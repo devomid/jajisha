@@ -17,9 +17,11 @@ import { useFocusEffect } from "@react-navigation/native";
 import { useCallback } from "react";
 import { BlurView } from "expo-blur";
 import { LinearGradient } from "expo-linear-gradient";
+import { useTranslation } from "react-i18next";
 
 
 export default function Home() {
+    const { t } = useTranslation();
     const location = useCurrentLocation();
     const theme = useTheme();
     const toiletInfoBottomSheetRef = useRef(null);

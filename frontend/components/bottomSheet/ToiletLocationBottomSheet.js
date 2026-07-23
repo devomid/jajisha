@@ -3,10 +3,13 @@ import { Text } from "react-native";
 import { BottomSheetModal, BottomSheetView, BottomSheetBackdrop, } from "@gorhom/bottom-sheet";
 import GlassBackground from "../../components/blur/blurView";
 import { BlurView } from "expo-blur";
+import { useTranslation } from "react-i18next";
 
 
 
 const ToiletInfo = forwardRef((props, ref) => {
+    const { t } = useTranslation();
+
     const snapPoints = useMemo(() => ["50%", "80%"], []);
 
     const handleSheetChanges = useCallback((index) => {
@@ -54,7 +57,7 @@ const ToiletInfo = forwardRef((props, ref) => {
                 }}
             >
                 <Text style={{ color: "white" }}>
-                    Toilet info
+                    {t("ToiletLocationBottomSheet.toiletInfo")}
                 </Text>
             </BottomSheetView>
         </BottomSheetModal>

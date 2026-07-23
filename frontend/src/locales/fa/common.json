@@ -1,0 +1,43 @@
+{
+    "AddWcBottomSheet": {
+        "add": "افزودن",
+        "cancel": "انصراف"
+    },
+    "ToiletLocationBottomSheet": {
+        "toiletInfo": "اطلاعات توالت"
+    },
+    "drawer": {
+        "hello": "سلام",
+        "welcome": "خوش برگشتی,",
+        "account": "حساب کاربری",
+        "settings": "تنظیمات",
+        "favorites": "علاقه مندی ها",
+        "help": "راهنمایی",
+        "about": "درباره نرم افزار"
+    },
+    "newToilet": {
+        "western": "فرنگی",
+        "iranian": "ایرانی",
+        "wheelchairAccess": "دسترسی ویلچر",
+        "handDryer": "خشک کن دست",
+        "babyChange": "اتاق کودک",
+        "warmWater": "آب گرم",
+        "toiletName": "عنوان توالت",
+        "chooseOnMap": "انتخاب از روی نقشه",
+        "location": "موقعیت جغرافیایی",
+        "address": "آدرس",
+        "free": "رایگان",
+        "price": "قیمت",
+        "amenities": "امکانات",
+        "rating": "امتیازدهی",
+        "description": "توضیحات تکمیلی"
+    },
+    "starRating": {
+        "cleaness": "تمیزی و نظافت",
+        "odor": "بوی محیط",
+        "amenitiesHealth": "سلامت امکانات",
+        "light": "روشنایی",
+        "privacy": "حریم خصوصی و امنیت",
+        "crowd": "شلوغی"
+    }
+}

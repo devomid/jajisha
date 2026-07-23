@@ -6,17 +6,15 @@ import { useTheme } from "react-native-paper";
 import { BottomSheetScrollView } from '@gorhom/bottom-sheet';
 import { View, Pressable, Text } from "react-native";
 import { BlurView } from "expo-blur";
+import { useTranslation } from "react-i18next";
 
 
 
 const AddWc = forwardRef((props, ref) => {
-
     const theme = useTheme();
-
     const snapPoints = useMemo(() => ["85%"], []);
-
     const handleSheetChanges = useCallback((index) => {
-        console.log(index);
+        // console.log(index);
     }, []);
 
     const renderBackdrop = useCallback(
@@ -31,6 +29,9 @@ const AddWc = forwardRef((props, ref) => {
         ),
         []
     );
+
+    const { t } = useTranslation();
+
 
     return (
         <BottomSheetModal
@@ -100,7 +101,7 @@ const AddWc = forwardRef((props, ref) => {
                                                 : theme.colors.success + '45',
                                     }}
                                 >
-                                    <Text>Add</Text>
+                                    <Text>{t("AddWcBottomSheet.add")}</Text>
                                 </View>
                             </BlurView>
                         )}
@@ -131,7 +132,7 @@ const AddWc = forwardRef((props, ref) => {
                                                 : theme.colors.error + '45',
                                     }}
                                 >
-                                    <Text>Cancel</Text>
+                                    <Text>{t("AddWcBottomSheet.cancel")}</Text>
                                 </View>
                             </BlurView>
                         )}

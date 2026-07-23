@@ -1,0 +1,43 @@
+{
+    "AddWcBottomSheet": {
+        "add": "Add",
+        "cancel": "Cancel"
+    },
+    "ToiletLocationBottomSheet":{
+        "toiletInfo": "Toilet Info"
+    },
+    "drawer":{
+        "hello":"Hello",
+        "welcome": "Welcome back,",
+        "account": "Account",
+        "settings": "Settings",
+        "favorites":"Favorites",
+        "help":"Help",
+        "about":"About"
+    },
+    "newToilet":{
+        "western":"Western",
+        "iranian":"Iranian",
+        "wheelchairAccess": "Wheelchair Access",
+        "handDryer":"Hand Dryer",
+        "babyChange": "Baby Change",
+        "warmWater": "Warm Water",
+        "toiletName":"Toilet Name",
+        "chooseOnMap":"Choose on Map",
+        "location":"Location",
+        "address":"Address",
+        "free":"Free",
+        "price":"Price",
+        "amenities":"Amenities",
+        "rating":"Rating",
+        "description": "Description"
+    },
+    "starRating":{
+        "cleaness": "Cleaness",
+        "odor": "Odor",
+        "amenitiesHealth": "Amenities Health",
+        "light": "Lights",
+        "privacy": "Privacy",
+        "crowd": "Crowd"
+    }
+}

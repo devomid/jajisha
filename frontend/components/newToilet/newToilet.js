@@ -5,9 +5,12 @@ import { useState } from "react";
 import { Checkbox } from 'expo-checkbox';
 import { ChevronDown, ChevronUp } from "lucide-react-native";
 import Rating from "./starRating";
+import { useTranslation } from "react-i18next";
+
 
 
 export default function NewToilet({ theme }) {
+    const { t } = useTranslation();
     const [text, setText] = useState('');
     const [isChecked, setChecked] = useState(true);
     const [expanded, setExpanded] = useState(true);
@@ -15,12 +18,12 @@ export default function NewToilet({ theme }) {
     const handlePress = () => setExpanded(!expanded);
 
     const amenities = [
-        { label: 'Western' },
-        { label: 'Iranian', },
-        { label: 'Wheelchair access', },
-        { label: 'Baby Changing', },
-        { label: 'Hand Dryer', },
-        { label: 'Warm Water', },
+        { label: t("newToilet.western") },
+        { label: t("newToilet.iranian"), },
+        { label: t("newToilet.wheelchairAccess"), },
+        { label: t("newToilet.babyChange"), },
+        { label: t('newToilet.handDryer'), },
+        { label: t('newToilet.warmWater'), },
         // { label: 'Baby Changing', value: baby, setValue: setBaby },
     ];
 
@@ -40,7 +43,7 @@ export default function NewToilet({ theme }) {
         >
             <View style={{ marginTop: 30, }}>
                 <TextInput
-                    label="Toilet Name"
+                    label={t("newToilet.toiletName")}
                     value={text}
                     onChangeText={(text) => setText(text)}
                     mode="flat"
@@ -78,17 +81,17 @@ export default function NewToilet({ theme }) {
                     transform: [{ scale: pressed ? 0.95 : 1 }], // zoom out
                 })}>
                     <Text style={{ color: theme.colors.surface }}>
-                        Choose on Map
+                        {t("newToilet.chooseOnMap")}
                     </Text>
                 </Pressable>
             </View>
 
             <View style={{ marginTop: 20, gap: 20 }}>
                 <Text>
-                    location:
+                    {t("newToilet.location")}:
                 </Text>
                 <Text>
-                    Address:
+                    {t("newToilet.address")}:
                 </Text>
             </View>
 
@@ -100,12 +103,14 @@ export default function NewToilet({ theme }) {
                         onValueChange={setChecked}
                         color={isChecked ? theme.colors.primary : theme.colors.secondaryLight}
                     />
-                    <Text >free</Text>
+                    <Text >
+                        {t("newToilet.free")}
+                    </Text>
                 </View>
 
                 <View style={{ width: '55%' }}>
                     <TextInput
-                        label="price"
+                        label={t("newToilet.price")}
                         multiline
                         editable={!isChecked}
                         disabled={isChecked}
@@ -123,7 +128,7 @@ export default function NewToilet({ theme }) {
 
             <View style={{ marginTop: 30 }}>
                 <List.Accordion
-                    title="Amenities"
+                    title={t("newToilet.amenities")}
                     expanded={expanded}
                     onPress={handlePress}
                     style={{
@@ -190,7 +195,7 @@ export default function NewToilet({ theme }) {
 
             <View>
                 <List.Accordion
-                    title="Rating"
+                    title={t("newToilet.rating")}
                     expanded={expanded}
                     onPress={handlePress}
                     style={{
@@ -238,7 +243,7 @@ export default function NewToilet({ theme }) {
 
             <View style={{ marginTop: 30, }}>
                 <TextInput
-                    label="Description"
+                    label={t("newToilet.description")}
                     multiline
                     value={text}
                     onChangeText={(text) => setText(text)}
