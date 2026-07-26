@@ -3,37 +3,39 @@
         "add": "Add",
         "cancel": "Cancel"
     },
-    "ToiletLocationBottomSheet":{
+    "ToiletLocationBottomSheet": {
         "toiletInfo": "Toilet Info"
     },
-    "drawer":{
-        "hello":"Hello",
+    "drawer": {
+        "hello": "Hello",
         "welcome": "Welcome back,",
         "account": "Account",
         "settings": "Settings",
-        "favorites":"Favorites",
-        "help":"Help",
-        "about":"About"
+        "favorites": "Favorites",
+        "help": "Help",
+        "about": "About"
     },
-    "newToilet":{
-        "western":"Western",
-        "iranian":"Iranian",
+    "newToilet": {
+        "western": "Western",
+        "iranian": "Iranian",
         "wheelchairAccess": "Wheelchair Access",
-        "handDryer":"Hand Dryer",
+        "handDryer": "Hand Dryer",
         "babyChange": "Baby Change",
         "warmWater": "Warm Water",
-        "toiletName":"Toilet Name",
-        "chooseOnMap":"Choose on Map",
-        "location":"Location",
-        "address":"Address",
-        "free":"Free",
-        "price":"Price",
-        "amenities":"Amenities",
-        "rating":"Rating",
+        "soap": "Soap",
+        "toiletPaper":"Toilet Paper",
+        "toiletName": "Toilet Name",
+        "chooseOnMap": "Choose on Map",
+        "location": "Location",
+        "address": "Address",
+        "free": "Free",
+        "price": "Price",
+        "amenities": "Amenities",
+        "rating": "Rating",
         "description": "Description"
     },
-    "starRating":{
-        "cleaness": "Cleaness",
+    "starRating": {
+        "cleanliness": "Cleanliness",
         "odor": "Odor",
         "amenitiesHealth": "Amenities Health",
         "light": "Lights",

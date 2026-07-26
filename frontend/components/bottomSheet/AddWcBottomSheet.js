@@ -1,4 +1,4 @@
-import React, { forwardRef, useMemo, useCallback } from "react";
+import React, { forwardRef, useMemo, useCallback, useEffect } from "react";
 import { BottomSheetModal, BottomSheetView, BottomSheetBackdrop } from "@gorhom/bottom-sheet";
 import GlassBackground from "../../components/blur/blurView";
 import NewToilet from "../newToilet/newToilet";
@@ -7,12 +7,36 @@ import { BottomSheetScrollView } from '@gorhom/bottom-sheet';
 import { View, Pressable, Text } from "react-native";
 import { BlurView } from "expo-blur";
 import { useTranslation } from "react-i18next";
-
+import { useAddWc } from "../../src/hooks/useAddWc";
+import { useWcDataStore } from "../../store/wcDataStore";
 
 
 const AddWc = forwardRef((props, ref) => {
+    const { t } = useTranslation();
+
+    const isPickingLocation =
+        useWcDataStore(state => state.isPickingLocation);
     const theme = useTheme();
     const snapPoints = useMemo(() => ["85%"], []);
+    const { addWc } = useAddWc();
+    const wcData = useWcDataStore((state) => state.wcData);
+    const setWcData = useWcDataStore((state) => state.setWcData);
+    const resetWcData = useWcDataStore(state => state.resetWcData);
+
+    const handleAdd = async () => {
+        const success = await addWc(wcData);
+
+        if (!success) return;
+
+        ref.current?.dismiss();   // close sheet
+        resetWcData();            // clear form
+    };
+
+    const handleCancel = () => {
+        ref.current?.dismiss();
+        resetWcData();
+    };
+
     const handleSheetChanges = useCallback((index) => {
         // console.log(index);
     }, []);
@@ -30,7 +54,14 @@ const AddWc = forwardRef((props, ref) => {
         []
     );
 
-    const { t } = useTranslation();
+
+    useEffect(() => {
+        if (isPickingLocation) {
+            // ref.current?.dismiss();
+            // ref.current?.snapToIndex(0);
+            ref.current?.forceClose();
+        }
+    }, [isPickingLocation]);
 
 
     return (
@@ -58,7 +89,9 @@ const AddWc = forwardRef((props, ref) => {
                     paddingBottom: 40,
                 }}
             >
-                <NewToilet theme={theme} />
+                <NewToilet
+                    theme={theme}
+                />
             </BottomSheetScrollView>
 
             <View
@@ -76,7 +109,10 @@ const AddWc = forwardRef((props, ref) => {
                         gap: 10
                     }}
                 >
-                    <Pressable style={{ flex: 1 }}>
+                    <Pressable
+                        style={{ flex: 1 }}
+                        onPress={handleAdd}
+                    >
                         {({ pressed }) => (
                             <BlurView
                                 intensity={15}
@@ -107,7 +143,10 @@ const AddWc = forwardRef((props, ref) => {
                         )}
                     </Pressable>
 
-                    <Pressable style={{ flex: 1 }}>
+                    <Pressable
+                        style={{ flex: 1 }}
+                        onPress={handleCancel}
+                    >
                         {({ pressed }) => (
                             <BlurView
                                 intensity={15}

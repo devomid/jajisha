@@ -5,6 +5,7 @@ const passport = require('passport');
 const cors = require('cors');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
+const toiletRoutes = require('./routes/toiletRoutes');
 
 
 dotenv.config()
@@ -29,6 +30,11 @@ app.use(cors({
     origin: 'http://localhost:8081',
     methods: ['GET', 'POST', 'DELETE', 'PATCH'],
 }));
+
+
+//routes
+app.use("/api/toilets", toiletRoutes);
+
 
 
 // DataBase

@@ -4,13 +4,14 @@ const toiletSchema = new mongoose.Schema(
     {
         name: {
             type: String,
-            required: true,
+            // required: true,
             trim: true,
         },
 
         description: {
             type: String,
             default: "",
+            trim: true,
         },
 
         location: {
@@ -21,23 +22,14 @@ const toiletSchema = new mongoose.Schema(
             },
             coordinates: {
                 type: [Number], // [longitude, latitude]
-                required: true,
+                // required: true,
             },
         },
 
         address: {
             type: String,
             default: "",
-        },
-
-        city: {
-            type: String,
-            default: "",
-        },
-
-        country: {
-            type: String,
-            default: "",
+            trim: true,
         },
 
         isFree: {
@@ -48,57 +40,106 @@ const toiletSchema = new mongoose.Schema(
         price: {
             type: Number,
             default: 0,
+            min: 0,
         },
 
-        gender: {
-            type: String,
-            enum: ["male", "female", "unisex"],
-            default: "unisex",
+        amenities: {
+            western: {
+                type: Boolean,
+                default: false,
+            },
+
+            iranian: {
+                type: Boolean,
+                default: false,
+            },
+
+            wheelchairAccessible: {
+                type: Boolean,
+                default: false,
+            },
+
+            babyChanging: {
+                type: Boolean,
+                default: false,
+            },
+
+            soap: {
+                type: Boolean,
+                default: false,
+            },
+
+            toiletPaper: {
+                type: Boolean,
+                default: false,
+            },
+
+            warmWater: {
+                type: Boolean,
+                default: false,
+            },
+
+            handDryer: {
+                type: Boolean,
+                default: false,
+            },
         },
 
-        wheelchairAccessible: {
-            type: Boolean,
-            default: false,
-        },
+        ratings: {
+            cleanliness: {
+                type: Number,
+                min: 0,
+                max: 5,
+                default: 0,
+            },
 
-        babyChanging: {
-            type: Boolean,
-            default: false,
-        },
+            odor: {
+                type: Number,
+                min: 0,
+                max: 5,
+                default: 0,
+            },
 
-        bidet: {
-            type: Boolean,
-            default: false,
-        },
+            amenitiesHealth: {
+                type: Number,
+                min: 0,
+                max: 5,
+                default: 0,
+            },
 
-        soap: {
-            type: Boolean,
-            default: false,
-        },
+            light: {
+                type: Number,
+                min: 0,
+                max: 5,
+                default: 0,
+            },
 
-        toiletPaper: {
-            type: Boolean,
-            default: true,
-        },
+            privacy: {
+                type: Number,
+                min: 0,
+                max: 5,
+                default: 0,
+            },
 
-        water: {
-            type: Boolean,
-            default: false,
-        },
-
-        handDryer: {
-            type: Boolean,
-            default: false,
+            crowd: {
+                type: Number,
+                min: 0,
+                max: 5,
+                default: 0,
+            },
         },
 
         averageRating: {
             type: Number,
             default: 0,
+            min: 0,
+            max: 5,
         },
 
         totalRatings: {
             type: Number,
             default: 0,
+            min: 0,
         },
 
         photos: [
@@ -115,7 +156,7 @@ const toiletSchema = new mongoose.Schema(
         createdBy: {
             type: mongoose.Schema.Types.ObjectId,
             ref: "User",
-            required: true,
+            // required: true,
         },
     },
     {

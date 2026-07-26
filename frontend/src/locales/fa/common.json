@@ -22,6 +22,8 @@
         "handDryer": "خشک کن دست",
         "babyChange": "اتاق کودک",
         "warmWater": "آب گرم",
+        "soap":"صابون و مایع دستشویی",
+        "toiletPaper":"دستمال توالت",
         "toiletName": "عنوان توالت",
         "chooseOnMap": "انتخاب از روی نقشه",
         "location": "موقعیت جغرافیایی",
@@ -33,7 +35,7 @@
         "description": "توضیحات تکمیلی"
     },
     "starRating": {
-        "cleaness": "تمیزی و نظافت",
+        "cleanliness": "تمیزی و نظافت",
         "odor": "بوی محیط",
         "amenitiesHealth": "سلامت امکانات",
         "light": "روشنایی",
