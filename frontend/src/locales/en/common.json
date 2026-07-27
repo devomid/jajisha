@@ -40,6 +40,7 @@
         "amenitiesHealth": "Amenities Health",
         "light": "Lights",
         "privacy": "Privacy",
-        "crowd": "Crowd"
+        "crowd": "Crowd",
+        "overall":"Overal"
     }
 }

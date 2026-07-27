@@ -24,6 +24,7 @@ const initialWcData = {
         light: 0,
         privacy: 0,
         crowd: 0,
+        averageRating:0
     },
 };
 
@@ -33,6 +34,22 @@ export const useWcDataStore = create((set) => ({
     isPickingLocation: false,
     pickedCoordinate: null,
     mapCenter: null,
+    toilets: [],
+    selectedToilet: null,
+
+    setSelectedToilet: (toilet) =>
+        set({ selectedToilet: toilet }),
+
+    clearSelectedToilet: () =>
+        set({ selectedToilet: null }),
+
+    addToilet: (toilet) =>
+        set(state => ({
+            toilets: [...state.toilets, toilet],
+        })),
+
+    setToilets: (toilets) =>
+        set({ toilets }),
 
     setMapCenter: (region) =>
         set({

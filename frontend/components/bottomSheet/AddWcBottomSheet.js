@@ -30,6 +30,7 @@ const AddWc = forwardRef((props, ref) => {
 
         ref.current?.dismiss();   // close sheet
         resetWcData();            // clear form
+        
     };
 
     const handleCancel = () => {

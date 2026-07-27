@@ -86,6 +86,12 @@ const toiletSchema = new mongoose.Schema(
         },
 
         ratings: {
+            averageRating: {
+                type: Number,
+                default: 0,
+                min: 0,
+                max: 5,
+            },
             cleanliness: {
                 type: Number,
                 min: 0,
@@ -127,19 +133,6 @@ const toiletSchema = new mongoose.Schema(
                 max: 5,
                 default: 0,
             },
-        },
-
-        averageRating: {
-            type: Number,
-            default: 0,
-            min: 0,
-            max: 5,
-        },
-
-        totalRatings: {
-            type: Number,
-            default: 0,
-            min: 0,
         },
 
         photos: [

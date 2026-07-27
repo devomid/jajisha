@@ -19,9 +19,11 @@ import { LinearGradient } from "expo-linear-gradient";
 import { useTranslation } from "react-i18next";
 import MapOfToilets from '../components/map/mapOfToilets';
 import { useWcDataStore } from '../store/wcDataStore';
+import { useGetWc } from '../src/hooks/useGetWc';
 
 
 export default function Home() {
+    useGetWc()
     const isPickingLocation =
         useWcDataStore(state => state.isPickingLocation);
 
@@ -57,7 +59,7 @@ export default function Home() {
     const onAddWcPress = (toilet) => {
         // setSelectedToilet(toilet);
         addWcBottomSheetRef.current?.present();
-        console.log("onAddWcPress");
+        // console.log("onAddWcPress");
     };
 
 
@@ -167,7 +169,7 @@ export default function Home() {
                     </BlurView>
                 )}
             </View>
-            <ToiletInfo ref={toiletInfoBottomSheetRef} />
+            <ToiletInfo ref={toiletInfoBottomSheetRef} location={location} />
             <AddWc ref={addWcBottomSheetRef} />
         </View>
     )

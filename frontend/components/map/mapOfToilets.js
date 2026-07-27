@@ -14,6 +14,10 @@ export default function MapOfToilets({ location, onMarkerPress, isPickingLocatio
 
     const theme = useTheme();
 
+    const toilets = useWcDataStore(state => state.toilets);
+    const setSelectedToilet = useWcDataStore(state => state.setSelectedToilet);
+
+
     const mapCenter =
         useWcDataStore(state => state.mapCenter);
 
@@ -22,7 +26,7 @@ export default function MapOfToilets({ location, onMarkerPress, isPickingLocatio
 
     const stopPickingLocation =
         useWcDataStore(state => state.stopPickingLocation);
-    console.log("Stop Picking:", isPickingLocation);
+    // console.log("Stop Picking:", isPickingLocation);
 
     const [latitudeDelta, setLatitudeDelta] = useState(0.02);
 
@@ -79,8 +83,8 @@ export default function MapOfToilets({ location, onMarkerPress, isPickingLocatio
         <View style={{ flex: 1 }}>
             <MapView
                 style={{ flex: 1 }}
-                showsUserLocation
-                followsUserLocation
+                showsUserLocation={false}
+                followsUserLocation={!isPickingLocation}
                 initialRegion={region}
                 onRegionChangeComplete={(newRegion) => {
                     setLatitudeDelta(newRegion.latitudeDelta);
@@ -88,35 +92,53 @@ export default function MapOfToilets({ location, onMarkerPress, isPickingLocatio
                     setMapCenter(newRegion);
                 }}
             >
-                {!isPickingLocation && (
+                {location && (
                     <Marker
                         coordinate={{
                             latitude: location.coords.latitude,
                             longitude: location.coords.longitude,
                         }}
-                        onPress={onMarkerPress}
-                        centerOffset={{ x: 3, y: -markerSize / 2 }}
+                        anchor={{ x: 0.5, y: 0.5 }}
                     >
                         <Image
-                            source={require("../../assets/toiletLocation.png")}
+                            source={require("../../assets/locationMarker.png")}
                             style={{
-                                width: markerSize,
-                                height: markerSize,
+                                width: 80,
+                                height: 80,
                                 resizeMode: "contain",
-
-                                shadowColor: "#000",
-                                shadowOffset: {
-                                    width: 8,
-                                    height: 8,
-                                },
-                                shadowOpacity: 0.14,
-                                shadowRadius: 5,
-
-                                elevation: 3,
                             }}
                         />
                     </Marker>
                 )}
+
+                {!isPickingLocation &&
+                    toilets
+                        .filter(toilet => toilet.location?.coordinates)
+                        .map((toilet) => (
+                            <Marker
+                                key={toilet._id}
+                                coordinate={{
+                                    latitude: toilet.location.coordinates[1],
+                                    longitude: toilet.location.coordinates[0],
+                                }}
+                                onPress={() => {
+                                    setSelectedToilet(toilet);
+                                    console.log(toilet);
+                                    onMarkerPress(toilet);
+                                }}
+                                centerOffset={{ x: 3, y: -markerSize / 2 }}
+                            >
+                                <Image
+                                    source={require("../../assets/toiletLocation.png")}
+                                    style={{
+                                        width: markerSize,
+                                        height: markerSize,
+                                        resizeMode: "contain",
+                                    }}
+                                />
+                            </Marker>
+                        ))
+                }
             </MapView>
 
             {isPickingLocation && (

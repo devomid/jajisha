@@ -20,10 +20,10 @@ export default function NewToilet({ theme, }) {
 
     const startPickingLocation =
         useWcDataStore(state => state.startPickingLocation);
-    console.log("Picking:", isPickingLocation);
+    // console.log("Picking:", isPickingLocation);
 
     const handleChooseOnMap = () => {
-        console.log("Pressed");
+        // console.log("Pressed");
         startPickingLocation();
     };
 

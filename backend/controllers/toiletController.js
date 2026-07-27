@@ -33,6 +33,8 @@ exports.createToilet = async (req, res) => {
 
             ratings: wcData.ratings,
 
+            averageRating: wcData.averageRating,
+
             // Temporary until authentication is implemented
             createdBy: "687d2f5f5a3e6c5f8d123456",
         });
@@ -49,3 +51,18 @@ exports.createToilet = async (req, res) => {
         });
     }
 };
+
+exports.getToilets = async (req, res) => {
+    try {
+
+        const toilets = await toiletModel.find();
+        res.status(200).json({ toilets })
+
+    } catch (error) {
+
+        console.log(error);
+        res.status(500).json({
+            message: "Failed to load toilets",
+        })
+    }
+}

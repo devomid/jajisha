@@ -6,7 +6,7 @@ import { BlurView } from "expo-blur";
 const GlassBackground = ({ style }) => {
     return (
         <BlurView
-            intensity={30}
+            intensity={20}
             tint="extraLight"
             style={[
                 style,

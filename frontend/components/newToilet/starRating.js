@@ -1,121 +1,90 @@
-import { View, Pressable, Text } from "react-native";
-import { router } from "expo-router";
-import { useState } from "react";
-import StarRating from 'react-native-star-rating-widget';
+import { View, Text } from "react-native";
+import { useMemo } from "react";
+import StarRating from "react-native-star-rating-widget";
 import { useTranslation } from "react-i18next";
 
-
-export default function Rating({ theme, setWcData, ratings }) {
-
+export default function Rating({ setWcData, ratings }) {
     const { t } = useTranslation();
 
+    const averageRating = useMemo(() => {
+        const values = Object.values(ratings);
+        return values.reduce((sum, value) => sum + value, 0) / values.length;
+    }, [ratings]);
+
+    const updateRating = (field, value) => {
+        setWcData((prev) => ({
+            ...prev,
+            ratings: {
+                ...prev.ratings,
+                [field]: value,
+            },
+        }));
+    };
 
     return (
         <View>
-            <Text>
-                {t("starRating.cleanliness")}
+            <Text style={{ fontSize: 18, fontWeight: "bold", marginBottom: 8 }}>
+                {t("starRating.overall")}
             </Text>
+
             <StarRating
-                style={{ marginBottom: 12 }}
+                rating={averageRating}
+                onChange={() => { }}
+                enableSwiping={false}
+                step="quarter"
+            />
+
+            <Text style={{ marginBottom: 24 }}>
+                {averageRating.toFixed(1)} / 5
+            </Text>
+
+            <Text>{t("starRating.cleanliness")}</Text>
+            <StarRating
                 rating={ratings.cleanliness}
-                onChange={(value) =>
-                    setWcData(prev => ({
-                        ...prev,
-                        ratings: {
-                            ...prev.ratings,
-                            cleanliness: value,
-                        },
-                    }))
-                }
+                onChange={(value) => updateRating("cleanliness", value)}
+                style={{ marginBottom: 12 }}
                 step="full"
             />
-            <Text>
-                {t("starRating.odor")}
-            </Text>
+
+            <Text>{t("starRating.odor")}</Text>
             <StarRating
-                style={{ marginBottom: 12 }}
                 rating={ratings.odor}
-                onChange={(value) =>
-                    setWcData(prev => ({
-                        ...prev,
-                        ratings: {
-                            ...prev.ratings,
-                            odor: value,
-                        },
-                    }))
-                }
+                onChange={(value) => updateRating("odor", value)}
+                style={{ marginBottom: 12 }}
                 step="full"
             />
-            <Text>
-                {t("starRating.amenitiesHealth")}
-            </Text>
+
+            <Text>{t("starRating.amenitiesHealth")}</Text>
             <StarRating
-                style={{ marginBottom: 12 }}
                 rating={ratings.amenitiesHealth}
-                onChange={(value) =>
-                    setWcData(prev => ({
-                        ...prev,
-                        ratings: {
-                            ...prev.ratings,
-                            amenitiesHealth: value,
-                        },
-                    }))
-                }
+                onChange={(value) => updateRating("amenitiesHealth", value)}
+                style={{ marginBottom: 12 }}
                 step="full"
             />
-            <Text>
-                {t("starRating.light")}
-            </Text>
+
+            <Text>{t("starRating.light")}</Text>
             <StarRating
-                style={{ marginBottom: 12 }}
                 rating={ratings.light}
-                onChange={(value) =>
-                    setWcData(prev => ({
-                        ...prev,
-                        ratings: {
-                            ...prev.ratings,
-                            light: value,
-                        },
-                    }))
-                }
+                onChange={(value) => updateRating("light", value)}
+                style={{ marginBottom: 12 }}
                 step="full"
             />
-            <Text>
-                {t("starRating.privacy")}
-            </Text>
+
+            <Text>{t("starRating.privacy")}</Text>
             <StarRating
-                style={{ marginBottom: 12 }}
                 rating={ratings.privacy}
-                onChange={(value) =>
-                    setWcData(prev => ({
-                        ...prev,
-                        ratings: {
-                            ...prev.ratings,
-                            privacy: value,
-                        },
-                    }))
-                }
+                onChange={(value) => updateRating("privacy", value)}
+                style={{ marginBottom: 12 }}
                 step="full"
             />
-            <Text>
-                {t("starRating.crowd")}
-            </Text>
+
+            <Text>{t("starRating.crowd")}</Text>
             <StarRating
-                style={{ marginBottom: 12 }}
                 rating={ratings.crowd}
-                onChange={(value) =>
-                    setWcData(prev => ({
-                        ...prev,
-                        ratings: {
-                            ...prev.ratings,
-                            crowd: value,
-                        },
-                    }))
-                }
+                onChange={(value) => updateRating("crowd", value)}
+                style={{ marginBottom: 12 }}
                 step="full"
             />
         </View>
     );
 }
-
-
