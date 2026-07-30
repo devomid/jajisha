@@ -6,6 +6,7 @@ const reviewSchema = new mongoose.Schema(
             type: mongoose.Schema.Types.ObjectId,
             ref: "Toilet",
             required: true,
+            index: true,
         },
 
         user: {
@@ -14,40 +15,27 @@ const reviewSchema = new mongoose.Schema(
             required: true,
         },
 
-        rating: {
-            type: Number,
-            required: true,
-            min: 1,
-            max: 5,
-        },
-
-        cleanliness: {
-            type: Number,
-            min: 1,
-            max: 5,
-        },
-
-        comment: {
+        text: {
             type: String,
             trim: true,
-            maxlength: 1000,
+            required: true,
+            minlength: 10,
+            maxlength: 200,
         },
 
-        photos: [
+        likes: [
             {
-                type: String,
+                type: mongoose.Schema.Types.ObjectId,
+                ref: "User",
             },
         ],
 
-        likes: {
-            type: Number,
-            default: 0,
-        },
-
-        dislikes: {
-            type: Number,
-            default: 0,
-        },
+        dislikes: [
+            {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: "User",
+            },
+        ],
     },
     {
         timestamps: true,
@@ -55,6 +43,12 @@ const reviewSchema = new mongoose.Schema(
 );
 
 // One review per user per toilet
-reviewSchema.index({ toilet: 1, user: 1 }, { unique: true });
+reviewSchema.index(
+    { toilet: 1, user: 1 },
+    { unique: true }
+);
+
+// Fast loading of reviews
+reviewSchema.index({ toilet: 1, createdAt: -1 });
 
 module.exports = mongoose.model("Review", reviewSchema);

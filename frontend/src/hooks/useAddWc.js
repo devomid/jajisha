@@ -1,52 +1,41 @@
 import { useWcDataStore } from "../../store/wcDataStore";
 
-
 export const useAddWc = () => {
-
     const wcData = useWcDataStore((state) => state.wcData);
-    const addToilet = useWcDataStore(state => state.addToilet);
+    const addToilet = useWcDataStore((state) => state.addToilet);
 
-    const addWc = async function () {
+    const addWc = async () => {
         try {
-            // console.log(wcData);
-            //loading state update
+            const response = await fetch(
+                "http://192.168.43.42:3001/api/toilets",
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        wcData,
+                    }),
+                }
+            );
 
-            const averageRating =
-                Object.values(wcData.ratings).reduce((sum, value) => sum + value, 0) /
-                Object.values(wcData.ratings).length;
-
-            const toiletData = {
-                ...wcData,
-                ratings: {
-                    ...wcData.ratings,
-                    averageRating,
-                },
-            };
-
-
-            const response = await fetch("http://192.168.43.42:3001/api/toilets", {
-                method: "POST",
-                headers: { "Content-Type": 'application/json' },
-                body: JSON.stringify({
-                    wcData: toiletData,
-                })
-            });
-            if (response.ok) {
-                const jsonRes = await response.json();
-                addToilet(jsonRes)
-                return jsonRes;
-            } else {
-                console.log('respons is not OK');
+            if (!response.ok) {
+                console.log("Response is not OK");
                 console.log("Status:", response.status);
-
-                const error = await response.text();
-                console.log(error);
-
-                return;
+                console.log(await response.text());
+                return null;
             }
+
+            const newToilet = await response.json();
+
+            addToilet(newToilet);
+
+            return newToilet;
         } catch (error) {
-            console.log('error adding WC', error);
+            console.log("Error adding WC:", error);
+            return null;
         }
-    }
-    return ({ addWc });
-}
+    };
+
+    return { addWc };
+};

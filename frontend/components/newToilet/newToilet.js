@@ -137,11 +137,9 @@ export default function NewToilet({ theme, }) {
                 <Text>
                     {`${t("newToilet.location")}:  `}
                     {/* {`\n`} */}
-                    {wcData.location && (
+                    {wcData.location?.coordinates && (
                         <Text style={{ color: theme.colors.secondary }}>
-                            {
-                                `${wcData.location.latitude.toFixed(6)},  ${wcData.location.longitude.toFixed(6)}`
-                            }
+                            {`${wcData.location.coordinates[1].toFixed(6)}, ${wcData.location.coordinates[0].toFixed(6)}`}
                         </Text>
                     )}
                 </Text>

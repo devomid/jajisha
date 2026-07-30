@@ -2,11 +2,18 @@ import { create } from "zustand";
 
 const initialWcData = {
     name: "",
-    location: null,
-    address: "",
-    isFree: true,
-    price: "",
     description: "",
+
+    location: {
+        type: "Point",
+        coordinates: null, // [longitude, latitude]
+    },
+
+    address: "",
+
+    isFree: true,
+    price: 0,
+
     amenities: {
         western: false,
         iranian: false,
@@ -17,6 +24,8 @@ const initialWcData = {
         warmWater: false,
         handDryer: false,
     },
+
+    // Initial rating given by the creator
     ratings: {
         cleanliness: 0,
         odor: 0,
@@ -24,8 +33,9 @@ const initialWcData = {
         light: 0,
         privacy: 0,
         crowd: 0,
-        averageRating:0
     },
+
+    photos: [],
 };
 
 export const useWcDataStore = create((set) => ({

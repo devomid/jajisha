@@ -1,19 +1,20 @@
 import React, { forwardRef, useMemo, useCallback, useState } from "react";
 import { Text, useTheme, SegmentedButtons } from "react-native-paper";
-import { View, Pressable } from "react-native";
-import {
-    BottomSheetModal,
-    BottomSheetBackdrop,
-    BottomSheetScrollView,
-} from "@gorhom/bottom-sheet";
+import { View, Pressable, Image } from "react-native";
+import { BottomSheetModal, BottomSheetBackdrop, BottomSheetScrollView, } from "@gorhom/bottom-sheet";
 import GlassBackground from "../../components/blur/blurView";
 import { BlurView } from "expo-blur";
 import { useTranslation } from "react-i18next";
 import { useWcDataStore } from "../../store/wcDataStore";
-import { Bookmark, Share, Navigation } from "lucide-react-native";
+import { Bookmark, Share, Navigation, Toilet } from "lucide-react-native";
 import StarRating from "react-native-star-rating-widget";
 import { getDistance } from "geolib";
 import PhotoGallery from "../photoGallery/photoGallery";
+import MapView, { Marker } from "react-native-maps";
+import { DynamicColorIOS } from 'react-native';
+import { NativeTabs } from 'expo-router/unstable-native-tabs';
+import Review from "../reviews/reviews";
+
 
 const ToiletInfo = forwardRef(({ location }, ref) => {
 
@@ -22,7 +23,7 @@ const ToiletInfo = forwardRef(({ location }, ref) => {
     const theme = useTheme();
     const toilet = useWcDataStore((state) => state.selectedToilet);
 
-    const snapPoints = useMemo(() => ["50%", "80%"], []);
+    const snapPoints = useMemo(() => ["22%", "50%", "80%"], []);
 
     const handleSheetChanges = useCallback((index) => {
         console.log(index);
@@ -94,11 +95,64 @@ const ToiletInfo = forwardRef(({ location }, ref) => {
                     }}
                 >
                     <Text
+                        numberOfLines={1}
+                        ellipsizeMode="tail"
                         variant="headlineLarge"
-                        style={{ color: theme.colors.surface }}
+                        style={{ color: theme.colors.surface, width: 195 }}
                     >
                         {toilet.name}
                     </Text>
+                    <View
+                        style={{
+                            paddingVertical: 5,
+                            flexDirection: "row",
+                            alignItems: "center",
+                            gap: 1,
+                            marginTop: 8
+                        }}
+                    >
+                        <Text
+                            style={{
+                                color: theme.colors.text,
+                            }}
+                            variant="bodySmall"
+                        >
+                            {toilet.ratingSummary.average.toFixed(1)} / 5
+                        </Text>
+
+                        <StarRating
+                            rating={toilet.ratingSummary.average}
+                            onChange={() => { }}
+                            enableSwiping={false}
+                            step="quarter"
+                            starSize={15}
+                            emptyColor={theme.colors.secondaryLight}
+                            color={theme.colors.secondaryDarker}
+                        // StarIconComponent={Toilet}
+                        />
+
+                        <Text
+                            style={{
+                                color: theme.colors.text,
+                            }}
+                            variant="bodySmall"
+                        >
+                            {toilet.ratingSummary.count}
+                        </Text>
+
+                        {formattedDistance && (
+                            <Text
+                                style={{
+                                    position: "absolute",
+                                    right: 10,
+                                    color: theme.colors.text,
+                                }}
+                                variant="bodySmall"
+                            >
+                                {formattedDistance}
+                            </Text>
+                        )}
+                    </View>
 
                     <View
                         style={{
@@ -124,66 +178,20 @@ const ToiletInfo = forwardRef(({ location }, ref) => {
                     showsVerticalScrollIndicator={false}
                 >
                     <View>
-                        <View
-                            style={{
-                                paddingVertical: 5,
-                                flexDirection: "row",
-                                alignItems: "center",
-                                gap: 5,
-                            }}
-                        >
-                            <Text
-                                style={{
-                                    color: theme.colors.text,
-                                }}
-                                variant="bodySmall"
-                            >
-                                {toilet.ratings.averageRating.toFixed(1)} / 5
-                            </Text>
-
-                            <StarRating
-                                rating={toilet.ratings.averageRating}
-                                onChange={() => { }}
-                                enableSwiping={false}
-                                step="quarter"
-                                starSize={24}
-                                emptyColor={theme.colors.secondaryLight}
-                                color={theme.colors.secondary}
-                            />
-
-                            <Text
-                                style={{
-                                    color: theme.colors.text,
-                                }}
-                                variant="bodySmall"
-                            >
-                                (75)
-                            </Text>
-                        </View>
-
                         <Text
+                            numberOfLines={2}
                             style={{
                                 color: theme.colors.secondaryLight,
                                 paddingTop: 7,
+                                paddingRight: 24
                             }}
                         >
                             {toilet.address}
                         </Text>
 
-                        {formattedDistance && (
-                            <Text
-                                style={{
-                                    marginTop: 5,
-                                    color: theme.colors.text,
-                                }}
-                                variant="bodySmall"
-                            >
-                                {formattedDistance}
-                            </Text>
-                        )}
                     </View>
 
-                    <View>
+                    <View style={{ marginTop: -20 }}>
                         <PhotoGallery />
                     </View>
 
@@ -206,6 +214,18 @@ const ToiletInfo = forwardRef(({ location }, ref) => {
                                 },
                             ]}
                         />
+                    </View>
+
+                    <View
+                        theme={theme}
+                        style={{
+                            alignItems: 'center',
+                            justifyContent:'center'
+                        }}
+                        >
+                        <Review/>
+                        <Review/>
+                        <Review/>
                     </View>
                 </BottomSheetScrollView>
             </View>

@@ -4,14 +4,15 @@ const toiletSchema = new mongoose.Schema(
     {
         name: {
             type: String,
-            // required: true,
             trim: true,
+            required: true,
         },
 
         description: {
             type: String,
             default: "",
             trim: true,
+            maxlength: 500,
         },
 
         location: {
@@ -22,7 +23,7 @@ const toiletSchema = new mongoose.Schema(
             },
             coordinates: {
                 type: [Number], // [longitude, latitude]
-                // required: true,
+                required: true,
             },
         },
 
@@ -85,59 +86,67 @@ const toiletSchema = new mongoose.Schema(
             },
         },
 
-        ratings: {
-            averageRating: {
+        ratingSummary: {
+            count: {
+                type: Number,
+                default: 0,
+                min: 0,
+            },
+
+            average: {
                 type: Number,
                 default: 0,
                 min: 0,
                 max: 5,
             },
+
             cleanliness: {
                 type: Number,
+                default: 0,
                 min: 0,
                 max: 5,
-                default: 0,
             },
 
             odor: {
                 type: Number,
+                default: 0,
                 min: 0,
                 max: 5,
-                default: 0,
             },
 
             amenitiesHealth: {
                 type: Number,
+                default: 0,
                 min: 0,
                 max: 5,
-                default: 0,
             },
 
             light: {
                 type: Number,
+                default: 0,
                 min: 0,
                 max: 5,
-                default: 0,
             },
 
             privacy: {
                 type: Number,
+                default: 0,
                 min: 0,
                 max: 5,
-                default: 0,
             },
 
             crowd: {
                 type: Number,
+                default: 0,
                 min: 0,
                 max: 5,
-                default: 0,
             },
         },
 
         photos: [
             {
                 type: String,
+                trim: true,
             },
         ],
 
@@ -149,7 +158,7 @@ const toiletSchema = new mongoose.Schema(
         createdBy: {
             type: mongoose.Schema.Types.ObjectId,
             ref: "User",
-            // required: true,
+            required: true,
         },
     },
     {
@@ -159,4 +168,4 @@ const toiletSchema = new mongoose.Schema(
 
 toiletSchema.index({ location: "2dsphere" });
 
-module.exports = mongoose.model("Toilet", toiletSchema);
+module.exports = mongoose.model("ToiletModel", toiletSchema);

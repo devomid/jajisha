@@ -1,25 +1,36 @@
-const toiletModel = require("../models/toiletModel")
+const ToiletModel = require("../models/toiletModel")
+const RatingModel = require("../models/ratingModel")
 
 exports.createToilet = async (req, res) => {
-
     try {
         const { wcData } = req.body;
-        const price =
-            wcData.isFree
-                ? 0
-                : Number(
-                    String(wcData.price).replace(/[,\s]/g, "")
-                );
 
-        const newToilet = new toiletModel({
+        const price = wcData.isFree
+            ? 0
+            : Number(String(wcData.price).replace(/[,\s]/g, ""));
+
+        const ratings = wcData.ratings;
+
+        const overall =
+            (
+                ratings.cleanliness +
+                ratings.odor +
+                ratings.amenitiesHealth +
+                ratings.light +
+                ratings.privacy +
+                ratings.crowd
+            ) / 6;
+
+        // 1. Create Toilet
+        const toilet = await ToiletModel.create({
             name: wcData.name,
             description: wcData.description,
 
             location: {
                 type: "Point",
                 coordinates: [
-                    req.body.wcData.location.longitude,
-                    req.body.wcData.location.latitude,
+                    wcData.location.longitude,
+                    wcData.location.latitude,
                 ],
             },
 
@@ -27,21 +38,41 @@ exports.createToilet = async (req, res) => {
 
             isFree: wcData.isFree,
 
-            price: price,
+            price,
 
             amenities: wcData.amenities,
 
-            ratings: wcData.ratings,
+            ratingSummary: {
+                count: 1,
+                average: overall,
+                cleanliness: ratings.cleanliness,
+                odor: ratings.odor,
+                amenitiesHealth: ratings.amenitiesHealth,
+                light: ratings.light,
+                privacy: ratings.privacy,
+                crowd: ratings.crowd,
+            },
 
-            averageRating: wcData.averageRating,
-
-            // Temporary until authentication is implemented
+            // Temporary until authentication
             createdBy: "687d2f5f5a3e6c5f8d123456",
         });
 
-        await newToilet.save();
+        // 2. Create creator's Rating
+        await RatingModel.create({
+            toilet: toilet._id,
+            user: toilet.createdBy,
 
-        res.status(201).json(newToilet);
+            cleanliness: ratings.cleanliness,
+            odor: ratings.odor,
+            amenitiesHealth: ratings.amenitiesHealth,
+            light: ratings.light,
+            privacy: ratings.privacy,
+            crowd: ratings.crowd,
+
+            overall,
+        });
+
+        res.status(201).json(toilet);
 
     } catch (err) {
         console.error(err);
@@ -55,7 +86,7 @@ exports.createToilet = async (req, res) => {
 exports.getToilets = async (req, res) => {
     try {
 
-        const toilets = await toiletModel.find();
+        const toilets = await ToiletModel.find();
         res.status(200).json({ toilets })
 
     } catch (error) {
