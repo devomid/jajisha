@@ -41,12 +41,80 @@ const initialWcData = {
 export const useWcDataStore = create((set) => ({
     wcData: structuredClone(initialWcData),
 
-    isPickingLocation: false,
     pickedCoordinate: null,
     mapCenter: null,
     toilets: [],
     selectedToilet: null,
+    navigation: {
+        target: null,
+        route: null,
+        distance: null,
+        duration: null,
+        status: "idle",
+    },
 
+    setNavigationTarget: (toilet) =>
+        set(state => ({
+            navigation: {
+                ...state.navigation,
+                target: toilet,
+                route: null,
+                distance: null,
+                duration: null,
+                status: "routing",
+            },
+        })),
+
+    setNavigationRoute: (route) =>
+        set(state => ({
+            navigation: {
+                ...state.navigation,
+                route,
+            },
+        })),
+
+    setNavigationDistance: (distance) =>
+        set(state => ({
+            navigation: {
+                ...state.navigation,
+                distance,
+            },
+        })),
+
+    setNavigationDuration: (duration) =>
+        set(state => ({
+            navigation: {
+                ...state.navigation,
+                duration,
+            },
+        })),
+
+    setNavigationStatus: (status) =>
+        set(state => ({
+            navigation: {
+                ...state.navigation,
+                status,
+            },
+        })),
+
+    startNavigation: () =>
+        set(state => ({
+            navigation: {
+                ...state.navigation,
+                status: "navigating",
+            },
+        })),
+
+    clearNavigation: () =>
+        set({
+            navigation: {
+                target: null,
+                route: null,
+                distance: null,
+                duration: null,
+                status: "idle",
+            },
+        }),
     setSelectedToilet: (toilet) =>
         set({ selectedToilet: toilet }),
 
@@ -85,7 +153,6 @@ export const useWcDataStore = create((set) => ({
 
     startPickingLocation: () =>
         set({ isPickingLocation: true }),
-
     stopPickingLocation: () =>
         set({ isPickingLocation: false }),
 

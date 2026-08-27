@@ -1,40 +1,47 @@
-import { useState } from "react";
-import MapView, { Marker } from "react-native-maps";
-import { Image } from "react-native";
+import * as Location from "expo-location";
+import { useState, useEffect } from "react";
 import { useWcDataStore } from "../../store/wcDataStore";
-import { View, Pressable, Text } from "react-native";
-import { BlurView } from "expo-blur";
 import { useTheme } from "react-native-paper";
 import { useTranslation } from "react-i18next";
-import * as Location from "expo-location";
+import { useNavigateToToilet } from "../../src/hooks/useNavigateWc";
 
-export default function MapOfToilets({ location, onMarkerPress, isPickingLocation, onAddWcPress }) {
+import { View, Pressable, Text } from "react-native";
+import { Image } from "react-native";
+import { BlurView } from "expo-blur";
+import MapView, { Marker } from "react-native-maps";
+
+export default function MapOfToilets({ currentLocation, onMarkerPress, isPickingLocation, onAddWcPress }) {
 
     const { t } = useTranslation();
-
     const theme = useTheme();
-
     const toilets = useWcDataStore(state => state.toilets);
     const setSelectedToilet = useWcDataStore(state => state.setSelectedToilet);
-
-
-    const mapCenter =
-        useWcDataStore(state => state.mapCenter);
-
-    const setMapCenter =
-        useWcDataStore(state => state.setMapCenter);
-
-    const stopPickingLocation =
-        useWcDataStore(state => state.stopPickingLocation);
-    // console.log("Stop Picking:", isPickingLocation);
-
-    const [latitudeDelta, setLatitudeDelta] = useState(0.02);
-
+    const mapCenter = useWcDataStore(state => state.mapCenter);
+    const setMapCenter = useWcDataStore(state => state.setMapCenter);
+    const stopPickingLocation = useWcDataStore(state => state.stopPickingLocation);
     const setPickedLocation = useWcDataStore(state => state.setPickedLocation);
+    const navigationTarget = useWcDataStore(state => state.navigation.target);
+    const navigationRoute = useWcDataStore(state => state.navigation.route);
+    const navigationActive = useWcDataStore(state => state.navigation.active);
+    const { navigateToToilet } = useNavigateToToilet();
+    const [latitudeDelta, setLatitudeDelta] = useState(0.02);
+    const [region, setRegion] = useState({
+        latitude: currentLocation.coords.latitude,
+        longitude: currentLocation.coords.longitude,
+        latitudeDelta: 0.02,
+        longitudeDelta: 0.02,
+    });
+
+    const markerSize = Math.max(
+        40,
+        Math.min(
+            85,
+            60 * Math.pow(0.02 / latitudeDelta, 0.25)
+        )
+    );
 
     const handleAddLocation = async () => {
         if (!mapCenter) return;
-
         const results = await Location.reverseGeocodeAsync({
             latitude: mapCenter.latitude,
             longitude: mapCenter.longitude,
@@ -42,43 +49,30 @@ export default function MapOfToilets({ location, onMarkerPress, isPickingLocatio
 
         const place = results[0];
 
-        const address = [
-            place.name,
-            place.street,
-            place.city,
-            place.region,
-            place.country,
-        ]
-            .filter(Boolean)
-            .join(", ");
-
+        const address = [place.name, place.street, place.city, place.region, place.country,].filter(Boolean).join(", ");
         setPickedLocation({
             latitude: mapCenter.latitude,
             longitude: mapCenter.longitude,
             address,
         });
-
         onAddWcPress();
     };
 
+    useEffect(() => {
+        if (!navigationTarget) return;
 
-    const [region, setRegion] = useState({
-        latitude: location.coords.latitude,
-        longitude: location.coords.longitude,
-        latitudeDelta: 0.02,
-        longitudeDelta: 0.02,
-    });
+        navigateToToilet(navigationTarget);
+    }, [navigationTarget]);
+
+    const routeCoordinates =
+        navigationRoute?.coordinates?.map(
+            ([longitude, latitude]) => ({
+                latitude,
+                longitude,
+            })
+        ) || [];
 
     if (!location) return null;
-
-    const markerSize = Math.max(
-        40,
-        Math.min(
-            85,
-            80 * Math.pow(0.02 / latitudeDelta, 0.25)
-        )
-    );
-
     return (
         <View style={{ flex: 1 }}>
             <MapView
@@ -95,8 +89,8 @@ export default function MapOfToilets({ location, onMarkerPress, isPickingLocatio
                 {location && (
                     <Marker
                         coordinate={{
-                            latitude: location.coords.latitude,
-                            longitude: location.coords.longitude,
+                            latitude: currentLocation.coords.latitude,
+                            longitude: currentLocation.coords.longitude,
                         }}
                         anchor={{ x: 0.5, y: 0.5 }}
                     >
@@ -123,7 +117,7 @@ export default function MapOfToilets({ location, onMarkerPress, isPickingLocatio
                                 }}
                                 onPress={() => {
                                     setSelectedToilet(toilet);
-                                    console.log(toilet);
+                                    // console.log(toilet);
                                     onMarkerPress(toilet);
                                 }}
                                 centerOffset={{ x: 3, y: -markerSize / 2 }}
@@ -139,6 +133,7 @@ export default function MapOfToilets({ location, onMarkerPress, isPickingLocatio
                             </Marker>
                         ))
                 }
+
             </MapView>
 
             {isPickingLocation && (

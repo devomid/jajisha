@@ -1,46 +1,41 @@
 import 'react-native-reanimated';
 import 'expo-router/entry';
+import { useCallback, useEffect, useRef } from "react";
 import { useNavigation } from "expo-router";
-import { View, Pressable, Image, Text } from "react-native";
-import useCurrentLocation from '../src/hooks/useCurrentLocation';
-import { Button } from "react-native-paper";
-import { Menu } from 'lucide-react-native';
-import { useTheme } from "react-native-paper";
-import Colors from '../src/constants/colors';
-import ToiletInfo from "../components/bottomSheet/ToiletLocationBottomSheet";
-import AddWc from "../components/bottomSheet/AddWcBottomSheet";
-import React, { useRef } from 'react';
-import { SafeAreaView } from "react-native-safe-area-context";
-import { useDrawerStore } from "../store/drawerStore";
 import { useFocusEffect } from "@react-navigation/native";
-import { useCallback } from "react";
-import { BlurView } from "expo-blur";
-import { LinearGradient } from "expo-linear-gradient";
+import { useTheme } from "react-native-paper";
+import { useDrawerStore } from "../store/drawerStore";
 import { useTranslation } from "react-i18next";
-import MapOfToilets from '../components/map/mapOfToilets';
 import { useWcDataStore } from '../store/wcDataStore';
 import { useGetWc } from '../src/hooks/useGetWc';
+import useCurrentLocation from '../src/hooks/useCurrentLocation';
 
+import { View, Pressable, Image } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { BlurView } from "expo-blur";
+import { Menu } from 'lucide-react-native';
+
+import MapOfToilets from '../components/map/mapOfToilets';
+import ToiletInfo from "../components/bottomSheet/ToiletLocationBottomSheet";
+import AddWc from "../components/bottomSheet/AddWcBottomSheet";
+import RoutePreview from '../components/bottomSheet/RoutePreview';
 
 export default function Home() {
+
     useGetWc()
-    const isPickingLocation =
-        useWcDataStore(state => state.isPickingLocation);
+
+    const isPickingLocation = useWcDataStore(state => state.isPickingLocation);
+    const navigationStatus = useWcDataStore(state => state.navigation.status);
+    const shouldOpenDrawer = useDrawerStore((state) => state.shouldOpenDrawer);
+    const reset = useDrawerStore((state) => state.reset);
 
     const { t } = useTranslation();
-    const location = useCurrentLocation();
+    const curentLocation = useCurrentLocation();
     const theme = useTheme();
     const toiletInfoBottomSheetRef = useRef(null);
     const addWcBottomSheetRef = useRef(null);
+    const routePreviewBottomSheetRef = useRef(null);
     const navigation = useNavigation();
-
-    const shouldOpenDrawer = useDrawerStore(
-        (state) => state.shouldOpenDrawer
-    );
-
-    const reset = useDrawerStore(
-        (state) => state.reset
-    );
 
     useFocusEffect(
         useCallback(() => {
@@ -50,6 +45,13 @@ export default function Home() {
             }
         }, [shouldOpenDrawer])
     );
+
+    useEffect(() => {
+        if (navigationStatus === "preview") {
+            routePreviewBottomSheetRef.current?.present();
+        }
+    }, [navigationStatus]);
+
 
     const onMarkerPress = (toilet) => {
         // setSelectedToilet(toilet);
@@ -62,18 +64,23 @@ export default function Home() {
         // console.log("onAddWcPress");
     };
 
+    const onNavigatePress = (location) => {
+        routePreviewBottomSheetRef.current?.present();
+    }
 
-    if (!location) return null;
+
+    if (!curentLocation) return null;
 
     return (
         <View style={{ flex: 1 }}>
 
             <MapOfToilets
-                location={location}
-                onMarkerPress={onMarkerPress}
+                currentLocation={curentLocation}
                 isPickingLocation={isPickingLocation}
+                onMarkerPress={onMarkerPress}
                 onAddWcPress={onAddWcPress}
             />
+
             <SafeAreaView
                 style={{
                     position: "absolute",
@@ -86,10 +93,10 @@ export default function Home() {
                     intensity={8}
                     tint="dark"
                     style={{
-                        backgroundColor: "rgba(255, 238, 0, 0.20)",
-                        width: 55,
-                        height: 55,
-                        borderRadius: 28,
+                        backgroundColor: "rgba(255, 238, 0, 0.1)",
+                        width: 40,
+                        height: 45,
+                        borderRadius: 17,
                         overflow: "hidden",
                         shadowColor: "#000",
                         shadowOffset: {
@@ -99,28 +106,28 @@ export default function Home() {
                         shadowOpacity: 0.12,
                         shadowRadius: 18,
                         elevation: 10,
+                        alignItems: 'center',
+                        justifyContent: 'center'
                     }}
                 >
                     <Pressable
                         onPress={() => navigation.openDrawer()}
                         style={{
-                            height: 55,
-                            width: 55,
-                            borderRadius: 60,
+                            width: 40,
+                            height: 45,
+                            borderRadius: 17,
                             justifyContent: "center",
                             alignItems: "center",
                             borderWidth: 1,
                             borderColor: "rgba(255,255,255,0.35)",
                         }}
                     >
-
-                        <Menu size={28} color={theme.colors.primary} />
+                        <Menu size={20} color={theme.colors.primary} />
                     </Pressable>
                 </BlurView>
             </SafeAreaView>
 
             <View>
-
                 {!isPickingLocation && (
                     <BlurView
                         intensity={8}
@@ -129,20 +136,11 @@ export default function Home() {
                             position: "absolute",
                             bottom: 20,
                             right: 20,
-
-                            backgroundColor: "rgba(255, 238, 0, 0.20)",
-
-                            width: 100,
-                            height: 100,
-
+                            backgroundColor: "rgba(255, 238, 0, 0.1)",
+                            width: 95,
+                            height: 95,
                             borderRadius: 60,
-
-                            // borderBottomLeftRadius: 45,
-                            // borderBottomRightRadius: 60,
-                            // borderTopLeftRadius: 80,
-                            // borderTopRightRadius:50,
                             overflow: "hidden",
-
                             shadowColor: "#000",
                             shadowOffset: {
                                 width: 0,
@@ -153,7 +151,6 @@ export default function Home() {
                             elevation: 10,
                         }}
                     >
-
                         <Pressable
                             onPress={onAddWcPress}
                             style={{
@@ -164,13 +161,14 @@ export default function Home() {
                                 borderColor: "rgba(255,255,255,0.35)",
                             }}
                         >
-                            <Image source={require("../assets/selected-tab-splash.png")} style={{ width: 95, height: 95 }} />
+                            <Image source={require("../assets/selected-tab-splash.png")} style={{ width: 90, height: 90 }} />
                         </Pressable>
                     </BlurView>
                 )}
             </View>
-            <ToiletInfo ref={toiletInfoBottomSheetRef} location={location} />
+            <ToiletInfo ref={toiletInfoBottomSheetRef} curentLocation={curentLocation} onNavigatePress={onNavigatePress} />
             <AddWc ref={addWcBottomSheetRef} />
+            <RoutePreview ref={routePreviewBottomSheetRef} curentLocation={curentLocation} toiletInfoBottomSheetRef={toiletInfoBottomSheetRef} />
         </View>
     )
 };

@@ -1,4 +1,4 @@
-import React, { forwardRef, useMemo, useCallback, useState } from "react";
+import { forwardRef, useMemo, useCallback, useState } from "react";
 import { Text, useTheme, SegmentedButtons } from "react-native-paper";
 import { View, Pressable, Image } from "react-native";
 import { BottomSheetModal, BottomSheetBackdrop, BottomSheetScrollView, } from "@gorhom/bottom-sheet";
@@ -8,7 +8,6 @@ import { useTranslation } from "react-i18next";
 import { useWcDataStore } from "../../store/wcDataStore";
 import { Bookmark, Share, Navigation, Toilet } from "lucide-react-native";
 import StarRating from "react-native-star-rating-widget";
-import { getDistance } from "geolib";
 import PhotoGallery from "../photoGallery/photoGallery";
 import MapView, { Marker } from "react-native-maps";
 import { DynamicColorIOS } from 'react-native';
@@ -16,14 +15,18 @@ import { NativeTabs } from 'expo-router/unstable-native-tabs';
 import Review from "../reviews/reviews";
 
 
-const ToiletInfo = forwardRef(({ location }, ref) => {
+const ToiletInfo = forwardRef(({ curentLocation, onNavigatePress }, ref) => {
 
     const [value, setValue] = useState('');
+    const [openAtIndex, setOpenAtIndex] = useState(0);
     const { t } = useTranslation();
     const theme = useTheme();
     const toilet = useWcDataStore((state) => state.selectedToilet);
+    const setNavigationTarget = useWcDataStore(state => state.setNavigationTarget);
+    const navigation = useWcDataStore(state => state.navigation);
+    const { distance, duration, status, } = navigation;
 
-    const snapPoints = useMemo(() => ["22%", "50%", "80%"], []);
+    const snapPoints = useMemo(() => ["28%", "57%", "85%"], []);
 
     const handleSheetChanges = useCallback((index) => {
         console.log(index);
@@ -45,27 +48,38 @@ const ToiletInfo = forwardRef(({ location }, ref) => {
 
     if (!toilet) return null;
 
-    const distance = getDistance(
-        {
-            latitude: location.coords.latitude,
-            longitude: location.coords.longitude,
-        },
-        {
-            latitude: toilet.location.coordinates[1],
-            longitude: toilet.location.coordinates[0],
-        }
-    );
-
     const formattedDistance =
         distance < 1000
             ? `${distance} m`
             : `${(distance / 1000).toFixed(1)} km`;
+
+    const formatDuration = () => {
+
+        if (duration == null) {
+            return "--";
+        }
+
+        const minutes = Math.round(duration / 60);
+
+        if (minutes < 60) {
+            return `${minutes} min`;
+        }
+
+        const hours = Math.floor(minutes / 60);
+
+        const remainingMinutes =
+            minutes % 60;
+
+        return `${hours}h ${remainingMinutes}min`;
+
+    };
 
 
     return (
         <BottomSheetModal
             ref={ref}
             snapPoints={snapPoints}
+            index={openAtIndex}
             enableDynamicSizing={false}
             onChange={handleSheetChanges}
             backdropComponent={renderBackdrop}
@@ -102,13 +116,14 @@ const ToiletInfo = forwardRef(({ location }, ref) => {
                     >
                         {toilet.name}
                     </Text>
+
                     <View
                         style={{
                             paddingVertical: 5,
                             flexDirection: "row",
                             alignItems: "center",
                             gap: 1,
-                            marginTop: 8
+                            marginTop: 8,
                         }}
                     >
                         <Text
@@ -126,9 +141,9 @@ const ToiletInfo = forwardRef(({ location }, ref) => {
                             enableSwiping={false}
                             step="quarter"
                             starSize={15}
-                            emptyColor={theme.colors.secondaryLight}
-                            color={theme.colors.secondaryDarker}
-                        // StarIconComponent={Toilet}
+                            emptyColor={theme.colors.unfocused}
+                            color={theme.colors.primaryDarker}
+                            StarIconComponent={Toilet}
                         />
 
                         <Text
@@ -137,7 +152,7 @@ const ToiletInfo = forwardRef(({ location }, ref) => {
                             }}
                             variant="bodySmall"
                         >
-                            {toilet.ratingSummary.count}
+                            ({toilet.ratingSummary.count} vote)
                         </Text>
 
                         {formattedDistance && (
@@ -152,6 +167,16 @@ const ToiletInfo = forwardRef(({ location }, ref) => {
                                 {formattedDistance}
                             </Text>
                         )}
+                        <Text
+                            style={{
+                                position: "absolute",
+                                right: 70,
+                                color: theme.colors.text,
+                            }}
+                            variant="bodySmall"
+                        >
+                            {formatDuration()}
+                        </Text>
                     </View>
 
                     <View
@@ -163,9 +188,66 @@ const ToiletInfo = forwardRef(({ location }, ref) => {
                             gap: 30,
                         }}
                     >
-                        <Navigation color={theme.colors.secondary} />
                         <Bookmark color={theme.colors.secondary} />
                         <Share color={theme.colors.secondary} />
+                    </View>
+                    <View
+                        style={{
+                            height: 70,
+                            marginTop: 10
+                        }}>
+                        <Pressable
+                            style={{ flex: 1 }}
+                            onPress={() => {
+                                ref.current?.dismiss();
+                                setNavigationTarget(toilet);
+                                onNavigatePress();
+                            }}
+                        >
+                            {({ pressed }) => (
+                                <BlurView
+                                    intensity={15}
+                                    tint="extraLight"
+                                    style={{
+                                        borderRadius: 30,
+                                        overflow: 'hidden',
+                                        transform: [{ scale: pressed ? 0.95 : 1 }],
+                                    }}
+                                >
+                                    <View
+                                        style={{
+                                            justifyContent: 'center',
+                                            borderRadius: 30,
+                                            borderWidth: 0.5,
+                                            borderColor: theme.colors.secondaryDarker,
+                                            alignItems: 'center',
+                                            paddingVertical: 20,
+                                            backgroundColor:
+                                                pressed
+                                                    ? theme.colors.secondaryDarker + '70'
+                                                    : theme.colors.secondaryDarker + '45',
+                                        }}
+                                    >
+                                        <Text style={{ color: theme.colors.surface, }}>
+                                            Show route to WC
+                                        </Text>
+                                    </View>
+                                </BlurView>
+                            )}
+                        </Pressable>
+                    </View>
+                    <View>
+                        <Text
+                            numberOfLines={2}
+                            style={{
+                                color: theme.colors.secondaryLight,
+                                paddingTop: 4,
+                                paddingRight: 24
+                            }}
+                        >
+                            {toilet.address}
+                        </Text>
+
                     </View>
                 </View>
 
@@ -178,20 +260,6 @@ const ToiletInfo = forwardRef(({ location }, ref) => {
                     showsVerticalScrollIndicator={false}
                 >
                     <View>
-                        <Text
-                            numberOfLines={2}
-                            style={{
-                                color: theme.colors.secondaryLight,
-                                paddingTop: 7,
-                                paddingRight: 24
-                            }}
-                        >
-                            {toilet.address}
-                        </Text>
-
-                    </View>
-
-                    <View style={{ marginTop: -20 }}>
                         <PhotoGallery />
                     </View>
 
@@ -220,12 +288,12 @@ const ToiletInfo = forwardRef(({ location }, ref) => {
                         theme={theme}
                         style={{
                             alignItems: 'center',
-                            justifyContent:'center'
+                            justifyContent: 'center'
                         }}
-                        >
-                        <Review/>
-                        <Review/>
-                        <Review/>
+                    >
+                        <Review />
+                        <Review />
+                        <Review />
                     </View>
                 </BottomSheetScrollView>
             </View>
@@ -234,3 +302,50 @@ const ToiletInfo = forwardRef(({ location }, ref) => {
 });
 
 export default ToiletInfo;
+
+
+// <View
+//     style={{
+//         height: 70,
+//         marginVertical: 10
+//     }}>
+//     <Pressable
+//         style={{ flex: 1 }}
+//         onPress={() => {
+//             ref.current?.dismiss();
+//             setNavigationTarget(toilet);
+//             onNavigatePress();
+//         }}
+//     >
+//         {({ pressed }) => (
+//             <BlurView
+//                 intensity={15}
+//                 tint="extraLight"
+//                 style={{
+//                     borderRadius: 30,
+//                     overflow: 'hidden',
+//                     transform: [{ scale: pressed ? 0.95 : 1 }],
+//                 }}
+//             >
+//                 <View
+//                     style={{
+//                         justifyContent: 'center',
+//                         borderRadius: 30,
+//                         borderWidth: 0.5,
+//                         borderColor: theme.colors.primaryDarker,
+//                         alignItems: 'center',
+//                         paddingVertical: 20,
+//                         backgroundColor:
+//                             pressed
+//                                 ? theme.colors.primaryDarker + '70'
+//                                 : theme.colors.primaryDarker + '45',
+//                     }}
+//                 >
+//                     <Text style={{ color: theme.colors.surface, }}>
+//                         Rate & Edit WC
+//                     </Text>
+//                 </View>
+//             </BlurView>
+//         )}
+//     </Pressable>
+// </View>

@@ -37,7 +37,7 @@ export default function PhotoGallery({ photos = [] }) {
                     <View style={{
                         justifyContent: "center",
                         alignItems: 'center',
-                        height: 380,
+                        height: 250,
                     }}>
                         <Image
                             source={require("../../assets/picPlaceHolder.png")}
@@ -46,30 +46,6 @@ export default function PhotoGallery({ photos = [] }) {
                                 height: 300,
                                 resizeMode: "contain",
                             }} />
-                        <Pressable
-                            style={({ pressed }) => ({
-                                shadowColor: "#000",
-                                shadowOffset: {
-                                    width: 0,
-                                    height: 10,
-                                },
-                                shadowOpacity: 0.3,
-                                shadowRadius: 20,
-                                elevation: 10,
-                                transform: [{ scale: pressed ? 0.9 : 1 }], // zoom out
-
-                            })}
-                        >
-                            <Image
-                                source={require("../../assets/UploadToiletPicBtn.png")}
-                                style={{
-                                    marginTop: -60,
-                                    width: 100,
-                                    height: 100,
-                                    resizeMode: "contain",
-                                }} />
-
-                        </Pressable>
                     </View>
                 )}
             </ScrollView>
