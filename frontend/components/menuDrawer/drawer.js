@@ -9,9 +9,12 @@ import { BlurView } from "expo-blur";
 import { useTranslation } from "react-i18next";
 import CountryFlag from "react-native-country-flag";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useUserStore } from "../../store/userStore";
 
 
 const CustomDrawerContent = (props) => {
+
+    const user = useUserStore((state) => state.user);
 
     const { i18n } = useTranslation();
     const { t } = useTranslation();
@@ -57,7 +60,7 @@ const CustomDrawerContent = (props) => {
                             fontWeight: "700",
                         }}
                     >
-                        {t("drawer.hello")} 👋
+                        {t("drawer.hello")} {user ? (user.name) : ("Guest user")} 👋
                     </Text>
 
                     <Text
@@ -65,10 +68,10 @@ const CustomDrawerContent = (props) => {
                             color: theme.colors.secondary,
                             fontSize: 15,
                             marginTop: 6,
-                            opacity: 0.8,
+                            opacity: user ? 0.8 : 0,
                         }}
                     >
-                        {t("drawer.welcome")} Omid
+                        {user ? `${t("drawer.welcome")} Omid` : ""}
                     </Text>
                 </View>
 
@@ -115,6 +118,7 @@ const CustomDrawerContent = (props) => {
                         }}
                     >
 
+                        {user ? (
                         <Pressable
                             onPress={() => {
                                 props.navigation.closeDrawer();
@@ -150,6 +154,7 @@ const CustomDrawerContent = (props) => {
                                 {t("drawer.account")}
                             </Text>
                         </Pressable>
+                        ):(<></>)}
                     </View>
                 </View>
 
@@ -201,7 +206,7 @@ const CustomDrawerContent = (props) => {
                     </Pressable>
 
                     <Pressable
-                        onPress={() =>{
+                        onPress={() => {
                             changeLanguage("fa")
                         }}
                         style={{ flex: 1 }}>
@@ -353,23 +358,6 @@ const MenuDrawer = () => {
                 }}
             />
 
-
-            <Drawer.Screen
-                name="Help"
-                options={{
-                    title: t("drawer.help"),
-                    drawerLabel: t("drawer.help"),
-
-                    drawerIcon: ({ color, size }) => (
-                        <CircleHelp
-                            color={color}
-                            size={size}
-                        />
-                    ),
-                }}
-            />
-
-
             <Drawer.Screen
                 name="About"
                 options={{
@@ -390,6 +378,24 @@ const MenuDrawer = () => {
             {/* Hidden from the normal list */}
             <Drawer.Screen
                 name="Account"
+                options={{
+                    drawerItemStyle: {
+                        display: "none",
+                    },
+                }}
+            />
+
+            <Drawer.Screen
+                name="(auth)"
+                options={{
+                    drawerItemStyle: {
+                        display: "none",
+                    },
+                }}
+            />
+
+            <Drawer.Screen
+                name="auth"
                 options={{
                     drawerItemStyle: {
                         display: "none",

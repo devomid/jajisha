@@ -1,6 +1,6 @@
 import { forwardRef, useMemo, useCallback, useState } from "react";
 import { Text, useTheme, SegmentedButtons } from "react-native-paper";
-import { View, Pressable, Image } from "react-native";
+import { View, Pressable, Share as RNShare } from "react-native";
 import { BottomSheetModal, BottomSheetBackdrop, BottomSheetScrollView, } from "@gorhom/bottom-sheet";
 import GlassBackground from "../../components/blur/blurView";
 import { BlurView } from "expo-blur";
@@ -74,6 +74,33 @@ const ToiletInfo = forwardRef(({ curentLocation, onNavigatePress }, ref) => {
 
     };
 
+    const handleShare = async () => {
+        try {
+            const coordinates = toilet?.location?.coordinates;
+
+            if (
+                !coordinates ||
+                coordinates.length !== 2 ||
+                coordinates[0] == null ||
+                coordinates[1] == null
+            ) {
+                return;
+            }
+
+            const [longitude, latitude] = coordinates;
+            const message = [`${latitude.toFixed(6)}, ${longitude.toFixed(6)}`]
+                .filter(Boolean)
+                .join("\n");
+
+            await RNShare.share({
+                title: toilet.name,
+                message,
+            });
+
+        } catch (error) {
+            console.log("Share error:", error);
+        }
+    };
 
     return (
         <BottomSheetModal
@@ -188,8 +215,28 @@ const ToiletInfo = forwardRef(({ curentLocation, onNavigatePress }, ref) => {
                             gap: 30,
                         }}
                     >
-                        <Bookmark color={theme.colors.secondary} />
-                        <Share color={theme.colors.secondary} />
+                        <Pressable
+                            onPress={handleShare}
+                        >
+                            {({ pressed }) => (
+                                <Bookmark style={{
+                                    transform: [{ scale: pressed ? 0.85 : 1 }],
+
+                                }}
+                                    color={theme.colors.secondary} />
+                            )}
+                        </Pressable>
+                        <Pressable
+                            onPress={handleShare}
+                        >
+                            {({ pressed }) => (
+                                <Share style={{
+                                    transform: [{ scale: pressed ? 0.85 : 1 }],
+
+                                }}
+                                    color={theme.colors.secondary} />
+                            )}
+                        </Pressable>
                     </View>
                     <View
                         style={{

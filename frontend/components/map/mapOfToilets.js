@@ -1,5 +1,5 @@
 import * as Location from "expo-location";
-import { useState, useEffect } from "react";
+import { useState, useEffect, forwardRef, useImperativeHandle, useRef } from "react";
 import { useWcDataStore } from "../../store/wcDataStore";
 import { useTheme } from "react-native-paper";
 import { useTranslation } from "react-i18next";
@@ -10,8 +10,9 @@ import { Image } from "react-native";
 import { BlurView } from "expo-blur";
 import MapView, { Marker } from "react-native-maps";
 
-export default function MapOfToilets({ currentLocation, onMarkerPress, isPickingLocation, onAddWcPress }) {
-
+const MapOfToilets = forwardRef(({ currentLocation, onMarkerPress, isPickingLocation, onAddWcPress }, ref) => {
+    
+    const mapRef = useRef(null);
     const { t } = useTranslation();
     const theme = useTheme();
     const toilets = useWcDataStore(state => state.toilets);
@@ -21,16 +22,67 @@ export default function MapOfToilets({ currentLocation, onMarkerPress, isPicking
     const stopPickingLocation = useWcDataStore(state => state.stopPickingLocation);
     const setPickedLocation = useWcDataStore(state => state.setPickedLocation);
     const navigationTarget = useWcDataStore(state => state.navigation.target);
-    const navigationRoute = useWcDataStore(state => state.navigation.route);
-    const navigationActive = useWcDataStore(state => state.navigation.active);
     const { navigateToToilet } = useNavigateToToilet();
     const [latitudeDelta, setLatitudeDelta] = useState(0.02);
+    const regionRef = useRef({
+        latitude: currentLocation.coords.latitude,
+        longitude: currentLocation.coords.longitude,
+        latitudeDelta: 0.02,
+        longitudeDelta: 0.02,
+    });
     const [region, setRegion] = useState({
         latitude: currentLocation.coords.latitude,
         longitude: currentLocation.coords.longitude,
         latitudeDelta: 0.02,
         longitudeDelta: 0.02,
     });
+
+    useImperativeHandle(ref, () => ({
+        zoomIn: () => {
+            const current = regionRef.current;
+
+            const newRegion = {
+                ...current,
+                latitudeDelta: current.latitudeDelta * 0.5,
+                longitudeDelta: current.longitudeDelta * 0.5,
+            };
+
+            regionRef.current = newRegion;
+            setRegion(newRegion);
+
+            mapRef.current?.animateToRegion(newRegion, 300);
+        },
+
+        zoomOut: () => {
+            const current = regionRef.current;
+
+            const newRegion = {
+                ...current,
+                latitudeDelta: current.latitudeDelta * 2,
+                longitudeDelta: current.longitudeDelta * 2,
+            };
+
+            regionRef.current = newRegion;
+            setRegion(newRegion);
+
+            mapRef.current?.animateToRegion(newRegion, 300);
+        },
+
+        recenter: () => {
+            const current = regionRef.current;
+
+            const newRegion = {
+                ...current,
+                latitude: currentLocation.coords.latitude,
+                longitude: currentLocation.coords.longitude,
+            };
+
+            regionRef.current = newRegion;
+            setRegion(newRegion);
+
+            mapRef.current?.animateToRegion(newRegion, 500);
+        },
+    }));
 
     const markerSize = Math.max(
         40,
@@ -64,23 +116,17 @@ export default function MapOfToilets({ currentLocation, onMarkerPress, isPicking
         navigateToToilet(navigationTarget);
     }, [navigationTarget]);
 
-    const routeCoordinates =
-        navigationRoute?.coordinates?.map(
-            ([longitude, latitude]) => ({
-                latitude,
-                longitude,
-            })
-        ) || [];
-
-    if (!location) return null;
     return (
         <View style={{ flex: 1 }}>
             <MapView
+                ref={mapRef}
                 style={{ flex: 1 }}
                 showsUserLocation={false}
                 followsUserLocation={!isPickingLocation}
                 initialRegion={region}
                 onRegionChangeComplete={(newRegion) => {
+                    regionRef.current = newRegion;
+
                     setLatitudeDelta(newRegion.latitudeDelta);
                     setRegion(newRegion);
                     setMapCenter(newRegion);
@@ -259,7 +305,6 @@ export default function MapOfToilets({ currentLocation, onMarkerPress, isPicking
             )}
         </View>
     );
-}
-
-
+})
+export default MapOfToilets;
 
