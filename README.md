@@ -187,55 +187,6 @@ Internationalization is built into the application architecture so additional la
 
 ---
 
-## 🖼️ Screenshots
-
-A small selection of screenshots can communicate the product much better than a long description.
-
-The recommended README layout is:
-
-<!-- SCREENSHOT: Replace the following placeholder section with a screenshot table/carousel -->
-
-|     Map     |     Toilet Details     |     Add Toilet     |
-| :---------: | :--------------------: | :----------------: |
-| `map.png` | `toilet-details.png` | `add-toilet.png` |
-
-|     Reviews     |     Favorites     |     Settings     |
-| :-------------: | :---------------: | :--------------: |
-| `reviews.png` | `favorites.png` | `settings.png` |
-
-### Recommended screenshot folder
-
-```text
-docs/
-└── screenshots/
-    ├── map.png
-    ├── toilet-details.png
-    ├── add-toilet.png
-    ├── reviews.png
-    ├── favorites.png
-    └── settings.png
-```
-
-Then replace the placeholder table above with actual Markdown image references:
-
-```markdown
-| Map | Toilet Details | Add Toilet |
-|:---:|:---:|:---:|
-| ![Map](docs/screenshots/map.png) | ![Toilet Details](docs/screenshots/toilet-details.png) | ![Add Toilet](docs/screenshots/add-toilet.png) |
-```
-
-You **do not need 8 screenshots**.
-
-For the GitHub landing page, I recommend starting with **3 strong screenshots**:
-
-1. Main map
-2. Toilet details
-3. Add toilet / contribution flow
-
-Those three communicate the product immediately.
-
----
-
 # 🏗️ Architecture
 
 Jajisha is structured as a full-stack application with a React Native frontend communicating with a Node.js/Express backend.
