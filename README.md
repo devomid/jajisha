@@ -2,6 +2,11 @@
 
 ### Find a toilet. Add a toilet. Get there.
 
+
+
+![1788117853271](image/README/1788117853271.png)
+
+
 **Jajisha** is a free, user-driven mobile application for discovering, adding, reviewing, and navigating to public toilets.
 
 The idea behind Jajisha came from a simple problem: **public toilets are often surprisingly difficult to find**. When you're in a city or an unfamiliar area, you may have no idea where the nearest toilet is — and even if you find one, you often don't know whether it is clean, usable, accessible, or properly equipped.
@@ -84,6 +89,9 @@ The experience is designed around a simple question:
 
 > **"Where can I find a toilet right now?"**
 
+![1788118093291](image/README/1788118093291.png)![1788118119215](image/README/1788118119215.png)
+
+
 ---
 
 ### ➕ Add a Toilet
@@ -91,6 +99,9 @@ The experience is designed around a simple question:
 Jajisha is user-powered.
 
 Anyone can contribute by adding a toilet location to the map, helping expand the database for other users.
+
+
+![1788118162814](image/README/1788118162814.png)
 
 <!-- SCREENSHOT: Add your "Add Toilet" screen here -->
 
@@ -149,6 +160,10 @@ The goal is to reduce the entire process to:
 
 **Find → Select → Navigate**
 
+![1788118252634](image/README/1788118252634.png)![1788118265728](image/README/1788118265728.png)
+
+
+
 ---
 
 ### 🔎 Search
@@ -180,12 +195,12 @@ The recommended README layout is:
 
 <!-- SCREENSHOT: Replace the following placeholder section with a screenshot table/carousel -->
 
-|    Map    |    Toilet Details    |    Add Toilet    |
-| :-------: | :------------------: | :--------------: |
+|     Map     |     Toilet Details     |     Add Toilet     |
+| :---------: | :--------------------: | :----------------: |
 | `map.png` | `toilet-details.png` | `add-toilet.png` |
 
-|    Reviews    |    Favorites    |    Settings    |
-| :-----------: | :-------------: | :------------: |
+|     Reviews     |     Favorites     |     Settings     |
+| :-------------: | :---------------: | :--------------: |
 | `reviews.png` | `favorites.png` | `settings.png` |
 
 ### Recommended screenshot folder
@@ -275,8 +290,8 @@ Jajisha is structured as a full-stack application with a React Native frontend c
 
 ## Frontend
 
-| Technology                       | Purpose                           |
-| -------------------------------- | --------------------------------- |
+| Technology                             | Purpose                           |
+| -------------------------------------- | --------------------------------- |
 | **React Native**                 | Cross-platform mobile application |
 | **Expo**                         | React Native development platform |
 | **Expo Router**                  | File-based application routing    |
@@ -296,8 +311,8 @@ Jajisha is structured as a full-stack application with a React Native frontend c
 
 ## Backend
 
-| Technology   | Purpose                       |
-| ------------ | ----------------------------- |
+| Technology         | Purpose                       |
+| ------------------ | ----------------------------- |
 | **Node.js**  | Backend runtime               |
 | **Express**  | REST API framework            |
 | **MongoDB**  | Database                      |
@@ -638,8 +653,8 @@ Jajisha currently supports:
 
 | Language     | Status |
 | ------------ | ------ |
-| 🇬🇧 English | ✅      |
-| 🇮🇷 Persian | ✅      |
+| 🇬🇧 English | ✅     |
+| 🇮🇷 Persian | ✅     |
 
 Localization is implemented using **i18next** and **react-i18next**, allowing additional languages to be added without restructuring the application.
 
@@ -651,16 +666,16 @@ Jajisha is an actively developed project.
 
 The long-term direction includes:
 
-* [x] Interactive toilet map
-* [x] User toilet submissions
-* [x] User accounts
-* [x] Ratings
-* [x] Reviews
-* [x] Favorites
-* [x] Location services
-* [x] Navigation
-* [x] English localization
-* [x] Persian localization
+* [X] Interactive toilet map
+* [X] User toilet submissions
+* [X] User accounts
+* [X] Ratings
+* [X] Reviews
+* [X] Favorites
+* [X] Location services
+* [X] Navigation
+* [X] English localization
+* [X] Persian localization
 * [ ] Public release
 * [ ] App Store distribution
 * [ ] Google Play distribution
@@ -740,11 +755,3 @@ It helps the project get noticed and provides motivation to keep building it.
 ---
 
 <div align="center">
-
-### 🚻 Find a toilet. Add a toilet. Help someone find one.
-
-**Jajisha**
-
-Made with ❤️ and a slightly desperate need for better toilet information.
-
-</div>
