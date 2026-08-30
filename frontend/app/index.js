@@ -3,7 +3,6 @@ import 'expo-router/entry';
 import { useCallback, useEffect, useRef } from "react";
 import { useNavigation } from "expo-router";
 import { useFocusEffect } from "@react-navigation/native";
-import { useTheme } from "react-native-paper";
 import { useDrawerStore } from "../store/drawerStore";
 import { useTranslation } from "react-i18next";
 import { useWcDataStore } from '../store/wcDataStore';
@@ -12,15 +11,19 @@ import useCurrentLocation from '../src/hooks/useCurrentLocation';
 import { useAuth } from '../src/hooks/useAuth';
 
 import { View, Pressable, Image } from "react-native";
+import { useTheme, Text } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { BlurView } from "expo-blur";
 import { Menu, LocateFixed, ZoomOut, ZoomIn, Search } from 'lucide-react-native';
+import { Matrix, snakeFrames } from 'react-native-dotgrid';
 
 import MapOfToilets from '../components/map/mapOfToilets';
 import ToiletInfo from "../components/bottomSheet/ToiletLocationBottomSheet";
 import AddWc from "../components/bottomSheet/AddWcBottomSheet";
 import RoutePreview from '../components/bottomSheet/RoutePreview';
 import SearchButton from '../components/searchBar/animatedSearchBtn';
+
+
 
 
 export default function Home() {
@@ -30,6 +33,7 @@ export default function Home() {
     const isPickingLocation = useWcDataStore(state => state.isPickingLocation);
     const navigationStatus = useWcDataStore(state => state.navigation.status);
     const shouldOpenDrawer = useDrawerStore((state) => state.shouldOpenDrawer);
+
     const reset = useDrawerStore((state) => state.reset);
 
 
@@ -69,22 +73,6 @@ export default function Home() {
         restoreUser()
     }, [])
 
-
-    // const onMarkerPress = (toilet) => {
-    //     // setSelectedToilet(toilet);
-    //     toiletInfoBottomSheetRef.current?.present();
-    // };
-    // const onMarkerPress = (toilet) => {
-    //     console.log("1. marker pressed");
-
-    //     toiletInfoBottomSheetRef.current?.present();
-
-    //     console.log(
-    //         "2. present called",
-    //         !!toiletInfoBottomSheetRef.current
-    //     );
-    // };
-
     const onMarkerPress = (toilet) => {
         console.log("1. marker pressed");
 
@@ -121,7 +109,103 @@ export default function Home() {
                 onMarkerPress={onMarkerPress}
                 onAddWcPress={onAddWcPress}
             />
+            {navigationStatus === "routing" && (
+                <View
+                    pointerEvents='none'
+                    style={{
+                        position: "absolute",
+                        top: 0,
+                        left: 0,
+                        right: 0,
+                        bottom: 0,
+                        justifyContent: "center",
+                        alignItems: "center",
+                        zIndex: 1000,
+                        gap: 40
+                    }}
+                >
+                    <Matrix
+                        rows={2}
+                        cols={5}
+                        frames={snakeFrames}
+                        size={28}
+                        gap={28}
+                        fps={13}
+                        loop
+                        palette={{
+                            on: theme.colors.secondary,
+                            off: theme.colors.surface + '10',
+                        }}
+                    />
+                    <Matrix
+                        rows={4}
+                        cols={5}
+                        frames={snakeFrames}
+                        size={28}
+                        gap={28}
+                        fps={13}
+                        loop
+                        palette={{
+                            on: theme.colors.secondary,
+                            off: theme.colors.surface + '10',
+                        }}
+                        style={{
+                            transform: [{ rotate: '90deg' }],
+                        }}
+                    />
+                    <Matrix
+                        rows={2}
+                        cols={5}
+                        frames={snakeFrames}
+                        size={28}
+                        gap={28}
+                        fps={13}
+                        loop
+                        palette={{
+                            on: theme.colors.secondary,
+                            off: theme.colors.surface + '10',
+                        }}
+                    />
+                    <BlurView
+                        intensity={9}
+                        tint="dark"
+                        style={{
+                            position: "absolute",
 
+                            width: 80,
+                            height: 80,
+                            borderRadius: 20,
+                            overflow: "hidden",
+
+                            backgroundColor: theme.colors.primaryLight + "40",
+
+                            alignItems: "center",
+                            justifyContent: "center",
+
+                            shadowColor: "#000",
+                            shadowOffset: {
+                                width: 0,
+                                height: 8,
+                            },
+                            shadowOpacity: 0.12,
+                            shadowRadius: 18,
+                            elevation: 10,
+
+                            zIndex: 2,
+                        }}
+                    >
+                        <Text
+                            variant='labelLarge'
+                            style={{
+                                textAlign: "center",
+                                width: "100%",
+                                color: theme.colors.secondaryDarker
+                            }}>
+                            Calculating route
+                        </Text>
+                    </BlurView>
+                </View>
+            )}
             <SafeAreaView
                 style={{
                     position: "absolute",
@@ -180,198 +264,196 @@ export default function Home() {
                     bottom: 0,
                     zIndex: 1000,
                 }}>
-                {!isPickingLocation && (
-                    <>
-                        <View
+                <View
+                    style={{
+                        position: 'absolute',
+                        top: 0,
+                        bottom: 0,
+                        right: 20,
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        gap: 10,
+                    }}
+                >
+                    <BlurView
+                        intensity={5}
+                        tint="light"
+                        style={{
+                            backgroundColor: "transparent",
+                            height: 45,
+                            width: 65,
+                            borderRadius: 99,
+                            overflow: "hidden",
+                            shadowColor: "#000",
+                            shadowOffset: {
+                                width: 0,
+                                height: 8,
+                            },
+                            shadowOpacity: 0.12,
+                            shadowRadius: 18,
+                            elevation: 10,
+                            alignItems: 'center',
+                            justifyContent: 'center'
+                        }}
+                    >
+                        <Pressable
+                            onPress={() => mapRef.current?.zoomIn()}
                             style={{
-                                position: 'absolute',
-                                top: 0,
-                                bottom: 0,
-                                right: 20,
-                                justifyContent: 'center',
+                                height: 45,
+                                width: 65,
+                                backgroundColor: theme.colors.secondaryLighter + '40',
+                                borderRadius: 99,
                                 alignItems: 'center',
-                                gap: 10,
+                                justifyContent: 'center',
                             }}
                         >
-                            <BlurView
-                                intensity={5}
-                                tint="light"
-                                style={{
-                                    backgroundColor: "transparent",
-                                    height: 45,
-                                    width: 65,
-                                    borderRadius: 99,
-                                    overflow: "hidden",
-                                    shadowColor: "#000",
-                                    shadowOffset: {
-                                        width: 0,
-                                        height: 8,
-                                    },
-                                    shadowOpacity: 0.12,
-                                    shadowRadius: 18,
-                                    elevation: 10,
-                                    alignItems: 'center',
-                                    justifyContent: 'center'
-                                }}
-                            >
-                                <Pressable
-                                    onPress={() => mapRef.current?.zoomIn()}
-                                    style={{
-                                        height: 45,
-                                        width: 65,
-                                        backgroundColor: theme.colors.secondaryLighter + '40',
-                                        borderRadius: 99,
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                    }}
-                                >
-                                    {({ pressed }) => (
-                                        <ZoomIn
-                                            style={{ transform: [{ scale: pressed ? 0.95 : 1 }] }}
-                                            size={40}
-                                            color={
-                                                pressed
-                                                    ? theme.colors.secondaryLight
-                                                    : theme.colors.primary
-                                            }
-                                        />
-                                    )}
-                                </Pressable>
-                            </BlurView>
+                            {({ pressed }) => (
+                                <ZoomIn
+                                    style={{ transform: [{ scale: pressed ? 0.95 : 1 }] }}
+                                    size={40}
+                                    color={
+                                        pressed
+                                            ? theme.colors.secondaryLight
+                                            : theme.colors.primary
+                                    }
+                                />
+                            )}
+                        </Pressable>
+                    </BlurView>
 
-                            <BlurView
-                                intensity={5}
-                                tint="light"
-                                style={{
-                                    backgroundColor: "transparent",
-                                    height: 50,
-                                    width: 50,
-                                    borderRadius: 99,
-                                    overflow: "hidden",
-                                    shadowColor: "#000",
-                                    shadowOffset: {
-                                        width: 0,
-                                        height: 8,
-                                    },
-                                    shadowOpacity: 0.12,
-                                    shadowRadius: 18,
-                                    elevation: 10,
-                                    alignItems: 'center',
-                                    justifyContent: 'center'
-                                }}
-                            >
-                                <Pressable
-                                    onPress={() => mapRef.current?.recenter()}
-                                    style={{
-                                        height: 50,
-                                        width: 50,
-                                        backgroundColor: theme.colors.primaryLighter + '40',
-                                        borderRadius: 99,
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                    }}
-                                >
-                                    {({ pressed }) => (
-                                        <LocateFixed
-                                            style={{ transform: [{ scale: pressed ? 0.95 : 1 }] }}
-                                            size={40}
-                                            color={
-                                                pressed
-                                                    ? theme.colors.primaryDark
-                                                    : theme.colors.secondaryLight
-                                            }
-                                        />
-                                    )}
-                                </Pressable>
-                            </BlurView>
-
-                            <BlurView
-                                intensity={5}
-                                tint="light"
-                                style={{
-                                    backgroundColor: "transparent",
-                                    height: 45,
-                                    width: 65,
-                                    borderRadius: 99,
-                                    overflow: "hidden",
-                                    shadowColor: "#000",
-                                    shadowOffset: {
-                                        width: 0,
-                                        height: 8,
-                                    },
-                                    shadowOpacity: 0.12,
-                                    shadowRadius: 18,
-                                    elevation: 10,
-                                    alignItems: 'center',
-                                    justifyContent: 'center'
-                                }}
-                            >
-                                <Pressable
-                                    onPress={() => mapRef.current?.zoomOut()}
-                                    style={{
-                                        height: 45,
-                                        width: 65,
-                                        backgroundColor: theme.colors.secondaryLighter + '40',
-                                        borderRadius: 99,
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                    }}
-                                >
-                                    {({ pressed }) => (
-                                        <ZoomOut
-                                            style={{ transform: [{ scale: pressed ? 0.95 : 1 }] }}
-                                            size={40}
-                                            color={
-                                                pressed
-                                                    ? theme.colors.secondaryLight
-                                                    : theme.colors.primary
-                                            }
-                                        />
-                                    )}
-                                </Pressable>
-                            </BlurView>
-                        </View>
-                        <BlurView
-                            intensity={0}
-                            tint="dark"
+                    <BlurView
+                        intensity={5}
+                        tint="light"
+                        style={{
+                            backgroundColor: "transparent",
+                            height: 50,
+                            width: 50,
+                            borderRadius: 99,
+                            overflow: "hidden",
+                            shadowColor: "#000",
+                            shadowOffset: {
+                                width: 0,
+                                height: 8,
+                            },
+                            shadowOpacity: 0.12,
+                            shadowRadius: 18,
+                            elevation: 10,
+                            alignItems: 'center',
+                            justifyContent: 'center'
+                        }}
+                    >
+                        <Pressable
+                            onPress={() => mapRef.current?.recenter()}
                             style={{
-                                position: "absolute",
-                                bottom: 20,
-                                right: 25,
-                                backgroundColor: 'transparent',
-                                width: 100,
-                                height: 100,
-                                borderRadius: 60,
-                                overflow: "hidden",
-                                shadowColor: "#000",
-                                shadowOffset: {
-                                    width: 0,
-                                    height: 8,
-                                },
-                                shadowOpacity: 0.12,
-                                shadowRadius: 18,
-                                elevation: 10,
+                                height: 50,
+                                width: 50,
+                                backgroundColor: theme.colors.primaryLighter + '40',
+                                borderRadius: 99,
+                                alignItems: 'center',
+                                justifyContent: 'center',
                             }}
                         >
-                            <Pressable
-                                onPress={onAddWcPress}
-                                style={{
-                                    flex: 1,
-                                    justifyContent: "center",
-                                    alignItems: "center",
-                                }}
-                            >
-                                {({ pressed }) => (
-                                    <Image source={require("../assets/selected-tab-splash.png")}
-                                        style={{
-                                            width: 100,
-                                            height: 100,
-                                            transform: [{ scale: pressed ? 0.8 : 1 }]
-                                        }} />
-                                )}
-                            </Pressable>
-                        </BlurView>
-                    </>
+                            {({ pressed }) => (
+                                <LocateFixed
+                                    style={{ transform: [{ scale: pressed ? 0.95 : 1 }] }}
+                                    size={40}
+                                    color={
+                                        pressed
+                                            ? theme.colors.primaryDark
+                                            : theme.colors.secondaryLight
+                                    }
+                                />
+                            )}
+                        </Pressable>
+                    </BlurView>
+
+                    <BlurView
+                        intensity={5}
+                        tint="light"
+                        style={{
+                            backgroundColor: "transparent",
+                            height: 45,
+                            width: 65,
+                            borderRadius: 99,
+                            overflow: "hidden",
+                            shadowColor: "#000",
+                            shadowOffset: {
+                                width: 0,
+                                height: 8,
+                            },
+                            shadowOpacity: 0.12,
+                            shadowRadius: 18,
+                            elevation: 10,
+                            alignItems: 'center',
+                            justifyContent: 'center'
+                        }}
+                    >
+                        <Pressable
+                            onPress={() => mapRef.current?.zoomOut()}
+                            style={{
+                                height: 45,
+                                width: 65,
+                                backgroundColor: theme.colors.secondaryLighter + '40',
+                                borderRadius: 99,
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                            }}
+                        >
+                            {({ pressed }) => (
+                                <ZoomOut
+                                    style={{ transform: [{ scale: pressed ? 0.95 : 1 }] }}
+                                    size={40}
+                                    color={
+                                        pressed
+                                            ? theme.colors.secondaryLight
+                                            : theme.colors.primary
+                                    }
+                                />
+                            )}
+                        </Pressable>
+                    </BlurView>
+                </View>
+                {!isPickingLocation && (
+                    <BlurView
+                        intensity={0}
+                        tint="dark"
+                        style={{
+                            position: "absolute",
+                            bottom: 20,
+                            right: 25,
+                            backgroundColor: 'transparent',
+                            width: 100,
+                            height: 100,
+                            borderRadius: 60,
+                            overflow: "hidden",
+                            shadowColor: "#000",
+                            shadowOffset: {
+                                width: 0,
+                                height: 8,
+                            },
+                            shadowOpacity: 0.12,
+                            shadowRadius: 18,
+                            elevation: 10,
+                        }}
+                    >
+                        <Pressable
+                            onPress={onAddWcPress}
+                            style={{
+                                flex: 1,
+                                justifyContent: "center",
+                                alignItems: "center",
+                            }}
+                        >
+                            {({ pressed }) => (
+                                <Image source={require("../assets/selected-tab-splash.png")}
+                                    style={{
+                                        width: 100,
+                                        height: 100,
+                                        transform: [{ scale: pressed ? 0.8 : 1 }]
+                                    }} />
+                            )}
+                        </Pressable>
+                    </BlurView>
                 )}
             </View>
             <ToiletInfo

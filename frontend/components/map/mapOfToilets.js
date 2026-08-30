@@ -705,7 +705,6 @@ const MapOfToilets = forwardRef(({ currentLocation, onMarkerPress, isPickingLoca
             </MapView>
 
             {navigationStatus === "navigating" && (
-
                 <View
                     pointerEvents="box-none"
                     style={{
@@ -714,39 +713,41 @@ const MapOfToilets = forwardRef(({ currentLocation, onMarkerPress, isPickingLoca
                         right: 135,
                         bottom: 35,
                     }}>
+                    {!isPickingLocation && (
 
-                    <Pressable onPress={handleCancelNavigation}>
+                        <Pressable onPress={handleCancelNavigation}>
 
-                        {({ pressed }) => (
+                            {({ pressed }) => (
 
-                            <BlurView
-                                intensity={20}
-                                tint="extraLight"
-                                style={{
-                                    borderRadius: 34,
-                                    overflow: "hidden",
-                                    transform: [{ scale: pressed ? 0.95 : 1 }]
-                                }}
-                            >
-
-                                <View
+                                <BlurView
+                                    intensity={20}
+                                    tint="extraLight"
                                     style={{
-                                        justifyContent: "center",
-                                        alignItems: "center",
-                                        paddingVertical: 22,
-                                        borderRadius: 38,
-                                        borderWidth: 0.5,
-                                        borderColor: theme.colors.error,
-                                        backgroundColor: theme.colors.error + "55",
+                                        borderRadius: 34,
+                                        overflow: "hidden",
+                                        transform: [{ scale: pressed ? 0.95 : 1 }]
                                     }}
                                 >
-                                    <Text>
-                                        Cancel Navigation
-                                    </Text>
-                                </View>
-                            </BlurView>
-                        )}
-                    </Pressable>
+
+                                    <View
+                                        style={{
+                                            justifyContent: "center",
+                                            alignItems: "center",
+                                            paddingVertical: 22,
+                                            borderRadius: 38,
+                                            borderWidth: 0.5,
+                                            borderColor: theme.colors.error,
+                                            backgroundColor: theme.colors.error + "55",
+                                        }}
+                                    >
+                                        <Text>
+                                            Cancel Navigation
+                                        </Text>
+                                    </View>
+                                </BlurView>
+                            )}
+                        </Pressable>
+                    )}
                 </View>
             )}
 
