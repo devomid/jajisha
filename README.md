@@ -2,10 +2,7 @@
 
 ### Find a toilet. Add a toilet. Get there.
 
-
-
 ![1788117853271](image/README/1788117853271.png)
-
 
 **Jajisha** is a free, user-driven mobile application for discovering, adding, reviewing, and navigating to public toilets.
 
@@ -91,7 +88,6 @@ The experience is designed around a simple question:
 
 ![1788118093291](image/README/1788118093291.png)![1788118119215](image/README/1788118119215.png)
 
-
 ---
 
 ### ➕ Add a Toilet
@@ -99,7 +95,6 @@ The experience is designed around a simple question:
 Jajisha is user-powered.
 
 Anyone can contribute by adding a toilet location to the map, helping expand the database for other users.
-
 
 ![1788118162814](image/README/1788118162814.png)
 
@@ -161,8 +156,6 @@ The goal is to reduce the entire process to:
 **Find → Select → Navigate**
 
 ![1788118252634](image/README/1788118252634.png)![1788118265728](image/README/1788118265728.png)
-
-
 
 ---
 
@@ -627,11 +620,11 @@ The long-term direction includes:
 * [X] Navigation
 * [X] English localization
 * [X] Persian localization
-* [ ] Public release
-* [ ] App Store distribution
-* [ ] Google Play distribution
-* [ ] PWA
-* [ ] Expand the toilet database
+* [X] Public release
+* [X] App Store distribution
+* [X] Google Play distribution
+* [X] PWA
+* [X] Expand the toilet database
 * [ ] Improve moderation and data quality
 * [ ] Continue improving toilet information and accessibility data
 
