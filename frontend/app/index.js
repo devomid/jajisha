@@ -9,17 +9,18 @@ import { useTranslation } from "react-i18next";
 import { useWcDataStore } from '../store/wcDataStore';
 import { useGetWc } from '../src/hooks/useGetWc';
 import useCurrentLocation from '../src/hooks/useCurrentLocation';
+import { useAuth } from '../src/hooks/useAuth';
 
 import { View, Pressable, Image } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { BlurView } from "expo-blur";
-import { Menu, LocateFixed, ZoomOut, ZoomIn } from 'lucide-react-native';
+import { Menu, LocateFixed, ZoomOut, ZoomIn, Search } from 'lucide-react-native';
 
 import MapOfToilets from '../components/map/mapOfToilets';
 import ToiletInfo from "../components/bottomSheet/ToiletLocationBottomSheet";
 import AddWc from "../components/bottomSheet/AddWcBottomSheet";
 import RoutePreview from '../components/bottomSheet/RoutePreview';
-
+import SearchButton from '../components/searchBar/animatedSearchBtn';
 
 
 export default function Home() {
@@ -31,11 +32,14 @@ export default function Home() {
     const shouldOpenDrawer = useDrawerStore((state) => state.shouldOpenDrawer);
     const reset = useDrawerStore((state) => state.reset);
 
+
     const { t } = useTranslation();
+    const { restoreUser } = useAuth();
     const mapRef = useRef(null);
     const curentLocation = useCurrentLocation();
     const theme = useTheme();
     const toiletInfoBottomSheetRef = useRef(null);
+    const reopenToiletInfoAtSecondSnapRef = useRef(false);
     const addWcBottomSheetRef = useRef(null);
     const routePreviewBottomSheetRef = useRef(null);
     const navigation = useNavigation();
@@ -50,15 +54,53 @@ export default function Home() {
     );
 
     useEffect(() => {
-        if (navigationStatus === "preview") {
-            routePreviewBottomSheetRef.current?.present();
+        if (navigationStatus !== "preview") {
+            return;
         }
+
+        const timer = setTimeout(() => {
+            routePreviewBottomSheetRef.current?.present();
+        }, 350);
+
+        return () => clearTimeout(timer);
     }, [navigationStatus]);
 
+    useEffect(() => {
+        restoreUser()
+    }, [])
+
+
+    // const onMarkerPress = (toilet) => {
+    //     // setSelectedToilet(toilet);
+    //     toiletInfoBottomSheetRef.current?.present();
+    // };
+    // const onMarkerPress = (toilet) => {
+    //     console.log("1. marker pressed");
+
+    //     toiletInfoBottomSheetRef.current?.present();
+
+    //     console.log(
+    //         "2. present called",
+    //         !!toiletInfoBottomSheetRef.current
+    //     );
+    // };
 
     const onMarkerPress = (toilet) => {
-        // setSelectedToilet(toilet);
-        toiletInfoBottomSheetRef.current?.present();
+        console.log("1. marker pressed");
+
+        if (navigationStatus !== "idle") {
+            console.log("Navigation still active:", navigationStatus);
+            return;
+        }
+
+        setTimeout(() => {
+            toiletInfoBottomSheetRef.current?.present();
+        }, 350);
+
+        console.log(
+            "2. ref exists:",
+            !!toiletInfoBottomSheetRef.current
+        );
     };
 
     const onAddWcPress = (toilet) => {
@@ -66,11 +108,6 @@ export default function Home() {
         addWcBottomSheetRef.current?.present();
         // console.log("onAddWcPress");
     };
-
-    const onNavigatePress = (location) => {
-        routePreviewBottomSheetRef.current?.present();
-    }
-
 
     if (!curentLocation) return null;
 
@@ -97,7 +134,7 @@ export default function Home() {
                     intensity={8}
                     tint="dark"
                     style={{
-                        backgroundColor: "rgba(255, 238, 0, 0.1)",
+                        backgroundColor: theme.colors.secondaryLighter + "40",
                         width: 40,
                         height: 45,
                         borderRadius: 17,
@@ -122,8 +159,6 @@ export default function Home() {
                             borderRadius: 17,
                             justifyContent: "center",
                             alignItems: "center",
-                            borderWidth: 1,
-                            borderColor: "rgba(255,255,255,0.35)",
                         }}
                     >
                         {({ pressed }) => (
@@ -132,6 +167,8 @@ export default function Home() {
                     </Pressable>
                 </BlurView>
             </SafeAreaView>
+
+            <SearchButton />
 
             <View
                 pointerEvents="box-none"
@@ -295,15 +332,15 @@ export default function Home() {
                             </BlurView>
                         </View>
                         <BlurView
-                            intensity={8}
+                            intensity={0}
                             tint="dark"
                             style={{
                                 position: "absolute",
                                 bottom: 20,
-                                right: 20,
-                                backgroundColor: "rgba(255, 238, 0, 0.1)",
-                                width: 95,
-                                height: 95,
+                                right: 25,
+                                backgroundColor: 'transparent',
+                                width: 100,
+                                height: 100,
                                 borderRadius: 60,
                                 overflow: "hidden",
                                 shadowColor: "#000",
@@ -322,21 +359,47 @@ export default function Home() {
                                     flex: 1,
                                     justifyContent: "center",
                                     alignItems: "center",
-                                    borderWidth: 1,
-                                    borderColor: "rgba(255,255,255,0.35)",
                                 }}
                             >
                                 {({ pressed }) => (
-                                    <Image source={require("../assets/selected-tab-splash.png")} style={{ width: 90, height: 90, transform: [{ scale: pressed ? 0.8 : 1 }] }} />
+                                    <Image source={require("../assets/selected-tab-splash.png")}
+                                        style={{
+                                            width: 100,
+                                            height: 100,
+                                            transform: [{ scale: pressed ? 0.8 : 1 }]
+                                        }} />
                                 )}
                             </Pressable>
                         </BlurView>
                     </>
                 )}
             </View>
-            <ToiletInfo ref={toiletInfoBottomSheetRef} curentLocation={curentLocation} onNavigatePress={onNavigatePress} />
+            <ToiletInfo
+                ref={toiletInfoBottomSheetRef}
+                curentLocation={curentLocation}
+                onPresent={(index) => {
+                    if (
+                        index === 0 &&
+                        reopenToiletInfoAtSecondSnapRef.current
+                    ) {
+                        reopenToiletInfoAtSecondSnapRef.current = false;
+
+                        toiletInfoBottomSheetRef.current?.snapToIndex(1);
+                    }
+                }}
+            />
             <AddWc ref={addWcBottomSheetRef} />
-            <RoutePreview ref={routePreviewBottomSheetRef} curentLocation={curentLocation} toiletInfoBottomSheetRef={toiletInfoBottomSheetRef} />
+            <RoutePreview
+                ref={routePreviewBottomSheetRef}
+                curentLocation={curentLocation}
+                toiletInfoBottomSheetRef={toiletInfoBottomSheetRef}
+                onDismiss={() => {
+                    console.log("HOME >>> ROUTE PREVIEW FULLY DISMISSED");
+                }}
+                onReopenToiletInfo={() => {
+                    reopenToiletInfoAtSecondSnapRef.current = true;
+                }}
+            />
         </View>
     )
 };

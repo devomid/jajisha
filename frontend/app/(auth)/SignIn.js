@@ -1,56 +1,115 @@
-import { View, StyleSheet } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { Text, useTheme } from "react-native-paper";
-import MapView from "react-native-maps";
-import { BlurView } from "expo-blur";
-import PageHeader from "../../components/topNav/topNav";
-import useCurrentLocation from "../../src/hooks/useCurrentLocation";
 import { useEffect, useState } from "react";
+import { useAuth } from "../../src/hooks/useAuth";
+import { useFormik } from "formik";
+import useCurrentLocation from "../../src/hooks/useCurrentLocation";
+
+import { SafeAreaView } from "react-native-safe-area-context";
+import { View, StyleSheet, Pressable } from "react-native";
+import { Text, TextInput, Button, useTheme, Checkbox } from "react-native-paper";
+import { BlurView } from "expo-blur";
+import MapView from "react-native-maps";
+import { router } from "expo-router";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
+import { signInSchema } from "../../src/validation/userInfoSchema";
 
 export default function SignIn() {
-    const pageName = "Sign In"
     const theme = useTheme();
     const currentLocation = useCurrentLocation();
+    const { signIn } = useAuth();
     const [region, setRegion] = useState(null);
+    const [rememberMe, setRememberMe] = useState(false);
+
+    const {
+        values,
+        errors,
+        touched,
+        isSubmitting,
+        handleSubmit,
+        handleBlur,
+        handleChange,
+        setValues
+    } = useFormik({
+        initialValues: {
+            email: "",
+            password: "",
+        },
+
+        validationSchema: signInSchema,
+
+        onSubmit: async (values, { resetForm }) => {
+            const isSignedIn = await signIn(values.email, values.password);
+
+            if (!isSignedIn) { return; }
+
+            if (rememberMe) {
+                await AsyncStorage.setItem("savedEmail", values.email);
+                await AsyncStorage.setItem("savedPassword", values.password);
+            } else {
+                await AsyncStorage.removeItem("savedEmail");
+                await AsyncStorage.removeItem("savedPassword");
+            }
+
+            resetForm();
+            router.push('/');
+        },
+    });
+
+    const handleCancel = () => {
+        router.replace('/')
+    }
 
     useEffect(() => {
-        if (!currentLocation?.coords) return;
+        const coords = currentLocation?.coords;
+
+        if (!coords) return;
 
         setRegion({
-            latitude: currentLocation.coords.latitude,
-            longitude: currentLocation.coords.longitude,
+            latitude: coords.latitude,
+            longitude: coords.longitude,
             latitudeDelta: 0.02,
             longitudeDelta: 0.02,
         });
     }, [currentLocation]);
 
-    if (!region) {
-        return (
-            <View style={{ flex: 1, }}>
-                <SafeAreaView>
-                    <PageHeader />
-                </SafeAreaView>
-            </View>
-        );
-    }
+    useEffect(() => {
+        const loadSavedLogin = async () => {
+            const savedEmail = await AsyncStorage.getItem("savedEmail");
+            const savedPassword = await AsyncStorage.getItem("savedPassword");
+
+            if (savedEmail && savedPassword) {
+                setValues({
+                    email: savedEmail,
+                    password: savedPassword,
+                });
+
+                setRememberMe(true);
+            }
+        };
+
+        loadSavedLogin();
+    }, []);
 
     return (
         <View style={{ flex: 1, }}>
 
-            {/* MAP — full screen background */}
-            <MapView
-                style={StyleSheet.absoluteFillObject}
-                showsUserLocation={false}
-                initialRegion={region}
-            />
+            {/* MAP BACKGROUND */}
+            {region && (
+                <MapView
+                    style={StyleSheet.absoluteFillObject}
+                    showsUserLocation={false}
+                    initialRegion={region}
+                />
+            )}
 
-            {/* PRIMARY COLOR + BLUR OVERLAY */}
+            {/* BLUR */}
             <BlurView
                 intensity={15}
                 tint="light"
                 style={StyleSheet.absoluteFillObject}
             />
 
+            {/* PRIMARY COLOR OVERLAY */}
             <View
                 pointerEvents="none"
                 style={[
@@ -62,22 +121,179 @@ export default function SignIn() {
                 ]}
             />
 
-            {/* EVERYTHING ABOVE THE MAP */}
             <SafeAreaView style={{ flex: 1, }}>
 
-                <PageHeader pageName={pageName} />
+                {!region ? (
+                    // Keep the page structure while location loads
+                    <View style={{ flex: 1, }} />
+                ) : (
+                    <View style={{ flex: 1, }}>
 
-                <View style={{
-                    flex: 1,
-                    justifyContent: "center",
-                    alignItems: "center",
-                }}>
+                        {/* TITLE */}
+                        <View style={{
+                            width: "100%",
+                            paddingHorizontal: 25,
+                            marginTop: 70,
+                            marginBottom: 50,
+                        }}>
+                            <Text style={{ color: theme.colors.secondaryDarker }} variant="displayLarge">
+                                Sign In
+                            </Text>
+                            <Text style={{ color: theme.colors.secondaryDarker, marginLeft: 2 }} variant="bodyMedium">
+                                to find best places to relief.
+                            </Text>
+                        </View>
 
+                        {/* FORM */}
+                        <View style={{
+                            paddingHorizontal: 25,
+                            gap: 25,
+                        }}>
+                            <TextInput
+                                label="Email"
+                                mode="outlined"
+                                outlineColor={theme.colors.secondaryLight + '80'}
+                                activeOutlineColor={theme.colors.primary}
+                                value={values.email}
+                                onChangeText={handleChange("email")}
+                                onBlur={handleBlur("email")}
+                                keyboardType="email-address"
+                                autoCapitalize="none"
+                                autoCorrect={false}
+                                error={Boolean(touched.email && errors.email)}
+                                style={{ backgroundColor: theme.colors.secondaryLight + "30", height: 40 }}
+                            />
 
-                </View>
+                            {touched.email && errors.email && (
+                                <Text style={{
+                                    marginTop: -12,
+                                    marginLeft: 4,
+                                    fontSize: 12,
+                                    color: theme.colors.error,
+                                }}>
+                                    {errors.email}
+                                </Text>
+                            )}
+
+                            <TextInput
+                                label="Password"
+                                mode="outlined"
+                                outlineColor={theme.colors.secondaryLight + '80'}
+                                activeOutlineColor={theme.colors.primary}
+                                value={values.password}
+                                onChangeText={handleChange("password")}
+                                onBlur={handleBlur("password")}
+                                secureTextEntry
+                                autoCapitalize="none"
+                                error={Boolean(touched.password && errors.password)}
+                                style={{ backgroundColor: theme.colors.secondaryLight + "30", height: 40 }}
+                            />
+
+                            {touched.password && errors.password && (
+                                <Text style={{
+                                    marginTop: -12,
+                                    marginLeft: 4,
+                                    fontSize: 12,
+                                    color: theme.colors.error,
+                                }}>
+                                    {errors.password}
+                                </Text>
+                            )}
+
+                            <View style={{ flexDirection: "row", alignItems: "center" }}>
+                                <View style={{ backgroundColor: theme.colors.secondary + '25', width: 35, height: 35, marginRight: 5, display: 'flex', justifyContent: 'center', alignItems: 'center', borderRadius: 7 }}>
+                                    <Checkbox
+                                        color={theme.colors.secondary}
+                                        status={rememberMe ? "checked" : "unchecked"}
+                                        onPress={() => setRememberMe(!rememberMe)}
+                                    />
+                                </View>
+
+                                <Text style={{ color: theme.colors.secondary }} >
+                                    Remember me
+                                </Text>
+                            </View>
+
+                            <View>
+                                <Pressable
+                                    onPress={handleSubmit}
+                                    disabled={isSubmitting}
+                                >
+                                    {({ pressed }) => (
+                                        <View style={{ transform: [{ scale: pressed ? 0.95 : 1, }] }}>
+                                            <Button
+                                                mode="contained"
+                                                loading={isSubmitting}
+                                                disabled={isSubmitting}
+                                                style={{
+                                                    backgroundColor:
+                                                        theme.colors.success + "50",
+                                                }}
+                                            >
+                                                <Text style={{ color: theme.colors.secondary }}>
+                                                    Sign In
+                                                </Text>
+                                            </Button>
+                                        </View>
+                                    )}
+                                </Pressable>
+                                <Pressable
+                                    onPress={handleCancel}
+                                    disabled={isSubmitting}
+                                >
+                                    {({ pressed }) => (
+                                        <View style={{ transform: [{ scale: pressed ? 0.95 : 1, }] }}>
+                                            <Button
+                                                mode="contained"
+                                                loading={isSubmitting}
+                                                disabled={isSubmitting}
+                                                style={{
+                                                    marginTop: 15,
+                                                    backgroundColor:
+                                                        theme.colors.error + "45",
+                                                }}
+                                            >
+                                                <Text style={{ color: theme.colors.secondary }}>
+                                                    Cancel
+                                                </Text>
+                                            </Button>
+                                        </View>
+                                    )}
+                                </Pressable>
+                                <Text style={{
+                                    alignSelf: 'center',
+                                    marginTop: '128',
+                                    color: theme.colors.secondary
+                                }}>
+                                    No account yet?
+                                </Text>
+                                <Pressable
+                                    onPress={() => {
+                                        router.push('/SignUp');
+                                    }}
+                                >
+                                    {({ pressed }) => (
+                                        <View style={{ transform: [{ scale: pressed ? 0.95 : 1, }] }}>
+                                            <Button
+                                                mode="contained"
+                                                style={{
+                                                    marginTop: 15,
+                                                    backgroundColor: theme.colors.primaryDarker + "45",
+                                                }}>
+                                                <Text style={{ color: theme.colors.secondaryDarker, }}>
+                                                    Become a new member
+                                                </Text>
+                                            </Button>
+                                        </View>
+                                    )}
+                                </Pressable>
+                            </View>
+
+                        </View>
+                    </View>
+                )}
 
             </SafeAreaView>
-
         </View>
     );
 }

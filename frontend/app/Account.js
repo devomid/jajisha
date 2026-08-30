@@ -1,14 +1,17 @@
 import { View, StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Text, useTheme } from "react-native-paper";
+import { Text, useTheme, Button } from "react-native-paper";
 import MapView from "react-native-maps";
 import { BlurView } from "expo-blur";
 import PageHeader from "../components/topNav/topNav";
 import useCurrentLocation from "../src/hooks/useCurrentLocation";
 import { useEffect, useState } from "react";
+import { useAuth } from "../src/hooks/useAuth";
+import { router } from "expo-router";
 
 export default function Account() {
   const pageName = "Omid's Account"
+  const { logout } = useAuth();
   const theme = useTheme();
   const currentLocation = useCurrentLocation();
   const [region, setRegion] = useState(null);
@@ -72,7 +75,19 @@ export default function Account() {
           justifyContent: "center",
           alignItems: "center",
         }}>
-
+          <Button
+            mode="contained"
+            onPress={() => {
+              logout();
+              router.push('/');
+            }}
+            style={{
+              marginTop: 15,
+              backgroundColor: theme.colors.error + "45"
+            }}
+          >
+            Sign out
+          </Button>
 
         </View>
 

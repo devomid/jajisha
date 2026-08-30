@@ -10,698 +10,713 @@ import { useWcDataStore } from "../../store/wcDataStore";
 import GlassBackground from "../../components/blur/blurView";
 
 
-const RoutePreview = forwardRef(({ curentLocation, toiletInfoBottomSheetRef }, ref) => {
+const RoutePreview = forwardRef(
+    ({ curentLocation, toiletInfoBottomSheetRef, onDismiss, onReopenToiletInfo }, ref) => {
 
-    const { t } = useTranslation();
-    const theme = useTheme();
-    const mapRef = useRef(null);
-    const [mapReady, setMapReady] = useState(false);
-    const navigation = useWcDataStore(state => state.navigation);
-    const { target, route, distance, duration, status, } = navigation;
-    const snapPoints = useMemo(() => ["65%"], []);
+        const { t } = useTranslation();
+        const theme = useTheme();
+        const mapRef = useRef(null);
+        const [mapReady, setMapReady] = useState(false);
+        const navigation = useWcDataStore(state => state.navigation);
+        const { target, route, distance, duration, status, } = navigation;
+        const snapPoints = useMemo(() => ["65%"], []);
+        const shouldReopenToiletInfo = useRef(false);
 
-    const origin = useMemo(() => {
-        if (
-            !curentLocation?.coords?.latitude ||
-            !curentLocation?.coords?.longitude
-        ) {
-            return null;
-        }
-        return {
-            latitude: curentLocation.coords.latitude,
-            longitude: curentLocation.coords.longitude,
-        };
+        const origin = useMemo(() => {
+            if (
+                !curentLocation?.coords?.latitude ||
+                !curentLocation?.coords?.longitude
+            ) {
+                return null;
+            }
+            return {
+                latitude: curentLocation.coords.latitude,
+                longitude: curentLocation.coords.longitude,
+            };
 
-    }, [curentLocation]);
+        }, [curentLocation]);
 
-    const routeCoordinates = useMemo(() => {
+        const routeCoordinates = useMemo(() => {
 
-        if (!route?.coordinates?.length) {
-            return [];
-        }
+            if (!route?.coordinates?.length) {
+                return [];
+            }
 
-        return route.coordinates.map(
-            ([longitude, latitude]) => ({
-                latitude,
-                longitude,
-            })
-        );
-
-    }, [route]);
-
-    const destination = useMemo(() => {
-
-        if (
-            !target?.location?.coordinates ||
-            target.location.coordinates.length < 2
-        ) {
-            return null;
-        }
-
-        return {
-            latitude:
-                target.location.coordinates[1],
-
-            longitude:
-                target.location.coordinates[0],
-        };
-
-    }, [target]);
-
-
-    /*
-     * FIT MAP TO ROUTE
-     *
-     * Only do this when:
-     *
-     * 1. Map is ready
-     * 2. Route exists
-     * 3. Origin exists
-     * 4. Destination exists
-     */
-    useEffect(() => {
-
-        if (!mapReady) {
-            return;
-        }
-
-        if (!mapRef.current) {
-            return;
-        }
-
-        if (!origin) {
-            return;
-        }
-
-        if (!destination) {
-            return;
-        }
-
-        if (routeCoordinates.length === 0) {
-            return;
-        }
-
-        const coordinates = [
-            origin,
-            destination,
-            ...routeCoordinates,
-        ];
-
-
-        const timer = setTimeout(() => {
-
-            mapRef.current?.fitToCoordinates(
-                coordinates,
-                {
-                    edgePadding: {
-                        top: 60,
-                        right: 50,
-                        bottom: 60,
-                        left: 50,
-                    },
-
-                    animated: true,
-                }
+            return route.coordinates.map(
+                ([longitude, latitude]) => ({
+                    latitude,
+                    longitude,
+                })
             );
 
-        }, 300);
+        }, [route]);
+
+        const destination = useMemo(() => {
+
+            if (
+                !target?.location?.coordinates ||
+                target.location.coordinates.length < 2
+            ) {
+                return null;
+            }
+
+            return {
+                latitude:
+                    target.location.coordinates[1],
+
+                longitude:
+                    target.location.coordinates[0],
+            };
+
+        }, [target]);
 
 
-        return () => {
-            clearTimeout(timer);
+        /*
+         * FIT MAP TO ROUTE
+         *
+         * Only do this when:
+         *
+         * 1. Map is ready
+         * 2. Route exists
+         * 3. Origin exists
+         * 4. Destination exists
+         */
+        useEffect(() => {
+
+            if (!mapReady) {
+                return;
+            }
+
+            if (!mapRef.current) {
+                return;
+            }
+
+            if (!origin) {
+                return;
+            }
+
+            if (!destination) {
+                return;
+            }
+
+            if (routeCoordinates.length === 0) {
+                return;
+            }
+
+            const coordinates = [
+                origin,
+                destination,
+                ...routeCoordinates,
+            ];
+
+
+            const timer = setTimeout(() => {
+
+                mapRef.current?.fitToCoordinates(
+                    coordinates,
+                    {
+                        edgePadding: {
+                            top: 60,
+                            right: 50,
+                            bottom: 60,
+                            left: 50,
+                        },
+
+                        animated: true,
+                    }
+                );
+
+            }, 300);
+
+
+            return () => {
+                clearTimeout(timer);
+            };
+
+        }, [
+            mapReady,
+            origin,
+            destination,
+            routeCoordinates,
+        ]);
+
+        const handleMapReady = useCallback(() => {
+
+            setMapReady(true);
+
+        }, []);
+
+        const handleCancel = () => {
+            console.log("ROUTE PREVIEW >>> CANCEL");
+
+            useWcDataStore.getState().clearNavigation();
+
+            // Tell Home that the next ToiletInfo presentation
+            // must open at snap point 1.
+            onReopenToiletInfo?.();
+
+            ref.current?.dismiss();
+
+            setTimeout(() => {
+                toiletInfoBottomSheetRef.current?.present();
+            }, 350);
         };
 
-    }, [
-        mapReady,
-        origin,
-        destination,
-        routeCoordinates,
-    ]);
+        const handleStartNavigation = () => {
+            console.log("ROUTE PREVIEW >>> START NAVIGATION");
 
-    const handleMapReady = useCallback(() => {
+            useWcDataStore.getState().startNavigation();
 
-        setMapReady(true);
-
-    }, []);
-
-    const handleCancel = () => {
-        ref.current?.dismiss();
-
-        useWcDataStore.getState().clearNavigation();
-
-        // setTimeout(() => {
-        //     toiletInfoBottomSheetRef.current?.present();
-
-        //     setTimeout(() => {
-        //         toiletInfoBottomSheetRef.current?.snapToIndex(1);
-        //     }, 100);
-        // }, 300);
-    };
-
-    const handleStartNavigation = () => {
-
-        useWcDataStore
-            .getState()
-            .startNavigation();
-
-        ref.current?.dismiss();
-
-    };
+            ref.current?.dismiss();
+        };
 
 
-    const renderBackdrop = useCallback(
-        (props) => (
+        const renderBackdrop = useCallback(
+            (props) => (
 
-            <BottomSheetBackdrop
-                {...props}
-                opacity={0.3}
-                appearsOnIndex={0}
-                disappearsOnIndex={-1}
-                pressBehavior="close"
-            />), []);
+                <BottomSheetBackdrop
+                    {...props}
+                    opacity={0.3}
+                    appearsOnIndex={0}
+                    disappearsOnIndex={-1}
+                    pressBehavior="close"
+                />), []);
 
-    const formatDistance = () => {
+        const formatDistance = () => {
 
-        if (distance == null) {
-            return "--";
-        }
+            if (distance == null) {
+                return "--";
+            }
 
-        if (distance < 1000) {
-            return `${Math.round(distance)} m`;
-        }
+            if (distance < 1000) {
+                return `${Math.round(distance)} m`;
+            }
 
-        return `${(distance / 1000).toFixed(1)} km`;
+            return `${(distance / 1000).toFixed(1)} km`;
 
-    };
+        };
 
-    const formatDuration = () => {
+        const formatDuration = () => {
 
-        if (duration == null) {
-            return "--";
-        }
+            if (duration == null) {
+                return "--";
+            }
 
-        const minutes = Math.round(duration / 60);
+            const minutes = Math.round(duration / 60);
 
-        if (minutes < 60) {
-            return `${minutes} min`;
-        }
+            if (minutes < 60) {
+                return `${minutes} min`;
+            }
 
-        const hours = Math.floor(minutes / 60);
+            const hours = Math.floor(minutes / 60);
 
-        const remainingMinutes =
-            minutes % 60;
+            const remainingMinutes =
+                minutes % 60;
 
-        return `${hours}h ${remainingMinutes}min`;
+            return `${hours}h ${remainingMinutes}min`;
 
-    };
+        };
 
-    const isRouting = status === "routing";
+        const isRouting = status === "routing";
 
 
-    return (
+        return (
 
-        <BottomSheetModal
-            ref={ref}
-            snapPoints={snapPoints}
-            enableDynamicSizing={false}
-            backdropComponent={renderBackdrop}
-            onDismiss={() => {
-                toiletInfoBottomSheetRef.current?.present();
+            <BottomSheetModal
+                ref={ref}
+                snapPoints={snapPoints}
+                enableDynamicSizing={false}
+                backdropComponent={renderBackdrop}
+                onPresent={() => {
+                    console.log("ROUTE PREVIEW >>> PRESENTED");
+                }}
+                onDismiss={() => {
+                    console.log("ROUTE PREVIEW >>> DISMISSED");
+                    onDismiss?.();
+                }}
+                // onDismiss={() => {
+                //     if (!shouldReopenToiletInfo.current) {
+                //         return;
+                //     }
 
-                setTimeout(() => {
-                    toiletInfoBottomSheetRef.current?.snapToIndex(1);
-                }, 300);
-            }}
-            backgroundComponent={(props) => (
-                <GlassBackground {...props} />
-            )}
+                //     shouldReopenToiletInfo.current = false;
 
-            handleStyle={{
-                backgroundColor: "transparent",
-            }}
+                //     toiletInfoBottomSheetRef.current?.present();
 
-            handleIndicatorStyle={{
-                backgroundColor:
-                    "rgba(255,255,255,0.6)",
+                //     setTimeout(() => {
+                //         toiletInfoBottomSheetRef.current?.snapToIndex(1);
+                //     }, 300);
+                // }}
+                backgroundComponent={(props) => (
+                    <GlassBackground {...props} />
+                )}
 
-                width: 50,
-                height: 5,
-            }}
-        >
+                handleStyle={{
+                    backgroundColor: "transparent",
+                }}
 
-            <View style={{ flex: 1, }}>
+                handleIndicatorStyle={{
+                    backgroundColor:
+                        "rgba(255,255,255,0.6)",
 
-                <View
-                    style={{
-                        height: 300,
-                        marginHorizontal: 20,
-                        borderRadius: 25,
-                        overflow: "hidden",
-                        position: "relative",
-                    }}
-                >
+                    width: 50,
+                    height: 5,
+                }}
+            >
 
-                    <MapView
-                        ref={mapRef}
-                        style={StyleSheet.absoluteFill}
-                        onMapReady={handleMapReady}
-                        scrollEnabled={false}
-                        zoomEnabled={false}
-                        rotateEnabled={false}
-                        pitchEnabled={false}
-                        showsUserLocation={false}
+                <View style={{ flex: 1, }}>
 
-                        /*
-                         * Prevent the map from initially
-                         * showing the whole world.
-                         */
-                        initialRegion={
-                            origin
-                                ? {
-                                    latitude:
-                                        origin.latitude,
-
-                                    longitude:
-                                        origin.longitude,
-
-                                    latitudeDelta:
-                                        0.01,
-
-                                    longitudeDelta:
-                                        0.01,
-                                }
-                                : undefined
-                        }
+                    <View
+                        style={{
+                            height: 300,
+                            marginHorizontal: 20,
+                            borderRadius: 25,
+                            overflow: "hidden",
+                            position: "relative",
+                        }}
                     >
 
+                        <MapView
+                            ref={mapRef}
+                            style={StyleSheet.absoluteFill}
+                            onMapReady={handleMapReady}
+                            scrollEnabled={false}
+                            zoomEnabled={false}
+                            rotateEnabled={false}
+                            pitchEnabled={false}
+                            showsUserLocation={false}
 
+                            /*
+                             * Prevent the map from initially
+                             * showing the whole world.
+                             */
+                            initialRegion={
+                                origin
+                                    ? {
+                                        latitude:
+                                            origin.latitude,
 
-                        {/* CURRENT LOCATION */}
+                                        longitude:
+                                            origin.longitude,
 
-                        {origin && (
-                            <Marker
-                                coordinate={origin}
-                                anchor={{
-                                    x: 0.5,
-                                    y: 0.5,
-                                }}
-                            >
+                                        latitudeDelta:
+                                            0.01,
 
-                                <Image
-                                    source={require(
-                                        "../../assets/locationMarker.png"
-                                    )}
-                                    style={{
-                                        width: 40,
-                                        height: 40,
-                                        resizeMode:
-                                            "contain",
-                                    }}
-                                />
-
-                            </Marker>
-                        )}
-
-
-                        {/* ROUTE */}
-
-                        {routeCoordinates.length > 0 && (
-
-                            <Polyline
-                                coordinates={
-                                    routeCoordinates
-                                }
-
-                                strokeWidth={3}
-
-                                strokeColor={
-                                    theme.colors
-                                        .secondary
-                                }
-
-                                lineCap="round"
-                                lineJoin="round"
-                            />
-
-                        )}
-
-
-                        {/* DESTINATION */}
-
-                        {destination && (
-
-                            <Marker
-                                coordinate={
-                                    destination
-                                }
-
-                                centerOffset={{
-                                    x: 3,
-                                    y: -20,
-                                }}
-                            >
-
-                                <Image
-                                    source={require(
-                                        "../../assets/toiletLocation.png"
-                                    )}
-                                    style={{
-                                        width: 40,
-                                        height: 40,
-                                        resizeMode:
-                                            "contain",
-                                    }}
-                                />
-
-                            </Marker>
-
-                        )}
-
-                    </MapView>
-
-
-                    {/* =========================
-                        ROUTING OVERLAY
-                    ========================= */}
-
-                    {isRouting && (
-
-                        <View
-                            style={{
-                                ...StyleSheet.absoluteFillObject,
-
-                                justifyContent:
-                                    "center",
-
-                                alignItems:
-                                    "center",
-
-                                backgroundColor:
-                                    "rgba(0,0,0,0.25)",
-                            }}
+                                        longitudeDelta:
+                                            0.01,
+                                    }
+                                    : undefined
+                            }
                         >
 
-                            <BlurView
-                                intensity={30}
-                                tint="dark"
-                                style={{
-                                    paddingHorizontal: 25,
-                                    paddingVertical: 18,
 
-                                    borderRadius: 20,
 
-                                    overflow: "hidden",
+                            {/* CURRENT LOCATION */}
 
-                                    alignItems:
-                                        "center",
-                                }}
-                            >
+                            {origin && (
+                                <Marker
+                                    coordinate={origin}
+                                    anchor={{
+                                        x: 0.5,
+                                        y: 0.5,
+                                    }}
+                                >
 
-                                <ActivityIndicator
-                                    size="large"
-                                    color={
+                                    <Image
+                                        source={require(
+                                            "../../assets/locationMarker.png"
+                                        )}
+                                        style={{
+                                            width: 40,
+                                            height: 40,
+                                            resizeMode:
+                                                "contain",
+                                        }}
+                                    />
+
+                                </Marker>
+                            )}
+
+
+                            {/* ROUTE */}
+
+                            {routeCoordinates.length > 0 && (
+
+                                <Polyline
+                                    coordinates={
+                                        routeCoordinates
+                                    }
+
+                                    strokeWidth={3}
+
+                                    strokeColor={
                                         theme.colors
                                             .secondary
                                     }
+
+                                    lineCap="round"
+                                    lineJoin="round"
                                 />
 
-                                <Text
-                                    style={{
-                                        marginTop: 10,
-                                        color: "white",
+                            )}
+
+
+                            {/* DESTINATION */}
+
+                            {destination && (
+
+                                <Marker
+                                    coordinate={
+                                        destination
+                                    }
+
+                                    centerOffset={{
+                                        x: 3,
+                                        y: -20,
                                     }}
                                 >
-                                    Calculating route...
-                                </Text>
 
-                            </BlurView>
+                                    <Image
+                                        source={require(
+                                            "../../assets/toiletLocation.png"
+                                        )}
+                                        style={{
+                                            width: 40,
+                                            height: 40,
+                                            resizeMode:
+                                                "contain",
+                                        }}
+                                    />
 
-                        </View>
+                                </Marker>
 
-                    )}
+                            )}
 
-                </View>
+                        </MapView>
 
 
-                {/* =========================
+                        {/* =========================
+                        ROUTING OVERLAY
+                    ========================= */}
+
+                        {isRouting && (
+
+                            <View
+                                style={{
+                                    ...StyleSheet.absoluteFillObject,
+
+                                    justifyContent:
+                                        "center",
+
+                                    alignItems:
+                                        "center",
+
+                                    backgroundColor:
+                                        "rgba(0,0,0,0.25)",
+                                }}
+                            >
+
+                                <BlurView
+                                    intensity={30}
+                                    tint="dark"
+                                    style={{
+                                        paddingHorizontal: 25,
+                                        paddingVertical: 18,
+
+                                        borderRadius: 20,
+
+                                        overflow: "hidden",
+
+                                        alignItems:
+                                            "center",
+                                    }}
+                                >
+
+                                    <ActivityIndicator
+                                        size="large"
+                                        color={
+                                            theme.colors
+                                                .secondary
+                                        }
+                                    />
+
+                                    <Text
+                                        style={{
+                                            marginTop: 10,
+                                            color: "white",
+                                        }}
+                                    >
+                                        Calculating route...
+                                    </Text>
+
+                                </BlurView>
+
+                            </View>
+
+                        )}
+
+                    </View>
+
+
+                    {/* =========================
                     ROUTE INFORMATION
                 ========================= */}
 
-                <View
-                    style={{
-                        paddingHorizontal: 24,
-                        paddingTop: 20,
-                    }}
-                >
-
-                    <Text
-                        variant="headlineSmall"
-                        style={{
-                            color:
-                                theme.colors.surface,
-                        }}
-                    >
-                        {target?.name}
-                    </Text>
-
-
                     <View
                         style={{
-                            flexDirection: "row",
-                            marginTop: 15,
-                            gap: 30,
+                            paddingHorizontal: 24,
+                            paddingTop: 20,
                         }}
                     >
 
-                        <View>
-
-                            <Text
-                                style={{
-                                    color:
-                                        theme.colors
-                                            .secondary,
-                                }}
-                            >
-                                Distance
-                            </Text>
-
-                            <Text
-                                variant="titleLarge"
-                                style={{
-                                    color:
-                                        theme.colors
-                                            .surface,
-                                }}
-                            >
-                                {formatDistance()}
-                            </Text>
-
-                        </View>
+                        <Text
+                            variant="headlineSmall"
+                            style={{
+                                color:
+                                    theme.colors.surface,
+                            }}
+                        >
+                            {target?.name}
+                        </Text>
 
 
-                        <View>
+                        <View
+                            style={{
+                                flexDirection: "row",
+                                marginTop: 15,
+                                gap: 30,
+                            }}
+                        >
 
-                            <Text
-                                style={{
-                                    color:
-                                        theme.colors
-                                            .secondary,
-                                }}
-                            >
-                                Estimated time
-                            </Text>
+                            <View>
 
-                            <Text
-                                variant="titleLarge"
-                                style={{
-                                    color:
-                                        theme.colors
-                                            .surface,
-                                }}
-                            >
-                                {formatDuration()}
-                            </Text>
+                                <Text
+                                    style={{
+                                        color:
+                                            theme.colors
+                                                .secondary,
+                                    }}
+                                >
+                                    Distance
+                                </Text>
+
+                                <Text
+                                    variant="titleLarge"
+                                    style={{
+                                        color:
+                                            theme.colors
+                                                .surface,
+                                    }}
+                                >
+                                    {formatDistance()}
+                                </Text>
+
+                            </View>
+
+
+                            <View>
+
+                                <Text
+                                    style={{
+                                        color:
+                                            theme.colors
+                                                .secondary,
+                                    }}
+                                >
+                                    Estimated time
+                                </Text>
+
+                                <Text
+                                    variant="titleLarge"
+                                    style={{
+                                        color:
+                                            theme.colors
+                                                .surface,
+                                    }}
+                                >
+                                    {formatDuration()}
+                                </Text>
+
+                            </View>
 
                         </View>
 
                     </View>
 
-                </View>
 
-
-                {/* =========================
+                    {/* =========================
                     BUTTONS
                 ========================= */}
 
-                <View
-                    pointerEvents="box-none"
-                    style={{
-                        position: "absolute",
-                        left: 24,
-                        right: 24,
-                        bottom: 25,
-                    }}
-                >
-
                     <View
+                        pointerEvents="box-none"
                         style={{
-                            flexDirection: "row",
-                            gap: 10,
+                            position: "absolute",
+                            left: 24,
+                            right: 24,
+                            bottom: 25,
                         }}
                     >
 
-                        {/* START */}
-
-                        <Pressable
+                        <View
                             style={{
-                                flex: 1,
+                                flexDirection: "row",
+                                gap: 10,
                             }}
-
-                            disabled={
-                                isRouting ||
-                                !route
-                            }
-
-                            onPress={
-                                handleStartNavigation
-                            }
                         >
 
-                            {({ pressed }) => (
+                            {/* START */}
 
-                                <BlurView
-                                    intensity={15}
-                                    tint="extraLight"
+                            <Pressable
+                                style={{
+                                    flex: 1,
+                                }}
 
-                                    style={{
-                                        borderRadius: 34,
-                                        overflow: "hidden",
+                                disabled={
+                                    isRouting ||
+                                    !route
+                                }
 
-                                        transform: [
-                                            {
-                                                scale:
-                                                    pressed
-                                                        ? 0.95
-                                                        : 1,
-                                            },
-                                        ],
-                                    }}
-                                >
+                                onPress={
+                                    handleStartNavigation
+                                }
+                            >
 
-                                    <View
+                                {({ pressed }) => (
+
+                                    <BlurView
+                                        intensity={15}
+                                        tint="extraLight"
+
                                         style={{
-                                            justifyContent:
-                                                "center",
+                                            borderRadius: 34,
+                                            overflow: "hidden",
 
-                                            alignItems:
-                                                "center",
-
-                                            paddingVertical:
-                                                25,
-
-                                            borderRadius:
-                                                38,
-
-                                            backgroundColor:
-                                                theme.colors
-                                                    .success +
-                                                "55",
-
-                                            opacity:
-                                                isRouting
-                                                    ? 0.4
-                                                    : 1,
+                                            transform: [
+                                                {
+                                                    scale:
+                                                        pressed
+                                                            ? 0.95
+                                                            : 1,
+                                                },
+                                            ],
                                         }}
                                     >
 
-                                        <Text>
-                                            Navigate
-                                        </Text>
+                                        <View
+                                            style={{
+                                                justifyContent:
+                                                    "center",
 
-                                    </View>
+                                                alignItems:
+                                                    "center",
 
-                                </BlurView>
+                                                paddingVertical:
+                                                    25,
 
-                            )}
+                                                borderRadius:
+                                                    38,
 
-                        </Pressable>
+                                                backgroundColor:
+                                                    theme.colors
+                                                        .success +
+                                                    "55",
 
-
-                        {/* CANCEL */}
-
-                        <Pressable
-                            style={{
-                                flex: 1,
-                            }}
-
-                            onPress={
-                                handleCancel
-                            }
-                        >
-
-                            {({ pressed }) => (
-
-                                <BlurView
-                                    intensity={15}
-                                    tint="extraLight"
-
-                                    style={{
-                                        borderRadius: 34,
-                                        overflow: "hidden",
-
-                                        transform: [
-                                            {
-                                                scale:
-                                                    pressed
-                                                        ? 0.95
+                                                opacity:
+                                                    isRouting
+                                                        ? 0.4
                                                         : 1,
-                                            },
-                                        ],
-                                    }}
-                                >
+                                            }}
+                                        >
 
-                                    <View
+                                            <Text>
+                                                Navigate
+                                            </Text>
+
+                                        </View>
+
+                                    </BlurView>
+
+                                )}
+
+                            </Pressable>
+
+
+                            {/* CANCEL */}
+
+                            <Pressable
+                                style={{
+                                    flex: 1,
+                                }}
+
+                                onPress={
+                                    handleCancel
+                                }
+                            >
+
+                                {({ pressed }) => (
+
+                                    <BlurView
+                                        intensity={15}
+                                        tint="extraLight"
+
                                         style={{
-                                            justifyContent:
-                                                "center",
+                                            borderRadius: 34,
+                                            overflow: "hidden",
 
-                                            alignItems:
-                                                "center",
-
-                                            paddingVertical:
-                                                25,
-
-                                            borderRadius:
-                                                38,
-
-                                            backgroundColor:
-                                                theme.colors
-                                                    .error +
-                                                "55",
+                                            transform: [
+                                                {
+                                                    scale:
+                                                        pressed
+                                                            ? 0.95
+                                                            : 1,
+                                                },
+                                            ],
                                         }}
                                     >
 
-                                        <Text>
-                                            Cancel
-                                        </Text>
+                                        <View
+                                            style={{
+                                                justifyContent:
+                                                    "center",
 
-                                    </View>
+                                                alignItems:
+                                                    "center",
 
-                                </BlurView>
+                                                paddingVertical:
+                                                    25,
 
-                            )}
+                                                borderRadius:
+                                                    38,
 
-                        </Pressable>
+                                                backgroundColor:
+                                                    theme.colors
+                                                        .error +
+                                                    "55",
+                                            }}
+                                        >
+
+                                            <Text>
+                                                Cancel
+                                            </Text>
+
+                                        </View>
+
+                                    </BlurView>
+
+                                )}
+
+                            </Pressable>
+
+                        </View>
 
                     </View>
 
                 </View>
 
-            </View>
-
-        </BottomSheetModal >
-    );
-});
+            </BottomSheetModal >
+        );
+    });
 
 
 export default RoutePreview;

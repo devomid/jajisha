@@ -394,15 +394,6 @@ const MenuDrawer = () => {
                 }}
             />
 
-            <Drawer.Screen
-                name="auth"
-                options={{
-                    drawerItemStyle: {
-                        display: "none",
-                    },
-                }}
-            />
-
 
         </Drawer>
     );

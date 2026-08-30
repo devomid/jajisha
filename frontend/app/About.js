@@ -71,9 +71,15 @@ export default function About() {
           flex: 1,
           justifyContent: "center",
           alignItems: "center",
+          padding: 20,
+          gap: 15
         }}>
-
-
+          <Text>
+            This app was built by tears and blood, during a war in my country.
+          </Text>
+          <Text>
+            The initial idea was from Mohsen, I worked on it and here it is. Use it to not to wet your pants.
+          </Text>
         </View>
 
       </SafeAreaView>

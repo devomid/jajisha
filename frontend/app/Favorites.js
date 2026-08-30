@@ -28,7 +28,7 @@ export default function Favorites() {
   }, [currentLocation]);
 
   if (!user) {
-    return <Redirect href="/auth/SignIn" />;
+    return <Redirect href="/SignIn" />;
   }
 
   if (!region) {

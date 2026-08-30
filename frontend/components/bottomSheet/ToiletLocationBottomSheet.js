@@ -13,12 +13,13 @@ import MapView, { Marker } from "react-native-maps";
 import { DynamicColorIOS } from 'react-native';
 import { NativeTabs } from 'expo-router/unstable-native-tabs';
 import Review from "../reviews/reviews";
+import { useUserStore } from "../../store/userStore";
+import { router } from "expo-router";
 
 
-const ToiletInfo = forwardRef(({ curentLocation, onNavigatePress }, ref) => {
-
+const ToiletInfo = forwardRef(({ curentLocation, onPresent }, ref) => {
+    const user = useUserStore((state) => state.user);
     const [value, setValue] = useState('');
-    const [openAtIndex, setOpenAtIndex] = useState(0);
     const { t } = useTranslation();
     const theme = useTheme();
     const toilet = useWcDataStore((state) => state.selectedToilet);
@@ -30,8 +31,8 @@ const ToiletInfo = forwardRef(({ curentLocation, onNavigatePress }, ref) => {
 
     const handleSheetChanges = useCallback((index) => {
         console.log(index);
-    }, []);
-
+        onPresent?.(index);
+    }, [onPresent]);
 
     const renderBackdrop = useCallback(
         (props) => (
@@ -46,12 +47,12 @@ const ToiletInfo = forwardRef(({ curentLocation, onNavigatePress }, ref) => {
         []
     );
 
-    if (!toilet) return null;
 
-    const formattedDistance =
-        distance < 1000
+    const formattedDistance = toilet
+        ? distance < 1000
             ? `${distance} m`
-            : `${(distance / 1000).toFixed(1)} km`;
+            : `${(distance / 1000).toFixed(1)} km`
+        : "--";
 
     const formatDuration = () => {
 
@@ -72,6 +73,20 @@ const ToiletInfo = forwardRef(({ curentLocation, onNavigatePress }, ref) => {
 
         return `${hours}h ${remainingMinutes}min`;
 
+    };
+
+    const handleSave = () => {
+        if (!user) {
+            ref.current?.dismiss();
+            router.push("/SignIn");
+            return;
+        }
+
+        try {
+            console.log("user present and wc saved");
+        } catch (error) {
+            console.log("Save error:", error);
+        }
     };
 
     const handleShare = async () => {
@@ -104,9 +119,16 @@ const ToiletInfo = forwardRef(({ curentLocation, onNavigatePress }, ref) => {
 
     return (
         <BottomSheetModal
+            onPresent={() => {
+                console.log("TOILET INFO >>> PRESENTED");
+                onPresent?.();
+            }}
+
+            onDismiss={() => {
+                console.log("TOILET INFO >>> DISMISSED");
+            }}
             ref={ref}
             snapPoints={snapPoints}
-            index={openAtIndex}
             enableDynamicSizing={false}
             onChange={handleSheetChanges}
             backdropComponent={renderBackdrop}
@@ -122,228 +144,230 @@ const ToiletInfo = forwardRef(({ curentLocation, onNavigatePress }, ref) => {
                 height: 5,
             }}
         >
-            <View
-                style={{
-                    flex: 1,
-                    backgroundColor: "transparent",
-                }}
-            >
-                {/* FIXED HEADER */}
+            {toilet && (
+
                 <View
                     style={{
-                        paddingHorizontal: 24,
-                        paddingBottom: 10,
+                        flex: 1,
+                        backgroundColor: "transparent",
                     }}
                 >
-                    <Text
-                        numberOfLines={1}
-                        ellipsizeMode="tail"
-                        variant="headlineLarge"
-                        style={{ color: theme.colors.surface, width: 195 }}
-                    >
-                        {toilet.name}
-                    </Text>
-
+                    {/* FIXED HEADER */}
                     <View
                         style={{
-                            paddingVertical: 5,
-                            flexDirection: "row",
-                            alignItems: "center",
-                            gap: 1,
-                            marginTop: 8,
+                            paddingHorizontal: 24,
+                            paddingBottom: 10,
                         }}
                     >
                         <Text
-                            style={{
-                                color: theme.colors.text,
-                            }}
-                            variant="bodySmall"
+                            numberOfLines={1}
+                            ellipsizeMode="tail"
+                            variant="headlineLarge"
+                            style={{ color: theme.colors.surface, width: 195 }}
                         >
-                            {toilet.ratingSummary.average.toFixed(1)} / 5
+                            {toilet.name}
                         </Text>
 
-                        <StarRating
-                            rating={toilet.ratingSummary.average}
-                            onChange={() => { }}
-                            enableSwiping={false}
-                            step="quarter"
-                            starSize={15}
-                            emptyColor={theme.colors.unfocused}
-                            color={theme.colors.primaryDarker}
-                            StarIconComponent={Toilet}
-                        />
-
-                        <Text
+                        <View
                             style={{
-                                color: theme.colors.text,
+                                paddingVertical: 5,
+                                flexDirection: "row",
+                                alignItems: "center",
+                                gap: 1,
+                                marginTop: 8,
                             }}
-                            variant="bodySmall"
                         >
-                            ({toilet.ratingSummary.count} vote)
-                        </Text>
-
-                        {formattedDistance && (
                             <Text
                                 style={{
-                                    position: "absolute",
-                                    right: 10,
                                     color: theme.colors.text,
                                 }}
                                 variant="bodySmall"
                             >
-                                {formattedDistance}
+                                {toilet.ratingSummary.average.toFixed(1)} / 5
                             </Text>
-                        )}
-                        <Text
+
+                            <StarRating
+                                rating={toilet.ratingSummary.average}
+                                onChange={() => { }}
+                                enableSwiping={false}
+                                step="quarter"
+                                starSize={15}
+                                emptyColor={theme.colors.unfocused}
+                                color={theme.colors.primaryDarker}
+                                StarIconComponent={Toilet}
+                            />
+
+                            <Text
+                                style={{
+                                    color: theme.colors.text,
+                                }}
+                                variant="bodySmall"
+                            >
+                                ({toilet.ratingSummary.count} vote)
+                            </Text>
+
+                            {formattedDistance && (
+                                <Text
+                                    style={{
+                                        position: "absolute",
+                                        right: 10,
+                                        color: theme.colors.text,
+                                    }}
+                                    variant="bodySmall"
+                                >
+                                    {formattedDistance}
+                                </Text>
+                            )}
+                            <Text
+                                style={{
+                                    position: "absolute",
+                                    right: 70,
+                                    color: theme.colors.text,
+                                }}
+                                variant="bodySmall"
+                            >
+                                {formatDuration()}
+                            </Text>
+                        </View>
+
+                        <View
                             style={{
                                 position: "absolute",
-                                right: 70,
-                                color: theme.colors.text,
-                            }}
-                            variant="bodySmall"
-                        >
-                            {formatDuration()}
-                        </Text>
-                    </View>
-
-                    <View
-                        style={{
-                            position: "absolute",
-                            right: 24,
-                            top: 10,
-                            flexDirection: "row",
-                            gap: 30,
-                        }}
-                    >
-                        <Pressable
-                            onPress={handleShare}
-                        >
-                            {({ pressed }) => (
-                                <Bookmark style={{
-                                    transform: [{ scale: pressed ? 0.85 : 1 }],
-
-                                }}
-                                    color={theme.colors.secondary} />
-                            )}
-                        </Pressable>
-                        <Pressable
-                            onPress={handleShare}
-                        >
-                            {({ pressed }) => (
-                                <Share style={{
-                                    transform: [{ scale: pressed ? 0.85 : 1 }],
-
-                                }}
-                                    color={theme.colors.secondary} />
-                            )}
-                        </Pressable>
-                    </View>
-                    <View
-                        style={{
-                            height: 70,
-                            marginTop: 10
-                        }}>
-                        <Pressable
-                            style={{ flex: 1 }}
-                            onPress={() => {
-                                ref.current?.dismiss();
-                                setNavigationTarget(toilet);
-                                onNavigatePress();
+                                right: 24,
+                                top: 10,
+                                flexDirection: "row",
+                                gap: 30,
                             }}
                         >
-                            {({ pressed }) => (
-                                <BlurView
-                                    intensity={15}
-                                    tint="extraLight"
-                                    style={{
-                                        borderRadius: 30,
-                                        overflow: 'hidden',
-                                        transform: [{ scale: pressed ? 0.95 : 1 }],
+                            <Pressable
+                                onPress={handleSave}
+                            >
+                                {({ pressed }) => (
+                                    <Bookmark style={{
+                                        transform: [{ scale: pressed ? 0.85 : 1 }],
+
                                     }}
-                                >
-                                    <View
+                                        color={theme.colors.secondary} />
+                                )}
+                            </Pressable>
+                            <Pressable
+                                onPress={handleShare}
+                            >
+                                {({ pressed }) => (
+                                    <Share style={{
+                                        transform: [{ scale: pressed ? 0.85 : 1 }],
+
+                                    }}
+                                        color={theme.colors.secondary} />
+                                )}
+                            </Pressable>
+                        </View>
+                        <View
+                            style={{
+                                height: 70,
+                                marginTop: 10
+                            }}>
+                            <Pressable
+                                style={{ flex: 1 }}
+                                onPress={() => {
+                                    ref.current?.dismiss();
+                                    setNavigationTarget(toilet);
+                                }}
+                            >
+                                {({ pressed }) => (
+                                    <BlurView
+                                        intensity={15}
+                                        tint="extraLight"
                                         style={{
-                                            justifyContent: 'center',
                                             borderRadius: 30,
-                                            borderWidth: 0.5,
-                                            borderColor: theme.colors.secondaryDarker,
-                                            alignItems: 'center',
-                                            paddingVertical: 20,
-                                            backgroundColor:
-                                                pressed
-                                                    ? theme.colors.secondaryDarker + '70'
-                                                    : theme.colors.secondaryDarker + '45',
+                                            overflow: 'hidden',
+                                            transform: [{ scale: pressed ? 0.95 : 1 }],
                                         }}
                                     >
-                                        <Text style={{ color: theme.colors.surface, }}>
-                                            Show route to WC
-                                        </Text>
-                                    </View>
-                                </BlurView>
-                            )}
-                        </Pressable>
+                                        <View
+                                            style={{
+                                                justifyContent: 'center',
+                                                borderRadius: 30,
+                                                borderWidth: 0.5,
+                                                borderColor: theme.colors.secondaryDarker,
+                                                alignItems: 'center',
+                                                paddingVertical: 20,
+                                                backgroundColor:
+                                                    pressed
+                                                        ? theme.colors.secondaryDarker + '70'
+                                                        : theme.colors.secondaryDarker + '45',
+                                            }}
+                                        >
+                                            <Text style={{ color: theme.colors.surface, }}>
+                                                Show route to WC
+                                            </Text>
+                                        </View>
+                                    </BlurView>
+                                )}
+                            </Pressable>
+                        </View>
+                        <View>
+                            <Text
+                                numberOfLines={2}
+                                style={{
+                                    color: theme.colors.secondaryLight,
+                                    paddingTop: 4,
+                                    paddingRight: 24
+                                }}
+                            >
+                                {toilet.address}
+                            </Text>
+
+                        </View>
                     </View>
-                    <View>
-                        <Text
-                            numberOfLines={2}
+
+                    {/* SCROLLABLE CONTENT */}
+                    <BottomSheetScrollView
+                        contentContainerStyle={{
+                            paddingHorizontal: 24,
+                            paddingBottom: 40,
+                        }}
+                        showsVerticalScrollIndicator={false}
+                    >
+                        <View>
+                            <PhotoGallery />
+                        </View>
+
+                        <View>
+                            <SegmentedButtons
+                                value={value}
+                                onValueChange={setValue}
+                                buttons={[
+                                    {
+                                        value: 'review',
+                                        label: 'Reviews',
+                                    },
+                                    {
+                                        value: 'amenities',
+                                        label: 'Amenities'
+                                    },
+                                    {
+                                        value: 'ratings',
+                                        label: 'Ratings',
+                                    },
+                                ]}
+                            />
+                        </View>
+
+                        <View
+                            theme={theme}
                             style={{
-                                color: theme.colors.secondaryLight,
-                                paddingTop: 4,
-                                paddingRight: 24
+                                alignItems: 'center',
+                                justifyContent: 'center'
                             }}
                         >
-                            {toilet.address}
-                        </Text>
-
-                    </View>
+                            <Review />
+                            <Review />
+                            <Review />
+                        </View>
+                    </BottomSheetScrollView>
                 </View>
-
-                {/* SCROLLABLE CONTENT */}
-                <BottomSheetScrollView
-                    contentContainerStyle={{
-                        paddingHorizontal: 24,
-                        paddingBottom: 40,
-                    }}
-                    showsVerticalScrollIndicator={false}
-                >
-                    <View>
-                        <PhotoGallery />
-                    </View>
-
-                    <View>
-                        <SegmentedButtons
-                            value={value}
-                            onValueChange={setValue}
-                            buttons={[
-                                {
-                                    value: 'review',
-                                    label: 'Reviews',
-                                },
-                                {
-                                    value: 'amenities',
-                                    label: 'Amenities'
-                                },
-                                {
-                                    value: 'ratings',
-                                    label: 'Ratings',
-                                },
-                            ]}
-                        />
-                    </View>
-
-                    <View
-                        theme={theme}
-                        style={{
-                            alignItems: 'center',
-                            justifyContent: 'center'
-                        }}
-                    >
-                        <Review />
-                        <Review />
-                        <Review />
-                    </View>
-                </BottomSheetScrollView>
-            </View>
+            )}
         </BottomSheetModal>
     );
 });
