@@ -621,10 +621,10 @@ The long-term direction includes:
 * [X] English localization
 * [X] Persian localization
 * [X] Public release
-* [X] App Store distribution
-* [X] Google Play distribution
-* [X] PWA
-* [X] Expand the toilet database
+* [ ] App Store distribution
+* [ ] Google Play distribution
+* [ ] PWA
+* [ ] Expand the toilet database
 * [ ] Improve moderation and data quality
 * [ ] Continue improving toilet information and accessibility data
 
