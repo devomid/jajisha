@@ -62,7 +62,7 @@ const TopSheet = forwardRef((props, ref) => {
             ),
         };
     });
-    
+
     useEffect(() => {
 
         if (sheetHeight === 0) { return; }
@@ -143,7 +143,8 @@ const TopSheet = forwardRef((props, ref) => {
                 pointerEvents={isOpen ? "auto" : "none"}
                 style={[{
                     ...StyleSheet.absoluteFillObject,
-                    backgroundColor: "rgba(0,0,0,0.25)"
+                    backgroundColor: theme.colors.primaryLighter + '20'
+
                 },
                     backdropAnimatedStyle,
                 ]}>
@@ -193,7 +194,7 @@ const TopSheet = forwardRef((props, ref) => {
                     <View style={{
                         width: "100%",
                         marginBottom: 25,
-                        marginTop:5
+                        marginTop: 5
                     }}>
 
                         <Text
@@ -207,7 +208,7 @@ const TopSheet = forwardRef((props, ref) => {
                             variant="titleSmall"
                             style={{ color: theme.colors.secondaryDarker, }}
                         >
-                            welcome back dear {user?(user.firstName):('Guest')}
+                            welcome back dear {user ? (user.firstName) : ('Guest')}
                         </Text>
 
                     </View>

@@ -180,6 +180,8 @@ const RoutePreview = forwardRef(
                     appearsOnIndex={0}
                     disappearsOnIndex={-1}
                     pressBehavior="close"
+                    style={{ backgroundColor: theme.colors.primaryLighter + '60' }}
+
                 />), []);
 
         const formatDistance = () => {

@@ -53,6 +53,7 @@ const ToiletInfo = forwardRef(({ curentLocation, onPresent }, ref) => {
                 appearsOnIndex={0}
                 disappearsOnIndex={-1}
                 pressBehavior="close"
+                style={{ backgroundColor: theme.colors.primaryLighter + '60' }}
             />
         ),
         []

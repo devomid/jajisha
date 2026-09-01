@@ -1,6 +1,6 @@
 const Colors = {
     light: {
-        primary: "#F4B400",
+        primary: "#f8bc17",
         primaryDark: "#f4a000",
         primaryDarker: "#f49000",
         primaryLight: "#f5ca29",
@@ -28,6 +28,8 @@ const Colors = {
 
         white: "#FFFFFF",
         black: "#000000",
+
+        navigate: "#1d9dff",
     },
     dark: {
         primary: "#F4B400",
@@ -58,6 +60,8 @@ const Colors = {
 
         white: "#FFFFFF",
         black: "#000000",
+
+        navigate: "#1d9dff",
     }
 };
 

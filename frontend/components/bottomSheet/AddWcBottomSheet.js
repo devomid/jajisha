@@ -50,6 +50,7 @@ const AddWc = forwardRef((props, ref) => {
                 appearsOnIndex={0}
                 disappearsOnIndex={-1}
                 pressBehavior="close"
+                style={{ backgroundColor: theme.colors.primaryLighter + '60' }}
             />
         ),
         []
@@ -108,7 +109,7 @@ const AddWc = forwardRef((props, ref) => {
                     style={{
                         flexDirection: 'row',
                         gap: 10,
-                        marginBottom:10
+                        marginBottom: 10
                     }}
                 >
                     <ButtonComponent
@@ -119,7 +120,7 @@ const AddWc = forwardRef((props, ref) => {
                             width: '50%',
                         }}
                     >
-                        <Text style={{color:theme.colors.secondary}}>{t("AddWcBottomSheet.add")}</Text>
+                        <Text style={{ color: theme.colors.secondary }}>{t("AddWcBottomSheet.add")}</Text>
                     </ButtonComponent>
 
                     <ButtonComponent
