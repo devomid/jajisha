@@ -3,27 +3,26 @@ import { StyleSheet } from "react-native";
 import { BottomSheetBackgroundProps } from "@gorhom/bottom-sheet";
 import { BlurView } from "expo-blur";
 
-const GlassBackground = ({ style }) => {
+
+const GlassBackground = ({ style, theme }) => {
+    console.log(theme.colors.primary);
     return (
         <BlurView
-            intensity={20}
-            tint="extraLight"
+            intensity={15}
+            tint="systemUltraThinMaterialLight"
             style={[
                 style,
-                styles.background,
+                {
+                    borderRadius: 30,
+                    overflow: "hidden",
+                    borderWidth: 1,
+                    borderColor: theme.colors.primaryLighter + '80',
+                    backgroundColor: theme.colors.primary + '30'
+                }
             ]}
         />
     );
 };
 
-const styles = StyleSheet.create({
-    background: {
-        borderRadius: 30,
-        overflow: "hidden",
-        borderWidth: 1,
-        borderColor: "rgba(255,255,255,0.3)",
-        backgroundColor: "rgba(251, 238, 62, 0.25)",
-    },
-});
 
 export default GlassBackground;

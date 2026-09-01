@@ -14,8 +14,7 @@ import { useWcDataStore } from "../../store/wcDataStore";
 const AddWc = forwardRef((props, ref) => {
     const { t } = useTranslation();
 
-    const isPickingLocation =
-        useWcDataStore(state => state.isPickingLocation);
+    const isPickingLocation = useWcDataStore(state => state.isPickingLocation);
     const theme = useTheme();
     const snapPoints = useMemo(() => ["85%"], []);
     const { addWc } = useAddWc();
@@ -30,7 +29,7 @@ const AddWc = forwardRef((props, ref) => {
 
         ref.current?.dismiss();   // close sheet
         resetWcData();            // clear form
-        
+
     };
 
     const handleCancel = () => {
@@ -73,7 +72,7 @@ const AddWc = forwardRef((props, ref) => {
             onChange={handleSheetChanges}
             backdropComponent={renderBackdrop}
             backgroundComponent={(props) => (
-                <GlassBackground {...props} />
+                <GlassBackground {...props} theme={theme} />
             )}
             handleStyle={{
                 backgroundColor: "transparent",

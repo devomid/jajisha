@@ -3,12 +3,12 @@ import 'expo-router/entry';
 import { useCallback, useEffect, useRef } from "react";
 import { useNavigation } from "expo-router";
 import { useFocusEffect } from "@react-navigation/native";
-import { useDrawerStore } from "../store/drawerStore";
 import { useTranslation } from "react-i18next";
 import { useWcDataStore } from '../store/wcDataStore';
 import { useGetWc } from '../src/hooks/useGetWc';
 import useCurrentLocation from '../src/hooks/useCurrentLocation';
 import { useAuth } from '../src/hooks/useAuth';
+import { useTopSheetStore } from '../store/menuStore';
 
 import { View, Pressable, Image } from "react-native";
 import { useTheme, Text } from "react-native-paper";
@@ -22,8 +22,7 @@ import ToiletInfo from "../components/bottomSheet/ToiletLocationBottomSheet";
 import AddWc from "../components/bottomSheet/AddWcBottomSheet";
 import RoutePreview from '../components/bottomSheet/RoutePreview';
 import SearchButton from '../components/searchBar/animatedSearchBtn';
-
-
+import MenuTopSheet from '../components/topSheet/MenuTopSheet';
 
 
 export default function Home() {
@@ -32,9 +31,9 @@ export default function Home() {
 
     const isPickingLocation = useWcDataStore(state => state.isPickingLocation);
     const navigationStatus = useWcDataStore(state => state.navigation.status);
-    const shouldOpenDrawer = useDrawerStore((state) => state.shouldOpenDrawer);
+    // const shouldOpenDrawer = useDrawerStore((state) => state.shouldOpenDrawer);
 
-    const reset = useDrawerStore((state) => state.reset);
+    // const reset = useDrawerStore((state) => state.reset);
 
 
     const { t } = useTranslation();
@@ -48,14 +47,14 @@ export default function Home() {
     const routePreviewBottomSheetRef = useRef(null);
     const navigation = useNavigation();
 
-    useFocusEffect(
-        useCallback(() => {
-            if (shouldOpenDrawer) {
-                navigation.openDrawer();
-                reset();
-            }
-        }, [shouldOpenDrawer])
-    );
+    // useFocusEffect(
+    //     useCallback(() => {
+    //         if (shouldOpenDrawer) {
+    //             navigation.openDrawer();
+    //             reset();
+    //         }
+    //     }, [shouldOpenDrawer])
+    // );
 
     useEffect(() => {
         if (navigationStatus !== "preview") {
@@ -236,7 +235,9 @@ export default function Home() {
                     }}
                 >
                     <Pressable
-                        onPress={() => navigation.openDrawer()}
+                        onPress={() => {
+                            useTopSheetStore.getState().open();
+                        }}
                         style={{
                             width: 40,
                             height: 45,
@@ -482,6 +483,7 @@ export default function Home() {
                     reopenToiletInfoAtSecondSnapRef.current = true;
                 }}
             />
+            <MenuTopSheet />
         </View>
     )
 };

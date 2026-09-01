@@ -8,6 +8,7 @@ import Rating from "./starRating";
 import { useTranslation } from "react-i18next";
 import { TextInput as RNTextInput } from "react-native";
 import { useWcDataStore } from "../../store/wcDataStore";
+import ButtonComponent from "../Button/Button";
 
 
 export default function NewToilet({ theme, }) {
@@ -99,39 +100,19 @@ export default function NewToilet({ theme, }) {
                     style={{ backgroundColor: 'transparent' }}
                 />
             </View>
-
-            <View style={{
-                marginTop: 50,
-                width: '100%',
-
-            }}>
-                <Pressable
-                    onPress={handleChooseOnMap}
-                    style={({ pressed }) => ({
-                        width: '100%',
-                        shadowColor: "#000",
-                        shadowOffset: {
-                            width: 0,
-                            height: 20,
-                        },
-                        shadowOpacity: 0.7,
-                        shadowRadius: 15,
-                        elevation: 10,
-                        display: 'flex',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        paddingVertical: 30,
-                        borderRadius: 34,
-                        borderWidth: 1,
-                        borderColor: theme.colors.secondary + 40,
-                        backgroundColor: pressed ? theme.colors.secondary + 70 : theme.colors.secondary + 50, // darker when pressed
-                        transform: [{ scale: pressed ? 0.95 : 1 }], // zoom out
-                    })}>
-                    <Text style={{ color: theme.colors.surface }}>
-                        {t("newToilet.chooseOnMap")}
-                    </Text>
-                </Pressable>
-            </View>
+            <ButtonComponent
+                onPress={handleChooseOnMap}
+                backgroundColor={theme.colors.secondary + '40'}
+                borderColor={theme.colors.secondaryLighter + '80'}
+                style={{
+                    width: '100%',
+                    marginTop: 30,
+                }}
+            >
+                <Text style={{ color: theme.colors.surface }}>
+                    {t("newToilet.chooseOnMap")}
+                </Text>
+            </ButtonComponent>
 
             <View style={{ marginTop: 30, }}>
                 <Text>

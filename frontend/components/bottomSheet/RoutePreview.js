@@ -234,21 +234,9 @@ const RoutePreview = forwardRef(
                     console.log("ROUTE PREVIEW >>> DISMISSED");
                     onDismiss?.();
                 }}
-                // onDismiss={() => {
-                //     if (!shouldReopenToiletInfo.current) {
-                //         return;
-                //     }
 
-                //     shouldReopenToiletInfo.current = false;
-
-                //     toiletInfoBottomSheetRef.current?.present();
-
-                //     setTimeout(() => {
-                //         toiletInfoBottomSheetRef.current?.snapToIndex(1);
-                //     }, 300);
-                // }}
                 backgroundComponent={(props) => (
-                    <GlassBackground {...props} />
+                    <GlassBackground {...props} theme={theme} />
                 )}
 
                 handleStyle={{

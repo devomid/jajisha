@@ -15,6 +15,7 @@ import { NativeTabs } from 'expo-router/unstable-native-tabs';
 import Review from "../reviews/reviews";
 import { useUserStore } from "../../store/userStore";
 import { router } from "expo-router";
+import ButtonComponent from "../Button/Button";
 
 
 const ToiletInfo = forwardRef(({ curentLocation, onPresent }, ref) => {
@@ -133,7 +134,7 @@ const ToiletInfo = forwardRef(({ curentLocation, onPresent }, ref) => {
             onChange={handleSheetChanges}
             backdropComponent={renderBackdrop}
             backgroundComponent={(props) => (
-                <GlassBackground {...props} />
+                <GlassBackground {...props} theme={theme} />
             )}
             handleStyle={{
                 backgroundColor: "transparent",
@@ -262,56 +263,30 @@ const ToiletInfo = forwardRef(({ curentLocation, onPresent }, ref) => {
                                 )}
                             </Pressable>
                         </View>
-                        <View
+
+                        <ButtonComponent
+                            onPress={() => {
+                                ref.current?.dismiss();
+                                setNavigationTarget(toilet);
+                            }}
+                            backgroundColor={theme.colors.secondary + '40'}
+                            borderColor={theme.colors.secondaryLighter + '80'}
                             style={{
-                                height: 70,
+                                width: '100%',
                                 marginTop: 10
-                            }}>
-                            <Pressable
-                                style={{ flex: 1 }}
-                                onPress={() => {
-                                    ref.current?.dismiss();
-                                    setNavigationTarget(toilet);
-                                }}
-                            >
-                                {({ pressed }) => (
-                                    <BlurView
-                                        intensity={15}
-                                        tint="extraLight"
-                                        style={{
-                                            borderRadius: 30,
-                                            overflow: 'hidden',
-                                            transform: [{ scale: pressed ? 0.95 : 1 }],
-                                        }}
-                                    >
-                                        <View
-                                            style={{
-                                                justifyContent: 'center',
-                                                borderRadius: 30,
-                                                borderWidth: 0.5,
-                                                borderColor: theme.colors.secondaryDarker,
-                                                alignItems: 'center',
-                                                paddingVertical: 20,
-                                                backgroundColor:
-                                                    pressed
-                                                        ? theme.colors.secondaryDarker + '70'
-                                                        : theme.colors.secondaryDarker + '45',
-                                            }}
-                                        >
-                                            <Text style={{ color: theme.colors.surface, }}>
-                                                Show route to WC
-                                            </Text>
-                                        </View>
-                                    </BlurView>
-                                )}
-                            </Pressable>
-                        </View>
+                            }}
+                        >
+                            <Text style={{ color: theme.colors.primaryLighter, }}>
+                                Show route to WC
+                            </Text>
+                        </ButtonComponent>
+
                         <View>
                             <Text
                                 numberOfLines={2}
                                 style={{
-                                    color: theme.colors.secondaryLight,
-                                    paddingTop: 4,
+                                    color: theme.colors.secondaryDarker,
+                                    marginTop: 10,
                                     paddingRight: 24
                                 }}
                             >
