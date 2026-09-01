@@ -5,13 +5,16 @@ import useCurrentLocation from "../../src/hooks/useCurrentLocation";
 
 import { SafeAreaView } from "react-native-safe-area-context";
 import { View, StyleSheet, Pressable } from "react-native";
-import { Text, TextInput, Button, useTheme, Checkbox } from "react-native-paper";
+import { Text, TextInput, Button, useTheme } from "react-native-paper";
 import { BlurView } from "expo-blur";
+import { Checkbox } from 'expo-checkbox';
 import MapView from "react-native-maps";
 import { router } from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { signInSchema } from "../../src/validation/userInfoSchema";
+
+import ButtonComponent from "../../components/Button/Button";
 
 export default function SignIn() {
     const theme = useTheme();
@@ -153,16 +156,27 @@ export default function SignIn() {
                                 label="Email"
                                 mode="outlined"
                                 outlineColor={theme.colors.secondaryLight + '80'}
-                                activeOutlineColor={theme.colors.primary}
+                                activeOutlineColor={theme.colors.secondary + '80'}
                                 value={values.email}
                                 onChangeText={handleChange("email")}
+                                textColor={theme.colors.text}
+                                selectionColor={theme.colors.primaryDarker}
+                                outlineStyle={{ borderRadius: 14, }}
+                                theme={{
+                                    colors: {
+                                        onSurfaceVariant: theme.colors.secondary + '70',
+                                        primary: theme.colors.white,
+                                    },
+                                }}
                                 onBlur={handleBlur("email")}
                                 keyboardType="email-address"
                                 autoCapitalize="none"
                                 autoCorrect={false}
                                 error={Boolean(touched.email && errors.email)}
-                                style={{ backgroundColor: theme.colors.secondaryLight + "30", height: 40 }}
-                            />
+                                style={{
+                                    backgroundColor: theme.colors.secondaryLight + "30",
+                                    height: 44,
+                                }} />
 
                             {touched.email && errors.email && (
                                 <Text style={{
@@ -179,15 +193,26 @@ export default function SignIn() {
                                 label="Password"
                                 mode="outlined"
                                 outlineColor={theme.colors.secondaryLight + '80'}
-                                activeOutlineColor={theme.colors.primary}
+                                activeOutlineColor={theme.colors.secondary + '80'}
                                 value={values.password}
                                 onChangeText={handleChange("password")}
                                 onBlur={handleBlur("password")}
                                 secureTextEntry
                                 autoCapitalize="none"
                                 error={Boolean(touched.password && errors.password)}
-                                style={{ backgroundColor: theme.colors.secondaryLight + "30", height: 40 }}
-                            />
+                                textColor={theme.colors.text}
+                                selectionColor={theme.colors.primaryDarker}
+                                outlineStyle={{ borderRadius: 14, }}
+                                theme={{
+                                    colors: {
+                                        onSurfaceVariant: theme.colors.secondary + '70',
+                                        primary: theme.colors.white,
+                                    },
+                                }}
+                                style={{
+                                    backgroundColor: theme.colors.secondaryLight + "30",
+                                    height: 44,
+                                }} />
 
                             {touched.password && errors.password && (
                                 <Text style={{
@@ -201,92 +226,74 @@ export default function SignIn() {
                             )}
 
                             <View style={{ flexDirection: "row", alignItems: "center" }}>
-                                <View style={{ backgroundColor: theme.colors.secondary + '25', width: 35, height: 35, marginRight: 5, display: 'flex', justifyContent: 'center', alignItems: 'center', borderRadius: 7 }}>
-                                    <Checkbox
-                                        color={theme.colors.secondary}
-                                        status={rememberMe ? "checked" : "unchecked"}
-                                        onPress={() => setRememberMe(!rememberMe)}
-                                    />
-                                </View>
+                                <Checkbox
+                                    style={{ margin: 10 }}
+                                    value={rememberMe}
+                                    onValueChange={setRememberMe}
+                                    color={
+                                        rememberMe
+                                            ? theme.colors.primary
+                                            : theme.colors.secondaryLight
+                                    }
+                                />
 
-                                <Text style={{ color: theme.colors.secondary }} >
+                                <Text style={{ color: theme.colors.secondary }}>
                                     Remember me
                                 </Text>
                             </View>
 
                             <View>
-                                <Pressable
+                                <ButtonComponent
                                     onPress={handleSubmit}
-                                    disabled={isSubmitting}
+                                    backgroundColor={theme.colors.success + '60'}
+                                    borderColor={theme.colors.success + '80'}
+                                    style={{
+                                        width: '100%',
+                                        marginTop: '15'
+                                    }}
                                 >
-                                    {({ pressed }) => (
-                                        <View style={{ transform: [{ scale: pressed ? 0.95 : 1, }] }}>
-                                            <Button
-                                                mode="contained"
-                                                loading={isSubmitting}
-                                                disabled={isSubmitting}
-                                                style={{
-                                                    backgroundColor:
-                                                        theme.colors.success + "50",
-                                                }}
-                                            >
-                                                <Text style={{ color: theme.colors.secondary }}>
-                                                    Sign In
-                                                </Text>
-                                            </Button>
-                                        </View>
-                                    )}
-                                </Pressable>
-                                <Pressable
+                                    <Text style={{ color: theme.colors.secondary }}>
+                                        Sign In
+                                    </Text>
+                                </ButtonComponent>
+
+                                <ButtonComponent
                                     onPress={handleCancel}
-                                    disabled={isSubmitting}
+                                    backgroundColor={theme.colors.error + '50'}
+                                    borderColor={theme.colors.error + '80'}
+                                    style={{
+                                        width: '100%',
+                                        marginTop: '15'
+                                    }}
                                 >
-                                    {({ pressed }) => (
-                                        <View style={{ transform: [{ scale: pressed ? 0.95 : 1, }] }}>
-                                            <Button
-                                                mode="contained"
-                                                loading={isSubmitting}
-                                                disabled={isSubmitting}
-                                                style={{
-                                                    marginTop: 15,
-                                                    backgroundColor:
-                                                        theme.colors.error + "45",
-                                                }}
-                                            >
-                                                <Text style={{ color: theme.colors.secondary }}>
-                                                    Cancel
-                                                </Text>
-                                            </Button>
-                                        </View>
-                                    )}
-                                </Pressable>
+                                    <Text style={{ color: theme.colors.secondary }}>
+                                        Cancel
+                                    </Text>
+                                </ButtonComponent>
+
                                 <Text style={{
                                     alignSelf: 'center',
                                     marginTop: '128',
-                                    color: theme.colors.secondary
+                                    color: theme.colors.secondaryDarker
                                 }}>
                                     No account yet?
                                 </Text>
-                                <Pressable
+
+                                <ButtonComponent
                                     onPress={() => {
                                         router.push('/SignUp');
                                     }}
+                                    backgroundColor={theme.colors.secondary + '30'}
+                                    borderColor={theme.colors.secondaryLighter + '80'}
+                                    style={{
+                                        width: '100%',
+                                        marginTop: 15
+                                    }}
                                 >
-                                    {({ pressed }) => (
-                                        <View style={{ transform: [{ scale: pressed ? 0.95 : 1, }] }}>
-                                            <Button
-                                                mode="contained"
-                                                style={{
-                                                    marginTop: 15,
-                                                    backgroundColor: theme.colors.primaryDarker + "45",
-                                                }}>
-                                                <Text style={{ color: theme.colors.secondaryDarker, }}>
-                                                    Become a new member
-                                                </Text>
-                                            </Button>
-                                        </View>
-                                    )}
-                                </Pressable>
+                                    <Text style={{ color: theme.colors.surface, }}>
+                                        Become a new member
+                                    </Text>
+                                </ButtonComponent>
                             </View>
 
                         </View>

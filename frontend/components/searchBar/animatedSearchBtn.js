@@ -36,6 +36,7 @@ import {
     SlidersHorizontal,
     X,
 } from "lucide-react-native";
+import ToiletCard from "../cards/ToiletCards";
 
 
 const { height: SCREEN_HEIGHT } =
@@ -1190,13 +1191,13 @@ export default function SearchButton({
                                 />
 
                             )}
-
+                            
                             ListEmptyComponent={
-
+                                
                                 <View
-                                    style={
-                                        styles.emptyContainer
-                                    }
+                                style={
+                                    styles.emptyContainer
+                                }
                                 >
 
                                     <Search
@@ -1225,14 +1226,14 @@ export default function SearchButton({
                                     <Text
                                         style={[
                                             styles.emptyText,
-
+                                            
                                             {
                                                 color:
                                                     theme.colors
                                                         .onSurfaceVariant,
                                             },
                                         ]}
-                                    >
+                                        >
                                         Try a toilet name,
                                         street, avenue,
                                         or coordinates.
@@ -1243,6 +1244,8 @@ export default function SearchButton({
                             }
 
                         />
+                        
+                        <ToiletCard />
 
                     </View>
 

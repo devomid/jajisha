@@ -41,7 +41,7 @@ const UserSchema = new mongoose.Schema(
         favoriteToilets: [
             {
                 type: mongoose.Schema.Types.ObjectId,
-                ref: "Toilet",
+                ref: "ToiletModel",
             },
         ],
 

@@ -1,3 +1,4 @@
+import { BlurView } from "expo-blur";
 import React from "react";
 import { Pressable, View } from "react-native";
 
@@ -14,21 +15,31 @@ const ButtonComponent = ({
             style={style}
         >
             {({ pressed }) => (
-                <View
+                <BlurView
+                    intensity={15}
+                    tint="dark"
                     style={{
-                        width: "100%",
-                        height: 44,
                         borderRadius: 14,
-                        borderWidth: 0.5,
-                        borderColor,
-                        alignItems: "center",
-                        justifyContent: "center",
-                        backgroundColor,
-                        opacity: pressed ? 0.65 : 1,
+                        overflow: "hidden",
                     }}
                 >
-                    {children}
-                </View>
+
+                    <View
+                        style={{
+                            width: "100%",
+                            height: 44,
+                            borderRadius: 14,
+                            borderWidth: 0.5,
+                            borderColor,
+                            alignItems: "center",
+                            justifyContent: "center",
+                            backgroundColor,
+                            opacity: pressed ? 0.65 : 1,
+                        }}
+                    >
+                        {children}
+                    </View>
+                </BlurView>
             )}
         </Pressable>
     );

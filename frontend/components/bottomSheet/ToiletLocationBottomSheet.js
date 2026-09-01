@@ -1,4 +1,4 @@
-import { forwardRef, useMemo, useCallback, useState } from "react";
+import { forwardRef, useMemo, useCallback, useState, useEffect } from "react";
 import { Text, useTheme, SegmentedButtons } from "react-native-paper";
 import { View, Pressable, Share as RNShare } from "react-native";
 import { BottomSheetModal, BottomSheetBackdrop, BottomSheetScrollView, } from "@gorhom/bottom-sheet";
@@ -6,7 +6,7 @@ import GlassBackground from "../../components/blur/blurView";
 import { BlurView } from "expo-blur";
 import { useTranslation } from "react-i18next";
 import { useWcDataStore } from "../../store/wcDataStore";
-import { Bookmark, Share, Navigation, Toilet } from "lucide-react-native";
+import { Bookmark, Share, Navigation, Toilet, BookmarkCheck } from "lucide-react-native";
 import StarRating from "react-native-star-rating-widget";
 import PhotoGallery from "../photoGallery/photoGallery";
 import MapView, { Marker } from "react-native-maps";
@@ -16,10 +16,17 @@ import Review from "../reviews/reviews";
 import { useUserStore } from "../../store/userStore";
 import { router } from "expo-router";
 import ButtonComponent from "../Button/Button";
+import { useSaveWc } from "../../src/hooks/useSaveWc";
+import { useUnsaveWc } from "../../src/hooks/useUnsaveWc";
+import { useAuth } from "../../src/hooks/useAuth";
 
 
 const ToiletInfo = forwardRef(({ curentLocation, onPresent }, ref) => {
+    const { restoreUser } = useAuth();
     const user = useUserStore((state) => state.user);
+    const saveWc = useSaveWc();
+    const unsave = useUnsaveWc();
+    const [isSaved, setIsSaved] = useState(false);
     const [value, setValue] = useState('');
     const { t } = useTranslation();
     const theme = useTheme();
@@ -30,6 +37,9 @@ const ToiletInfo = forwardRef(({ curentLocation, onPresent }, ref) => {
 
     const snapPoints = useMemo(() => ["28%", "57%", "85%"], []);
 
+    useEffect(() => {
+        restoreUser()
+    }, [])
     const handleSheetChanges = useCallback((index) => {
         console.log(index);
         onPresent?.(index);
@@ -76,7 +86,7 @@ const ToiletInfo = forwardRef(({ curentLocation, onPresent }, ref) => {
 
     };
 
-    const handleSave = () => {
+    const handleSave = async () => {
         if (!user) {
             ref.current?.dismiss();
             router.push("/SignIn");
@@ -84,9 +94,25 @@ const ToiletInfo = forwardRef(({ curentLocation, onPresent }, ref) => {
         }
 
         try {
-            console.log("user present and wc saved");
+            if (isSaved) {
+                // It's currently saved → unsave it
+                const success = await unsave();
+
+                if (success) {
+                    setIsSaved(false);
+                    console.log("WC unsaved");
+                }
+            } else {
+                // It's currently not saved → save it
+                const success = await saveWc();
+
+                if (success) {
+                    setIsSaved(true);
+                    console.log("WC saved");
+                }
+            }
         } catch (error) {
-            console.log("Save error:", error);
+            console.log("Save/unsave error:", error);
         }
     };
 
@@ -244,11 +270,21 @@ const ToiletInfo = forwardRef(({ curentLocation, onPresent }, ref) => {
                                 onPress={handleSave}
                             >
                                 {({ pressed }) => (
-                                    <Bookmark style={{
-                                        transform: [{ scale: pressed ? 0.85 : 1 }],
+                                    isSaved ? (
+                                        <BookmarkCheck style={{
+                                            transform: [{ scale: pressed ? 0.85 : 1 }],
 
-                                    }}
-                                        color={theme.colors.secondary} />
+                                        }}
+                                            color={theme.colors.secondary} />
+                                    ) : (
+                                        <Bookmark style={{
+                                            transform: [{
+                                                scale: pressed ? 0.85 : 1
+                                            }],
+
+                                        }}
+                                            color={theme.colors.secondary} />
+                                    )
                                 )}
                             </Pressable>
                             <Pressable
@@ -348,50 +384,3 @@ const ToiletInfo = forwardRef(({ curentLocation, onPresent }, ref) => {
 });
 
 export default ToiletInfo;
-
-
-// <View
-//     style={{
-//         height: 70,
-//         marginVertical: 10
-//     }}>
-//     <Pressable
-//         style={{ flex: 1 }}
-//         onPress={() => {
-//             ref.current?.dismiss();
-//             setNavigationTarget(toilet);
-//             onNavigatePress();
-//         }}
-//     >
-//         {({ pressed }) => (
-//             <BlurView
-//                 intensity={15}
-//                 tint="extraLight"
-//                 style={{
-//                     borderRadius: 30,
-//                     overflow: 'hidden',
-//                     transform: [{ scale: pressed ? 0.95 : 1 }],
-//                 }}
-//             >
-//                 <View
-//                     style={{
-//                         justifyContent: 'center',
-//                         borderRadius: 30,
-//                         borderWidth: 0.5,
-//                         borderColor: theme.colors.primaryDarker,
-//                         alignItems: 'center',
-//                         paddingVertical: 20,
-//                         backgroundColor:
-//                             pressed
-//                                 ? theme.colors.primaryDarker + '70'
-//                                 : theme.colors.primaryDarker + '45',
-//                     }}
-//                 >
-//                     <Text style={{ color: theme.colors.surface, }}>
-//                         Rate & Edit WC
-//                     </Text>
-//                 </View>
-//             </BlurView>
-//         )}
-//     </Pressable>
-// </View>

@@ -9,6 +9,7 @@ import { BlurView } from "expo-blur";
 import { useTranslation } from "react-i18next";
 import { useAddWc } from "../../src/hooks/useAddWc";
 import { useWcDataStore } from "../../store/wcDataStore";
+import ButtonComponent from "../Button/Button";
 
 
 const AddWc = forwardRef((props, ref) => {
@@ -106,76 +107,31 @@ const AddWc = forwardRef((props, ref) => {
                 <View
                     style={{
                         flexDirection: 'row',
-                        gap: 10
+                        gap: 10,
+                        marginBottom:10
                     }}
                 >
-                    <Pressable
-                        style={{ flex: 1 }}
+                    <ButtonComponent
                         onPress={handleAdd}
+                        backgroundColor={theme.colors.success + '50'}
+                        borderColor={theme.colors.success + '80'}
+                        style={{
+                            width: '50%',
+                        }}
                     >
-                        {({ pressed }) => (
-                            <BlurView
-                                intensity={15}
-                                tint="extraLight"
-                                style={{
-                                    borderRadius: 34,
-                                    overflow: 'hidden',
-                                    transform: [{ scale: pressed ? 0.95 : 1 }],
-                                }}
-                            >
-                                <View
-                                    style={{
-                                        justifyContent: 'center',
-                                        borderRadius: 38,
-                                        borderWidth: 0.5,
-                                        borderColor: theme.colors.success,
-                                        alignItems: 'center',
-                                        paddingVertical: 30,
-                                        backgroundColor:
-                                            pressed
-                                                ? theme.colors.success + '70'
-                                                : theme.colors.success + '45',
-                                    }}
-                                >
-                                    <Text>{t("AddWcBottomSheet.add")}</Text>
-                                </View>
-                            </BlurView>
-                        )}
-                    </Pressable>
+                        <Text style={{color:theme.colors.secondary}}>{t("AddWcBottomSheet.add")}</Text>
+                    </ButtonComponent>
 
-                    <Pressable
-                        style={{ flex: 1 }}
+                    <ButtonComponent
                         onPress={handleCancel}
+                        backgroundColor={theme.colors.error + '80'}
+                        borderColor={theme.colors.error + '80'}
+                        style={{
+                            width: '50%',
+                        }}
                     >
-                        {({ pressed }) => (
-                            <BlurView
-                                intensity={15}
-                                tint="extraLight"
-                                style={{
-                                    borderRadius: 34,
-                                    overflow: 'hidden',
-                                    transform: [{ scale: pressed ? 0.95 : 1 }],
-                                }}
-                            >
-                                <View
-                                    style={{
-                                        justifyContent: 'center',
-                                        borderRadius: 38,
-                                        borderWidth: 0.5,
-                                        borderColor: theme.colors.error,
-                                        alignItems: 'center',
-                                        paddingVertical: 30,
-                                        backgroundColor:
-                                            pressed
-                                                ? theme.colors.error + '70'
-                                                : theme.colors.error + '45',
-                                    }}
-                                >
-                                    <Text>{t("AddWcBottomSheet.cancel")}</Text>
-                                </View>
-                            </BlurView>
-                        )}
-                    </Pressable>
+                        <Text style={{ color: theme.colors.secondary }}>{t("AddWcBottomSheet.cancel")}</Text>
+                    </ButtonComponent>
                 </View>
             </View>
 

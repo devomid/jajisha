@@ -207,7 +207,7 @@ const TopSheet = forwardRef((props, ref) => {
                             variant="titleSmall"
                             style={{ color: theme.colors.secondaryDarker, }}
                         >
-                            welcome back dear{" "}{user ? user.name : "Guest"}
+                            welcome back dear {user?(user.firstName):('Guest')}
                         </Text>
 
                     </View>

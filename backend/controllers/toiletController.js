@@ -1,7 +1,8 @@
 const ToiletModel = require("../models/toiletModel")
-const RatingModel = require("../models/ratingModel")
+const RatingModel = require("../models/ratingModel");
+const UserModel = require("../models/userModel");
 
-exports.createToilet = async (req, res) => {
+const createToilet = async (req, res) => {
     try {
         const { wcData } = req.body;
 
@@ -83,7 +84,7 @@ exports.createToilet = async (req, res) => {
     }
 };
 
-exports.getToilets = async (req, res) => {
+const getToilets = async (req, res) => {
     try {
 
         const toilets = await ToiletModel.find();
@@ -96,4 +97,9 @@ exports.getToilets = async (req, res) => {
             message: "Failed to load toilets",
         })
     }
+};
+
+module.exports = {
+    createToilet,
+    getToilets,
 }

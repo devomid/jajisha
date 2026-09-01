@@ -8,13 +8,18 @@ import useCurrentLocation from "../src/hooks/useCurrentLocation";
 import { useEffect, useState } from "react";
 import { useUserStore } from "../store/userStore";
 import { Redirect } from "expo-router";
+import ToiletCard from "../components/cards/ToiletCards";
+import { ScrollView } from "react-native";
+import { useAuth } from "../src/hooks/useAuth";
 
 export default function Favorites() {
+  const { restoreUser } = useAuth();
   const user = useUserStore((state) => state.user);
   const pageName = "Saved Toilets"
   const theme = useTheme();
   const currentLocation = useCurrentLocation();
   const [region, setRegion] = useState(null);
+  const favoriteToilets = user.favoriteToilets;
 
   useEffect(() => {
     if (!currentLocation?.coords) return;
@@ -26,6 +31,10 @@ export default function Favorites() {
       longitudeDelta: 0.02,
     });
   }, [currentLocation]);
+
+  useEffect(() => {
+    restoreUser()
+  }, [])
 
   if (!user) {
     return <Redirect href="/SignIn" />;
@@ -41,7 +50,7 @@ export default function Favorites() {
     );
   }
 
-  return(
+  return (
     <View style={{ flex: 1, }}>
 
       {/* MAP — full screen background */}
@@ -70,18 +79,33 @@ export default function Favorites() {
       />
 
       {/* EVERYTHING ABOVE THE MAP */}
-      <SafeAreaView style={{ flex: 1, }}>
-
+      <SafeAreaView style={{ flex: 1 }}>
         <PageHeader pageName={pageName} />
-
-        <View style={{
-          flex: 1,
-          justifyContent: "center",
-          alignItems: "center",
+        {favoriteToilets?.length ? (
+        <ScrollView contentContainerStyle={{
+          paddingBottom: 100,
+          paddingTop:10
         }}>
-
-
-        </View>
+          {favoriteToilets.map((toilet) => (
+            <ToiletCard
+              key={toilet._id}
+              toilet={toilet}
+            />
+          ))}
+        </ScrollView>
+        ) : (
+            <View style={{
+              height: '100%',
+              width: '100%',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent:'center'
+            }}>
+              <Text>
+                No saved place yet.
+              </Text>
+            </View>
+        )}
 
       </SafeAreaView>
 

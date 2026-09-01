@@ -11,6 +11,8 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { View, StyleSheet, Pressable } from "react-native";
 import { signInSchema } from "../../src/validation/userInfoSchema";
 
+import ButtonComponent from "../../components/Button/Button";
+
 export default function SignUp() {
     const theme = useTheme();
     const currentLocation = useCurrentLocation();
@@ -126,16 +128,27 @@ export default function SignUp() {
                                 label="Email"
                                 mode="outlined"
                                 outlineColor={theme.colors.secondaryLight + '80'}
-                                activeOutlineColor={theme.colors.primary}
+                                activeOutlineColor={theme.colors.secondary + '80'}
                                 value={values.email}
                                 onChangeText={handleChange("email")}
+                                textColor={theme.colors.text}
+                                selectionColor={theme.colors.primaryDarker}
+                                outlineStyle={{ borderRadius: 14, }}
+                                theme={{
+                                    colors: {
+                                        onSurfaceVariant: theme.colors.secondary + '70',
+                                        primary: theme.colors.white,
+                                    },
+                                }}
                                 onBlur={handleBlur("email")}
                                 keyboardType="email-address"
                                 autoCapitalize="none"
                                 autoCorrect={false}
                                 error={Boolean(touched.email && errors.email)}
-                                style={{ backgroundColor: theme.colors.secondaryLight + "30", height: 40 }}
-                            />
+                                style={{
+                                    backgroundColor: theme.colors.secondaryLight + "30",
+                                    height: 44,
+                                }} />
 
                             {touched.email && errors.email && (
                                 <Text style={styles.error}>
@@ -147,37 +160,56 @@ export default function SignUp() {
                                 label="Password"
                                 mode="outlined"
                                 outlineColor={theme.colors.secondaryLight + '80'}
-                                activeOutlineColor={theme.colors.primary}
+                                activeOutlineColor={theme.colors.secondary + '80'}
                                 value={values.password}
                                 onChangeText={handleChange("password")}
                                 onBlur={handleBlur("password")}
                                 secureTextEntry
                                 autoCapitalize="none"
                                 error={Boolean(touched.password && errors.password)}
-                                style={{ backgroundColor: theme.colors.secondaryLight + "30", height: 40 }}
-
-                            />
+                                textColor={theme.colors.text}
+                                selectionColor={theme.colors.primaryDarker}
+                                outlineStyle={{ borderRadius: 14, }}
+                                theme={{
+                                    colors: {
+                                        onSurfaceVariant: theme.colors.secondary + '70',
+                                        primary: theme.colors.white,
+                                    },
+                                }}
+                                style={{
+                                    backgroundColor: theme.colors.secondaryLight + "30",
+                                    height: 44,
+                                }} />
 
                             {touched.password && errors.password && (
                                 <Text style={styles.error}>
                                     {errors.password}
                                 </Text>
                             )}
-
                             <TextInput
-                                label="Confirm Password"
+                                label="confirmPassword"
                                 mode="outlined"
                                 outlineColor={theme.colors.secondaryLight + '80'}
-                                activeOutlineColor={theme.colors.primary}
+                                activeOutlineColor={theme.colors.secondary + '80'}
                                 value={values.confirmPassword}
                                 onChangeText={handleChange("confirmPassword")}
                                 onBlur={handleBlur("confirmPassword")}
                                 secureTextEntry
                                 autoCapitalize="none"
                                 error={Boolean(touched.confirmPassword && errors.confirmPassword)}
-                                style={{ backgroundColor: theme.colors.secondaryLight + "30", height: 40 }}
-
-                            />
+                                textColor={theme.colors.text}
+                                selectionColor={theme.colors.primaryDarker}
+                                outlineStyle={{ borderRadius: 14, }}
+                                theme={{
+                                    colors: {
+                                        onSurfaceVariant: theme.colors.secondary + '70',
+                                        primary: theme.colors.white,
+                                    },
+                                }}
+                                style={{
+                                    backgroundColor: theme.colors.secondaryLight + "30",
+                                    height: 44,
+                                }} />
 
                             {touched.confirmPassword && errors.confirmPassword && (
                                 <Text style={styles.error}>
@@ -195,16 +227,28 @@ export default function SignUp() {
                                 <TextInput
                                     label="First Name"
                                     mode="outlined"
-                                    outlineColor={theme.colors.secondaryLight + '80'}
-                                    activeOutlineColor={theme.colors.primary}
                                     value={values.firstName}
                                     onChangeText={handleChange("firstName")}
                                     onBlur={handleBlur("firstName")}
+                                    error={Boolean(touched.firstName && errors.firstName)}
                                     autoCapitalize="words"
                                     autoCorrect={false}
-                                    error={Boolean(touched.firstName && errors.firstName)}
-                                    style={{ width: '48%', backgroundColor: theme.colors.secondaryLight + "30", height: 40 }}
-                                />
+                                    outlineColor={theme.colors.secondaryLight + '80'}
+                                    activeOutlineColor={theme.colors.secondary + '80'}
+                                    textColor={theme.colors.text}
+                                    selectionColor={theme.colors.primaryDarker}
+                                    outlineStyle={{ borderRadius: 14, }}
+                                    theme={{
+                                        colors: {
+                                            onSurfaceVariant: theme.colors.secondary + '70',
+                                            primary: theme.colors.white,
+                                        },
+                                    }}
+                                    style={{
+                                        width: '48%',
+                                        backgroundColor: theme.colors.secondaryLight + "30",
+                                        height: 44,
+                                    }} />
 
                                 {touched.firstName && errors.firstName && (
                                     <Text style={styles.error}>
@@ -215,15 +259,28 @@ export default function SignUp() {
                                 <TextInput
                                     label="Last Name"
                                     mode="outlined"
-                                    outlineColor={theme.colors.secondaryLight + '80'}
-                                    activeOutlineColor={theme.colors.primary}
                                     value={values.lastName}
                                     onChangeText={handleChange("lastName")}
                                     onBlur={handleBlur("lastName")}
+                                    error={Boolean(touched.lastName && errors.lastName)}
                                     autoCapitalize="words"
                                     autoCorrect={false}
-                                    error={Boolean(touched.lastName && errors.lastName)}
-                                    style={{ width: '48%', backgroundColor: theme.colors.secondaryLight + "30", height: 40 }}
+                                    outlineColor={theme.colors.secondaryLight + '80'}
+                                    activeOutlineColor={theme.colors.secondary + '80'}
+                                    textColor={theme.colors.text}
+                                    selectionColor={theme.colors.primaryDarker}
+                                    outlineStyle={{ borderRadius: 14, }}
+                                    theme={{
+                                        colors: {
+                                            onSurfaceVariant: theme.colors.secondary + '70',
+                                            primary: theme.colors.white,
+                                        },
+                                    }}
+                                    style={{
+                                        width: '48%',
+                                        backgroundColor: theme.colors.secondaryLight + "30",
+                                        height: 44,
+                                    }}
                                 />
 
                                 {touched.lastName && errors.lastName && (
@@ -236,15 +293,27 @@ export default function SignUp() {
                             <TextInput
                                 label="Username"
                                 mode="outlined"
-                                outlineColor={theme.colors.secondaryLight + '80'}
-                                activeOutlineColor={theme.colors.primary}
                                 value={values.username}
                                 onChangeText={handleChange("username")}
                                 onBlur={handleBlur("username")}
+                                error={Boolean(touched.username && errors.username)}
                                 autoCapitalize="none"
                                 autoCorrect={false}
-                                error={Boolean(touched.username && errors.username)}
-                                style={{ backgroundColor: theme.colors.secondaryLight + "30", height: 40 }}
+                                outlineColor={theme.colors.secondaryLight + '80'}
+                                activeOutlineColor={theme.colors.secondary + '80'}
+                                textColor={theme.colors.text}
+                                selectionColor={theme.colors.primaryDarker}
+                                outlineStyle={{ borderRadius: 14, }}
+                                theme={{
+                                    colors: {
+                                        onSurfaceVariant: theme.colors.secondary + '70',
+                                        primary: theme.colors.white,
+                                    },
+                                }}
+                                style={{
+                                    backgroundColor: theme.colors.secondaryLight + "30",
+                                    height: 44,
+                                }}
                             />
 
                             {touched.username && errors.username && (
@@ -254,79 +323,56 @@ export default function SignUp() {
                             )}
 
                             <View>
-                                    <Pressable
-                                        onPress={handleSubmit}
-                                        disabled={isSubmitting}
-                                    >
-                                        {({ pressed }) => (
-                                            <View style={{ transform: [{ scale: pressed ? 0.95 : 1, }] }}>
-                                                <Button
-                                                    mode="contained"
-                                                    loading={isSubmitting}
-                                                    disabled={isSubmitting}
-                                                    style={{
-                                                        backgroundColor:
-                                                            theme.colors.success + "50",
-                                                    }}
-                                                >
-                                                    <Text style={{ color: theme.colors.secondary }}>
-                                                        Sign Up
-                                                    </Text>
-                                                </Button>
-                                            </View>
-                                        )}
-                                    </Pressable>
-                                <Pressable
-                                    onPress={handleCancel}
-                                    disabled={isSubmitting}
+
+                                <ButtonComponent
+                                    onPress={handleSubmit}
+                                    backgroundColor={theme.colors.success + '60'}
+                                    borderColor={theme.colors.success + '80'}
+                                    style={{
+                                        width: '100%',
+                                        marginTop: '15'
+                                    }}
                                 >
-                                    {({ pressed }) => (
-                                        <View style={{ transform: [{ scale: pressed ? 0.95 : 1, }] }}>
-                                            <Button
-                                                mode="contained"
-                                                loading={isSubmitting}
-                                                disabled={isSubmitting}
-                                                style={{
-                                                    marginTop: 15,
-                                                    backgroundColor:
-                                                        theme.colors.error + "45",
-                                                }}
-                                            >
-                                                <Text style={{ color: theme.colors.secondary }}>
-                                                    Cancel
-                                                </Text>
-                                            </Button>
-                                        </View>
-                                    )}
-                                </Pressable>
+                                    <Text style={{ color: theme.colors.secondary }}>
+                                        Sign Up
+                                    </Text>
+                                    </ButtonComponent>
+                                    
+                                    <ButtonComponent
+                                        onPress={handleCancel}
+                                        backgroundColor={theme.colors.error + '50'}
+                                        borderColor={theme.colors.error + '80'}
+                                        style={{
+                                            width: '100%',
+                                            marginTop: '15'
+                                        }}
+                                    >
+                                        <Text style={{ color: theme.colors.secondary }}>
+                                            Cancel
+                                        </Text>
+                                    </ButtonComponent>
                                 <Text style={{
                                     alignSelf: 'center',
                                     marginTop: '32',
-                                    color: theme.colors.secondary
+                                    color: theme.colors.secondaryDarker
                                 }}>
                                     Already a member?
                                 </Text>
-                                <Pressable
-                                    onPress={() => {
-                                        router.push('/SignIn');
-                                    }}
-                                >
-                                    {({ pressed }) => (
-                                        <View style={{ transform: [{ scale: pressed ? 0.95 : 1, }] }}>
-                                            <Button
-                                                mode="contained"
-                                                style={{
-                                                    marginTop: 15,
-                                                    backgroundColor: theme.colors.primaryDarker + "45",
-                                                }}
-                                            >
-                                                <Text style={{ color: theme.colors.secondaryDarker, }}>
-                                                    Become a new member
-                                                </Text>
-                                            </Button>
-                                        </View>
-                                    )}
-                                </Pressable>
+                                    <ButtonComponent
+                                        onPress={() => {
+                                            router.push('/SignIn');
+                                        }}
+                                        backgroundColor={theme.colors.secondary + '30'}
+                                        borderColor={theme.colors.secondaryLighter + '80'}
+                                        style={{
+                                            width: '100%',
+                                            marginTop: 15
+                                        }}
+                                    >
+                                        <Text style={{ color: theme.colors.surface, }}>
+                                            Get back to your account
+                                        </Text>
+                                    </ButtonComponent>
                             </View>
 
 

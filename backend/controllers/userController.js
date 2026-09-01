@@ -12,7 +12,7 @@ const createToken = function (_id) {
 const getUser = async (req, res) => {
     try {
         const id = req.params.id;
-        const user = await UserModel.findById(id).select("-password");
+        const user = await UserModel.findById(id).select("-password").populate("favoriteToilets");;
         user ? (
             res.status(200).json(user)
         ) : (
@@ -98,10 +98,50 @@ const signInUser = async (req, res) => {
     }
 };
 
+const saveToilet = async (req, res) => {
+    const { toiletId, userId } = req.params;
+    try {
+        const user = await UserModel.findByIdAndUpdate(
+            userId,
+            { $addToSet: { favoriteToilets: toiletId } },
+            { new: true })
+        !user ?
+            (
+                res.status(404).json({ message: "User not found" })
+            ) : (
+                res.status(200).json({ message: "Toilet saved successfully" })
+            )
 
+    } catch (error) {
+        res.status(400).json({ error: error.message })
+
+    }
+}
+
+const unsaveToilet = async (req, res) => {
+    const { toiletId, userId } = req.params;
+    try {
+        const user = await UserModel.findByIdAndUpdate(
+            userId,
+            { $pull: { favoriteToilets: toiletId } },
+            { new: true })
+        !user ?
+            (
+                res.status(404).json({ message: "User not found" })
+            ) : (
+                res.status(200).json({ message: "Toilet removed successfully" })
+            )
+
+    } catch (error) {
+        res.status(400).json({ error: error.message })
+
+    }
+}
 
 module.exports = {
     getUser,
     signUpUser,
-    signInUser
+    signInUser,
+    saveToilet,
+    unsaveToilet
 }
