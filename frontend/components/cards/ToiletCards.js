@@ -192,7 +192,7 @@ const ToiletCard = ({toilet}) => {
                         setNavigationTarget(toilet);
                     }}
                     backgroundColor={
-                        theme.colors.secondary + "40"
+                        theme.colors.nav + "40"
                     }
                     borderColor={
                         theme.colors.secondaryLighter + "80"

@@ -44,7 +44,9 @@ export function getPaperTheme(isDark) {
             text: c.text,
             textSecondary: c.textSecondary,
 
-            border: c.border
+            border: c.border,
+
+            nav: c.nav
         },
     };
 }

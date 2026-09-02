@@ -29,7 +29,7 @@ const Colors = {
         white: "#FFFFFF",
         black: "#000000",
 
-        navigate: "#1d9dff",
+        nav: "#0015fa",
     },
     dark: {
         primary: "#F4B400",
@@ -61,7 +61,7 @@ const Colors = {
         white: "#FFFFFF",
         black: "#000000",
 
-        navigate: "#1d9dff",
+        nav: "#1d9dff",
     }
 };
 

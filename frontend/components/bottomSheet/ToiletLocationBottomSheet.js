@@ -191,7 +191,7 @@ const ToiletInfo = forwardRef(({ curentLocation, onPresent }, ref) => {
                             numberOfLines={1}
                             ellipsizeMode="tail"
                             variant="headlineLarge"
-                            style={{ color: theme.colors.surface, width: 195 }}
+                            style={{ color: theme.colors.secondaryDarker, width: 195 }}
                         >
                             {toilet.name}
                         </Text>
@@ -306,14 +306,14 @@ const ToiletInfo = forwardRef(({ curentLocation, onPresent }, ref) => {
                                 ref.current?.dismiss();
                                 setNavigationTarget(toilet);
                             }}
-                            backgroundColor={theme.colors.secondary + '40'}
+                            backgroundColor={theme.colors.nav + '60'}
                             borderColor={theme.colors.secondaryLighter + '80'}
                             style={{
                                 width: '100%',
                                 marginTop: 10
                             }}
                         >
-                            <Text style={{ color: theme.colors.primaryLighter, }}>
+                            <Text style={{ color: theme.colors.surface, }}>
                                 Show route to WC
                             </Text>
                         </ButtonComponent>

@@ -233,8 +233,8 @@ const TopSheet = forwardRef((props, ref) => {
                     ) : (
                         <ButtonComponent
                             onPress={() => { router.push('/SignIn'); }}
-                            backgroundColor={theme.colors.secondary + '40'}
-                            borderColor={theme.colors.secondaryLighter + '80'}
+                            backgroundColor={theme.colors.error + '40'}
+                            borderColor={theme.colors.error + '30'}
                             style={{ width: '100%' }}
                         >
                             <Text
