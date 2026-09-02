@@ -150,6 +150,13 @@ const toiletSchema = new mongoose.Schema(
             },
         ],
 
+        reviews: [
+            {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: "ReviewModel",
+            },
+        ],
+
         verified: {
             type: Boolean,
             default: false,
@@ -157,7 +164,7 @@ const toiletSchema = new mongoose.Schema(
 
         createdBy: {
             type: mongoose.Schema.Types.ObjectId,
-            ref: "User",
+            ref: "UserModel",
             required: true,
         },
     },

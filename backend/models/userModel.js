@@ -45,6 +45,13 @@ const UserSchema = new mongoose.Schema(
             },
         ],
 
+        reviews: [
+            {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: "ReviewModel",
+            },
+        ],
+
         role: {
             type: String,
             enum: ["user", "admin"],
@@ -56,4 +63,4 @@ const UserSchema = new mongoose.Schema(
     }
 );
 
-module.exports = mongoose.model("User", UserSchema);
+module.exports = mongoose.model("UserModel", UserSchema);

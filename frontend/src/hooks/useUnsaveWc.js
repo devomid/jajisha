@@ -7,7 +7,7 @@ export const useUnsaveWc = () => {
     const unsaveWc = async () => {
         try {
             const response = await fetch(
-                `http://192.168.43.42:3001/api/user/${user._id}/savedToilets/${toilet._id}`,
+                `http://192.168.43.42:3001/api/managment/${user._id}/savedToilets/${toilet._id}`,
                 {
                     method: "Delete",
                     headers: {
