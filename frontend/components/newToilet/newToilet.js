@@ -1,9 +1,9 @@
-import { View, Pressable, Text } from "react-native";
+import { View, Pressable, } from "react-native";
 import { router } from "expo-router";
-import { TextInput, List } from "react-native-paper";
+import { TextInput, List, Text } from "react-native-paper";
 import { useState, useMemo, useEffect } from "react";
 import { Checkbox } from 'expo-checkbox';
-import { ChevronDown, ChevronUp } from "lucide-react-native";
+import { ChevronDown, ChevronUp, Toilet, MapPin, DollarSign, ShowerHead, Star } from "lucide-react-native";
 import Rating from "./starRating";
 import { useTranslation } from "react-i18next";
 import { TextInput as RNTextInput } from "react-native";
@@ -83,22 +83,40 @@ export default function NewToilet({ theme, }) {
                 paddingBottom: 80,
             }}
         >
+            <Text
+                variant= "titleMedium"
+                style={{
+                    alignSelf: 'center',
+                    color: theme.colors.secondaryDarker +'90',
+                    marginBottom: 14
+                }}>
+                Add a new toilet
+            </Text>
             <View >
                 <TextInput
                     label={t("newToilet.toiletName")}
+                    left={<TextInput.Icon
+                        icon={() => (
+                            <Toilet
+                                size={19}
+                                color={theme.colors.secondary + '70'}
+                            />
+                        )}
+                    />}
                     value={wcData.name}
                     mode="outlined"
                     outlineColor={theme.colors.secondaryLight + '80'}
                     activeOutlineColor={theme.colors.secondary + '80'}
                     textColor={theme.colors.text}
                     selectionColor={theme.colors.primaryDarker}
-                    outlineStyle={{ borderRadius: 14, }}
+                    outlineStyle={{ borderRadius: 14, borderWidth: 0.5 }}
                     theme={{
                         colors: {
                             onSurfaceVariant: theme.colors.secondary + '70',
                             primary: theme.colors.white,
                         },
                     }}
+
                     onChangeText={(text) =>
                         setWcData(prev => ({
                             ...prev,
@@ -106,28 +124,37 @@ export default function NewToilet({ theme, }) {
                         }))
                     }
                     style={{
-                        backgroundColor: theme.colors.secondaryLight + "30",
+                        backgroundColor: theme.colors.primaryLighter + '25',
+                        // backgroundColor: theme.colors.secondaryLight + "10",
                         height: 44,
                     }}
                 />
             </View>
             <ButtonComponent
                 onPress={handleChooseOnMap}
-                backgroundColor={theme.colors.secondary + '30'}
-                borderColor={theme.colors.secondaryLighter + '80'}
+                backgroundColor={theme.colors.nav + '13'}
+                borderColor={theme.colors.secondaryLight + '80'}
                 style={{
                     width: '100%',
-                    marginTop: 25,
+                    marginTop: 9,
                 }}
             >
-                <Text style={{ color: theme.colors.primaryLighter }}>
+                <Text style={{ color: theme.colors.nav }}>
                     {t("newToilet.chooseOnMap")}
                 </Text>
             </ButtonComponent>
 
-            <View style={{ marginTop: 25, }}>
+            <View style={{ marginTop: 3, }}>
                 <View style={{ width: '100%', }}>
                     <TextInput
+                        left={<TextInput.Icon
+                            icon={() => (
+                                <MapPin
+                                    size={19}
+                                    color={theme.colors.secondary + '70'}
+                                />
+                            )}
+                        />}
                         label={t("newToilet.address")}
                         value={wcData.address}
                         mode="outlined"
@@ -135,7 +162,7 @@ export default function NewToilet({ theme, }) {
                         outlineColor={theme.colors.secondaryLight + '80'}
                         activeOutlineColor={theme.colors.secondary + '80'}
                         selectionColor={theme.colors.primaryDarker}
-                        outlineStyle={{ borderRadius: 14, }}
+                        outlineStyle={{ borderRadius: 14, borderWidth: 0.5 }}
                         theme={{
                             colors: {
                                 onSurfaceVariant: theme.colors.secondary + '70',
@@ -149,13 +176,13 @@ export default function NewToilet({ theme, }) {
                             }))
                         }
                         style={{
-                            backgroundColor: theme.colors.secondaryLight + "30",
+                            backgroundColor: theme.colors.primaryLighter + '25',
                             height: 44
                         }} />
                 </View>
             </View>
 
-            <View style={{ marginTop: 25, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+            <View style={{ marginTop: 3, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
                 <View style={{ width: '30%', flexDirection: 'row', alignItems: 'center', }}>
                     <Checkbox
                         style={{ margin: 10 }}
@@ -178,6 +205,14 @@ export default function NewToilet({ theme, }) {
 
                 <View style={{ width: '55%' }}>
                     <TextInput
+                        left={<TextInput.Icon
+                            icon={() => (
+                                <DollarSign
+                                    size={19}
+                                    color={theme.colors.secondary + '70'}
+                                />
+                            )}
+                        />}
                         label={t("newToilet.price")}
                         keyboardType="numeric"
                         editable={!wcData.isFree}
@@ -202,22 +237,22 @@ export default function NewToilet({ theme, }) {
                             }))
                         }
                         style={{
-                            backgroundColor: theme.colors.secondaryLight + "30",
+                            backgroundColor: theme.colors.primaryLighter + "25",
                             height: 44
                         }} />
                 </View>
             </View>
 
-            <View style={{ marginTop: 30 }}>
+            <View style={{ marginTop: 15 }}>
                 <List.Accordion
                     title={t("newToilet.amenities")}
                     expanded={expandedAmenities}
                     onPress={handlePressAmenities}
                     style={{
-                        height:44,
-                        backgroundColor: theme.colors.secondaryLight + "30",
+                        height: 44,
+                        backgroundColor: theme.colors.primaryLighter + "25",
                         borderWidth: 0.5,
-                        borderColor: theme.colors.secondary + 90,
+                        borderColor: theme.colors.surface + '99',
                         borderRadius: 14,
                         paddingHorizontal: 10,
                         shadowColor: "#000",
@@ -228,7 +263,7 @@ export default function NewToilet({ theme, }) {
                         shadowOpacity: 0.7,
                         shadowRadius: 15,
                         elevation: 10,
-                        marginBottom: 20,
+                        marginBottom: 5,
                     }}
                     theme={{
                         colors: {
@@ -236,13 +271,16 @@ export default function NewToilet({ theme, }) {
                             surface: 'transparent',
                         },
                     }}
-                    titleStyle={{ color: theme.colors.secondary, transform: [{ translateY: -3 }] }}
-                    right={() => null} // remove default arrow
-                    left={() =>
+                    titleStyle={{ color: theme.colors.secondary + '99', transform: [{ translateY: -8 }], fontSize: 14 }}
+                    left={() => (<ShowerHead
+                        size={18}
+                        color={theme.colors.secondary + '95'}
+                    />)} // remove default arrow
+                    right={() =>
                         expandedAmenities ? (
-                            <ChevronUp size={20} color={theme.colors.secondary} />
+                            <ChevronUp size={20} color={theme.colors.secondary} style={{ transform: [{ translateY: -4 }] }} />
                         ) : (
-                                <ChevronDown size={20} color={theme.colors.secondary} />
+                            <ChevronDown size={20} color={theme.colors.secondary} style={{ transform: [{ translateY: -4 }] }} />
                         )
                     }
                 >
@@ -286,9 +324,9 @@ export default function NewToilet({ theme, }) {
                     onPress={handlePressRatings}
                     style={{
                         height: 44,
-                        backgroundColor: theme.colors.secondaryLight + "30",
+                        backgroundColor: theme.colors.primaryLighter + "25",
                         borderWidth: 0.5,
-                        borderColor: theme.colors.secondary + 90,
+                        borderColor: theme.colors.surface + '99',
                         borderRadius: 14,
                         paddingHorizontal: 10,
                         shadowColor: "#000",
@@ -299,7 +337,7 @@ export default function NewToilet({ theme, }) {
                         shadowOpacity: 0.7,
                         shadowRadius: 15,
                         elevation: 10,
-                        marginBottom: 20
+                        marginBottom: 5,
                     }}
                     theme={{
                         colors: {
@@ -307,13 +345,16 @@ export default function NewToilet({ theme, }) {
                             surface: 'transparent',
                         },
                     }}
-                    titleStyle={{ color: theme.colors.secondary, transform: [{ translateY: -3 }] }}
-                    right={() => null} // remove default arrow
-                    left={() =>
-                        expandedRatings ? (
-                            <ChevronUp size={20} color={theme.colors.secondary} />
+                    titleStyle={{ color: theme.colors.secondary + '99', transform: [{ translateY: -8 }], fontSize: 14 }}
+                    left={() => (<Star
+                        size={18}
+                        color={theme.colors.secondary + '95'}
+                    />)} // remove default arrow
+                    right={() =>
+                        expandedAmenities ? (
+                            <ChevronUp size={20} color={theme.colors.secondary} style={{ transform: [{ translateY: -4 }] }} />
                         ) : (
-                            <ChevronDown size={20} color={theme.colors.secondary} />
+                            <ChevronDown size={20} color={theme.colors.secondary} style={{ transform: [{ translateY: -4 }] }} />
                         )
                     }
                 >
@@ -332,7 +373,9 @@ export default function NewToilet({ theme, }) {
                 </List.Accordion>
             </View>
 
-            <ButtonComponent
+            <PhotoGallery />
+
+            {/* <ButtonComponent
                 // onPress={handleChooseOnMap}
                 backgroundColor={theme.colors.secondary + '40'}
                 borderColor={theme.colors.secondaryLighter + '80'}
@@ -344,9 +387,7 @@ export default function NewToilet({ theme, }) {
                 <Text style={{ color: theme.colors.primaryLighter }}>
                     Add photo
                 </Text>
-            </ButtonComponent>
-
-            <PhotoGallery/>
+            </ButtonComponent> */}
 
         </View>
     );

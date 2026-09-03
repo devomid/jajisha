@@ -3,7 +3,7 @@ const router = express.Router();
 const { createToilet, getToilets } = require('../controllers/toiletController');
 
 
-router.post('/', createToilet);
+router.post('/:userId', createToilet);
 router.get('/', getToilets);
 
 

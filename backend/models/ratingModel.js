@@ -74,8 +74,10 @@ ratingSchema.index(
     { unique: true }
 );
 
-// Fast queries
+// Fast queries by toilet
 ratingSchema.index({ toilet: 1 });
+
+// Fast queries by user
 ratingSchema.index({ user: 1 });
 
-module.exports = mongoose.model("RatingModel", ratingSchema);
+module.exports = mongoose.model("Rating", ratingSchema);

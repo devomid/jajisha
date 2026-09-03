@@ -29,7 +29,7 @@ const Colors = {
         white: "#FFFFFF",
         black: "#000000",
 
-        nav: "#0015fa",
+        nav: "#0057fa",
     },
     dark: {
         primary: "#F4B400",

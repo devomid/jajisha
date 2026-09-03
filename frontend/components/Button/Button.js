@@ -17,7 +17,7 @@ const ButtonComponent = ({
             {({ pressed }) => (
                 <BlurView
                     intensity={15}
-                    tint="dark"
+                    tint="light"
                     style={{
                         borderRadius: 14,
                         overflow: "hidden",

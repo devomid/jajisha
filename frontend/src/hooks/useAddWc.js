@@ -1,13 +1,16 @@
 import { useWcDataStore } from "../../store/wcDataStore";
+import { useUserStore } from "../../store/userStore";
 
 export const useAddWc = () => {
     const wcData = useWcDataStore((state) => state.wcData);
     const addToilet = useWcDataStore((state) => state.addToilet);
+        const user = useUserStore((state) => state.user);
+    
 
     const addWc = async () => {
         try {
             const response = await fetch(
-                "http://192.168.43.42:3001/api/toilets",
+                `http://192.168.43.42:3001/api/toilets/${user._id}`,
                 {
                     method: "POST",
                     headers: {

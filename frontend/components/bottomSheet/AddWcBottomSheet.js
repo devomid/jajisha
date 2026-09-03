@@ -17,7 +17,7 @@ const AddWc = forwardRef((props, ref) => {
 
     const isPickingLocation = useWcDataStore(state => state.isPickingLocation);
     const theme = useTheme();
-    const snapPoints = useMemo(() => ["85%"], []);
+    const snapPoints = useMemo(() => ["88%"], []);
     const { addWc } = useAddWc();
     const wcData = useWcDataStore((state) => state.wcData);
     const setWcData = useWcDataStore((state) => state.setWcData);
@@ -87,7 +87,7 @@ const AddWc = forwardRef((props, ref) => {
         >
             <BottomSheetScrollView
                 contentContainerStyle={{
-                    padding: 24,
+                    paddingHorizontal: 24,
                     paddingBottom: 40,
                 }}
             >
@@ -109,30 +109,31 @@ const AddWc = forwardRef((props, ref) => {
                     style={{
                         flexDirection: 'row',
                         gap: 10,
-                        marginBottom: 10
+                        marginBottom: 20
                     }}
                 >
+                        <ButtonComponent
+                            onPress={handleCancel}
+                            backgroundColor={theme.colors.error + '50'}
+                            borderColor={theme.colors.error + '80'}
+                            style={{
+                                width: '30%',
+                            }}
+                        >
+                            <Text style={{ color: theme.colors.error }}>{t("AddWcBottomSheet.cancel")}</Text>
+                    </ButtonComponent>
+                    
                     <ButtonComponent
                         onPress={handleAdd}
-                        backgroundColor={theme.colors.success + '50'}
-                        borderColor={theme.colors.success + '80'}
+                        backgroundColor={theme.colors.secondary + '50'}
+                        borderColor={theme.colors.secondaryLight + '80'}
                         style={{
-                            width: '50%',
+                            width: '70%',
                         }}
                     >
                         <Text style={{ color: theme.colors.secondary }}>{t("AddWcBottomSheet.add")}</Text>
                     </ButtonComponent>
 
-                    <ButtonComponent
-                        onPress={handleCancel}
-                        backgroundColor={theme.colors.error + '80'}
-                        borderColor={theme.colors.error + '80'}
-                        style={{
-                            width: '50%',
-                        }}
-                    >
-                        <Text style={{ color: theme.colors.secondary }}>{t("AddWcBottomSheet.cancel")}</Text>
-                    </ButtonComponent>
                 </View>
             </View>
 

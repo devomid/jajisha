@@ -21,6 +21,7 @@ const toiletSchema = new mongoose.Schema(
                 enum: ["Point"],
                 default: "Point",
             },
+
             coordinates: {
                 type: [Number], // [longitude, latitude]
                 required: true,
@@ -153,7 +154,7 @@ const toiletSchema = new mongoose.Schema(
         reviews: [
             {
                 type: mongoose.Schema.Types.ObjectId,
-                ref: "ReviewModel",
+                ref: "Review",
             },
         ],
 
@@ -164,7 +165,7 @@ const toiletSchema = new mongoose.Schema(
 
         createdBy: {
             type: mongoose.Schema.Types.ObjectId,
-            ref: "UserModel",
+            ref: "User",
             required: true,
         },
     },
@@ -173,6 +174,7 @@ const toiletSchema = new mongoose.Schema(
     }
 );
 
+// Geospatial queries
 toiletSchema.index({ location: "2dsphere" });
 
-module.exports = mongoose.model("ToiletModel", toiletSchema);
+module.exports = mongoose.model("Toilet", toiletSchema);

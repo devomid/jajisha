@@ -4,14 +4,13 @@ const reviewSchema = new mongoose.Schema(
     {
         toilet: {
             type: mongoose.Schema.Types.ObjectId,
-            ref: "ToiletModel",
+            ref: "Toilet",
             required: true,
-            index: true,
         },
 
         user: {
             type: mongoose.Schema.Types.ObjectId,
-            ref: "UserModel",
+            ref: "User",
             required: true,
         },
 
@@ -21,20 +20,19 @@ const reviewSchema = new mongoose.Schema(
             required: true,
             minlength: 10,
             maxlength: 200,
-            required: true,
         },
 
         likes: [
             {
                 type: mongoose.Schema.Types.ObjectId,
-                ref: "UserModel",
+                ref: "User",
             },
         ],
 
         dislikes: [
             {
                 type: mongoose.Schema.Types.ObjectId,
-                ref: "UserModel",
+                ref: "User",
             },
         ],
     },
@@ -49,7 +47,10 @@ reviewSchema.index(
     { unique: true }
 );
 
-// Fast loading of reviews
-reviewSchema.index({ toilet: 1, createdAt: -1 });
+// Fast loading of reviews for a toilet
+reviewSchema.index({
+    toilet: 1,
+    createdAt: -1,
+});
 
-module.exports = mongoose.model("ReviewModel", reviewSchema);
+module.exports = mongoose.model("Review", reviewSchema);

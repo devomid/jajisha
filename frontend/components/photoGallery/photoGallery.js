@@ -39,13 +39,19 @@ export default function PhotoGallery({ photos = [] }) {
                         alignItems: 'center',
                         height: 250,
                     }}>
-                        <Image
-                            source={require("../../assets/picPlaceHolder.png")}
-                            style={{
-                                width: 350,
-                                height: 300,
-                                resizeMode: "contain",
-                            }} />
+                        <Pressable>
+                            {({ pressed }) => (
+                                <Image
+                                    source={require("../../assets/picPlaceHolder.png")}
+                                    style={{
+                                        width: 350,
+                                        height: 300,
+                                        resizeMode: "contain",
+                                        opacity: pressed ? 0.95 : 1,
+                                        transform: [{ scale: pressed ? 0.98 : 1 }]
+                                    }} />
+                            )}
+                        </Pressable>
                     </View>
                 )}
             </ScrollView>

@@ -1,4 +1,4 @@
-const UserModel = require("../models/userModel");
+const User = require("../models/userModel");
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const dotenv = require('dotenv');
@@ -12,7 +12,7 @@ const createToken = function (_id) {
 const getUser = async (req, res) => {
     try {
         const id = req.params.id;
-        const user = await UserModel.findById(id).select("-password").populate("favoriteToilets");;
+        const user = await User.findById(id).select("-password").populate("favoriteToilets").populate("reviews");
         user ? (
             res.status(200).json(user)
         ) : (
@@ -36,8 +36,8 @@ const signUpUser = async (req, res) => {
 
     try {
         const [usernameExists, emailExists] = await Promise.all([
-            UserModel.exists({ username }),
-            UserModel.exists({ email }),
+            User.exists({ username }),
+            User.exists({ email }),
         ]);
 
         if (usernameExists) {
@@ -61,7 +61,7 @@ const signUpUser = async (req, res) => {
         const salt = await bcrypt.genSalt(10);
         const hashedPass = await bcrypt.hash(password, salt);
 
-        const user = await UserModel.create({
+        const user = await User.create({
             username,
             firstName,
             lastName,
@@ -83,7 +83,7 @@ const signInUser = async (req, res) => {
     try {
         const { email, password } = req.body;
         
-        const user = await UserModel.findOne({ email });
+        const user = await User.findOne({ email });
         if (!user) return (res.status(400).json({ error: "User does not exist." }));
         
         const token = createToken(user._id);

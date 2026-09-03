@@ -1,13 +1,15 @@
 import React, { forwardRef, useMemo, useCallback, useEffect, useRef, useState, } from "react";
 import { BottomSheetModal, BottomSheetBackdrop, } from "@gorhom/bottom-sheet";
-import { View, Pressable, Text, StyleSheet, ActivityIndicator, } from "react-native";
+import { View, Pressable, StyleSheet, ActivityIndicator, } from "react-native";
 import { BlurView } from "expo-blur";
-import { useTheme } from "react-native-paper";
+import { useTheme, Text } from "react-native-paper";
 import MapView, { Polyline, Marker, } from "react-native-maps";
 import { Image } from "react-native";
 import { useTranslation } from "react-i18next";
 import { useWcDataStore } from "../../store/wcDataStore";
 import GlassBackground from "../../components/blur/blurView";
+import { Navigation } from 'lucide-react-native';
+
 
 
 const RoutePreview = forwardRef(
@@ -18,8 +20,9 @@ const RoutePreview = forwardRef(
         const mapRef = useRef(null);
         const [mapReady, setMapReady] = useState(false);
         const navigation = useWcDataStore(state => state.navigation);
+        const toilet = useWcDataStore((state) => state.selectedToilet);
         const { target, route, distance, duration, status, } = navigation;
-        const snapPoints = useMemo(() => ["65%"], []);
+        const snapPoints = useMemo(() => ["70%"], []);
         const shouldReopenToiletInfo = useRef(false);
 
         const origin = useMemo(() => {
@@ -255,14 +258,42 @@ const RoutePreview = forwardRef(
             >
 
                 <View style={{ flex: 1, }}>
-
+                    <View style={{
+                        width: '100%',
+                        display: 'flex',
+                        alignItems: 'flex-start',
+                        justifyContent: 'flex-start',
+                        flexDirection: 'row',
+                        marginTop: 15,
+                        marginLeft: 32
+                    }}>
+                        <View style={{ marginTop: 8 }}>
+                            <Navigation color={theme.colors.secondaryDarker + '99'} size={35} />
+                        </View>
+                        <View style={{
+                            marginLeft: 18,
+                            marginBottom: 14,
+                        }}>
+                            <Text
+                                style={{ color: theme.colors.secondaryDarker + '99' }}
+                                variant='headlineMedium'>
+                                Rout Prview
+                            </Text>
+                            {/* <Text numberOfLines={1} style={{ color: theme.colors.secondaryDarker + '99', marginRight: 14 }}>
+                                to {toilet.name} ({toilet.address})
+                            </Text> */}
+                        </View>
+                    </View>
                     <View
                         style={{
                             height: 300,
                             marginHorizontal: 20,
-                            borderRadius: 25,
+                            borderRadius: 14,
                             overflow: "hidden",
                             position: "relative",
+                            borderWidth: 0.5,
+                            borderColor: theme.colors.secondary + '70',
+                            marginBottom: 10
                         }}
                     >
 
@@ -275,31 +306,14 @@ const RoutePreview = forwardRef(
                             rotateEnabled={false}
                             pitchEnabled={false}
                             showsUserLocation={false}
-
-                            /*
-                             * Prevent the map from initially
-                             * showing the whole world.
-                             */
                             initialRegion={
-                                origin
-                                    ? {
-                                        latitude:
-                                            origin.latitude,
-
-                                        longitude:
-                                            origin.longitude,
-
-                                        latitudeDelta:
-                                            0.01,
-
-                                        longitudeDelta:
-                                            0.01,
-                                    }
-                                    : undefined
-                            }
+                                origin ? {
+                                    latitude: origin.latitude,
+                                    longitude: origin.longitude,
+                                    latitudeDelta: 0.01,
+                                    longitudeDelta: 0.01
+                                } : undefined}
                         >
-
-
 
                             {/* CURRENT LOCATION */}
 
@@ -383,68 +397,6 @@ const RoutePreview = forwardRef(
                             )}
 
                         </MapView>
-
-
-                        {/* =========================
-                        ROUTING OVERLAY
-                    ========================= */}
-
-                        {isRouting && (
-
-                            <View
-                                style={{
-                                    ...StyleSheet.absoluteFillObject,
-
-                                    justifyContent:
-                                        "center",
-
-                                    alignItems:
-                                        "center",
-
-                                    backgroundColor:
-                                        "rgba(0,0,0,0.25)",
-                                }}
-                            >
-
-                                <BlurView
-                                    intensity={30}
-                                    tint="dark"
-                                    style={{
-                                        paddingHorizontal: 25,
-                                        paddingVertical: 18,
-
-                                        borderRadius: 20,
-
-                                        overflow: "hidden",
-
-                                        alignItems:
-                                            "center",
-                                    }}
-                                >
-
-                                    <ActivityIndicator
-                                        size="large"
-                                        color={
-                                            theme.colors
-                                                .secondary
-                                        }
-                                    />
-
-                                    <Text
-                                        style={{
-                                            marginTop: 10,
-                                            color: "white",
-                                        }}
-                                    >
-                                        Calculating route...
-                                    </Text>
-
-                                </BlurView>
-
-                            </View>
-
-                        )}
-
                     </View>
 
 
@@ -454,47 +406,41 @@ const RoutePreview = forwardRef(
 
                     <View
                         style={{
-                            paddingHorizontal: 24,
-                            paddingTop: 20,
+                            paddingHorizontal: 14,
+                            borderWidth: 0.5,
+                            borderColor: theme.colors.secondary + '70',
+                            width: '90%',
+                            height:'12%',
+                            alignSelf: 'center',
+                            borderRadius: 14,
+                            marginBottom: 10,
+                            
                         }}
-                    >
-
-                        <Text
-                            variant="headlineSmall"
-                            style={{
-                                color:
-                                    theme.colors.surface,
-                            }}
                         >
-                            {target?.name}
-                        </Text>
-
 
                         <View
                             style={{
                                 flexDirection: "row",
-                                marginTop: 15,
                                 gap: 30,
+                                height: '100%',
+                                width:'100%',
                             }}
-                        >
+                            >
 
-                            <View>
-
-                                <Text
-                                    style={{
-                                        color:
-                                            theme.colors
-                                                .secondary,
-                                    }}
-                                >
-                                    Distance
-                                </Text>
+                            <View style={{
+                                height: '100%',
+                                width:'50%',
+                                borderRightColor: theme.colors.primary +'90',
+                                borderRightWidth: 0.5,
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                            }}>
 
                                 <Text
                                     variant="titleLarge"
                                     style={{
                                         color:
-                                            theme.colors
+                                        theme.colors
                                                 .surface,
                                     }}
                                 >
@@ -504,18 +450,14 @@ const RoutePreview = forwardRef(
                             </View>
 
 
-                            <View>
-
-                                <Text
-                                    style={{
-                                        color:
-                                            theme.colors
-                                                .secondary,
-                                    }}
-                                >
-                                    Estimated time
-                                </Text>
-
+                            <View style={{
+                                height: '100%',
+                                width: '50%',
+                                borderRightColor: 'red',
+                                borderRightWidth: 0.5,
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                            }}>
                                 <Text
                                     variant="titleLarge"
                                     style={{

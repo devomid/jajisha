@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const UserSchema = new mongoose.Schema(
+const userSchema = new mongoose.Schema(
     {
         username: {
             type: String,
@@ -8,7 +8,7 @@ const UserSchema = new mongoose.Schema(
             unique: true,
             trim: true,
         },
-        
+
         firstName: {
             type: String,
             required: true,
@@ -26,6 +26,7 @@ const UserSchema = new mongoose.Schema(
             required: true,
             unique: true,
             lowercase: true,
+            trim: true,
         },
 
         password: {
@@ -41,14 +42,14 @@ const UserSchema = new mongoose.Schema(
         favoriteToilets: [
             {
                 type: mongoose.Schema.Types.ObjectId,
-                ref: "ToiletModel",
+                ref: "Toilet",
             },
         ],
 
         reviews: [
             {
                 type: mongoose.Schema.Types.ObjectId,
-                ref: "ReviewModel",
+                ref: "Review",
             },
         ],
 
@@ -63,4 +64,4 @@ const UserSchema = new mongoose.Schema(
     }
 );
 
-module.exports = mongoose.model("UserModel", UserSchema);
+module.exports = mongoose.model("User", userSchema);

@@ -1,10 +1,19 @@
-const ToiletModel = require("../models/toiletModel")
-const RatingModel = require("../models/ratingModel");
-const UserModel = require("../models/userModel");
+const Toilet = require("../models/toiletModel")
+const Rating = require("../models/ratingModel");
+const User = require("../models/userModel");
 
 const createToilet = async (req, res) => {
     try {
+        const { userId } = req.params;
         const { wcData } = req.body;
+
+        console.log(userId);
+
+        const user = await User.exists({ _id: userId });
+        if (!user) {
+            res.status(404).json({ message: "User not found", });
+            return false;
+        }
 
         const price = wcData.isFree
             ? 0
@@ -23,7 +32,7 @@ const createToilet = async (req, res) => {
             ) / 6;
 
         // 1. Create Toilet
-        const toilet = await ToiletModel.create({
+        const toilet = await Toilet.create({
             name: wcData.name,
             description: wcData.description,
 
@@ -54,12 +63,11 @@ const createToilet = async (req, res) => {
                 crowd: ratings.crowd,
             },
 
-            // Temporary until authentication
-            createdBy: "687d2f5f5a3e6c5f8d123456",
+            createdBy: userId,
         });
 
         // 2. Create creator's Rating
-        await RatingModel.create({
+        await Rating.create({
             toilet: toilet._id,
             user: toilet.createdBy,
 
@@ -87,7 +95,7 @@ const createToilet = async (req, res) => {
 const getToilets = async (req, res) => {
     try {
 
-        const toilets = await ToiletModel.find();
+        const toilets = await Toilet.find().populate("reviews");
         res.status(200).json({ toilets })
 
     } catch (error) {
