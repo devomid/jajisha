@@ -2,7 +2,7 @@
 
 ### Find a toilet. Add a toilet. Get there.
 
-![1788117853271](image/README/1788117853271.png)
+![Jajisha](image/README/1788117853271.png)
 
 **Jajisha** is a free, user-driven mobile application for discovering, adding, reviewing, and navigating to public toilets.
 
@@ -64,21 +64,19 @@ The name is intentionally simple, playful, and directly connected to the purpose
 
 ---
 
-## 🚀 Features
+# 🚀 Features
 
-### 🗺️ Interactive Map
+## 🗺️ Interactive Map
 
 The primary interface of Jajisha is a map-based experience where users can discover nearby toilet locations.
 
 Toilet markers provide a quick visual overview of available locations, while selecting a marker opens more detailed information.
 
-<!-- SCREENSHOT: Add your main map screenshot here -->
-
-<!-- Suggested file: docs/screenshots/map.png -->
+![Jajisha Map](image/README/1788117853271.png)
 
 ---
 
-### 📍 Find Nearby Toilets
+## 📍 Find Nearby Toilets
 
 Jajisha uses the device's location to help users discover toilets around their current position.
 
@@ -86,25 +84,22 @@ The experience is designed around a simple question:
 
 > **"Where can I find a toilet right now?"**
 
-![1788118093291](image/README/1788118093291.png)![1788118119215](image/README/1788118119215.png)
+![Nearby Toilets](image/README/1788118093291.png)
+![Nearby Toilets](image/README/1788118119215.png)
 
 ---
 
-### ➕ Add a Toilet
+## ➕ Add a Toilet
 
 Jajisha is user-powered.
 
-Anyone can contribute by adding a toilet location to the map, helping expand the database for other users.
+Users can contribute by adding a toilet location to the map, helping expand the database for other users.
 
-![1788118162814](image/README/1788118162814.png)
-
-<!-- SCREENSHOT: Add your "Add Toilet" screen here -->
-
-<!-- Suggested file: docs/screenshots/add-toilet.png -->
+![Add a Toilet](image/README/1788118162814.png)
 
 ---
 
-### ⭐ Ratings & Reviews
+## ⭐ Ratings & Reviews
 
 Users can share their experience with a toilet through ratings and reviews.
 
@@ -119,35 +114,23 @@ Users also want to know:
 
 Community feedback can make this information significantly more useful.
 
-<!-- SCREENSHOT: Add your toilet details/reviews screen here -->
-
-<!-- Suggested file: docs/screenshots/reviews.png -->
-
 ---
 
-### 📷 Photos
+## 📷 Photos
 
 Visual information can help users understand what to expect before visiting a location.
 
 Jajisha includes support for toilet-related images and photo galleries.
 
-<!-- SCREENSHOT: Add your photo gallery screen here -->
-
-<!-- Suggested file: docs/screenshots/gallery.png -->
-
 ---
 
-### ❤️ Favorites
+## ❤️ Favorites
 
 Users can save useful toilet locations for easier access later.
 
-<!-- SCREENSHOT: Add your favorites screen here -->
-
-<!-- Suggested file: docs/screenshots/favorites.png -->
-
 ---
 
-### 🧭 Navigation
+## 🧭 Navigation
 
 Once a user selects a toilet, Jajisha can help them get there using navigation.
 
@@ -155,21 +138,18 @@ The goal is to reduce the entire process to:
 
 **Find → Select → Navigate**
 
-![1788118252634](image/README/1788118252634.png)![1788118265728](image/README/1788118265728.png)
+![Navigation](image/README/1788118252634.png)
+![Navigation](image/README/1788118265728.png)
 
 ---
 
-### 🔎 Search
+## 🔎 Search
 
 Users can search for locations and discover toilets beyond their immediate surroundings.
 
-<!-- SCREENSHOT: Add your search UI here -->
-
-<!-- Suggested file: docs/screenshots/search.png -->
-
 ---
 
-### 🌍 Localization
+## 🌍 Localization
 
 Jajisha currently supports:
 
@@ -234,8 +214,8 @@ Jajisha is structured as a full-stack application with a React Native frontend c
 
 ## Frontend
 
-| Technology                             | Purpose                           |
-| -------------------------------------- | --------------------------------- |
+| Technology                       | Purpose                           |
+| -------------------------------- | --------------------------------- |
 | **React Native**                 | Cross-platform mobile application |
 | **Expo**                         | React Native development platform |
 | **Expo Router**                  | File-based application routing    |
@@ -243,7 +223,6 @@ Jajisha is structured as a full-stack application with a React Native frontend c
 | **Expo Location**                | Device location services          |
 | **React Native Paper**           | UI components                     |
 | **Zustand**                      | Application state management      |
-| **React Hook Form**              | Form management                   |
 | **Formik**                       | Form handling                     |
 | **Yup**                          | Validation                        |
 | **i18next**                      | Internationalization              |
@@ -255,15 +234,15 @@ Jajisha is structured as a full-stack application with a React Native frontend c
 
 ## Backend
 
-| Technology         | Purpose                       |
-| ------------------ | ----------------------------- |
+| Technology   | Purpose                       |
+| ------------ | ----------------------------- |
 | **Node.js**  | Backend runtime               |
 | **Express**  | REST API framework            |
 | **MongoDB**  | Database                      |
 | **Mongoose** | MongoDB object modeling       |
 | **JWT**      | Authentication                |
 | **Passport** | Authentication middleware     |
-| **bcrypt**   | Password hashing              |
+| **bcryptjs** | Password hashing              |
 | **Helmet**   | HTTP security                 |
 | **CORS**     | Cross-origin resource sharing |
 | **dotenv**   | Environment configuration     |
@@ -293,6 +272,7 @@ jajisha/
 │   │   ├── toiletRoutes.js
 │   │   └── userRoutes.js
 │   │
+│   ├── .env.example
 │   ├── server.js
 │   └── package.json
 │
@@ -382,7 +362,7 @@ The backend uses:
 
 * JSON Web Tokens
 * Passport
-* bcrypt password hashing
+* bcryptjs password hashing
 * Environment-based secrets
 * Helmet security middleware
 * CORS configuration
@@ -423,13 +403,13 @@ The backend provides REST endpoints for the application's core resources.
 Current API areas include:
 
 ```text
-/api/users
+/api/user
 /api/toilets
 ```
 
-The exact endpoints and request/response contracts are intentionally kept in the backend route and controller layers.
+The API follows a REST-oriented architecture with routing and business logic separated into dedicated route and controller modules.
 
-As the API stabilizes, dedicated API documentation can be added here.
+Detailed API documentation can be added as the API continues to stabilize.
 
 ---
 
@@ -505,7 +485,7 @@ npm run android
 npm run web
 ```
 
-> Web support is currently experimental/planned. The primary targets are iOS and Android.
+> Web support is currently experimental. The primary targets are iOS and Android.
 
 ---
 
@@ -523,11 +503,16 @@ Create a `.env` file containing your backend configuration.
 For example:
 
 ```env
-MONGO_URI=your_mongodb_connection_string
-JWT_SECRET=your_secret
+MONGOURI=your_mongodb_connection_string
+PORT=your_port_number
+SECRET_KEY=your_jwt_secret
 ```
 
-Use your actual environment variable names if they differ from the example above.
+A template is provided in:
+
+```text
+backend/.env.example
+```
 
 Then start the development server:
 
@@ -545,28 +530,30 @@ npm start
 
 # ⚙️ Environment Variables
 
-The backend requires sensitive configuration to be supplied through environment variables.
+The backend requires configuration to be supplied through environment variables.
 
-Typical configuration includes:
+The following variables are currently used:
 
 ```env
-MONGO_URI=
-JWT_SECRET=
+MONGOURI=
+PORT=
+SECRET_KEY=
 ```
 
 Your actual `.env` file should **never** be committed to the repository.
 
-A safe approach is to provide an example file:
+A safe template is provided at:
 
 ```text
-.env.example
+backend/.env.example
 ```
 
 containing:
 
 ```env
-MONGO_URI=
-JWT_SECRET=
+MONGOURI=your_mongodb_connection_string
+PORT=your_port_number
+SECRET_KEY=your_jwt_secret
 ```
 
 This allows other developers to understand which variables are required without exposing credentials.
@@ -582,10 +569,9 @@ This allows other developers to understand which variables are required without 
 
 ### Planned
 
+* 🔄 App Store distribution
+* 🔄 Google Play distribution
 * 🔄 Progressive Web App (PWA)
-* 🔄 Wider public distribution
-* 🔄 App Store release
-* 🔄 Google Play release
 
 The application is built with cross-platform development in mind, with iOS and Android as the primary mobile targets.
 
@@ -597,8 +583,8 @@ Jajisha currently supports:
 
 | Language     | Status |
 | ------------ | ------ |
-| 🇬🇧 English | ✅     |
-| 🇮🇷 Persian | ✅     |
+| 🇬🇧 English | ✅      |
+| 🇮🇷 Persian | ✅      |
 
 Localization is implemented using **i18next** and **react-i18next**, allowing additional languages to be added without restructuring the application.
 
@@ -606,29 +592,18 @@ Localization is implemented using **i18next** and **react-i18next**, allowing ad
 
 # 🛣️ Roadmap
 
-Jajisha is an actively developed project.
+Jajisha is actively developed, with the core application functionality already implemented.
 
-The long-term direction includes:
+### Next
 
-* [X] Interactive toilet map
-* [X] User toilet submissions
-* [X] User accounts
-* [X] Ratings
-* [X] Reviews
-* [X] Favorites
-* [X] Location services
-* [X] Navigation
-* [X] English localization
-* [X] Persian localization
-* [X] Public release
 * [ ] App Store distribution
 * [ ] Google Play distribution
-* [ ] PWA
+* [ ] Progressive Web App (PWA)
 * [ ] Expand the toilet database
 * [ ] Improve moderation and data quality
 * [ ] Continue improving toilet information and accessibility data
 
-The roadmap will evolve as the application moves from development toward public use.
+The roadmap will evolve as the application moves toward wider public use.
 
 ---
 
@@ -664,11 +639,9 @@ This makes debugging significantly easier.
 
 # 📄 License
 
-Jajisha currently does not have an open-source license.
+Jajisha is licensed under the **MIT License**.
 
-Until a license is added, the repository should **not be assumed to grant permission to copy, modify, redistribute, or commercially use the source code**.
-
-A license will be selected before the project is formally presented as an open-source project.
+See the [`LICENSE`](LICENSE) file for the full license text.
 
 ---
 
@@ -686,7 +659,7 @@ It is also intended as a portfolio project demonstrating full-stack application 
 
 **Repository**
 
-[github.com/devomid/jajisha](https://github.com/devomid/jajisha?utm_source=chatgpt.com)
+[github.com/devomid/jajisha](https://github.com/devomid/jajisha)
 
 ---
 
@@ -699,3 +672,7 @@ It helps the project get noticed and provides motivation to keep building it.
 ---
 
 <div align="center">
+
+**Built by Omid**
+
+</div>
