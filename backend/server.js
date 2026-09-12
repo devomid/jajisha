@@ -6,7 +6,6 @@ const dotenv = require('dotenv');
 const toiletRoutes = require('./routes/toiletRoutes');
 const userRoutes = require('./routes/userRoutes');
 const managmentRoutes = require('./routes/managmentRoutes');
-const rateLimit = require('express-rate-limit');
 
 
 dotenv.config()
@@ -17,9 +16,17 @@ const missingEnv = requiredEnv.filter((key) => !process.env[key]);
 if (missingEnv.length > 0) {
     console.error(`Missing required environment variables: ${missingEnv.join(", ")}`);
     process.exit(1);
-}
+};
+
+
 const mongoUrl = process.env.MONGOURI;
-const portNumber = process.env.PORT;
+const portNumber = Number(process.env.PORT);
+
+if (!Number.isInteger(portNumber) || portNumber < 1 || portNumber > 65535) {
+    console.error("PORT must be a valid number between 1 and 65535");
+    process.exit(1);
+};
+
 
 // configs and middlwares
 const app = express();
@@ -71,6 +78,10 @@ process.on("SIGTERM", () => shutdown("SIGTERM"));
 
 
 // DataBase
+mongoose.connection.on("error", (error) => {
+    console.error("MongoDB connection error:", error);
+});
+
 mongoose.connect(mongoUrl)
     .then(() => {
         app.listen(portNumber, () => {

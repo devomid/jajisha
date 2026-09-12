@@ -170,11 +170,23 @@ const createToilet = async (req, res) => {
     } catch (err) {
         if (session.inTransaction()) {
             await session.abortTransaction();
-        };
+        }
 
         console.error(err);
 
-        res.status(500).json({
+        if (err.name === "ValidationError") {
+            return res.status(400).json({
+                message: "Invalid toilet data",
+            });
+        }
+
+        if (err.code === 11000) {
+            return res.status(409).json({
+                message: "Toilet already exists",
+            });
+        }
+
+        return res.status(500).json({
             message: "Failed to create toilet.",
         });
     } finally {
@@ -207,7 +219,7 @@ const getToiletReviews = async (req, res) => {
     }
 
     try {
-        const reviews = await Review.find({ toilet: toiletId }).sort({ createdAt: -1 }).limit(50);
+        const reviews = await Review.find({ toilet: toiletId }).sort({ createdAt: -1 }).limit(50).lean();
         res.status(200).json({ reviews });
 
     } catch (error) {
