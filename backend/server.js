@@ -1,14 +1,8 @@
-const express = require('express');
-const helmet = require('helmet');
-const cors = require('cors');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
-const toiletRoutes = require('./routes/toiletRoutes');
-const userRoutes = require('./routes/userRoutes');
-const managmentRoutes = require('./routes/managmentRoutes');
+const app = require('./app');
 
-
-dotenv.config()
+dotenv.config();
 
 const requiredEnv = ["MONGOURI", "PORT", "SECRET_KEY", "CLIENT_ORIGIN"];
 const missingEnv = requiredEnv.filter((key) => !process.env[key]);
@@ -16,8 +10,7 @@ const missingEnv = requiredEnv.filter((key) => !process.env[key]);
 if (missingEnv.length > 0) {
     console.error(`Missing required environment variables: ${missingEnv.join(", ")}`);
     process.exit(1);
-};
-
+}
 
 const mongoUrl = process.env.MONGOURI;
 const portNumber = Number(process.env.PORT);
@@ -25,46 +18,9 @@ const portNumber = Number(process.env.PORT);
 if (!Number.isInteger(portNumber) || portNumber < 1 || portNumber > 65535) {
     console.error("PORT must be a valid number between 1 and 65535");
     process.exit(1);
-};
+}
 
-
-// configs and middlwares
-const app = express();
-app.use(express.json({ limit: "1mb" }));
-app.use(express.static('public'));
-app.use(express.urlencoded({ extended: true, limit: "1mb" }));
-app.use(helmet());
-app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }));
-app.use(cors({
-    credentials: true,
-    origin: process.env.CLIENT_ORIGIN,
-    methods: ['GET', 'POST', 'DELETE', 'PATCH'],
-}));
-
-//health check
-app.get("/health", (req, res) => {
-    res.status(200).json({ status: "ok" })
-});
-
-//routes
-app.use("/api/toilets", toiletRoutes);
-app.use("/api/user", userRoutes);
-app.use("/api/managment", managmentRoutes);
-
-
-// 404 handler
-app.use((req, res) => {
-    res.status(404).json({ error: "Route not found", });
-});
-
-
-// error handler
-app.use((err, req, res, next) => {
-    console.error("Unhandled server error:", err);
-    res.status(500).json({ error: "Internal server error", });
-});
-
-//shutdown
+// shutdown
 const shutdown = async (signal) => {
     console.log(`${signal} received. Shutting down...`);
 
@@ -76,8 +32,7 @@ const shutdown = async (signal) => {
 process.on("SIGINT", () => shutdown("SIGINT"));
 process.on("SIGTERM", () => shutdown("SIGTERM"));
 
-
-// DataBase
+// Database
 mongoose.connection.on("error", (error) => {
     console.error("MongoDB connection error:", error);
 });
