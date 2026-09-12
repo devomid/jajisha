@@ -9,6 +9,14 @@ const managmentRoutes = require('./routes/managmentRoutes');
 
 
 dotenv.config()
+
+const requiredEnv = ["MONGOURI","PORT","SECRET_KEY","CLIENT_ORIGIN"];
+const missingEnv = requiredEnv.filter((key) => !process.env[key]);
+
+if (missingEnv.length > 0) {
+    console.error(`Missing required environment variables: ${missingEnv.join(", ")}`);
+    process.exit(1);
+}
 const mongoUrl = process.env.MONGOURI;
 const portNumber = process.env.PORT;
 
@@ -48,7 +56,6 @@ const shutdown = async (signal) => {
 
 process.on("SIGINT", () => shutdown("SIGINT"));
 process.on("SIGTERM", () => shutdown("SIGTERM"));
-
 
 
 // DataBase

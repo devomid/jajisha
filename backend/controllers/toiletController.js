@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+import Review from '../../frontend/components/reviews/reviews';
 const Toilet = require("../models/toiletModel")
 const Rating = require("../models/ratingModel");
 const User = require("../models/userModel");
@@ -183,8 +184,8 @@ const createToilet = async (req, res) => {
 
 const getToilets = async (req, res) => {
     try {
-        const toilets = await Toilet.find();
-        res.status(200).json({ toilets })
+        const toilets = await Toilet.find().select("-reviews -createdBy");
+        res.status(200).json({ toilets });
 
     } catch (error) {
 
@@ -197,21 +198,21 @@ const getToilets = async (req, res) => {
 
 const getToiletReviews = async (req, res) => {
     const { toiletId } = req.params;
+
+    if (!mongoose.isValidObjectId(toiletId)) {
+        return res.status(400).json({ message: "Invalid toilet ID" });
+    }
+
     try {
-        const toilet = await Toilet.findById(toiletId).populate("reviews");
-        if (!toilet) {
-            return res.status(404).json({ message: "Toilet not found", });
-        }
-        res.status(200).json({ reviews: toilet.reviews, });
+        const reviews = await Review.find({ toilet: toiletId }).sort({ createdAt: -1 }).limit(50);
+        res.status(200).json({ reviews });
 
     } catch (error) {
+        console.error("Get toilet reviews error:", error);
 
-        console.log(error);
-        res.status(500).json({
-            message: "Failed to load toilet reviews",
-        })
+        res.status(500).json({ message: "Failed to load toilet reviews", });
     }
-}
+};
 
 module.exports = {
     createToilet,
