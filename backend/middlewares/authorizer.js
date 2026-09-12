@@ -3,7 +3,11 @@ const dotenv = require('dotenv');
 const User = require('../models/userModel');
 
 dotenv.config();
-const secretKey = process.env.SECRET_KEY
+const secretKey = process.env.SECRET_KEY;
+
+if (!secretKey) {
+    throw new Error("SECRET_KEY is not configured");
+};
 
 const authorize = async (req, res, next) => {
     // verify authorization

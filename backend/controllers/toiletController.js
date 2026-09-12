@@ -1,8 +1,8 @@
 const mongoose = require("mongoose");
-import Review from '../../frontend/components/reviews/reviews';
 const Toilet = require("../models/toiletModel")
 const Rating = require("../models/ratingModel");
 const User = require("../models/userModel");
+const Review = require("../models/reviewModel");
 
 const createToilet = async (req, res) => {
     const session = await mongoose.startSession();
