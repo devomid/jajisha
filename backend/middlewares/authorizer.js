@@ -17,11 +17,11 @@ const authorize = async (req, res, next) => {
         return res.status(401).json({ error: 'Authorization token requires!' })
     };
 
-    const [scheme, token] = authorization.split(' ');
+    const [scheme, token, extra] = authorization.split(' ');
 
-    if (scheme !== 'Bearer' || !token) {
+    if (scheme !== 'Bearer' || !token || extra) {
         return res.status(401).json({ error: 'Invalid authorization format' });
-    };
+    }
 
     try {
         const { _id } = jwt.verify(token, secretKey);
