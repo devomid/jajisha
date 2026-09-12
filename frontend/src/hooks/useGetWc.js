@@ -30,11 +30,12 @@ export const useGetWc = () => {
                 const error = await response.text();
                 console.log(error);
 
-                return;
+                return null;
             }
 
         } catch (error) {
             console.log("Error get all WCs", error);
+            return null;
         }
     };
 
