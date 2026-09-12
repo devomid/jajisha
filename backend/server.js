@@ -6,11 +6,12 @@ const dotenv = require('dotenv');
 const toiletRoutes = require('./routes/toiletRoutes');
 const userRoutes = require('./routes/userRoutes');
 const managmentRoutes = require('./routes/managmentRoutes');
+const rateLimit = require('express-rate-limit');
 
 
 dotenv.config()
 
-const requiredEnv = ["MONGOURI","PORT","SECRET_KEY","CLIENT_ORIGIN"];
+const requiredEnv = ["MONGOURI", "PORT", "SECRET_KEY", "CLIENT_ORIGIN"];
 const missingEnv = requiredEnv.filter((key) => !process.env[key]);
 
 if (missingEnv.length > 0) {
@@ -33,7 +34,6 @@ app.use(cors({
     methods: ['GET', 'POST', 'DELETE', 'PATCH'],
 }));
 
-
 //health check
 app.get("/health", (req, res) => {
     res.status(200).json({ status: "ok" })
@@ -44,6 +44,18 @@ app.use("/api/toilets", toiletRoutes);
 app.use("/api/user", userRoutes);
 app.use("/api/managment", managmentRoutes);
 
+
+// 404 handler
+app.use((req, res) => {
+    res.status(404).json({ error: "Route not found", });
+});
+
+
+// error handler
+app.use((err, req, res, next) => {
+    console.error("Unhandled server error:", err);
+    res.status(500).json({ error: "Internal server error", });
+});
 
 //shutdown
 const shutdown = async (signal) => {
