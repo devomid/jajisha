@@ -4,17 +4,21 @@ import { useUserStore } from "../../store/userStore";
 export const useAddWc = () => {
     const wcData = useWcDataStore((state) => state.wcData);
     const addToilet = useWcDataStore((state) => state.addToilet);
-        const user = useUserStore((state) => state.user);
+    const user = useUserStore((state) => state.user);
+    const token = user?.token
     
 
     const addWc = async () => {
+        if (!token) return null;
+
         try {
             const response = await fetch(
-                `http://192.168.43.42:3001/api/toilets/${user._id}`,
+                `http://192.168.43.42:3001/api/toilets`,
                 {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
+                        Authorization: `Bearer ${token}`
                     },
                     body: JSON.stringify({
                         wcData,

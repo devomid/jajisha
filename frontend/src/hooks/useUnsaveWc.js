@@ -4,14 +4,19 @@ import { useUserStore } from '../../store/userStore';
 export const useUnsaveWc = () => {
     const toilet = useWcDataStore((state) => state.selectedToilet);
     const user = useUserStore((state) => state.user);
+    const token = user?.token;
+    
     const unsaveWc = async () => {
+                if (!token) return null;
+
         try {
             const response = await fetch(
-                `http://192.168.43.42:3001/api/managment/${user._id}/savedToilets/${toilet._id}`,
+                `http://192.168.43.42:3001/api/managment/unSaveToilets/${toilet._id}`,
                 {
                     method: "Delete",
                     headers: {
                         "Content-Type": "application/json",
+                        Authorization: `Bearer ${token}`
                     }
                 });
             if (!response.ok) {

@@ -18,9 +18,11 @@ export const useAuth = () => {
             });
             if (response.ok) {
                 const jsonRes = await response.json();
-                await AsyncStorage.setItem("userId", jsonRes.user._id);
-                useUserStore.getState().setUser(jsonRes.user);
-                return true;
+                await AsyncStorage.setItem("authToken", jsonRes.token);
+                useUserStore.getState().setUser({
+                    ...jsonRes.user,
+                    token: jsonRes.token,
+                }); return true;
             } else {
                 const errorRes = await response.json();
                 console.log("Signup error:", errorRes);
@@ -41,9 +43,11 @@ export const useAuth = () => {
             });
             if (response.ok) {
                 const jsonRes = await response.json();
-                await AsyncStorage.setItem("userId", jsonRes.user._id);
-                useUserStore.getState().setUser(jsonRes.user);
-                return true;
+                await AsyncStorage.setItem("authToken", jsonRes.token);
+                useUserStore.getState().setUser({
+                    ...jsonRes.user,
+                    token: jsonRes.token,
+                }); return true;
             } else {
                 const errorRes = await response.json();
                 console.log("Signin error:", errorRes);
@@ -57,34 +61,34 @@ export const useAuth = () => {
 
     const restoreUser = async () => {
         try {
-            const userId = await AsyncStorage.getItem("userId");
+            const token = await AsyncStorage.getItem("authToken");
 
-            // console.log("Stored userId:", userId);
-
-            if (!userId) {
-                console.log("No stored user");
-                return;
-            }
-
-            const response = await fetch(
-                `http://192.168.43.42:3001/api/user/${userId}`
-            );
-
-            // console.log("Restore status:", response.status);
-
-            const data = await response.json();
-
-            // console.log("Restore response:", data);
-
-            if (!response.ok) {
-                await AsyncStorage.removeItem("userId");
+            if (!token) {
+                await AsyncStorage.removeItem("authToken");
                 useUserStore.getState().logout();
                 return;
             }
 
-            useUserStore.getState().setUser(data);
+            const response = await fetch(`http://192.168.43.42:3001/api/user/returnMe`, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            }
+            );
 
-            // console.log("User restored:", data);
+            const data = await response.json();
+
+            if (!response.ok) {
+                await AsyncStorage.removeItem("authToken");
+                useUserStore.getState().logout();
+                return;
+            }
+
+            useUserStore.getState().setUser({
+                ...data,
+                token,
+            });
+
 
         } catch (error) {
             console.log("Restore user error:", error);
@@ -93,7 +97,7 @@ export const useAuth = () => {
 
     const logout = async () => {
         try {
-            await AsyncStorage.removeItem("userId");
+            await AsyncStorage.removeItem("authToken");
             useUserStore.getState().logout();
         } catch (error) {
             console.error("Logout error:", error);

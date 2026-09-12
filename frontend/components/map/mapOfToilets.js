@@ -3,6 +3,7 @@ import { useWcDataStore } from "../../store/wcDataStore";
 import { useTheme } from "react-native-paper";
 import { useNavigateToToilet } from "../../src/hooks/useNavigateWc";
 import { useTranslation } from "react-i18next";
+import {useGetWc}from '../../src/hooks/useGetWc'
 
 import * as Location from "expo-location";
 import { View, Pressable, Text, Image, Platform, } from "react-native";
@@ -16,6 +17,7 @@ const MapOfToilets = forwardRef(({ currentLocation, onMarkerPress, isPickingLoca
     const { t } = useTranslation();
     const theme = useTheme();
     const { navigateToToilet } = useNavigateToToilet();
+    const { getWcReviews } = useGetWc()
 
     const toilets = useWcDataStore(state => state.toilets);
     const setSelectedToilet = useWcDataStore(state => state.setSelectedToilet);
@@ -31,8 +33,12 @@ const MapOfToilets = forwardRef(({ currentLocation, onMarkerPress, isPickingLoca
         status: navigationStatus,
     } = navigation;
 
-    const handleToiletPress = (toilet) => {
-        setSelectedToilet(toilet);
+    const handleToiletPress = async (toilet) => {
+        const reviews = await getWcReviews(toilet._id)
+        setSelectedToilet({
+            ...toilet,
+            reviews
+        })
         onMarkerPress(toilet);
     };
     // nprmal map

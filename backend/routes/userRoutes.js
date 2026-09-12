@@ -1,8 +1,9 @@
 const express = require("express");
 const router = express.Router();
-const { getUser, signUpUser, signInUser, saveToilet, unsaveToilet } = require("../controllers/userController");
+const { getUser, signUpUser, signInUser } = require("../controllers/userController");
+const authorize = require("../middlewares/authorizer");
 
-router.get('/:id', getUser);
+router.get('/returnMe', authorize, getUser);
 router.post('/su', signUpUser);
 router.post('/si', signInUser);
 

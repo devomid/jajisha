@@ -1,3 +1,4 @@
+const mongoose = require("mongoose");
 const User = require("../models/userModel");
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
@@ -9,22 +10,6 @@ const createToken = function (_id) {
     return jwt.sign({ _id }, secretKey, { expiresIn: '3d' })
 };
 
-const getUser = async (req, res) => {
-    try {
-        const id = req.params.id;
-        const user = await User.findById(id).select("-password").populate("favoriteToilets").populate("reviews");
-        user ? (
-            res.status(200).json(user)
-        ) : (
-            res.status(404).json({ message: "User not found!" })
-        )
-    } catch (error) {
-        return (
-            res.status(400).json({ error: error.message })
-        );
-    }
-};
-
 const signUpUser = async (req, res) => {
     const {
         username,
@@ -34,10 +19,39 @@ const signUpUser = async (req, res) => {
         password
     } = req.body;
 
+    if (
+        typeof username !== "string" ||
+        typeof firstName !== "string" ||
+        typeof lastName !== "string" ||
+        typeof email !== "string" ||
+        typeof password !== "string"
+    ) {
+        return res.status(400).json({
+            error: "Invalid signup data.",
+        });
+    };
+
+    if (
+        !username.trim() ||
+        !firstName.trim() ||
+        !lastName.trim() ||
+        !email.trim() ||
+        !password.trim()
+    ) {
+        return res.status(400).json({
+            error: "All signup fields are required.",
+        });
+    };
+
+    const normalizedUsername = username.trim();
+    const normalizedFirstName = firstName.trim();
+    const normalizedLastName = lastName.trim();
+    const normalizedEmail = email.trim().toLowerCase();
+
     try {
         const [usernameExists, emailExists] = await Promise.all([
-            User.exists({ username }),
-            User.exists({ email }),
+            User.exists({ username: normalizedUsername }),
+            User.exists({ email: normalizedEmail }),
         ]);
 
         if (usernameExists) {
@@ -62,46 +76,126 @@ const signUpUser = async (req, res) => {
         const hashedPass = await bcrypt.hash(password, salt);
 
         const user = await User.create({
-            username,
-            firstName,
-            lastName,
-            email,
+            username: normalizedUsername,
+            firstName: normalizedFirstName,
+            lastName: normalizedLastName,
+            email: normalizedEmail,
             password: hashedPass
         });
         const token = createToken(user._id);
-        res.status(201).json({ user, token });
+        res.status(201).json({
+            user: {
+                _id: user._id,
+                username: user.username,
+                firstName: user.firstName,
+                lastName: user.lastName,
+                email: user.email,
+                avatar: user.avatar,
+                favoriteToilets: user.favoriteToilets,
+                reviews: user.reviews,
+                role: user.role
+            },
+            token
+        });
 
     } catch (error) {
-        return (
-            res.status(400).json({ error: error.message })
-        );
+        console.error("Signup error:", error);
+
+        if (error.code === 11000) {
+            return res.status(409).json({
+                error: "Username or email is already in use.",
+            });
+        }
+
+        return res.status(500).json({
+            error: "Failed to create account.",
+        });
     }
 }
 
 const signInUser = async (req, res) => {
-
     try {
         const { email, password } = req.body;
-        
-        const user = await User.findOne({ email });
-        if (!user) return (res.status(400).json({ error: "User does not exist." }));
+
+        if (
+            typeof email !== "string" ||
+            typeof password !== "string" ||
+            !email.trim() ||
+            !password
+        ) {
+            return res.status(400).json({
+                error: "Email and password are required.",
+            });
+        }
+
+        const normalizedEmail = email.trim().toLowerCase();
+
+        const user = await User.findOne({ email: normalizedEmail });
+
+        if (!user) {
+            return res.status(401).json({
+                error: "Invalid credentials.",
+            });
+        }
+
+        const isPassCorrect = await bcrypt.compare(password, user.password);
+
+        if (!isPassCorrect) {
+            return res.status(401).json({
+                error: "Invalid credentials.",
+            });
+        }
         
         const token = createToken(user._id);
-        
-        const isPassCorrect = await bcrypt.compare(password, user.password)
-        if (!isPassCorrect) return (res.status(400).json({ error: "Invalid credentials." }));
 
-        res.status(200).json({ user, token });
+        res.status(200).json({
+            user: {
+                _id: user._id,
+                username: user.username,
+                firstName: user.firstName,
+                lastName: user.lastName,
+                email: user.email,
+                avatar: user.avatar,
+                favoriteToilets: user.favoriteToilets,
+                reviews: user.reviews,
+                role: user.role
+            },
+            token
+        });
 
     } catch (error) {
-        res.status(400).json({ error: error.message });
+        console.error("Signin error:", error);
+
+        return res.status(500).json({
+            error: "Failed to sign in.",
+        });
+    }
+};
+
+const getUser = async (req, res) => {
+    try {
+        const id = req.user._id;
+        if (!mongoose.isValidObjectId(id)) {
+            return res.status(404).json({ message: "User not found!" });
+        };
+        const user = await User.findById(id).select("-password").populate("favoriteToilets").populate("reviews");
+        user ? (
+            res.status(200).json(user)
+        ) : (
+            res.status(404).json({ message: "User not found!" })
+        )
+    } catch (error) {
+        console.error("Get user error:", error);
+
+        return res.status(500).json({
+            message: "Failed to load user",
+        });
     }
 };
 
 
-
 module.exports = {
-    getUser,
     signUpUser,
     signInUser,
+    getUser,
 }

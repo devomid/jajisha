@@ -14,30 +14,42 @@ dotenv.config()
 const mongoUrl = process.env.MONGOURI;
 const portNumber = process.env.PORT;
 
-console.log(process.env.MONGOURI);
-
-
-
 // configs and middlwares
 const app = express();
-app.use(express.json());
+app.use(express.json({ limit: "1mb" }));
 app.use(express.static('public'));
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: true, limit: "1mb" }));
 app.use(helmet());
 app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }));
-app.use(bodyParser.json({ limit: '50mb' }));
-app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 app.use(cors({
     credentials: true,
-    origin: 'http://localhost:8081',
+    origin: process.env.CLIENT_ORIGIN,
     methods: ['GET', 'POST', 'DELETE', 'PATCH'],
 }));
 
 
+//health check
+app.get("/health", (req, res) => {
+    res.status(200).json({ status: "ok" })
+});
+
 //routes
 app.use("/api/toilets", toiletRoutes);
 app.use("/api/user", userRoutes);
-app.use("/api/managment", managmentRoutes)
+app.use("/api/managment", managmentRoutes);
+
+
+//shutdown
+const shutdown = async (signal) => {
+    console.log(`${signal} received. Shutting down...`);
+
+    await mongoose.connection.close();
+
+    process.exit(0);
+};
+
+process.on("SIGINT", () => shutdown("SIGINT"));
+process.on("SIGTERM", () => shutdown("SIGTERM"));
 
 
 
@@ -50,7 +62,6 @@ mongoose.connect(mongoUrl)
         });
     })
     .catch((error) => {
-        console.error(error);
-        console.error(error.message);
-        console.error(error.stack);
+        console.error("Database connection failed:", error);
+        process.exit(1);
     });
