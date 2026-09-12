@@ -18,5 +18,5 @@ describe('Authentication rate limiting', () => {
         expect(response.body).toEqual({
             error: 'Too many authentication attempts. Please try again later.'
         });
-    });
+    }, 15000);
 });

@@ -57,7 +57,7 @@ describe('Toilet management', () => {
 
         const toiletResponse = await request(app)
             .post('/api/toilets')
-            .set('Authorization', `Bearer ${ token } `)
+            .set('Authorization', `Bearer ${token}`)
             .send(validToilet);
 
         expect(toiletResponse.statusCode).toBe(201);
@@ -68,8 +68,8 @@ describe('Toilet management', () => {
     describe('PATCH /api/managment/saveToilets/:toiletId', () => {
         it('should save a toilet successfully', async () => {
             const response = await request(app)
-                .patch(`/ api / managment / saveToilets / ${ toiletId } `)
-                .set('Authorization', `Bearer ${ token } `);
+                .patch(`/api/managment/saveToilets/${toiletId}`)
+                .set('Authorization', `Bearer ${token}`);
 
             expect(response.statusCode).toBe(200);
             expect(response.body).toEqual({
@@ -79,14 +79,14 @@ describe('Toilet management', () => {
 
         it('should not duplicate a saved toilet', async () => {
             const firstResponse = await request(app)
-                .patch(`/ api / managment / saveToilets / ${ toiletId } `)
-                .set('Authorization', `Bearer ${ token } `);
+                .patch(`/api/managment/saveToilets/${toiletId}`)
+                .set('Authorization', `Bearer ${token}`);
 
             expect(firstResponse.statusCode).toBe(200);
 
             const secondResponse = await request(app)
-                .patch(`/ api / managment / saveToilets / ${ toiletId } `)
-                .set('Authorization', `Bearer ${ token } `);
+                .patch(`/api/managment/saveToilets/${toiletId}`)
+                .set('Authorization', `Bearer ${token}`);
 
             expect(secondResponse.statusCode).toBe(200);
             expect(secondResponse.body).toEqual({
@@ -96,7 +96,7 @@ describe('Toilet management', () => {
 
         it('should return 401 without authorization', async () => {
             const response = await request(app)
-                .patch(`/ api / managment / saveToilets / ${ toiletId } `);
+                .patch(`/api/managment/saveToilets/${toiletId}`);
 
             expect(response.statusCode).toBe(401);
             expect(response.body).toEqual({
@@ -107,7 +107,7 @@ describe('Toilet management', () => {
         it('should return 404 for an invalid toilet ID', async () => {
             const response = await request(app)
                 .patch('/api/managment/saveToilets/not-a-valid-id')
-                .set('Authorization', `Bearer ${ token } `);
+                .set('Authorization', `Bearer ${token}`);
 
             expect(response.statusCode).toBe(404);
             expect(response.body).toEqual({
@@ -119,8 +119,8 @@ describe('Toilet management', () => {
             const fakeToiletId = new mongoose.Types.ObjectId();
 
             const response = await request(app)
-                .patch(`/ api / managment / saveToilets / ${ fakeToiletId } `)
-                .set('Authorization', `Bearer ${ token } `);
+                .patch(`/api/managment/saveToilets/${fakeToiletId}`)
+                .set('Authorization', `Bearer ${token}`);
 
             expect(response.statusCode).toBe(404);
             expect(response.body).toEqual({
@@ -132,12 +132,12 @@ describe('Toilet management', () => {
     describe('DELETE /api/managment/unSavedToilets/:toiletId', () => {
         it('should unsave a toilet successfully', async () => {
             await request(app)
-                .patch(`/ api / managment / saveToilets / ${ toiletId } `)
-                .set('Authorization', `Bearer ${ token } `);
+                .patch(`/api/managment/saveToilets/${toiletId}`)
+                .set('Authorization', `Bearer ${token}`);
 
             const response = await request(app)
-                .delete(`/ api / managment / unSavedToilets / ${ toiletId } `)
-                .set('Authorization', `Bearer ${ token } `);
+                .delete(`/api/managment/unSavedToilets/${toiletId}`)
+                .set('Authorization', `Bearer ${token}`);
 
             expect(response.statusCode).toBe(200);
             expect(response.body).toEqual({
@@ -147,7 +147,7 @@ describe('Toilet management', () => {
 
         it('should return 401 without authorization', async () => {
             const response = await request(app)
-                .delete(`/ api / managment / unSavedToilets / ${ toiletId } `);
+                .delete(`/api/managment/unSavedToilets/${toiletId}`);
 
             expect(response.statusCode).toBe(401);
             expect(response.body).toEqual({
@@ -158,7 +158,7 @@ describe('Toilet management', () => {
         it('should return 404 for an invalid toilet ID', async () => {
             const response = await request(app)
                 .delete('/api/managment/unSavedToilets/not-a-valid-id')
-                .set('Authorization', `Bearer ${ token } `);
+                .set('Authorization', `Bearer ${token}`);
 
             expect(response.statusCode).toBe(404);
             expect(response.body).toEqual({
@@ -170,8 +170,8 @@ describe('Toilet management', () => {
             const fakeToiletId = new mongoose.Types.ObjectId();
 
             const response = await request(app)
-                .delete(`/ api / managment / unSavedToilets / ${ fakeToiletId } `)
-                .set('Authorization', `Bearer ${ token } `);
+                .delete(`/api/managment/unSavedToilets/${fakeToiletId}`)
+                .set('Authorization', `Bearer ${token}`);
 
             expect(response.statusCode).toBe(404);
             expect(response.body).toEqual({
@@ -236,7 +236,7 @@ describe('POST /api/managment/toiletManagement/:toiletId', () => {
 
         const toiletResponse = await request(app)
             .post('/api/toilets')
-            .set('Authorization', `Bearer ${ token } `)
+            .set('Authorization', `Bearer ${token}`)
             .send(validToilet);
 
         expect(toiletResponse.statusCode).toBe(201);
@@ -246,8 +246,8 @@ describe('POST /api/managment/toiletManagement/:toiletId', () => {
 
     it('should create a review successfully', async () => {
         const response = await request(app)
-            .post(`/ api / managment / toiletManagement / ${ toiletId } `)
-            .set('Authorization', `Bearer ${ token } `)
+            .post(`/api/managment/toiletManagement/${toiletId}`)
+            .set('Authorization', `Bearer ${token}`)
             .send({
                 reviewText: 'This is a clean and useful public toilet.'
             });
@@ -262,7 +262,7 @@ describe('POST /api/managment/toiletManagement/:toiletId', () => {
 
     it('should return 401 without authorization', async () => {
         const response = await request(app)
-            .post(`/ api / managment / toiletManagement / ${ toiletId } `)
+            .post(`/api/managment/toiletManagement/${toiletId}`)
             .send({
                 reviewText: 'This is a clean and useful public toilet.'
             });
@@ -276,7 +276,7 @@ describe('POST /api/managment/toiletManagement/:toiletId', () => {
     it('should return 404 for an invalid toilet ID', async () => {
         const response = await request(app)
             .post('/api/managment/toiletManagement/not-a-valid-id')
-            .set('Authorization', `Bearer ${ token } `)
+            .set('Authorization', `Bearer ${token}`)
             .send({
                 reviewText: 'This is a clean and useful public toilet.'
             });
@@ -291,8 +291,8 @@ describe('POST /api/managment/toiletManagement/:toiletId', () => {
         const fakeToiletId = new mongoose.Types.ObjectId();
 
         const response = await request(app)
-            .post(`/ api / managment / toiletManagement / ${ fakeToiletId } `)
-            .set('Authorization', `Bearer ${ token } `)
+            .post(`/api/managment/toiletManagement/${fakeToiletId}`)
+            .set('Authorization', `Bearer ${token}`)
             .send({
                 reviewText: 'This is a clean and useful public toilet.'
             });
@@ -305,8 +305,8 @@ describe('POST /api/managment/toiletManagement/:toiletId', () => {
 
     it('should return 400 when the review is shorter than 10 characters', async () => {
         const response = await request(app)
-            .post(`/ api / managment / toiletManagement / ${ toiletId } `)
-            .set('Authorization', `Bearer ${ token } `)
+            .post(`/api/managment/toiletManagement/${toiletId}`)
+            .set('Authorization', `Bearer ${token}`)
             .send({
                 reviewText: 'Too short'
             });
@@ -319,8 +319,8 @@ describe('POST /api/managment/toiletManagement/:toiletId', () => {
 
     it('should return 400 when the review is longer than 200 characters', async () => {
         const response = await request(app)
-            .post(`/ api / managment / toiletManagement / ${ toiletId } `)
-            .set('Authorization', `Bearer ${ token } `)
+            .post(`/api/managment/toiletManagement/${toiletId}`)
+            .set('Authorization', `Bearer ${token}`)
             .send({
                 reviewText: 'a'.repeat(201)
             });
@@ -333,8 +333,8 @@ describe('POST /api/managment/toiletManagement/:toiletId', () => {
 
     it('should return 400 when reviewText is missing', async () => {
         const response = await request(app)
-            .post(`/ api / managment / toiletManagement / ${ toiletId } `)
-            .set('Authorization', `Bearer ${ token } `)
+            .post(`/api/managment/toiletManagement/${toiletId}`)
+            .set('Authorization', `Bearer ${token}`)
             .send({});
 
         expect(response.statusCode).toBe(400);
@@ -349,15 +349,15 @@ describe('POST /api/managment/toiletManagement/:toiletId', () => {
         };
 
         const firstResponse = await request(app)
-            .post(`/ api / managment / toiletManagement / ${ toiletId } `)
-            .set('Authorization', `Bearer ${ token } `)
+            .post(`/api/managment/toiletManagement/${toiletId}`)
+            .set('Authorization', `Bearer ${token}`)
             .send(review);
 
         expect(firstResponse.statusCode).toBe(201);
 
         const secondResponse = await request(app)
-            .post(`/ api / managment / toiletManagement / ${ toiletId } `)
-            .set('Authorization', `Bearer ${ token } `)
+            .post(`/api/managment/toiletManagement/${toiletId}`)
+            .set('Authorization', `Bearer ${token}`)
             .send(review);
 
         expect(secondResponse.statusCode).toBe(409);

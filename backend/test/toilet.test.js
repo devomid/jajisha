@@ -28,7 +28,7 @@ describe('GET /api/toilets/reviews/:toiletId', () => {
         const toiletId = new mongoose.Types.ObjectId();
 
         const response = await request(app)
-            .get(`/ api / toilets / reviews / ${ toiletId } `);
+            .get(`/api/toilets/reviews/${toiletId}`);
 
         expect(response.statusCode).toBe(200);
         expect(response.body).toHaveProperty('reviews');
@@ -93,7 +93,7 @@ describe('POST /api/toilets', () => {
     it('should create a toilet successfully', async () => {
         const response = await request(app)
             .post('/api/toilets')
-            .set('Authorization', `Bearer ${ token } `)
+            .set('Authorization', `Bearer ${token}`)
             .send(validToilet);
 
         expect(response.statusCode).toBe(201);
@@ -120,7 +120,7 @@ describe('POST /api/toilets', () => {
     it('should return 400 when toilet data is missing', async () => {
         const response = await request(app)
             .post('/api/toilets')
-            .set('Authorization', `Bearer ${ token } `)
+            .set('Authorization', `Bearer ${token}`)
             .send({});
 
         expect(response.statusCode).toBe(400);
@@ -132,7 +132,7 @@ describe('POST /api/toilets', () => {
     it('should return 400 when toilet name is missing', async () => {
         const response = await request(app)
             .post('/api/toilets')
-            .set('Authorization', `Bearer ${ token } `)
+            .set('Authorization', `Bearer ${token}`)
             .send({
                 wcData: {
                     ...validToilet.wcData,
@@ -149,7 +149,7 @@ describe('POST /api/toilets', () => {
     it('should return 400 when latitude is invalid', async () => {
         const response = await request(app)
             .post('/api/toilets')
-            .set('Authorization', `Bearer ${ token } `)
+            .set('Authorization', `Bearer ${token}`)
             .send({
                 wcData: {
                     ...validToilet.wcData,
@@ -169,7 +169,7 @@ describe('POST /api/toilets', () => {
     it('should return 400 when longitude is invalid', async () => {
         const response = await request(app)
             .post('/api/toilets')
-            .set('Authorization', `Bearer ${ token } `)
+            .set('Authorization', `Bearer ${token}`)
             .send({
                 wcData: {
                     ...validToilet.wcData,
@@ -189,7 +189,7 @@ describe('POST /api/toilets', () => {
     it('should return 400 when a rating is outside the 0-5 range', async () => {
         const response = await request(app)
             .post('/api/toilets')
-            .set('Authorization', `Bearer ${ token } `)
+            .set('Authorization', `Bearer ${token}`)
             .send({
                 wcData: {
                     ...validToilet.wcData,
@@ -209,7 +209,7 @@ describe('POST /api/toilets', () => {
     it('should return 400 when an amenity is not a boolean', async () => {
         const response = await request(app)
             .post('/api/toilets')
-            .set('Authorization', `Bearer ${ token } `)
+            .set('Authorization', `Bearer ${token}`)
             .send({
                 wcData: {
                     ...validToilet.wcData,
@@ -229,7 +229,7 @@ describe('POST /api/toilets', () => {
     it('should return 400 when isFree is not a boolean', async () => {
         const response = await request(app)
             .post('/api/toilets')
-            .set('Authorization', `Bearer ${ token } `)
+            .set('Authorization', `Bearer ${token}`)
             .send({
                 wcData: {
                     ...validToilet.wcData,
