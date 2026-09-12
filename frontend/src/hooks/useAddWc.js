@@ -1,5 +1,6 @@
 import { useWcDataStore } from "../../store/wcDataStore";
 import { useUserStore } from "../../store/userStore";
+import { API_URL } from "../config/api";
 
 export const useAddWc = () => {
     const wcData = useWcDataStore((state) => state.wcData);
@@ -13,7 +14,7 @@ export const useAddWc = () => {
 
         try {
             const response = await fetch(
-                `http://192.168.43.42:3001/api/toilets`,
+                `${API_URL }/api/toilets`,
                 {
                     method: "POST",
                     headers: {

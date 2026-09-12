@@ -184,7 +184,10 @@ const createToilet = async (req, res) => {
 
 const getToilets = async (req, res) => {
     try {
-        const toilets = await Toilet.find().select("-reviews -createdBy");
+        const toilets = await Toilet.find()
+            .select("-reviews -createdBy")
+            .limit(1000)
+            .lean();
         res.status(200).json({ toilets });
 
     } catch (error) {

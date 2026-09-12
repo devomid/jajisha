@@ -1,3 +1,5 @@
+import { API_URL } from "../config/api";
+
 export const useCreateReview = () => {
     const toiletId = useWcDataStore((state) => state.selectedToilet._id);
     const userId = useUserStore((state) => state.user._id);
@@ -6,7 +8,7 @@ export const useCreateReview = () => {
     const createReview = async ({ reviewText }) => {
         try {
             const response = await fetch(
-                `http://192.168.43.42:3001/api/managment/toiletManagement/${toiletId}`,
+                `${API_URL }/api/managment/toiletManagement/${toiletId}`,
                 {
                     method: "POST",
                     headers: {

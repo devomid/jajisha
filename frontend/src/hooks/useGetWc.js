@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { useWcDataStore } from "../../store/wcDataStore";
+import { API_URL } from "../config/api";
 
 export const useGetWc = () => {
 
@@ -13,7 +14,7 @@ export const useGetWc = () => {
 
         try {
 
-            const response = await fetch("http://192.168.43.42:3001/api/toilets", {
+            const response = await fetch(`${API_URL }/api/toilets`, {
                 method: "GET",
                 headers: { "Content-Type": 'application/json' },
             });
@@ -39,7 +40,7 @@ export const useGetWc = () => {
 
     const getWcReviews = async (toiletId) => {
         try {
-            const response = await fetch(`http://192.168.43.42:3001/api/toilets/reviews/${toiletId}`, {
+            const response = await fetch(`${API_URL }/api/toilets/reviews/${toiletId}`, {
                 method: "GET",
                 headers: { "Content-Type": 'application/json' },
             });

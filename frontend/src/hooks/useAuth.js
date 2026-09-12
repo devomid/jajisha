@@ -1,11 +1,12 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useUserStore } from "../../store/userStore";
+import { API_URL } from "../config/api";
 
 export const useAuth = () => {
     const signUp = async (username, firstName, lastName, email, password) => {
         try {
             // console.log("Here is in Hook", username, firstName, lastName, email, password);
-            const response = await fetch("http://192.168.43.42:3001/api/user/su", {
+            const response = await fetch(`${API_URL }/api/user/su`, {
                 method: "POST",
                 headers: { "Content-Type": 'application/json' },
                 body: JSON.stringify({
@@ -36,7 +37,7 @@ export const useAuth = () => {
 
     const signIn = async (email, password) => {
         try {
-            const response = await fetch("http://192.168.43.42:3001/api/user/si", {
+            const response = await fetch(`${API_URL }/api/user/si`, {
                 method: "POST",
                 headers: { "Content-Type": 'application/json' },
                 body: JSON.stringify({ email, password })
@@ -69,7 +70,7 @@ export const useAuth = () => {
                 return;
             }
 
-            const response = await fetch(`http://192.168.43.42:3001/api/user/returnMe`, {
+            const response = await fetch(`${API_URL }/api/user/returnMe`, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }

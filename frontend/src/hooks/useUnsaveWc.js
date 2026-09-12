@@ -1,5 +1,6 @@
 import { useWcDataStore } from "../../store/wcDataStore";
 import { useUserStore } from '../../store/userStore';
+import { API_URL } from "../config/api";
 
 export const useUnsaveWc = () => {
     const toilet = useWcDataStore((state) => state.selectedToilet);
@@ -11,7 +12,7 @@ export const useUnsaveWc = () => {
 
         try {
             const response = await fetch(
-                `http://192.168.43.42:3001/api/managment/unSaveToilets/${toilet._id}`,
+                `${API_URL }/api/managment/unSaveToilets/${toilet._id}`,
                 {
                     method: "Delete",
                     headers: {
