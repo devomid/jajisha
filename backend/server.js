@@ -1,7 +1,5 @@
 const express = require('express');
-const bodyParser = require('body-parser');
 const helmet = require('helmet');
-const passport = require('passport');
 const cors = require('cors');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
