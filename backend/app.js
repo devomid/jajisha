@@ -6,11 +6,7 @@ const userRoutes = require('./routes/userRoutes');
 const managmentRoutes = require('./routes/managmentRoutes');
 const dotenv = require('dotenv');
 
-
-
 dotenv.config()
-
-
 
 // configs and middlwares
 const app = express();

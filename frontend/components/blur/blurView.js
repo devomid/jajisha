@@ -13,7 +13,7 @@ const GlassBackground = ({ style, theme }) => {
             style={[
                 style,
                 {
-                    borderRadius: 30,
+                    borderRadius: 48,
                     overflow: "hidden",
                     borderWidth: 1,
                     borderColor: theme.colors.primaryLighter + '80',

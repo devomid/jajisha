@@ -457,20 +457,21 @@ export default function Home() {
                     </BlurView>
                 )}
             </View>
-            <ToiletInfo
-                ref={toiletInfoBottomSheetRef}
-                curentLocation={curentLocation}
-                onPresent={(index) => {
-                    if (
-                        index === 0 &&
-                        reopenToiletInfoAtSecondSnapRef.current
-                    ) {
-                        reopenToiletInfoAtSecondSnapRef.current = false;
 
-                        toiletInfoBottomSheetRef.current?.snapToIndex(1);
-                    }
-                }}
-            />
+                <ToiletInfo
+                    ref={toiletInfoBottomSheetRef}
+                    curentLocation={curentLocation}
+                    onPresent={(index) => {
+                        if (
+                            index === 0 &&
+                            reopenToiletInfoAtSecondSnapRef.current
+                        ) {
+                            reopenToiletInfoAtSecondSnapRef.current = false;
+
+                            toiletInfoBottomSheetRef.current?.snapToIndex(1);
+                        }
+                    }}
+                />
             <AddWc ref={addWcBottomSheetRef} />
             <RoutePreview
                 ref={routePreviewBottomSheetRef}

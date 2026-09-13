@@ -1,23 +1,25 @@
-import React, { forwardRef, useEffect, useState } from "react";
-import { Pressable, StyleSheet, View } from "react-native";
-import { Text, useTheme } from "react-native-paper";
-import Animated, { runOnJS, useAnimatedStyle, useSharedValue, withTiming, interpolateColor, } from "react-native-reanimated";
+import { forwardRef, useEffect, useState } from "react";
+import { router } from "expo-router";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
-import GlassBackground from "../../components/blur/blurView";
+import { useTranslation } from "react-i18next";
+import { useAuth } from "../../src/hooks/useAuth";
 import { useTopSheetStore } from "../../store/menuStore";
 import { useUserStore } from "../../store/userStore";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { BlurView } from "expo-blur";
-import { useTranslation } from "react-i18next";
-import CountryFlag from "react-native-country-flag";
-import { router } from "expo-router";
-import { useAuth } from "../../src/hooks/useAuth";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+
 import ButtonComponent from '../Button/Button';
+import GlassBackground from "../../components/blur/blurView";
+
+import { Pressable, StyleSheet, View } from "react-native";
+import { Text, useTheme } from "react-native-paper";
+import { LogOut, Settings, Save, LogIn } from "lucide-react-native";
+import { BlurView } from "expo-blur";
+import Animated, { runOnJS, useAnimatedStyle, useSharedValue, withTiming, interpolateColor, } from "react-native-reanimated";
+import CountryFlag from "react-native-country-flag";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 
 const TopSheet = forwardRef((props, ref) => {
-
 
     const { i18n } = useTranslation();
     const language = i18n.language;
@@ -25,9 +27,7 @@ const TopSheet = forwardRef((props, ref) => {
     const backdropOpacity = useSharedValue(0);
     const translateY = useSharedValue(0);
     const { logout } = useAuth();
-
     const [sheetHeight, setSheetHeight] = useState(0);
-
     const close = useTopSheetStore((state) => state.close);
     const user = useUserStore((state) => state.user);
     const isOpen = useTopSheetStore((state) => state.isOpen);
@@ -86,26 +86,38 @@ const TopSheet = forwardRef((props, ref) => {
             return { opacity: backdropOpacity.value, };
         });
 
-    const panGesture =
-        Gesture.Pan().onUpdate((event) => {
-            if (event.translationY < 0) {
-                translateY.value = event.translationY;
-            } else {
-                translateY.value = 0;
-            }
-        }).onEnd((event) => {
-            const draggedEnough = event.translationY < -(sheetHeight * 0.20);
-            const swipedFastEnough = event.velocityY < -700;
+    const panGesture = Gesture.Pan()
+        .activeOffsetY([-10, 10])
+        .failOffsetX([-20, 20])
+        .onUpdate((event) => {
+            // Only allow dragging upward
+            translateY.value = Math.min(0, event.translationY);
+        })
+        .onEnd((event) => {
+            const draggedEnough =
+                event.translationY < -(sheetHeight * 0.2);
+
+            const swipedFastEnough =
+                event.velocityY < -700;
+
             if (draggedEnough || swipedFastEnough) {
-                translateY.value =
-                    withTiming(-sheetHeight, { duration: 220 },
-                        (finished) => {
-                            if (finished) { runOnJS(close)(); }
+                translateY.value = withTiming(
+                    -sheetHeight,
+                    { duration: 220 },
+                    (finished) => {
+                        if (finished) {
+                            runOnJS(close)();
                         }
-                    );
-                backdropOpacity.value = withTiming(0, { duration: 220, });
+                    }
+                );
+
+                backdropOpacity.value = withTiming(0, {
+                    duration: 220,
+                });
             } else {
-                translateY.value = withTiming(0, { duration: 200, });
+                translateY.value = withTiming(0, {
+                    duration: 200,
+                });
             }
         });
 
@@ -199,14 +211,14 @@ const TopSheet = forwardRef((props, ref) => {
 
                         <Text
                             variant="headlineSmall"
-                            style={{ color: theme.colors.secondaryDark, }}
+                            style={{ color: theme.colors.secondaryDarker +'99', }}
                         >
                             Hello,{" "}
                         </Text>
 
                         <Text
                             variant="titleSmall"
-                            style={{ color: theme.colors.secondaryDarker, }}
+                            style={{ color: theme.colors.secondaryDarker + '85', }}
                         >
                             welcome back dear {user ? (user.firstName) : ('Guest')}
                         </Text>
@@ -216,36 +228,76 @@ const TopSheet = forwardRef((props, ref) => {
                     {!user ? (
                         <ButtonComponent
                             onPress={() => { router.push('/SignIn'); }}
-                            backgroundColor={theme.colors.secondary + '40'}
+                            backgroundColor={theme.colors.secondary + '13'}
                             borderColor={theme.colors.secondaryLighter + '80'}
                             style={{ width: '100%' }}
                         >
-                            <Text
+                            <View
                                 style={{
-                                    color: theme.colors.primaryLighter,
-                                    fontSize: 15,
-                                    fontWeight: "500",
+                                    width: "100%",
+                                    height: "100%",
+                                    alignItems: "center",
+                                    justifyContent: "center",
                                 }}
                             >
-                                Sign In
-                            </Text>
+                                <Text
+                                    style={{
+                                        color: theme.colors.secondaryLight,
+                                        fontSize: 15,
+                                        fontWeight: "500",
+                                    }}
+                                >
+                                    Sign In
+                                </Text>
+                                <LogIn
+                                    size={18}
+                                    color={theme.colors.secondaryLight}
+                                    strokeWidth={2}
+                                    style={{
+                                        position: "absolute",
+                                        left: 90,
+                                    }}
+                                />
+                            </View>
                         </ButtonComponent>
                     ) : (
                         <ButtonComponent
-                            onPress={() => { router.push('/SignIn'); }}
-                            backgroundColor={theme.colors.error + '40'}
-                            borderColor={theme.colors.error + '30'}
-                            style={{ width: '100%' }}
+                            onPress={() => {
+                                    router.push("/SignIn");
+                                    logout();
+                            }}
+                            backgroundColor={theme.colors.error + "13"}
+                            borderColor={theme.colors.error + "30"}
+                            style={{ width: "100%" }}
                         >
-                            <Text
+                            <View
                                 style={{
-                                    color: theme.colors.primaryLighter,
-                                    fontSize: 15,
-                                    fontWeight: "500",
+                                    width: "100%",
+                                    height: "100%",
+                                    alignItems: "center",
+                                    justifyContent: "center",
                                 }}
                             >
-                                Sign Out
-                            </Text>
+                                <Text
+                                    style={{
+                                        color: theme.colors.error,
+                                        fontSize: 15,
+                                        fontWeight: "500",
+                                    }}
+                                >
+                                    Sign Out
+                                </Text>
+
+                                <LogOut
+                                    size={18}
+                                    color={theme.colors.error}
+                                    strokeWidth={2}
+                                    style={{
+                                        position: "absolute",
+                                        left: 90,
+                                    }}
+                                />
+                            </View>
                         </ButtonComponent>
                     )}
 
@@ -264,22 +316,35 @@ const TopSheet = forwardRef((props, ref) => {
 
                         <ButtonComponent
                             onPress={() => { router.push('/Settings'); }}
-                            backgroundColor={theme.colors.secondary + '40'}
+                            backgroundColor={theme.colors.secondary + '15'}
                             borderColor={theme.colors.secondaryLighter + '80'}
                             style={{
                                 flex: 1,
                                 minWidth: 0,
                             }}
                         >
-                            <Text
+                            <View
                                 style={{
-                                    color: theme.colors.primaryLighter,
-                                    fontSize: 15,
-                                    fontWeight: "500",
+                                    flexDirection: "row",
+                                    alignItems: "center",
+                                    gap: 15,
                                 }}
                             >
-                                Settings
-                            </Text>
+                                <Settings
+                                    size={18}
+                                    color={theme.colors.secondaryLight}
+                                    strokeWidth={2}
+                                />
+                                <Text
+                                    style={{
+                                        color: theme.colors.secondaryLight,
+                                        fontSize: 15,
+                                        fontWeight: "500",
+                                    }}
+                                >
+                                    Settings
+                                </Text>
+                            </View>
                         </ButtonComponent>
 
 
@@ -402,35 +467,52 @@ const TopSheet = forwardRef((props, ref) => {
                     {user && (
                         <ButtonComponent
                             onPress={() => { router.push('/Favorites'); }}
-                            backgroundColor={theme.colors.secondary + '40'}
+                            backgroundColor={theme.colors.secondary + '15'}
                             borderColor={theme.colors.secondaryLighter + '80'}
                             style={{
                                 width: "100%",
                                 marginTop: 10,
                             }}
                         >
-                            <Text
+                            <View
                                 style={{
-                                    color: theme.colors.primaryLighter,
-                                    fontSize: 15,
-                                    fontWeight: "500",
+                                    width: "100%",
+                                    height: "100%",
+                                    alignItems: "center",
+                                    justifyContent: "center",
                                 }}
                             >
-                                Saved Toilets
-                            </Text>
+                                <Text
+                                    style={{
+                                        color: theme.colors.secondaryLight,
+                                        fontSize: 15,
+                                        fontWeight: "500",
+                                    }}
+                                >
+                                    Saved Toilets
+                                </Text>
+                                <Save
+                                    size={18}
+                                    color={theme.colors.secondaryLight}
+                                    strokeWidth={2}
+                                    style={{
+                                        position: "absolute",
+                                        left: 90,
+                                    }}
+                                />
+                            </View>
                         </ButtonComponent>
                     )}
                 </SafeAreaView>
 
 
                 <View
-                    pointerEvents="box-only"
                     style={{
                         position: "absolute",
                         left: 0,
                         right: 0,
                         bottom: 0,
-                        height: 45,
+                        height: 60,
                         zIndex: 999999,
                         elevation: 999999,
                     }}
@@ -440,15 +522,17 @@ const TopSheet = forwardRef((props, ref) => {
                             style={{
                                 flex: 1,
                                 alignItems: "center",
-                                justifyContent: "center",
+                                justifyContent: "flex-end",
+                                paddingBottom: 10,
                             }}
                         >
                             <View
                                 style={{
                                     width: 55,
-                                    height: 5,
+                                    height: 4,
                                     borderRadius: 999,
-                                    backgroundColor: theme.colors.surface + "CC",
+                                    backgroundColor:
+                                        theme.colors.secondaryLight + "45",
                                 }}
                             />
                         </View>

@@ -139,7 +139,7 @@ export default function NewToilet({ theme, }) {
                     marginTop: 9,
                 }}
             >
-                <Text style={{ color: theme.colors.nav }}>
+                <Text style={{ color: theme.colors.nav+'99' }}>
                     {t("newToilet.chooseOnMap")}
                 </Text>
             </ButtonComponent>
