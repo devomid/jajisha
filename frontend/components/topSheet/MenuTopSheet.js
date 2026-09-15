@@ -176,7 +176,8 @@ const TopSheet = forwardRef((props, ref) => {
                         right: 0,
                         height: SHEET_HEIGHT,
                         overflow: "hidden",
-                        borderBottomLeftRadius: 30,
+                       
+                         borderBottomLeftRadius: 30,
                         borderBottomRightRadius: 30,
                         shadowColor: "#000",
                         shadowOffset: {

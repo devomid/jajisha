@@ -52,6 +52,26 @@ export const useWcDataStore = create((set) => ({
         duration: null,
         status: "idle",
     },
+    toiletRouteInfo: {
+        distance: null,
+        duration: null,
+    },
+
+    setToiletRouteInfo: (distance, duration) =>
+        set({
+            toiletRouteInfo: {
+                distance,
+                duration,
+            },
+        }),
+
+    clearToiletRouteInfo: () =>
+        set({
+            toiletRouteInfo: {
+                distance: null,
+                duration: null,
+            },
+        }),
 
     setNavigationTarget: (toilet) =>
         set(state => ({

@@ -16,7 +16,7 @@ const MapOfToilets = forwardRef(({ currentLocation, onMarkerPress, isPickingLoca
     const mapRef = useRef(null);
     const { t } = useTranslation();
     const theme = useTheme();
-    const { navigateToToilet } = useNavigateToToilet();
+    const { navigateToToilet, calculateToiletDistance } = useNavigateToToilet();
     const { getWcReviews } = useGetWc()
 
     const toilets = useWcDataStore(state => state.toilets);
@@ -39,6 +39,7 @@ const MapOfToilets = forwardRef(({ currentLocation, onMarkerPress, isPickingLoca
             ...toilet,
             reviews
         })
+        calculateToiletDistance(toilet);
         onMarkerPress(toilet);
     };
     // nprmal map

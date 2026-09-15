@@ -1,8 +1,7 @@
 import 'react-native-reanimated';
 import 'expo-router/entry';
-import { useCallback, useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { useNavigation } from "expo-router";
-import { useFocusEffect } from "@react-navigation/native";
 import { useTranslation } from "react-i18next";
 import { useWcDataStore } from '../store/wcDataStore';
 import { useGetWc } from '../src/hooks/useGetWc';
