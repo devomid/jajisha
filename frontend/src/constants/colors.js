@@ -17,7 +17,7 @@ const Colors = {
         background: "#F7F9FB",
         surface: "#FFFFFF",
 
-        text: "#1F2937",
+        text: "#253142",
         textSecondary: "#64748B",
 
         border: "#E2E8F0",

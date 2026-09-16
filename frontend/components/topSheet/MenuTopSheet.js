@@ -31,6 +31,7 @@ const TopSheet = forwardRef((props, ref) => {
     const close = useTopSheetStore((state) => state.close);
     const user = useUserStore((state) => state.user);
     const isOpen = useTopSheetStore((state) => state.isOpen);
+    const sheetMargin = 12;
 
     const SHEET_HEIGHT = user ? "39%" : "33%"
 
@@ -71,7 +72,7 @@ const TopSheet = forwardRef((props, ref) => {
             translateY.value = withTiming(0, { duration: 300, });
             backdropOpacity.value = withTiming(1, { duration: 300, });
         } else {
-            translateY.value = withTiming(-sheetHeight, { duration: 250, });
+            translateY.value = withTiming(-(sheetHeight + sheetMargin), { duration: 250, });
             backdropOpacity.value = withTiming(0, { duration: 250, });
         }
     }, [isOpen, sheetHeight]);
@@ -155,7 +156,7 @@ const TopSheet = forwardRef((props, ref) => {
                 pointerEvents={isOpen ? "auto" : "none"}
                 style={[{
                     ...StyleSheet.absoluteFillObject,
-                    backgroundColor: theme.colors.primaryLighter + '20'
+                    backgroundColor: theme.colors.primaryLighter + '27'
 
                 },
                     backdropAnimatedStyle,
@@ -176,25 +177,28 @@ const TopSheet = forwardRef((props, ref) => {
                         right: 0,
                         height: SHEET_HEIGHT,
                         overflow: "hidden",
-                       
-                         borderBottomLeftRadius: 30,
+                        borderRadius: 48,
+                        marginTop: sheetMargin,
+                        marginHorizontal: 12,
+                        overflow: "hidden",
+                        borderBottomLeftRadius: 30,
                         borderBottomRightRadius: 30,
-                        shadowColor: "#000",
-                        shadowOffset: {
-                            width: 0,
-                            height: 4,
-                        },
-                        shadowOpacity: 0.18,
-                        shadowRadius: 10,
                         elevation: 10,
                     },
                     sheetAnimatedStyle,
                 ]}
-            >
+                >
 
                 <GlassBackground
                     theme={theme}
-                    style={StyleSheet.absoluteFill}
+                    style={{
+                        overflow: "hidden",
+                        position: 'absolute',
+                        left: 0,
+                        right: 0,
+                        top: 0,
+                        bottom: 0,
+                    }}
                 />
 
                 <SafeAreaView style={{
@@ -212,7 +216,7 @@ const TopSheet = forwardRef((props, ref) => {
 
                         <Text
                             variant="headlineSmall"
-                            style={{ color: theme.colors.secondaryDarker +'99', }}
+                            style={{ color: theme.colors.secondaryDarker + '99', }}
                         >
                             Hello,{" "}
                         </Text>
@@ -264,8 +268,8 @@ const TopSheet = forwardRef((props, ref) => {
                     ) : (
                         <ButtonComponent
                             onPress={() => {
-                                    router.push("/SignIn");
-                                    logout();
+                                router.push("/SignIn");
+                                logout();
                             }}
                             backgroundColor={theme.colors.error + "13"}
                             borderColor={theme.colors.error + "30"}

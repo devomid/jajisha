@@ -17,7 +17,7 @@ const AddWc = forwardRef((props, ref) => {
 
     const isPickingLocation = useWcDataStore(state => state.isPickingLocation);
     const theme = useTheme();
-    const snapPoints = useMemo(() => ["88%"], []);
+    const snapPoints = useMemo(() => ["86%"], []);
     const { addWc } = useAddWc();
     const wcData = useWcDataStore((state) => state.wcData);
     const setWcData = useWcDataStore((state) => state.setWcData);
@@ -76,6 +76,12 @@ const AddWc = forwardRef((props, ref) => {
             backgroundComponent={(props) => (
                 <GlassBackground {...props} theme={theme} />
             )}
+            containerStyle={{
+                borderRadius: 48,
+                marginBottom: 12,
+                marginHorizontal: 12,
+                overflow: "hidden",
+            }}
             handleStyle={{
                 backgroundColor: "transparent",
             }}
@@ -114,7 +120,7 @@ const AddWc = forwardRef((props, ref) => {
                 >
                         <ButtonComponent
                             onPress={handleCancel}
-                            backgroundColor={theme.colors.error + '50'}
+                            backgroundColor={theme.colors.error + '18'}
                             borderColor={theme.colors.error + '80'}
                             style={{
                                 width: '30%',
@@ -125,7 +131,7 @@ const AddWc = forwardRef((props, ref) => {
                     
                     <ButtonComponent
                         onPress={handleAdd}
-                        backgroundColor={theme.colors.secondary + '50'}
+                        backgroundColor={theme.colors.secondary + '18'}
                         borderColor={theme.colors.secondaryLight + '80'}
                         style={{
                             width: '70%',

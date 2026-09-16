@@ -185,7 +185,11 @@ export default function NewToilet({ theme, }) {
             <View style={{ marginTop: 3, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
                 <View style={{ width: '30%', flexDirection: 'row', alignItems: 'center', }}>
                     <Checkbox
-                        style={{ margin: 10 }}
+                        style={{
+                            margin: 10,
+                            width: 17,
+                            height: 17
+                        }}
                         value={wcData.isFree}
                         onValueChange={(value) =>
                             setWcData(prev => ({
@@ -306,11 +310,19 @@ export default function NewToilet({ theme, }) {
                                     onValueChange={(value) => updateAmenity(item.key, value)}
                                     color={
                                         wcData.amenities[item.key]
-                                            ? theme.colors.primary
-                                            : theme.colors.secondaryLight
+                                            ? theme.colors.primaryDark
+                                            : theme.colors.secondaryLight + '99'
                                     }
+                                    style={{
+                                        width: 17,
+                                        height:17
+                                    }}
                                 />
-                                <Text style={{ marginLeft: 12, marginRight: 15 }}>{item.label}</Text>
+                                <Text variant="bodySmall" style={{
+                                    marginLeft: 12,
+                                    marginRight: 15,
+                                    color:theme.colors.text
+                                }}>{item.label}</Text>
                             </View>
                         ))}
                     </View>
