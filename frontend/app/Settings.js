@@ -1,4 +1,4 @@
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Text, useTheme } from "react-native-paper";
 import MapView from "react-native-maps";
@@ -6,6 +6,9 @@ import { BlurView } from "expo-blur";
 import PageHeader from "../components/topNav/topNav";
 import useCurrentLocation from "../src/hooks/useCurrentLocation";
 import { useEffect, useState } from "react";
+import GeneralSettings from "../components/setting/general";
+import MapSettings from "../components/setting/map";
+import AboutSettings from "../components/setting/about";
 
 export default function Settings() {
   const pageName = "Settings"
@@ -48,7 +51,15 @@ export default function Settings() {
       <BlurView
         intensity={15}
         tint="light"
-        style={StyleSheet.absoluteFillObject}
+        style={{
+          position: 'absolute',
+          top: 0,
+          bottom: 0,
+          right: 0,
+          left: 0,
+          margin: 12,
+          borderRadius: 48
+        }}
       />
 
       <View
@@ -57,7 +68,9 @@ export default function Settings() {
           StyleSheet.absoluteFillObject,
           {
             backgroundColor: theme.colors.primary,
-            opacity: 0.18,
+            opacity: 0.23,
+            margin: 12,
+            borderRadius: 48
           },
         ]}
       />
@@ -67,14 +80,23 @@ export default function Settings() {
 
         <PageHeader pageName={pageName} />
 
-        <View style={{
-          flex: 1,
-          justifyContent: "center",
-          alignItems: "center",
+        <ScrollView style={{
+          marginBottom:10
         }}>
 
+          <GeneralSettings theme={theme} />
+          <MapSettings theme={theme} />
+          <AboutSettings theme={theme} />
 
-        </View>
+        </ScrollView>
+
+        <Text style={{
+          fontSize: 9,
+          color: theme.colors.text + '60',
+          alignSelf: 'center',
+        }}>
+          Developed by: devom. 2026
+        </Text>
 
       </SafeAreaView>
 

@@ -6,12 +6,16 @@ import useCurrentLocation from "../../src/hooks/useCurrentLocation";
 import MapView from "react-native-maps";
 import { BlurView } from "expo-blur";
 import { router } from "expo-router";
-import { Text, TextInput, Button, useTheme } from "react-native-paper";
+import { Text, Button, useTheme } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { View, StyleSheet, Pressable } from "react-native";
+import { View, StyleSheet, Pressable, TextInput } from "react-native";
 import { signInSchema } from "../../src/validation/userInfoSchema";
 
+import { Mail, KeyRound, ShieldCheck, ContactRound, UserRound, AtSign } from 'lucide-react-native';
+
+
 import ButtonComponent from "../../components/Button/Button";
+import FormInput from "../../components/inpuField/formInput";
 
 export default function SignUp() {
     const theme = useTheme();
@@ -89,7 +93,18 @@ export default function SignUp() {
             <BlurView
                 intensity={15}
                 tint="light"
-                style={StyleSheet.absoluteFillObject}
+                style={{
+                    position: 'absolute',
+                    left: 0,
+                    right: 0,
+                    top: 0,
+                    bottom: 0,
+                    borderRadius: 48,
+                    marginBottom: 12,
+                    marginTop: 12,
+                    marginHorizontal: 12,
+                    overflow: "hidden",
+                }}
             />
 
             {/* PRIMARY COLOR OVERLAY */}
@@ -100,6 +115,11 @@ export default function SignUp() {
                     {
                         backgroundColor: theme.colors.primary,
                         opacity: 0.18,
+                        borderRadius: 48,
+                        marginBottom: 12,
+                        marginTop: 12,
+                        marginHorizontal: 12,
+                        overflow: "hidden",
                     },
                 ]}
             />
@@ -114,108 +134,60 @@ export default function SignUp() {
 
                         {/* TITLE */}
                         <View style={styles.titleContainer}>
-                            <Text style={{ color: theme.colors.secondaryDarker }} variant="displayLarge">
+                            <Text style={{ color: theme.colors.secondaryDarker + '99' }} variant="displayLarge">
                                 Sign Up
                             </Text>
-                            <Text style={{ color: theme.colors.secondaryDarker, marginLeft: 2 }} variant="bodyMedium">
+                            <Text style={{
+                                color: theme.colors.secondaryDarker + '99',
+                                marginLeft: 2
+                            }} variant="bodyMedium">
                                 so you can save places.
                             </Text>
                         </View>
 
                         {/* FORM */}
                         <View style={styles.form}>
-                            <TextInput
+                            <FormInput
                                 label="Email"
-                                mode="outlined"
-                                outlineColor={theme.colors.secondaryLight + '80'}
-                                activeOutlineColor={theme.colors.secondary + '80'}
+                                icon={Mail}
                                 value={values.email}
                                 onChangeText={handleChange("email")}
-                                textColor={theme.colors.text}
-                                selectionColor={theme.colors.primaryDarker}
-                                outlineStyle={{ borderRadius: 14, }}
-                                theme={{
-                                    colors: {
-                                        onSurfaceVariant: theme.colors.secondary + '70',
-                                        primary: theme.colors.white,
-                                    },
-                                }}
                                 onBlur={handleBlur("email")}
+                                error={errors.email}
+                                touched={touched.email}
+                                theme={theme}
                                 keyboardType="email-address"
                                 autoCapitalize="none"
                                 autoCorrect={false}
-                                error={Boolean(touched.email && errors.email)}
-                                style={{
-                                    backgroundColor: theme.colors.secondaryLight + "30",
-                                    height: 44,
-                                }} />
+                            />
 
-                            {touched.email && errors.email && (
-                                <Text style={styles.error}>
-                                    {errors.email}
-                                </Text>
-                            )}
-
-                            <TextInput
+                            <FormInput
                                 label="Password"
-                                mode="outlined"
-                                outlineColor={theme.colors.secondaryLight + '80'}
-                                activeOutlineColor={theme.colors.secondary + '80'}
+                                icon={KeyRound}
                                 value={values.password}
                                 onChangeText={handleChange("password")}
                                 onBlur={handleBlur("password")}
+                                error={errors.password}
+                                touched={touched.password}
+                                theme={theme}
                                 secureTextEntry
                                 autoCapitalize="none"
-                                error={Boolean(touched.password && errors.password)}
-                                textColor={theme.colors.text}
-                                selectionColor={theme.colors.primaryDarker}
-                                outlineStyle={{ borderRadius: 14, }}
-                                theme={{
-                                    colors: {
-                                        onSurfaceVariant: theme.colors.secondary + '70',
-                                        primary: theme.colors.white,
-                                    },
-                                }}
-                                style={{
-                                    backgroundColor: theme.colors.secondaryLight + "30",
-                                    height: 44,
-                                }} />
+                                autoCorrect={false}
+                            />
 
-                            {touched.password && errors.password && (
-                                <Text style={styles.error}>
-                                    {errors.password}
-                                </Text>
-                            )}
-                            <TextInput
-                                label="confirmPassword"
-                                mode="outlined"
-                                outlineColor={theme.colors.secondaryLight + '80'}
-                                activeOutlineColor={theme.colors.secondary + '80'}
-                                value={values.confirmPassword}
-                                onChangeText={handleChange("confirmPassword")}
-                                onBlur={handleBlur("confirmPassword")}
+                            <FormInput
+                                label="Password"
+                                icon={ShieldCheck}
+                                value={values.password}
+                                onChangeText={handleChange("password")}
+                                onBlur={handleBlur("password")}
+                                error={errors.password}
+                                touched={touched.password}
+                                theme={theme}
                                 secureTextEntry
                                 autoCapitalize="none"
-                                error={Boolean(touched.confirmPassword && errors.confirmPassword)}
-                                textColor={theme.colors.text}
-                                selectionColor={theme.colors.primaryDarker}
-                                outlineStyle={{ borderRadius: 14, }}
-                                theme={{
-                                    colors: {
-                                        onSurfaceVariant: theme.colors.secondary + '70',
-                                        primary: theme.colors.white,
-                                    },
-                                }}
-                                style={{
-                                    backgroundColor: theme.colors.secondaryLight + "30",
-                                    height: 44,
-                                }} />
-
-                            {touched.confirmPassword && errors.confirmPassword && (
-                                <Text style={styles.error}>
-                                    {errors.confirmPassword}
-                                </Text>
-                            )}
+                                autoCorrect={false}
+                            />
 
                             <View style={{
                                 display: 'flex',
@@ -224,155 +196,164 @@ export default function SignUp() {
                                 alignItems: 'center',
                                 justifyContent: 'space-between',
                             }}>
-                                <TextInput
-                                    label="First Name"
-                                    mode="outlined"
+                                <FormInput
+                                    label="First name"
+                                    icon={UserRound}
                                     value={values.firstName}
                                     onChangeText={handleChange("firstName")}
                                     onBlur={handleBlur("firstName")}
-                                    error={Boolean(touched.firstName && errors.firstName)}
-                                    autoCapitalize="words"
+                                    error={errors.firstName}
+                                    touched={touched.firstName}
+                                    theme={theme}
+                                    autoCapitalize="none"
                                     autoCorrect={false}
-                                    outlineColor={theme.colors.secondaryLight + '80'}
-                                    activeOutlineColor={theme.colors.secondary + '80'}
-                                    textColor={theme.colors.text}
-                                    selectionColor={theme.colors.primaryDarker}
-                                    outlineStyle={{ borderRadius: 14, }}
-                                    theme={{
-                                        colors: {
-                                            onSurfaceVariant: theme.colors.secondary + '70',
-                                            primary: theme.colors.white,
-                                        },
-                                    }}
-                                    style={{
-                                        width: '48%',
-                                        backgroundColor: theme.colors.secondaryLight + "30",
-                                        height: 44,
-                                    }} />
+                                    style={{ width: '48%' }}
+                                />
+
+                                <FormInput
+                                    label="Last name"
+                                    icon={UserRound}
+                                    value={values.lastName}
+                                    onChangeText={handleChange("lastName")}
+                                    onBlur={handleBlur("lastName")}
+                                    error={errors.lastName}
+                                    touched={touched.lastName}
+                                    theme={theme}
+                                    autoCapitalize="none"
+                                    autoCorrect={false}
+                                    style={{ width: '48%' }}
+                                />
+                            </View>
+
+                            <FormInput
+                                label="User name"
+                                icon={AtSign}
+                                value={values.username}
+                                onChangeText={handleChange("username")}
+                                onBlur={handleBlur("username")}
+                                error={errors.username}
+                                touched={touched.username}
+                                theme={theme}
+                                secureTextEntry
+                                autoCapitalize="none"
+                                autoCorrect={false}
+                            />
+
+                            <View style={{
+                                minHeight: 80
+                            }}>
+                                {touched.email && errors.email && (
+                                    <Text style={{
+                                        color: theme.colors.error,
+                                        fontSize: 12,
+                                        marginLeft: 4,
+                                    }}>
+                                        {errors.email}
+                                    </Text>
+                                )}
+
+                                {touched.password && errors.password && (
+                                    <Text style={{
+                                        color: theme.colors.error,
+                                        fontSize: 12,
+                                        marginLeft: 4,
+                                    }}>
+                                        {errors.password}
+                                    </Text>
+                                )}
+
+                                {touched.confirmPassword && errors.confirmPassword && (
+                                    <Text style={{
+                                        color: theme.colors.error,
+                                        fontSize: 12,
+                                        marginLeft: 4,
+                                    }}>
+                                        {errors.confirmPassword}
+                                    </Text>
+                                )}
 
                                 {touched.firstName && errors.firstName && (
-                                    <Text style={styles.error}>
+                                    <Text style={{
+                                        color: theme.colors.error,
+                                        fontSize: 12,
+                                        marginLeft: 4,
+                                    }}>
                                         {errors.firstName}
                                     </Text>
                                 )}
 
-                                <TextInput
-                                    label="Last Name"
-                                    mode="outlined"
-                                    value={values.lastName}
-                                    onChangeText={handleChange("lastName")}
-                                    onBlur={handleBlur("lastName")}
-                                    error={Boolean(touched.lastName && errors.lastName)}
-                                    autoCapitalize="words"
-                                    autoCorrect={false}
-                                    outlineColor={theme.colors.secondaryLight + '80'}
-                                    activeOutlineColor={theme.colors.secondary + '80'}
-                                    textColor={theme.colors.text}
-                                    selectionColor={theme.colors.primaryDarker}
-                                    outlineStyle={{ borderRadius: 14, }}
-                                    theme={{
-                                        colors: {
-                                            onSurfaceVariant: theme.colors.secondary + '70',
-                                            primary: theme.colors.white,
-                                        },
-                                    }}
-                                    style={{
-                                        width: '48%',
-                                        backgroundColor: theme.colors.secondaryLight + "30",
-                                        height: 44,
-                                    }}
-                                />
-
                                 {touched.lastName && errors.lastName && (
-                                    <Text style={styles.error}>
+                                    <Text style={{
+                                        color: theme.colors.error,
+                                        fontSize: 12,
+                                        marginLeft: 4,
+                                    }}>
                                         {errors.lastName}
+                                    </Text>
+                                )}
+
+                                {touched.username && errors.username && (
+                                    <Text style={{
+                                        color: theme.colors.error,
+                                        fontSize: 12,
+                                        marginLeft: 4,
+                                    }}>
+                                        {errors.username}
                                     </Text>
                                 )}
                             </View>
 
-                            <TextInput
-                                label="Username"
-                                mode="outlined"
-                                value={values.username}
-                                onChangeText={handleChange("username")}
-                                onBlur={handleBlur("username")}
-                                error={Boolean(touched.username && errors.username)}
-                                autoCapitalize="none"
-                                autoCorrect={false}
-                                outlineColor={theme.colors.secondaryLight + '80'}
-                                activeOutlineColor={theme.colors.secondary + '80'}
-                                textColor={theme.colors.text}
-                                selectionColor={theme.colors.primaryDarker}
-                                outlineStyle={{ borderRadius: 14, }}
-                                theme={{
-                                    colors: {
-                                        onSurfaceVariant: theme.colors.secondary + '70',
-                                        primary: theme.colors.white,
-                                    },
-                                }}
-                                style={{
-                                    backgroundColor: theme.colors.secondaryLight + "30",
-                                    height: 44,
-                                }}
-                            />
-
-                            {touched.username && errors.username && (
-                                <Text style={styles.error}>
-                                    {errors.username}
-                                </Text>
-                            )}
-
                             <View>
-
                                 <ButtonComponent
                                     onPress={handleSubmit}
-                                    backgroundColor={theme.colors.success + '60'}
-                                    borderColor={theme.colors.success + '80'}
+                                    backgroundColor={theme.colors.success + '20'}
+                                    borderColor={theme.colors.success + '50'}
+                                    style={{
+                                        width: '100%',
+                                    }}
+                                >
+                                    <Text style={{ color: theme.colors.secondary }}>
+                                        Sign Up
+                                    </Text>
+                                </ButtonComponent>
+
+                                <ButtonComponent
+                                    onPress={handleCancel}
+                                    backgroundColor={theme.colors.error + '20'}
+                                    borderColor={theme.colors.error + '50'}
                                     style={{
                                         width: '100%',
                                         marginTop: '15'
                                     }}
                                 >
                                     <Text style={{ color: theme.colors.secondary }}>
-                                        Sign Up
+                                        Cancel
                                     </Text>
-                                    </ButtonComponent>
-                                    
-                                    <ButtonComponent
-                                        onPress={handleCancel}
-                                        backgroundColor={theme.colors.error + '50'}
-                                        borderColor={theme.colors.error + '80'}
-                                        style={{
-                                            width: '100%',
-                                            marginTop: '15'
-                                        }}
-                                    >
-                                        <Text style={{ color: theme.colors.secondary }}>
-                                            Cancel
-                                        </Text>
-                                    </ButtonComponent>
-                                <Text style={{
-                                    alignSelf: 'center',
-                                    marginTop: '32',
-                                    color: theme.colors.secondaryDarker
+                                </ButtonComponent>
+
+                                <View style={{
+                                    marginTop: '40',
+                                    flexDirection: 'row',
+                                    gap: 15,
+                                    alignSelf: 'center'
                                 }}>
-                                    Already a member?
-                                </Text>
-                                    <ButtonComponent
-                                        onPress={() => {
-                                            router.push('/SignIn');
-                                        }}
-                                        backgroundColor={theme.colors.secondary + '30'}
-                                        borderColor={theme.colors.secondaryLighter + '80'}
-                                        style={{
-                                            width: '100%',
-                                            marginTop: 15
-                                        }}
-                                    >
-                                        <Text style={{ color: theme.colors.surface, }}>
-                                            Get back to your account
+                                    <Text style={{
+                                        color: theme.colors.text + '90'
+                                    }}>
+                                        Alreadu have account?
+                                    </Text>
+
+                                    <Pressable onPress={() => router.push("/SignIn")}>
+                                        <Text
+                                            style={{
+                                                color: theme.colors.secondaryDarker,
+                                                fontWeight: "600",
+                                            }}
+                                        >
+                                            Sign In
                                         </Text>
-                                    </ButtonComponent>
+                                    </Pressable>
+                                </View>
                             </View>
 
 

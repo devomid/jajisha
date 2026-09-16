@@ -10,6 +10,7 @@ import { TextInput as RNTextInput } from "react-native";
 import { useWcDataStore } from "../../store/wcDataStore";
 import ButtonComponent from "../Button/Button";
 import PhotoGallery from '../photoGallery/photoGallery';
+import FormInput from "../inpuField/formInput";
 
 
 export default function NewToilet({ theme, }) {
@@ -92,44 +93,20 @@ export default function NewToilet({ theme, }) {
                 }}>
                 Add a new toilet
             </Text>
-            <View >
-                <TextInput
-                    label={t("newToilet.toiletName")}
-                    left={<TextInput.Icon
-                        icon={() => (
-                            <Toilet
-                                size={19}
-                                color={theme.colors.secondary + '70'}
-                            />
-                        )}
-                    />}
-                    value={wcData.name}
-                    mode="outlined"
-                    outlineColor={theme.colors.secondaryLight + '80'}
-                    activeOutlineColor={theme.colors.secondary + '80'}
-                    textColor={theme.colors.text}
-                    selectionColor={theme.colors.primaryDarker}
-                    outlineStyle={{ borderRadius: 14, borderWidth: 0.5 }}
-                    theme={{
-                        colors: {
-                            onSurfaceVariant: theme.colors.secondary + '70',
-                            primary: theme.colors.white,
-                        },
-                    }}
 
-                    onChangeText={(text) =>
-                        setWcData(prev => ({
-                            ...prev,
-                            name: text,
-                        }))
-                    }
-                    style={{
-                        backgroundColor: theme.colors.primaryLighter + '25',
-                        // backgroundColor: theme.colors.secondaryLight + "10",
-                        height: 44,
-                    }}
-                />
-            </View>
+            <FormInput
+                label={t("newToilet.toiletName")}
+                icon={Toilet}
+                value={wcData.name}
+                onChangeText={(text) =>
+                    setWcData((prev) => ({
+                        ...prev,
+                        name: text,
+                    }))
+                }
+                theme={theme}
+            />
+
             <ButtonComponent
                 onPress={handleChooseOnMap}
                 backgroundColor={theme.colors.nav + '13'}
@@ -137,6 +114,7 @@ export default function NewToilet({ theme, }) {
                 style={{
                     width: '100%',
                     marginTop: 9,
+                    marginBottom: 9,
                 }}
             >
                 <Text style={{ color: theme.colors.nav + '99' }}>
@@ -144,55 +122,43 @@ export default function NewToilet({ theme, }) {
                 </Text>
             </ButtonComponent>
 
-            <View style={{ marginTop: 3, }}>
-                <View style={{ width: '100%', }}>
-                    <TextInput
-                        left={<TextInput.Icon
-                            icon={() => (
-                                <MapPin
-                                    size={19}
-                                    color={theme.colors.secondary + '70'}
-                                />
-                            )}
-                        />}
-                        label={t("newToilet.address")}
-                        value={wcData.address}
-                        mode="outlined"
-                        textColor={theme.colors.secondary}
-                        outlineColor={theme.colors.secondaryLight + '80'}
-                        activeOutlineColor={theme.colors.secondary + '80'}
-                        selectionColor={theme.colors.primaryDarker}
-                        outlineStyle={{ borderRadius: 14, borderWidth: 0.5 }}
-                        theme={{
-                            colors: {
-                                onSurfaceVariant: theme.colors.secondary + '70',
-                                primary: theme.colors.white,
-                            },
-                        }}
-                        onChangeText={(text) =>
-                            setWcData(prev => ({
-                                ...prev,
-                                address: text,
-                            }))
-                        }
-                        style={{
-                            backgroundColor: theme.colors.primaryLighter + '25',
-                            height: 44
-                        }} />
-                </View>
-            </View>
+            <FormInput
+                label={t("newToilet.address")}
+                icon={MapPin}
+                value={wcData.address}
+                onChangeText={(text) =>
+                    setWcData((prev) => ({
+                        ...prev,
+                        address: text,
+                    }))
+                }
+                theme={theme}
+            />
 
-            <View style={{ marginTop: 3, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-                <View style={{ width: '30%', flexDirection: 'row', alignItems: 'center', }}>
+            <View
+                style={{
+                    marginTop: 3,
+                    flexDirection: "row",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                }}
+            >
+                <View
+                    style={{
+                        width: "30%",
+                        flexDirection: "row",
+                        alignItems: "center",
+                    }}
+                >
                     <Checkbox
                         style={{
                             margin: 10,
                             width: 17,
-                            height: 17
+                            height: 17,
                         }}
                         value={wcData.isFree}
                         onValueChange={(value) =>
-                            setWcData(prev => ({
+                            setWcData((prev) => ({
                                 ...prev,
                                 isFree: value,
                             }))
@@ -201,50 +167,33 @@ export default function NewToilet({ theme, }) {
                             wcData.isFree
                                 ? theme.colors.primary
                                 : theme.colors.secondaryLight
-                        } />
-                    <Text >
+                        }
+                    />
+
+                    <Text>
                         {t("newToilet.free")}
                     </Text>
                 </View>
 
-                <View style={{ width: '55%' }}>
-                    <TextInput
-                        left={<TextInput.Icon
-                            icon={() => (
-                                <DollarSign
-                                    size={19}
-                                    color={theme.colors.secondary + '70'}
-                                />
-                            )}
-                        />}
-                        label={t("newToilet.price")}
-                        keyboardType="numeric"
-                        editable={!wcData.isFree}
-                        disabled={wcData.isFree}
-                        value={wcData.price}
-                        mode="outlined"
-                        textColor={theme.colors.secondary}
-                        outlineColor={theme.colors.secondaryLight + '80'}
-                        activeOutlineColor={theme.colors.secondaryDarker}
-                        selectionColor={theme.colors.primaryDarker}
-                        outlineStyle={{ borderRadius: 14, }}
-                        theme={{
-                            colors: {
-                                onSurfaceVariant: theme.colors.secondary + '70',
-                                primary: theme.colors.white,
-                            },
-                        }}
-                        onChangeText={(text) =>
-                            setWcData(prev => ({
-                                ...prev,
-                                price: text.replace(/\D/g, ""), // keep only 0-9
-                            }))
-                        }
-                        style={{
-                            backgroundColor: theme.colors.primaryLighter + "25",
-                            height: 44
-                        }} />
-                </View>
+                <FormInput
+                    label={t("newToilet.price")}
+                    icon={DollarSign}
+                    value={wcData.price}
+                    onChangeText={(text) =>
+                        setWcData((prev) => ({
+                            ...prev,
+                            price: text.replace(/\D/g, ""),
+                        }))
+                    }
+                    theme={theme}
+                    keyboardType="numeric"
+                    editable={!wcData.isFree}
+                    disabled={wcData.isFree}
+                    style={{
+                        width: "55%",
+                        marginTop: 8
+                    }}
+                />
             </View>
 
             <View style={{ marginTop: 15 }}>
@@ -315,13 +264,13 @@ export default function NewToilet({ theme, }) {
                                     }
                                     style={{
                                         width: 17,
-                                        height:17
+                                        height: 17
                                     }}
                                 />
                                 <Text variant="bodySmall" style={{
                                     marginLeft: 12,
                                     marginRight: 15,
-                                    color:theme.colors.text
+                                    color: theme.colors.text
                                 }}>{item.label}</Text>
                             </View>
                         ))}
