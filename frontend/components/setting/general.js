@@ -1,17 +1,37 @@
-import { View } from "react-native";
-import { TextInput, List, Text } from "react-native-paper";
+import { Pressable, View } from "react-native";
+import { TextInput, List, Text, Divider } from "react-native-paper";
 import { ChevronDown, ChevronUp, RulerDimensionLine, Languages, SunMoon, UserRoundCog } from "lucide-react-native";
 import { useTranslation } from "react-i18next";
 import { useState, useMemo, useEffect } from "react";
-
+import { useSettingsStore } from "../../store/settingsStore";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function GeneralSettings({ theme }) {
+
     const { t } = useTranslation();
-    const [expandedAmenities, setExpandedAmenities] = useState(false);
-    const [expandedRatings, setExpandedRatings] = useState(false);
+    const { i18n } = useTranslation();
+
+    const distanceUnit = useSettingsStore((state) => state.distanceUnit);
+    const setDistanceUnit = useSettingsStore((state) => state.setDistanceUnit);
+
+    const [unitExpand, setUnitExpand] = useState(false);
+    const [languageExpand, setLanguageExpand] = useState(false);
+    const [themeExpand, setThemeExpand] = useState(false);
+    const [accountExpand, setAccountExpand] = useState(false);
 
 
-    const handlePressAmenities = () => setExpandedAmenities(!expandedAmenities);
+    const handlePressUnit = () => setUnitExpand(!unitExpand);
+    const handlePressLanguage = () => setLanguageExpand(!languageExpand);
+    const handlePressTheme = () => setThemeExpand(!themeExpand);
+    const handlePressAccount = () => setAccountExpand(!accountExpand);
+
+    const changeLanguage = async (lan) => {
+        if (lan === i18n.language)
+            return;
+
+        await i18n.changeLanguage(lan);
+        await AsyncStorage.setItem("language", lan);
+    };
 
     return (
         <View style={{
@@ -21,7 +41,7 @@ export default function GeneralSettings({ theme }) {
 
             <View style={{
                 padding: 12,
-                borderRadius:24,
+                borderRadius: 24,
                 borderWidth: 0.5,
                 borderColor: theme.colors.secondaryLight + '80',
                 backgroundColor: theme.colors.secondaryLight + '10'
@@ -37,9 +57,9 @@ export default function GeneralSettings({ theme }) {
                     marginTop: 10,
                 }}>
                     <List.Accordion
-                        title={"Distance unit"}
-                        expanded={expandedAmenities}
-                        onPress={handlePressAmenities}
+                        title={"System unit"}
+                        expanded={unitExpand}
+                        onPress={handlePressUnit}
                         style={{
                             height: 44,
                             backgroundColor: theme.colors.secondaryLighter + "25",
@@ -83,10 +103,10 @@ export default function GeneralSettings({ theme }) {
                                         transform: [{ translateY: -8 }],
                                     }}
                                 >
-                                    test
+                                    {distanceUnit}
                                 </Text>
 
-                                {expandedAmenities ? (
+                                {unitExpand ? (
                                     <ChevronUp
                                         size={20}
                                         color={theme.colors.secondary}
@@ -104,13 +124,64 @@ export default function GeneralSettings({ theme }) {
                     >
                         <View
                             style={{
-                                flexDirection: 'row',
-                                flexWrap: 'wrap',
+                                marginHorizontal: 15,
+                                marginBottom: 10,
+                                marginTop: -5,
+                                height: 89,
+                                width: '91%',
+                                justifyContent: 'center',
+                                borderWidth: 0.5,
+                                borderTopWidth: 0,
+                                borderBottomLeftRadius: 24,
+                                borderBottomRightRadius: 24,
+                                borderColor: theme.colors.secondaryLight + '80',
+                                backgroundColor: theme.colors.surface + '20',
                             }}
                         >
-                            <Text>
-                                test
-                            </Text>
+                            <Pressable
+                                onPress={() => {
+                                    setDistanceUnit('Metric')
+                                    setUnitExpand(false)
+                                }}
+                                style={{
+                                    width: '100%',
+                                    padding: 0,
+                                    paddingVertical: 10,
+                                    marginLeft: -20
+                                }}
+                            >
+                                {({ pressed }) => (
+                                    <Text style={{
+                                        color: pressed ?
+                                            theme.colors.secondaryLight :
+                                            theme.colors.primaryDarker
+
+                                    }}>Metric</Text>
+                                )}
+                            </Pressable>
+
+                            <Divider horizontalInset style={{ marginLeft: -20 }} />
+
+                            <Pressable
+                                onPress={() => {
+                                    setDistanceUnit('Imperial')
+                                    setUnitExpand(false)
+                                }}
+                                style={{
+                                    width: '100%',
+                                    padding: 0,
+                                    paddingVertical: 10,
+                                    marginLeft: -20,
+                                }}>
+                                {({ pressed }) => (
+                                    <Text style={{
+                                        color: pressed ?
+                                            theme.colors.secondaryLight :
+                                            theme.colors.primaryDarker
+
+                                    }}>Imperial</Text>
+                                )}
+                            </Pressable>
                         </View>
                     </List.Accordion>
                 </View>
@@ -118,8 +189,8 @@ export default function GeneralSettings({ theme }) {
                 <View>
                     <List.Accordion
                         title={"Language"}
-                        expanded={expandedAmenities}
-                        onPress={handlePressAmenities}
+                        expanded={languageExpand}
+                        onPress={handlePressLanguage}
                         style={{
                             height: 44,
                             backgroundColor: theme.colors.secondaryLighter + "25",
@@ -163,10 +234,10 @@ export default function GeneralSettings({ theme }) {
                                         transform: [{ translateY: -8 }],
                                     }}
                                 >
-                                    test
+                                    {i18n.language === 'fa' ? "Farsi" : i18n.language === 'en' ? "English" : "--"}
                                 </Text>
 
-                                {expandedAmenities ? (
+                                {languageExpand ? (
                                     <ChevronUp
                                         size={20}
                                         color={theme.colors.secondary}
@@ -182,15 +253,67 @@ export default function GeneralSettings({ theme }) {
                             </View>
                         )}
                     >
+
                         <View
                             style={{
-                                flexDirection: 'row',
-                                flexWrap: 'wrap',
+                                marginHorizontal: 15,
+                                marginBottom: 10,
+                                marginTop: -5,
+                                height: 89,
+                                width: '91%',
+                                justifyContent: 'center',
+                                borderWidth: 0.5,
+                                borderTopWidth: 0,
+                                borderBottomLeftRadius: 24,
+                                borderBottomRightRadius: 24,
+                                borderColor: theme.colors.secondaryLight + '80',
+                                backgroundColor: theme.colors.surface + '20',
                             }}
                         >
-                            <Text>
-                                test
-                            </Text>
+                            <Pressable
+                                onPress={() => {
+                                    changeLanguage("fa")
+                                    setLanguageExpand(false)
+                                }}
+                                style={{
+                                    width: '100%',
+                                    padding: 0,
+                                    paddingVertical: 10,
+                                    marginLeft: -20
+                                }}
+                            >
+                                {({ pressed }) => (
+                                    <Text style={{
+                                        color: pressed ?
+                                            theme.colors.secondaryLight :
+                                            theme.colors.primaryDarker
+
+                                    }}>Farsi</Text>
+                                )}
+                            </Pressable>
+
+                            <Divider horizontalInset style={{ marginLeft: -20 }} />
+
+                            <Pressable
+                                onPress={() => {
+                                    changeLanguage("en")
+                                    setLanguageExpand(false)
+                                }}
+                                style={{
+                                    width: '100%',
+                                    padding: 0,
+                                    paddingVertical: 10,
+                                    marginLeft: -20,
+                                }}>
+                                {({ pressed }) => (
+                                    <Text style={{
+                                        color: pressed ?
+                                            theme.colors.secondaryLight :
+                                            theme.colors.primaryDarker
+
+                                    }}>English</Text>
+                                )}
+                            </Pressable>
                         </View>
                     </List.Accordion>
                 </View>
@@ -198,8 +321,8 @@ export default function GeneralSettings({ theme }) {
                 <View>
                     <List.Accordion
                         title={"Theme"}
-                        expanded={expandedAmenities}
-                        onPress={handlePressAmenities}
+                        expanded={themeExpand}
+                        onPress={handlePressTheme}
                         style={{
                             height: 44,
                             backgroundColor: theme.colors.secondaryLighter + "25",
@@ -246,7 +369,7 @@ export default function GeneralSettings({ theme }) {
                                     test
                                 </Text>
 
-                                {expandedAmenities ? (
+                                {unitExpand ? (
                                     <ChevronUp
                                         size={20}
                                         color={theme.colors.secondary}
@@ -278,8 +401,8 @@ export default function GeneralSettings({ theme }) {
                 <View>
                     <List.Accordion
                         title={"Account"}
-                        expanded={expandedAmenities}
-                        onPress={handlePressAmenities}
+                        expanded={accountExpand}
+                        onPress={handlePressAccount}
                         style={{
                             height: 44,
                             backgroundColor: theme.colors.secondaryLighter + "25",
@@ -326,7 +449,7 @@ export default function GeneralSettings({ theme }) {
                                     test
                                 </Text>
 
-                                {expandedAmenities ? (
+                                {accountExpand ? (
                                     <ChevronUp
                                         size={20}
                                         color={theme.colors.secondary}
