@@ -4,10 +4,14 @@ import { useMemo } from "react";
 import StarRating from "react-native-star-rating-widget";
 import { useTranslation } from "react-i18next";
 
-export default function Rating({ theme, setWcData, ratings }) {
+export default function Rating({ myTheme, setWcData, ratings }) {
+
+    console.log("Rating myTheme colors:", myTheme);
+    console.log("secondaryLight:", myTheme.secondaryLight);
+
     const { t } = useTranslation();
 
-    const starColor = theme.colors.secondaryLight;
+    const starColor = myTheme.secondaryLight;
     const emptyStarColor = starColor + "70";
 
     const averageRating = useMemo(() => {
@@ -102,7 +106,7 @@ export default function Rating({ theme, setWcData, ratings }) {
                 <Text
                     style={{
                         marginLeft: 5,
-                        color: theme.colors.text + "95",
+                        color: myTheme.text + "95",
                     }}
                 >
                     {averageRating.toFixed(1)} / 5

@@ -94,13 +94,11 @@ export default function WriteCommandAndRate({ theme }) {
                         )
                     }
                 >
-                    <>
-                        <Rating
-                            theme={theme}
-                            setWcData={setWcData}
-                            ratings={wcData.ratings}
-                        />
-                    </>
+                    <Rating
+                        myTheme={theme.colors}
+                        setWcData={setWcData}
+                        ratings={wcData.ratings}
+                    />
                 </List.Accordion>
             </View>
         </View>

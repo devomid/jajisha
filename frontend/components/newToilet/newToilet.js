@@ -360,32 +360,16 @@ export default function NewToilet({ theme, }) {
                         )
                     }
                 >
-                    <>
-                        <Rating
-                            theme={theme}
-                            setWcData={setWcData}
-                            ratings={wcData.ratings}
-                        />
-                    </>
+                    <Rating
+                        myTheme={theme.colors}
+                        setWcData={setWcData}
+                        ratings={wcData.ratings}
+                    />
 
                 </List.Accordion>
             </View>
 
             <PhotoGallery />
-
-            {/* <ButtonComponent
-                // onPress={handleChooseOnMap}
-                backgroundColor={theme.colors.secondary + '40'}
-                borderColor={theme.colors.secondaryLighter + '80'}
-                style={{
-                    width: '100%',
-                    marginTop: 15,
-                }}
-            >
-                <Text style={{ color: theme.colors.primaryLighter }}>
-                    Add photo
-                </Text>
-            </ButtonComponent> */}
 
         </View>
     );
