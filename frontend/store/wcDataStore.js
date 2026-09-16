@@ -35,6 +35,8 @@ const initialWcData = {
         crowd: 0,
     },
 
+    review:"",
+
     photos: [],
 };
 

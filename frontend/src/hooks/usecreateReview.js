@@ -1,24 +1,38 @@
 import { API_URL } from "../config/api";
+import { useWcDataStore } from "../../store/wcDataStore";
+import { useUserStore } from "../../store/userStore";
 
 export const useCreateReview = () => {
-    const toiletId = useWcDataStore((state) => state.selectedToilet._id);
-    const userId = useUserStore((state) => state.user._id);
-    const token = user.token;
+    const toiletId = useWcDataStore((state) => state.selectedToilet?._id);
+    const user = useUserStore((state) => state.user);
 
-    const createReview = async ({ reviewText }) => {
+    const createReview = async ({ reviewText, ratings }) => {
         try {
+            if (!user?.token) {
+                console.log("Cannot create review: user is not authenticated");
+                return false;
+            }
+
+            if (!toiletId) {
+                console.log("Cannot create review: toilet ID is missing");
+                return false;
+            }
+
             const response = await fetch(
-                `${API_URL }/api/managment/toiletManagement/${toiletId}`,
+                `${API_URL}/api/managment/toiletManagement/${toiletId}`,
                 {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
-                        Authorization: `Bearer ${token}`
+                        Authorization: `Bearer ${user.token}`
                     },
-                    body: {
-                        reviewText
-                    }
-                });
+                    body: JSON.stringify({
+                        reviewText,
+                        ratings
+                    })
+                }
+            );
+
             if (!response.ok) {
                 console.log("Response is not OK");
                 console.log("Status:", response.status);
@@ -29,9 +43,10 @@ export const useCreateReview = () => {
             return true;
 
         } catch (error) {
-            console.log("Error saving WC:", error);
+            console.log("Error saving review:", error);
             return false;
         }
-    }
+    };
+
     return createReview;
-}
+};

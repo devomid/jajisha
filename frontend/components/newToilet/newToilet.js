@@ -4,7 +4,7 @@ import { TextInput, List, Text } from "react-native-paper";
 import { useState, useMemo, useEffect } from "react";
 import { Checkbox } from 'expo-checkbox';
 import { ChevronDown, ChevronUp, Toilet, MapPin, DollarSign, ShowerHead, Star } from "lucide-react-native";
-import Rating from "./starRating";
+import Rating from "../rating/starRating";
 import { useTranslation } from "react-i18next";
 import { TextInput as RNTextInput } from "react-native";
 import { useWcDataStore } from "../../store/wcDataStore";
@@ -84,10 +84,10 @@ export default function NewToilet({ theme, }) {
             }}
         >
             <Text
-                variant= "titleMedium"
+                variant="titleMedium"
                 style={{
                     alignSelf: 'center',
-                    color: theme.colors.secondaryDarker +'90',
+                    color: theme.colors.secondaryDarker + '90',
                     marginBottom: 14
                 }}>
                 Add a new toilet
@@ -139,7 +139,7 @@ export default function NewToilet({ theme, }) {
                     marginTop: 9,
                 }}
             >
-                <Text style={{ color: theme.colors.nav+'99' }}>
+                <Text style={{ color: theme.colors.nav + '99' }}>
                     {t("newToilet.chooseOnMap")}
                 </Text>
             </ButtonComponent>
@@ -317,7 +317,9 @@ export default function NewToilet({ theme, }) {
                 </List.Accordion>
             </View>
 
-            <View>
+            <View style={{
+                width: '100%',
+            }}>
                 <List.Accordion
                     title={t("newToilet.rating")}
                     expanded={expandedRatings}
@@ -358,18 +360,14 @@ export default function NewToilet({ theme, }) {
                         )
                     }
                 >
-                    <View
-                        style={{
-                            flexDirection: 'row',
-                            flexWrap: 'wrap',
-                        }}
-                    >
+                    <>
                         <Rating
                             theme={theme}
                             setWcData={setWcData}
                             ratings={wcData.ratings}
                         />
-                    </View>
+                    </>
+
                 </List.Accordion>
             </View>
 

@@ -219,13 +219,20 @@ const getToiletReviews = async (req, res) => {
     }
 
     try {
-        const reviews = await Review.find({ toilet: toiletId }).sort({ createdAt: -1 }).limit(50).lean();
+        const reviews = await Review.find({ toilet: toiletId })
+            .populate("user", "username firstName lastName avatar")
+            .sort({ createdAt: -1 })
+            .limit(50)
+            .lean();
+
         res.status(200).json({ reviews });
 
     } catch (error) {
         console.error("Get toilet reviews error:", error);
 
-        res.status(500).json({ message: "Failed to load toilet reviews", });
+        res.status(500).json({
+            message: "Failed to load toilet reviews",
+        });
     }
 };
 

@@ -22,6 +22,50 @@ const reviewSchema = new mongoose.Schema(
             maxlength: 200,
         },
 
+        ratings: {
+            cleanliness: {
+                type: Number,
+                required: true,
+                min: 0,
+                max: 5,
+            },
+
+            odor: {
+                type: Number,
+                required: true,
+                min: 0,
+                max: 5,
+            },
+
+            amenitiesHealth: {
+                type: Number,
+                required: true,
+                min: 0,
+                max: 5,
+            },
+
+            light: {
+                type: Number,
+                required: true,
+                min: 0,
+                max: 5,
+            },
+
+            privacy: {
+                type: Number,
+                required: true,
+                min: 0,
+                max: 5,
+            },
+
+            crowd: {
+                type: Number,
+                required: true,
+                min: 0,
+                max: 5,
+            },
+        },
+
         likes: [
             {
                 type: mongoose.Schema.Types.ObjectId,
@@ -41,15 +85,18 @@ const reviewSchema = new mongoose.Schema(
     }
 );
 
-// One review per user per toilet
 reviewSchema.index(
     { toilet: 1, user: 1 },
     { unique: true }
 );
 
-// Fast loading of reviews for a toilet
 reviewSchema.index({
     toilet: 1,
+    createdAt: -1,
+});
+
+reviewSchema.index({
+    user: 1,
     createdAt: -1,
 });
 

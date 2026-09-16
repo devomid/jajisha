@@ -14,12 +14,15 @@ import {
     Animated,
     Easing
 } from "react-native";
+
 import { router } from "expo-router";
+
 import {
     BottomSheetModal,
     BottomSheetBackdrop,
     BottomSheetScrollView,
 } from "@gorhom/bottom-sheet";
+
 import { useWcDataStore } from "../../store/wcDataStore";
 import { useUserStore } from "../../store/userStore";
 import { useSaveWc } from "../../src/hooks/useSaveWc";
@@ -32,6 +35,7 @@ import PhotoGallery from "../photoGallery/photoGallery";
 import ButtonComponent from "../Button/Button";
 
 import { BlurView } from "expo-blur";
+
 import {
     Save,
     SaveCheck,
@@ -55,10 +59,14 @@ import {
     useTheme,
     SegmentedButtons
 } from "react-native-paper";
-import CommentSection from "../comments/commentSection";
+
+import CommentSection from "../comments/commentGallery";
+import CommentComponent from "../cards/commentCardComponentSmall";
+import RateAndCommentSheet from "../rating/rateAndCommentSheet";
 
 
 const ToiletInfo = forwardRef(({ curentLocation, onPresent }, ref) => {
+
     const { restoreUser } = useAuth();
 
     const user = useUserStore((state) => state.user);
@@ -70,16 +78,15 @@ const ToiletInfo = forwardRef(({ curentLocation, onPresent }, ref) => {
     const [isAtAmenitiesHeight, setIsAtAmenitiesHeight] = useState(false);
     const [isSaved, setIsSaved] = useState(false);
     const [showAllAmenities, setShowAllAmenities] = useState(false);
-    const [value, setValue] = useState('');
+    const [value, setValue] = useState("");
     const [saving, setSaving] = useState(false);
+    const [iscommenting, setIscommenting] = useState(false);
+    const [iscommentsOpen, setIscommentsOpen] = useState(false);
 
     const { t } = useTranslation();
     const theme = useTheme();
 
-    const toilet = useWcDataStore(
-        (state) => state.selectedToilet
-    );
-
+    const toilet = useWcDataStore((state) => state.selectedToilet);
     const setNavigationTarget = useWcDataStore(
         state => state.setNavigationTarget
     );
@@ -90,26 +97,14 @@ const ToiletInfo = forwardRef(({ curentLocation, onPresent }, ref) => {
 
     const { distance, duration } = toiletRouteInfo;
 
-    /*
-     * ---------------------------------------------------------
-     * BOTTOM SHEET
-     * ---------------------------------------------------------
-     */
-
     const snapPoints = useMemo(
-        () => ["34%", "44%", "63%", "86%"],
+        () => ["39.5%", "48%", "65%", "86%"],
         []
     );
 
     const lastStableIndexRef = useRef(0);
 
     const programmaticAmenitiesHeightRef = useRef(false);
-
-    /*
-     * ---------------------------------------------------------
-     * AMENITIES ANIMATION
-     * ---------------------------------------------------------
-     */
 
     const amenitiesAnimation = useRef(
         new Animated.Value(0)
@@ -129,6 +124,7 @@ const ToiletInfo = forwardRef(({ curentLocation, onPresent }, ref) => {
         }).start();
     }, [showAllAmenities]);
 
+
     const extraAmenitiesAnimatedStyle = {
         maxHeight: amenitiesAnimation.interpolate({
             inputRange: [0, 1],
@@ -147,6 +143,7 @@ const ToiletInfo = forwardRef(({ curentLocation, onPresent }, ref) => {
 
         overflow: "hidden",
     };
+
 
     /*
      * ---------------------------------------------------------
@@ -168,9 +165,11 @@ const ToiletInfo = forwardRef(({ curentLocation, onPresent }, ref) => {
         setIsSaved(saved);
     }, [toilet, user]);
 
+
     useEffect(() => {
         restoreUser();
     }, []);
+
 
     /*
      * ---------------------------------------------------------
@@ -180,17 +179,20 @@ const ToiletInfo = forwardRef(({ curentLocation, onPresent }, ref) => {
 
     const handleSheetChanges = useCallback(
         (index) => {
+
             /*
              * 44% is a protected temporary snap point.
              *
              * It can only be reached programmatically
              * by the More button.
              */
+
             if (index === 1) {
 
                 if (
                     programmaticAmenitiesHeightRef.current
                 ) {
+
                     programmaticAmenitiesHeightRef.current = false;
 
                     setSheetIndex(1);
@@ -200,10 +202,12 @@ const ToiletInfo = forwardRef(({ curentLocation, onPresent }, ref) => {
                     return;
                 }
 
+
                 /*
                  * User manually dragged to 44%.
                  * Return to the last legitimate snap point.
                  */
+
                 const previousStableIndex =
                     lastStableIndexRef.current;
 
@@ -216,6 +220,7 @@ const ToiletInfo = forwardRef(({ curentLocation, onPresent }, ref) => {
                 return;
             }
 
+
             /*
              * Legitimate snap point:
              *
@@ -223,6 +228,7 @@ const ToiletInfo = forwardRef(({ curentLocation, onPresent }, ref) => {
              * 2 = 63%
              * 3 = 86%
              */
+
             lastStableIndexRef.current = index;
 
             setSheetIndex(index);
@@ -235,6 +241,7 @@ const ToiletInfo = forwardRef(({ curentLocation, onPresent }, ref) => {
         },
         [onPresent, ref]
     );
+
 
     /*
      * ---------------------------------------------------------
@@ -256,8 +263,9 @@ const ToiletInfo = forwardRef(({ curentLocation, onPresent }, ref) => {
                 }}
             />
         ),
-        []
+        [theme]
     );
+
 
     /*
      * ---------------------------------------------------------
@@ -266,6 +274,7 @@ const ToiletInfo = forwardRef(({ curentLocation, onPresent }, ref) => {
      */
 
     const amenitiesIcon = () => {
+
         const amenities = [
             {
                 key: "western",
@@ -315,6 +324,7 @@ const ToiletInfo = forwardRef(({ curentLocation, onPresent }, ref) => {
         );
     };
 
+
     /*
      * ---------------------------------------------------------
      * DISTANCE / DURATION
@@ -328,7 +338,9 @@ const ToiletInfo = forwardRef(({ curentLocation, onPresent }, ref) => {
                 : `${(distance / 1000).toFixed(1)} km`
             : "--";
 
+
     const formatDuration = () => {
+
         if (typeof duration !== "number") {
             return "--";
         }
@@ -351,6 +363,7 @@ const ToiletInfo = forwardRef(({ curentLocation, onPresent }, ref) => {
         return `${hours}h ${remainingMinutes}min`;
     };
 
+
     /*
      * ---------------------------------------------------------
      * MORE / LESS
@@ -358,6 +371,7 @@ const ToiletInfo = forwardRef(({ curentLocation, onPresent }, ref) => {
      */
 
     const handleMore = () => {
+
         setShowAllAmenities(true);
 
         /*
@@ -367,7 +381,9 @@ const ToiletInfo = forwardRef(({ curentLocation, onPresent }, ref) => {
          * If the user is already at 63% or 86%,
          * don't interrupt their position.
          */
+
         if (lastStableIndexRef.current === 0) {
+
             setIsAtAmenitiesHeight(true);
 
             programmaticAmenitiesHeightRef.current = true;
@@ -378,7 +394,9 @@ const ToiletInfo = forwardRef(({ curentLocation, onPresent }, ref) => {
         }
     };
 
+
     const handleLess = () => {
+
         setShowAllAmenities(false);
 
         setIsAtAmenitiesHeight(false);
@@ -387,7 +405,9 @@ const ToiletInfo = forwardRef(({ curentLocation, onPresent }, ref) => {
          * If we are at the temporary 44% position,
          * return to 34%.
          */
+
         if (sheetIndex === 1) {
+
             programmaticAmenitiesHeightRef.current = false;
 
             requestAnimationFrame(() => {
@@ -398,6 +418,7 @@ const ToiletInfo = forwardRef(({ curentLocation, onPresent }, ref) => {
         }
     };
 
+
     /*
      * ---------------------------------------------------------
      * SAVE
@@ -405,13 +426,16 @@ const ToiletInfo = forwardRef(({ curentLocation, onPresent }, ref) => {
      */
 
     const handleSave = async () => {
+
         if (!user) {
+
             ref.current?.dismiss();
 
             router.push("/SignIn");
 
             return;
         }
+
 
         if (
             saving ||
@@ -420,9 +444,11 @@ const ToiletInfo = forwardRef(({ curentLocation, onPresent }, ref) => {
             return;
         }
 
+
         setSaving(true);
 
         try {
+
             if (isSaved) {
 
                 console.log(
@@ -439,6 +465,7 @@ const ToiletInfo = forwardRef(({ curentLocation, onPresent }, ref) => {
                 );
 
                 if (success) {
+
                     setIsSaved(false);
 
                     await restoreUser();
@@ -464,6 +491,7 @@ const ToiletInfo = forwardRef(({ curentLocation, onPresent }, ref) => {
                 );
 
                 if (success) {
+
                     setIsSaved(true);
 
                     await restoreUser();
@@ -482,9 +510,11 @@ const ToiletInfo = forwardRef(({ curentLocation, onPresent }, ref) => {
             );
 
         } finally {
+
             setSaving(false);
         }
     };
+
 
     /*
      * ---------------------------------------------------------
@@ -493,7 +523,9 @@ const ToiletInfo = forwardRef(({ curentLocation, onPresent }, ref) => {
      */
 
     const handleShare = async () => {
+
         try {
+
             const coordinates =
                 toilet?.location?.coordinates;
 
@@ -506,16 +538,19 @@ const ToiletInfo = forwardRef(({ curentLocation, onPresent }, ref) => {
                 return;
             }
 
+
             const [
                 longitude,
                 latitude
             ] = coordinates;
+
 
             const message = [
                 `${latitude.toFixed(6)}, ${longitude.toFixed(6)}`
             ]
                 .filter(Boolean)
                 .join("\n");
+
 
             await RNShare.share({
                 title: toilet.name,
@@ -531,6 +566,7 @@ const ToiletInfo = forwardRef(({ curentLocation, onPresent }, ref) => {
         }
     };
 
+
     /*
      * ---------------------------------------------------------
      * AMENITIES DATA
@@ -545,6 +581,7 @@ const ToiletInfo = forwardRef(({ curentLocation, onPresent }, ref) => {
     const hasMoreAmenities =
         amenities.length > 3;
 
+
     /*
      * ---------------------------------------------------------
      * RENDER
@@ -552,13 +589,10 @@ const ToiletInfo = forwardRef(({ curentLocation, onPresent }, ref) => {
      */
 
     return (
+
         <BottomSheetModal
 
             onPresent={() => {
-                console.log(
-                    "TOILET INFO >>> PRESENTED"
-                );
-
                 onPresent?.();
             }}
 
@@ -570,19 +604,17 @@ const ToiletInfo = forwardRef(({ curentLocation, onPresent }, ref) => {
             }}
 
             onDismiss={() => {
-                console.log(
-                    "TOILET INFO >>> DISMISSED"
-                );
 
                 setShowAllAmenities(false);
-
                 setIsAtAmenitiesHeight(false);
-
+                setIscommenting(false);
+                setIscommentsOpen(false);
                 setSheetIndex(0);
 
                 lastStableIndexRef.current = 0;
 
-                programmaticAmenitiesHeightRef.current = false;
+                programmaticAmenitiesHeightRef.current =
+                    false;
 
                 amenitiesAnimation.setValue(0);
             }}
@@ -616,326 +648,295 @@ const ToiletInfo = forwardRef(({ curentLocation, onPresent }, ref) => {
             }}
         >
 
-            {toilet && (
+            {iscommenting || iscommentsOpen ? (
 
-                <View
-                    style={{
-                        flex: 1,
-                        backgroundColor:
-                            "transparent",
-                    }}
-                >
+                <View style={{
+                    paddingHorizontal: 15,
+                    height: '100%'
+                }} >
+                    <RateAndCommentSheet theme={theme} toilet={toilet} iscommenting={iscommenting} iscommentsOpen={iscommentsOpen} setIscommenting={setIscommenting} setIscommentsOpen={setIscommentsOpen} />
+                </View>
 
-                    {/* ==============================
-                        FIXED HEADER
-                    ============================== */}
+            ) : (
+
+                toilet && (
 
                     <View
                         style={{
-                            paddingLeft: 20,
-                            paddingBottom: 10,
-                            paddingRight: 40
+                            flex: 1,
+                            backgroundColor: "transparent",
                         }}
                     >
 
-                        <Text
-                            numberOfLines={1}
-                            ellipsizeMode="tail"
-                            variant="headlineLarge"
-                            style={{
-                                color:
-                                    theme.colors.text +
-                                    "99",
-                                width: 195
-                            }}
-                        >
-                            {toilet.name}
-                        </Text>
-
                         <View
                             style={{
-                                display: "flex",
-                                flexDirection: "row",
-                                alignItems: "center",
-                                gap: 15,
-                                marginTop: 10
+                                marginHorizontal: 24,
+                                marginBottom: 15,
+                                marginTop: 10,
+                                gap: 4,
                             }}
                         >
-
-                            <MapPin
-                                size={18}
-                                color={
-                                    theme.colors.text +
-                                    "70"
-                                }
-                                strokeWidth={2}
-                            />
 
                             <Text
                                 numberOfLines={1}
+                                ellipsizeMode="tail"
+                                variant="headlineLarge"
                                 style={{
                                     color:
                                         theme.colors.text +
-                                        "90",
-                                    marginTop: 10,
-                                    paddingRight: 24,
-                                    marginBottom: 10
+                                        "99",
                                 }}
                             >
-                                {toilet.address}
+                                {toilet.name}
                             </Text>
 
-                        </View>
 
-                        <View
-                            style={{
-                                width: "100%",
-                                paddingVertical: 5,
-                                flexDirection: "row",
-                                alignItems: "center",
-                                gap: 15,
-                                marginTop: 8,
-                                justifyContent: "center"
-                            }}
-                        >
+                            <View
+                                style={{
+                                    display: "flex",
+                                    flexDirection: "row",
+                                    gap: 10,
+                                    marginRight: 35,
+                                }}
+                            >
 
-                            <Road
-                                size={18}
-                                color={
-                                    theme.colors.secondaryLight +
-                                    "90"
-                                }
-                                strokeWidth={2}
-                            />
+                                <MapPin
+                                    size={18}
+                                    color={
+                                        theme.colors.text +
+                                        "70"
+                                    }
+                                    strokeWidth={2}
+                                />
 
-                            {formattedDistance && (
+                                <Text
+                                    numberOfLines={1}
+                                    style={{
+                                        color:
+                                            theme.colors.text +
+                                            "90",
+                                    }}
+                                >
+                                    {toilet.address}
+                                </Text>
+
+                            </View>
+
+
+                            <View
+                                style={{
+                                    width: "100%",
+                                    paddingVertical: 5,
+                                    flexDirection: "row",
+                                    alignItems: "center",
+                                    gap: 15,
+                                    marginTop: 8,
+                                    justifyContent: "center",
+                                }}
+                            >
+
+                                <Road
+                                    size={18}
+                                    color={
+                                        theme.colors.secondaryLight +
+                                        "90"
+                                    }
+                                    strokeWidth={2}
+                                />
+
+                                {formattedDistance && (
+
+                                    <Text
+                                        style={{
+                                            color:
+                                                theme.colors.secondaryDark +
+                                                "99",
+                                            marginRight: 30,
+                                        }}
+                                        variant="bodySmall"
+                                    >
+                                        {formattedDistance}
+                                    </Text>
+
+                                )}
+
+
+                                <Timer
+                                    size={18}
+                                    color={
+                                        theme.colors.secondaryLight +
+                                        "90"
+                                    }
+                                    strokeWidth={2}
+                                />
+
+
                                 <Text
                                     style={{
                                         color:
                                             theme.colors.secondaryDark +
                                             "99",
-                                        marginRight: 30
                                     }}
                                     variant="bodySmall"
                                 >
-                                    {formattedDistance}
+                                    {formatDuration()}
                                 </Text>
-                            )}
 
-                            <Timer
-                                size={18}
-                                color={
-                                    theme.colors.secondaryLight +
-                                    "90"
-                                }
-                                strokeWidth={2}
-                            />
+                            </View>
 
-                            <Text
+
+                            {/* RATING */}
+
+                            <View
                                 style={{
-                                    color:
-                                        theme.colors.secondaryDark +
-                                        "99",
-                                }}
-                                variant="bodySmall"
-                            >
-                                {formatDuration()}
-                            </Text>
-
-                        </View>
-
-                        {/* RATING */}
-
-                        <View
-                            style={{
-                                height: 44,
-                                paddingHorizontal: 10,
-                                position: "absolute",
-                                right: 24,
-                                top: 2,
-                                flexDirection: "row",
-                                gap: 10,
-                                borderRadius: 14,
-                                borderWidth: 0.5,
-                                backgroundColor:
-                                    theme.colors.surface +
-                                    "35",
-                                borderColor:
-                                    theme.colors.secondaryLight +
-                                    "50",
-                                alignItems: "center",
-                                justifyContent: "center"
-                            }}
-                        >
-
-                            <Star
-                                size={18}
-                                color={
-                                    theme.colors.secondaryLight
-                                }
-                                strokeWidth={2}
-                            />
-
-                            <Text
-                                style={{
-                                    color:
-                                        theme.colors.text,
-                                    fontWeight: 800,
-                                }}
-                                variant="bodySmall"
-                            >
-                                {toilet.ratingSummary.average.toFixed(1)}
-                            </Text>
-
-                            <Text
-                                style={{
-                                    color:
-                                        theme.colors.text +
-                                        "99",
-                                }}
-                                variant="bodySmall"
-                            >
-                                (
-                                {toilet.ratingSummary.count}
-                                {" "}
-                                vote
-                                )
-                            </Text>
-
-                        </View>
-
-                        {/* BUTTONS */}
-
-                        <View
-                            style={{
-                                display: "flex",
-                                flexDirection: "row",
-                                gap: 7
-                            }}
-                        >
-
-                            <ButtonComponent
-                                onPress={() => {
-                                    ref.current?.dismiss();
-
-                                    setNavigationTarget(
-                                        toilet
-                                    );
-                                }}
-                                backgroundColor={
-                                    theme.colors.nav +
-                                    "15"
-                                }
-                                borderColor={
-                                    theme.colors.secondaryLighter +
-                                    "80"
-                                }
-                                style={{
-                                    width: "52%",
-                                    marginTop: 10
+                                    height: 44,
+                                    width: "100%",
+                                    flexDirection: "row",
+                                    gap: 10,
+                                    borderRadius: 14,
+                                    borderWidth: 0.5,
+                                    backgroundColor:
+                                        theme.colors.surface +
+                                        "35",
+                                    borderColor:
+                                        theme.colors.secondaryLight +
+                                        "50",
+                                    alignItems: "center",
+                                    justifyContent: "center",
                                 }}
                             >
 
-                                <View
+                                <Star
+                                    size={18}
+                                    color={
+                                        theme.colors.secondaryLight
+                                    }
+                                    strokeWidth={2}
+                                />
+
+                                <Text
                                     style={{
-                                        width: "100%",
-                                        height: "100%",
-                                        alignItems: "center",
-                                        justifyContent: "center",
-                                        flexDirection: "row",
-                                        gap: 15
+                                        color:
+                                            theme.colors.text,
+                                        fontWeight: 800,
+                                    }}
+                                    variant="bodySmall"
+                                >
+                                    {toilet.ratingSummary.average.toFixed(1)}
+                                </Text>
+
+
+                                <Text
+                                    style={{
+                                        color:
+                                            theme.colors.text +
+                                            "99",
+                                    }}
+                                    variant="bodySmall"
+                                >
+                                    (
+                                    {toilet.ratingSummary.count}
+                                    {" "}
+                                    vote
+                                    )
+                                </Text>
+
+                            </View>
+
+
+                            {/* BUTTONS */}
+
+                            <View
+                                style={{
+                                    flexDirection: "row",
+                                    gap: 7,
+                                    width: "100%",
+                                }}
+                            >
+
+                                <ButtonComponent
+                                    onPress={() => {
+
+                                        ref.current?.dismiss();
+
+                                        setNavigationTarget(
+                                            toilet
+                                        );
+                                    }}
+                                    backgroundColor={
+                                        theme.colors.nav +
+                                        "15"
+                                    }
+                                    borderColor={
+                                        theme.colors.secondaryLighter +
+                                        "80"
+                                    }
+                                    style={{
+                                        flex: 1,
+                                        marginTop: 10,
                                     }}
                                 >
 
-                                    <Route
-                                        size={15}
-                                        color={
-                                            theme.colors.nav
-                                        }
-                                        strokeWidth={2}
-                                    />
-
-                                    <Text
+                                    <View
                                         style={{
-                                            color:
-                                                theme.colors.nav +
-                                                "99"
+                                            width: "100%",
+                                            height: "100%",
+                                            alignItems: "center",
+                                            justifyContent: "center",
+                                            flexDirection: "row",
+                                            gap: 15,
                                         }}
                                     >
-                                        Show route
-                                    </Text>
 
-                                </View>
+                                        <Route
+                                            size={15}
+                                            color={
+                                                theme.colors.nav
+                                            }
+                                            strokeWidth={2}
+                                        />
 
-                            </ButtonComponent>
+                                        <Text
+                                            style={{
+                                                color:
+                                                    theme.colors.nav +
+                                                    "99",
+                                            }}
+                                        >
+                                            Show route
+                                        </Text>
 
-                            <ButtonComponent
-                                onPress={handleShare}
-                                backgroundColor={
-                                    theme.colors.secondaryLight +
-                                    "14"
-                                }
-                                borderColor={
-                                    theme.colors.secondaryLighter +
-                                    "80"
-                                }
-                                style={{
-                                    width: "25%",
-                                    marginTop: 10
-                                }}
-                            >
+                                    </View>
 
-                                <View
+                                </ButtonComponent>
+
+
+                                <ButtonComponent
+                                    onPress={handleShare}
+                                    backgroundColor={
+                                        theme.colors.secondaryLight +
+                                        "14"
+                                    }
+                                    borderColor={
+                                        theme.colors.secondaryLighter +
+                                        "80"
+                                    }
                                     style={{
-                                        width: "100%",
-                                        height: "100%",
-                                        alignItems: "center",
-                                        justifyContent: "center",
-                                        flexDirection: "row",
-                                        gap: 15
+                                        flex: 0.35,
+                                        marginTop: 10,
                                     }}
                                 >
 
-                                    <Share2
-                                        size={18}
-                                        color={
-                                            theme.colors.secondaryLight
-                                        }
-                                        strokeWidth={2}
-                                    />
+                                    <View
+                                        style={{
+                                            width: "100%",
+                                            height: "100%",
+                                            alignItems: "center",
+                                            justifyContent: "center",
+                                        }}
+                                    >
 
-                                </View>
-
-                            </ButtonComponent>
-
-                            <ButtonComponent
-                                onPress={handleSave}
-                                backgroundColor={
-                                    theme.colors.secondary +
-                                    "15"
-                                }
-                                borderColor={
-                                    theme.colors.secondaryLighter +
-                                    "80"
-                                }
-                                style={{
-                                    width: "25%",
-                                    marginTop: 10
-                                }}
-                            >
-
-                                <View
-                                    style={{
-                                        width: "100%",
-                                        height: "100%",
-                                        alignItems: "center",
-                                        justifyContent: "center",
-                                    }}
-                                >
-
-                                    {isSaved ? (
-
-                                        <SaveCheck
+                                        <Share2
                                             size={18}
                                             color={
                                                 theme.colors.secondaryLight
@@ -943,66 +944,166 @@ const ToiletInfo = forwardRef(({ curentLocation, onPresent }, ref) => {
                                             strokeWidth={2}
                                         />
 
-                                    ) : (
+                                    </View>
 
-                                        <Save
-                                            size={18}
-                                            color={
-                                                theme.colors.secondaryLight
-                                            }
-                                            strokeWidth={2}
-                                        />
+                                </ButtonComponent>
 
-                                    )}
 
-                                </View>
+                                <ButtonComponent
+                                    onPress={handleSave}
+                                    backgroundColor={
+                                        theme.colors.secondary +
+                                        "15"
+                                    }
+                                    borderColor={
+                                        theme.colors.secondaryLighter +
+                                        "80"
+                                    }
+                                    style={{
+                                        flex: 0.35,
+                                        marginTop: 10,
+                                    }}
+                                >
 
-                            </ButtonComponent>
+                                    <View
+                                        style={{
+                                            width: "100%",
+                                            height: "100%",
+                                            alignItems: "center",
+                                            justifyContent: "center",
+                                        }}
+                                    >
+
+                                        {isSaved ? (
+
+                                            <SaveCheck
+                                                size={18}
+                                                color={
+                                                    theme.colors.secondaryLight
+                                                }
+                                                strokeWidth={2}
+                                            />
+
+                                        ) : (
+
+                                            <Save
+                                                size={18}
+                                                color={
+                                                    theme.colors.secondaryLight
+                                                }
+                                                strokeWidth={2}
+                                            />
+
+                                        )}
+
+                                    </View>
+
+                                </ButtonComponent>
+
+                            </View>
 
                         </View>
 
-                    </View>
-
-
-                    {/* ==============================
-                        SCROLLABLE CONTENT
-                    ============================== */}
-
-                    <BottomSheetScrollView
-                        contentContainerStyle={{
-                            paddingHorizontal: 24,
-                            paddingBottom: 40,
-                        }}
-                        showsVerticalScrollIndicator={false}
-                    >
 
                         {/* ==============================
-                            FIRST AMENITIES ROW
+                            SCROLLABLE CONTENT
                         ============================== */}
 
-                        <View
-                            style={{
-                                width: "100%",
-                                flexDirection: "row",
-                                alignItems: "center",
-                                justifyContent: "space-around",
+                        <BottomSheetScrollView
+                            contentContainerStyle={{
+                                paddingHorizontal: 24,
+                                paddingBottom: 40,
                             }}
+                            showsVerticalScrollIndicator={false}
                         >
 
-                            {visibleAmenities.map(
-                                ({
-                                    key,
-                                    name,
-                                    Icon
-                                }) => (
+                            {/* ==============================
+                                FIRST AMENITIES ROW
+                            ============================== */}
 
-                                    <BlurView
-                                        key={key}
-                                        intensity={15}
-                                        tint="light"
+                            <View
+                                style={{
+                                    width: "100%",
+                                    flexDirection: "row",
+                                    alignItems: "center",
+                                    justifyContent: "space-around",
+                                }}
+                            >
+
+                                {visibleAmenities.map(
+                                    ({
+                                        key,
+                                        name,
+                                        Icon
+                                    }) => (
+
+                                        <BlurView
+                                            key={key}
+                                            intensity={15}
+                                            tint="light"
+                                            style={{
+                                                borderRadius: 14,
+                                                overflow: "hidden",
+                                                width: "23%",
+                                                gap: 5,
+                                            }}
+                                        >
+
+                                            <View
+                                                style={{
+                                                    height: 45,
+                                                    borderRadius: 14,
+                                                    borderWidth: 0.5,
+                                                    borderColor:
+                                                        theme.colors.secondaryLight +
+                                                        "50",
+                                                    alignItems: "center",
+                                                    justifyContent: "center",
+                                                    backgroundColor:
+                                                        theme.colors.surface +
+                                                        "35",
+                                                }}
+                                            >
+
+                                                <Icon
+                                                    size={18}
+                                                    color={
+                                                        theme.colors.secondaryLight
+                                                    }
+                                                    strokeWidth={1.8}
+                                                />
+
+                                            </View>
+
+
+                                            <Text
+                                                variant="bodySmall"
+                                                style={{
+                                                    alignSelf: "center",
+                                                    fontSize: 10,
+                                                }}
+                                                numberOfLines={1}
+                                            >
+                                                {t(name)}
+                                            </Text>
+
+                                        </BlurView>
+
+                                    )
+                                )}
+
+
+                                {/* MORE / LESS */}
+
+                                {hasMoreAmenities && (
+
+                                    <Pressable
+                                        onPress={
+                                            showAllAmenities
+                                                ? handleLess
+                                                : handleMore
+                                        }
                                         style={{
-                                            borderRadius: 14,
-                                            overflow: "hidden",
                                             width: "23%",
                                             gap: 5,
                                         }}
@@ -1024,7 +1125,7 @@ const ToiletInfo = forwardRef(({ curentLocation, onPresent }, ref) => {
                                             }}
                                         >
 
-                                            <Icon
+                                            <Ellipsis
                                                 size={18}
                                                 color={
                                                     theme.colors.secondaryLight
@@ -1034,204 +1135,213 @@ const ToiletInfo = forwardRef(({ curentLocation, onPresent }, ref) => {
 
                                         </View>
 
+
                                         <Text
                                             variant="bodySmall"
                                             style={{
                                                 alignSelf: "center",
-                                                fontSize: 10
+                                                fontSize: 10,
                                             }}
-                                            numberOfLines={1}
                                         >
-                                            {t(name)}
+                                            {showAllAmenities
+                                                ? t("less")
+                                                : t("more")}
                                         </Text>
 
-                                    </BlurView>
+                                    </Pressable>
 
-                                )
-                            )}
+                                )}
 
-                            {/* MORE / LESS */}
+                            </View>
+
+
+                            {/* ==============================
+                                EXTRA AMENITIES
+                            ============================== */}
 
                             {hasMoreAmenities && (
 
-                                <Pressable
-                                    onPress={
-                                        showAllAmenities
-                                            ? handleLess
-                                            : handleMore
+                                <Animated.View
+                                    style={
+                                        extraAmenitiesAnimatedStyle
                                     }
-                                    style={{
-                                        width: "23%",
-                                        gap: 5,
-                                    }}
                                 >
 
                                     <View
                                         style={{
-                                            height: 45,
-                                            borderRadius: 14,
-                                            borderWidth: 0.5,
-                                            borderColor:
-                                                theme.colors.secondaryLight +
-                                                "50",
-                                            alignItems: "center",
-                                            justifyContent: "center",
-                                            backgroundColor:
-                                                theme.colors.surface +
-                                                "35",
+                                            width: "100%",
+                                            flexDirection: "row",
+                                            justifyContent: "flex-start",
+                                            gap: 10,
+                                            marginTop: 7,
                                         }}
                                     >
 
-                                        <Ellipsis
-                                            size={18}
-                                            color={
-                                                theme.colors.secondaryLight
-                                            }
-                                            strokeWidth={1.8}
-                                        />
+                                        {amenities
+                                            .slice(3)
+                                            .map(
+                                                ({
+                                                    key,
+                                                    name,
+                                                    Icon
+                                                }) => (
+
+                                                    <BlurView
+                                                        key={key}
+                                                        intensity={15}
+                                                        tint="light"
+                                                        style={{
+                                                            borderRadius: 14,
+                                                            overflow: "hidden",
+                                                            width: "23%",
+                                                            gap: 5,
+                                                        }}
+                                                    >
+
+                                                        <View
+                                                            style={{
+                                                                height: 45,
+                                                                borderRadius: 14,
+                                                                borderWidth: 0.5,
+                                                                borderColor:
+                                                                    theme.colors.secondaryLight +
+                                                                    "50",
+                                                                alignItems: "center",
+                                                                justifyContent: "center",
+                                                                backgroundColor:
+                                                                    theme.colors.surface +
+                                                                    "35",
+                                                            }}
+                                                        >
+
+                                                            <Icon
+                                                                size={18}
+                                                                color={
+                                                                    theme.colors.secondaryLight
+                                                                }
+                                                                strokeWidth={1.8}
+                                                            />
+
+                                                        </View>
+
+
+                                                        <Text
+                                                            variant="bodySmall"
+                                                            style={{
+                                                                alignSelf: "center",
+                                                                fontSize: 10,
+                                                            }}
+                                                            numberOfLines={1}
+                                                        >
+                                                            {t(name)}
+                                                        </Text>
+
+                                                    </BlurView>
+
+                                                )
+                                            )}
 
                                     </View>
 
-                                    <Text
-                                        variant="bodySmall"
-                                        style={{
-                                            alignSelf: "center",
-                                            fontSize: 10
-                                        }}
-                                    >
-                                        {showAllAmenities
-                                            ? t("less")
-                                            : t("more")}
-                                    </Text>
-
-                                </Pressable>
+                                </Animated.View>
 
                             )}
 
-                        </View>
+                            {user ? (
+                                <>
+                                    <View
+                                        theme={theme}
+                                        style={{
+                                            width: "100%",
+                                            alignItems: "flex-start",
+                                            marginBottom: 8,
+                                        }}
+                                    >
+                                        <CommentSection
+                                            theme={theme}
+                                            iscommenting={iscommenting}
+                                            setIscommenting={setIscommenting}
+                                            iscommentsOpen={iscommentsOpen}
+                                            setIscommentsOpen={setIscommentsOpen}
+                                            />
+                                            
+                                        <ButtonComponent
+                                            onPress={() => {
+                                                setIscommenting(true);
+                                            }}
+                                            backgroundColor={theme.colors.secondary + '30'}
+                                            borderColor={theme.colors.secondaryLighter + '80'}
+                                            style={{
+                                                width: '100%',
+                                                marginTop: 15
+                                            }}
+                                        >
+                                            <Text style={{ color: theme.colors.surface, }}>
+                                                rate and write a review
+                                            </Text>
+                                        </ButtonComponent>
 
+                                    </View>
 
-                        {/* ==============================
-                            EXTRA AMENITIES
-                        ============================== */}
+                                    <View>
+                                        <PhotoGallery />
+                                    </View>
+                                </>
 
-                        {hasMoreAmenities && (
+                            ) : (
+                                <View style={{
+                                    height: '150%',
+                                    width: '100%',
+                                    flexDirection: 'column',
+                                    justifyContent: 'center',
+                                    alignItems: 'center'
+                                }}>
+                                    <Text style={{ color: theme.colors.secondaryDark }}>
+                                        sign in to see photos and reviews
+                                    </Text>
+                                    <ButtonComponent
+                                        onPress={() => {
+                                            router.push('/SignIn');
+                                        }}
+                                        backgroundColor={theme.colors.secondary + '30'}
+                                        borderColor={theme.colors.secondaryLighter + '80'}
+                                        style={{
+                                            width: '100%',
+                                            marginTop: 15
+                                        }}
+                                    >
+                                        <Text style={{ color: theme.colors.surface, }}>
+                                            Sign In
+                                        </Text>
+                                    </ButtonComponent>
 
-                            <Animated.View
-                                style={
-                                    extraAmenitiesAnimatedStyle
-                                }
-                            >
-
-                                <View
-                                    style={{
-                                        width: "100%",
-                                        flexDirection: "row",
-                                        justifyContent: "flex-start",
-                                        gap: 10,
-                                    }}
-                                >
-
-                                    {amenities
-                                        .slice(3)
-                                        .map(
-                                            ({
-                                                key,
-                                                name,
-                                                Icon
-                                            }) => (
-
-                                                <BlurView
-                                                    key={key}
-                                                    intensity={15}
-                                                    tint="light"
-                                                    style={{
-                                                        borderRadius: 14,
-                                                        overflow: "hidden",
-                                                        width: "23%",
-                                                        gap: 5,
-                                                    }}
-                                                >
-
-                                                    <View
-                                                        style={{
-                                                            height: 45,
-                                                            borderRadius: 14,
-                                                            borderWidth: 0.5,
-                                                            borderColor:
-                                                                theme.colors.secondaryLight +
-                                                                "50",
-                                                            alignItems: "center",
-                                                            justifyContent: "center",
-                                                            backgroundColor:
-                                                                theme.colors.surface +
-                                                                "35",
-                                                        }}
-                                                    >
-
-                                                        <Icon
-                                                            size={18}
-                                                            color={
-                                                                theme.colors.secondaryLight
-                                                            }
-                                                            strokeWidth={1.8}
-                                                        />
-
-                                                    </View>
-
-                                                    <Text
-                                                        variant="bodySmall"
-                                                        style={{
-                                                            alignSelf: "center",
-                                                            fontSize: 10
-                                                        }}
-                                                        numberOfLines={1}
-                                                    >
-                                                        {t(name)}
-                                                    </Text>
-
-                                                </BlurView>
-
-                                            )
-                                        )}
-
+                                    <ButtonComponent
+                                        onPress={() => {
+                                            router.push('/SignUp');
+                                        }}
+                                        backgroundColor={theme.colors.secondary + '30'}
+                                        borderColor={theme.colors.secondaryLighter + '80'}
+                                        style={{
+                                            width: '100%',
+                                            marginTop: 15
+                                        }}
+                                    >
+                                        <Text style={{ color: theme.colors.surface, }}>
+                                            Sign Up
+                                        </Text>
+                                    </ButtonComponent>
                                 </View>
+                            )}
 
-                            </Animated.View>
+                        </BottomSheetScrollView>
 
-                        )}
+                    </View>
 
-                        {/* ==============================
-                            REVIEWS
-                        ============================== */}
-
-                        <View
-                            theme={theme}
-                            style={{
-                                width:'100%',
-                                alignItems: "flex-start",
-                                marginBottom:5
-                            }}
-                        >
-                            <CommentSection theme={theme} />
-                        </View>
-
-                        {/* ==============================
-                            PHOTO GALLERY
-                        ============================== */}
-
-                        <View>
-                            <PhotoGallery />
-                        </View>
-
-
-                    </BottomSheetScrollView>
-
-                </View>
+                )
 
             )}
 
-        </BottomSheetModal>
+        </BottomSheetModal >
     );
 });
 
