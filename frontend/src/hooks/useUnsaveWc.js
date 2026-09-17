@@ -26,23 +26,16 @@ export const useUnsaveWc = () => {
                 }
             );
 
-            console.log("UNSAVE STATUS:", response.status);
-
             if (!response.ok) {
                 const errorText = await response.text();
-
-                console.log("UNSAVE FAILED:", errorText);
-
-                return false;
+                return;
             }
-
-            console.log("UNSAVE SUCCESS:", toilet._id);
-
             return true;
 
         } catch (error) {
             console.log("Error unsaving WC:", error);
-            return false;
+            return;
+
         } finally {
             setUnsaveWcEndWaiting();
         }

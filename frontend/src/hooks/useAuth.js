@@ -6,10 +6,19 @@ import useWaitingSystemStore from '../../store/waitingSystemStore';
 
 export const useAuth = () => {
 
+    const setSignupWaiting = useWaitingSystemStore(state => state.setSignupWaiting);
+    const setSignupEndWaiting = useWaitingSystemStore(state => state.setSignupEndWaiting);
+    const setSigninWaiting = useWaitingSystemStore(state => state.setSigninWaiting);
+    const setSigninEndWaiting = useWaitingSystemStore(state => state.setSigninEndWaiting);
+    const setRestoreUserWaiting = useWaitingSystemStore(state => state.setRestoreUserWaiting);
+    const setRestoreUserEndWaiting = useWaitingSystemStore(state => state.setRestoreUserEndWaiting);
+    const setLogoutWaiting = useWaitingSystemStore(state => state.setLogoutWaiting);
+    const setLogoutEndWaiting = useWaitingSystemStore(state => state.setLogoutEndWaiting);
+    const setDeleteUserWaiting = useWaitingSystemStore(state => state.setDeleteUserWaiting);
+    const setDeleteUserEndWaiting = useWaitingSystemStore(state => state.setDeleteUserEndWaiting);
+
     const signUp = async (username, firstName, lastName, email, password) => {
 
-        const setSignupWaiting = useWaitingSystemStore(state => state.setSignupWaiting);
-        const setSignupEndWaiting = useWaitingSystemStore(state => state.setSignupEndWaiting);
 
         try {
             setSignupWaiting();
@@ -48,8 +57,6 @@ export const useAuth = () => {
 
     const signIn = async (email, password) => {
 
-        const setSigninWaiting = useWaitingSystemStore(state => state.setSigninWaiting);
-        const setSigninEndWaiting = useWaitingSystemStore(state => state.setSigninEndWaiting);
 
         try {
             setSigninWaiting();
@@ -80,8 +87,6 @@ export const useAuth = () => {
 
     const restoreUser = async () => {
 
-        const setRestoreUserWaiting = useWaitingSystemStore(state => state.setRestoreUserWaiting);
-        const setRestoreUserEndWaiting = useWaitingSystemStore(state => state.setRestoreUserEndWaiting);
 
         try {
             setRestoreUserWaiting();
@@ -122,8 +127,6 @@ export const useAuth = () => {
 
     const logout = async () => {
 
-        const setLogoutWaiting = useWaitingSystemStore(state => state.setLogoutWaiting);
-        const setLogoutEndWaiting = useWaitingSystemStore(state => state.setLogoutEndWaiting);
 
         try {
             setLogoutWaiting();
@@ -138,8 +141,6 @@ export const useAuth = () => {
 
     const deleteUser = async () => {
 
-        const setDeleteUserWaiting = useWaitingSystemStore(state => state.setDeleteUserWaiting);
-        const setDeleteUserEndWaiting = useWaitingSystemStore(state => state.setDeleteUserEndWaiting);
 
         try {
             setDeleteUserWaiting();

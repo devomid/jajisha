@@ -6,11 +6,11 @@ import useWaitingSystemStore from "../../store/waitingSystemStore";
 export const useCreateReview = () => {
     const toiletId = useWcDataStore((state) => state.selectedToilet?._id);
     const user = useUserStore((state) => state.user);
+    const setCreateReviewWaiting = useWaitingSystemStore(state => state.setCreateReviewWaiting);
+    const setCreateReviewEndWaiting = useWaitingSystemStore(state => state.setCreateReviewEndWaiting);
 
     const createReview = async ({ reviewText, ratings }) => {
 
-        const setCreateReviewWaiting = useWaitingSystemStore(state => state.setCreateReviewWaiting);
-        const setCreateReviewEndWaiting = useWaitingSystemStore(state => state.setCreateReviewEndWaiting);
 
         try {
             setCreateReviewWaiting();

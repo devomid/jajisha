@@ -8,6 +8,8 @@ export const useGetWc = () => {
     const setGetWcsWaiting = useWaitingSystemStore(state => state.setGetWcsWaiting);
     const setGetWcsEndWaiting = useWaitingSystemStore(state => state.setGetWcsEndWaiting);
     const setToilets = useWcDataStore(state => state.setToilets);
+    const setGetWcReviewWaiting = useWaitingSystemStore(state => state.setGetWcReviewWaiting);
+    const setGetWcReviewEndWaiting = useWaitingSystemStore(state => state.setGetWcReviewEndWaiting);
 
     useEffect(() => {
         getWc()
@@ -46,8 +48,6 @@ export const useGetWc = () => {
 
     const getWcReviews = async (toiletId) => {
 
-        const setGetWcReviewWaiting = useWaitingSystemStore(state => state.setGetWcReviewWaiting);
-        const setGetWcReviewEndWaiting = useWaitingSystemStore(state => state.setGetWcReviewEndWaiting);
 
         try {
 
