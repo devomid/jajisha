@@ -385,15 +385,90 @@ export default function GeneralSettings({ theme }) {
                             </View>
                         )}
                     >
+
                         <View
                             style={{
-                                flexDirection: 'row',
-                                flexWrap: 'wrap',
+                                marginHorizontal: 15,
+                                marginBottom: 10,
+                                marginTop: -5,
+                                height: 120,
+                                width: '91%',
+                                justifyContent: 'center',
+                                borderWidth: 0.5,
+                                borderTopWidth: 0,
+                                borderBottomLeftRadius: 24,
+                                borderBottomRightRadius: 24,
+                                borderColor: theme.colors.secondaryLight + '80',
+                                backgroundColor: theme.colors.surface + '20',
                             }}
                         >
-                            <Text>
-                                test
-                            </Text>
+                            <Pressable
+                                onPress={() => {
+
+                                    setThemeExpand(false)
+                                }}
+                                style={{
+                                    width: '100%',
+                                    padding: 0,
+                                    paddingVertical: 10,
+                                    marginLeft: -20
+                                }}
+                            >
+                                {({ pressed }) => (
+                                    <Text style={{
+                                        color: pressed ?
+                                            theme.colors.secondaryLight :
+                                            theme.colors.primaryDarker
+
+                                    }}>Light</Text>
+                                )}
+                            </Pressable>
+
+                            <Divider horizontalInset style={{ marginLeft: -20 }} />
+
+                            <Pressable
+                                onPress={() => {
+
+                                    setThemeExpand(false)
+                                }}
+                                style={{
+                                    width: '100%',
+                                    padding: 0,
+                                    paddingVertical: 10,
+                                    marginLeft: -20,
+                                }}>
+                                {({ pressed }) => (
+                                    <Text style={{
+                                        color: pressed ?
+                                            theme.colors.secondaryLight :
+                                            theme.colors.primaryDarker
+
+                                    }}>System</Text>
+                                )}
+                            </Pressable>
+
+                            <Divider horizontalInset style={{ marginLeft: -20 }} />
+
+                            <Pressable
+                                onPress={() => {
+
+                                    setThemeExpand(false)
+                                }}
+                                style={{
+                                    width: '100%',
+                                    padding: 0,
+                                    paddingVertical: 10,
+                                    marginLeft: -20,
+                                }}>
+                                {({ pressed }) => (
+                                    <Text style={{
+                                        color: pressed ?
+                                            theme.colors.secondaryLight :
+                                            theme.colors.primaryDarker
+
+                                    }}>Dark</Text>
+                                )}
+                            </Pressable>
                         </View>
                     </List.Accordion>
                 </View>

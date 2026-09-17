@@ -8,12 +8,19 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { Slot } from "expo-router";
 
+import { useSettingsStore } from "../store/settingsStore";
 import { getPaperTheme } from "../src/constants/paperTheme";
 import { initI18n } from "../src/i18n";
 
 export default function RootLayout() {
     const scheme = useColorScheme();
-    const isDark = scheme === "dark";
+    const themeSetting = useSettingsStore(state => state.theme);
+
+    const isDark =
+        themeSetting === "System"
+            ? scheme === "dark"
+            : themeSetting === "Dark";
+
     const theme = getPaperTheme(isDark);
 
     const [ready, setReady] = useState(false);

@@ -6,9 +6,13 @@ export const useSettingsStore = create(
     persist(
         (set) => ({
             distanceUnit: "Metric",
+            theme: "System",
 
             setDistanceUnit: (distanceUnit) =>
                 set({ distanceUnit }),
+
+            setTheme: (theme) =>
+                set({ theme }),
         }),
         {
             name: "jajisha-settings",
