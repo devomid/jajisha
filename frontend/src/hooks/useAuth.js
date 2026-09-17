@@ -1,6 +1,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useUserStore } from "../../store/userStore";
 import { API_URL } from "../config/api";
+import * as SecureStore from "expo-secure-store";
 
 export const useAuth = () => {
     const signUp = async (username, firstName, lastName, email, password) => {
@@ -19,7 +20,7 @@ export const useAuth = () => {
             });
             if (response.ok) {
                 const jsonRes = await response.json();
-                await AsyncStorage.setItem("authToken", jsonRes.token);
+                await SecureStore.setItemAsync("authToken", jsonRes.token);
                 useUserStore.getState().setUser({
                     ...jsonRes.user,
                     token: jsonRes.token,
@@ -44,7 +45,7 @@ export const useAuth = () => {
             });
             if (response.ok) {
                 const jsonRes = await response.json();
-                await AsyncStorage.setItem("authToken", jsonRes.token);
+                await SecureStore.setItemAsync("authToken", jsonRes.token);
                 useUserStore.getState().setUser({
                     ...jsonRes.user,
                     token: jsonRes.token,
@@ -55,17 +56,17 @@ export const useAuth = () => {
                 return false;
             }
         } catch (error) {
-            console.log("Error Sign up!", error);
+            console.log("Error Sign in!", error);
             return false;
         }
     }
 
     const restoreUser = async () => {
         try {
-            const token = await AsyncStorage.getItem("authToken");
+            const token = await SecureStore.getItemAsync("authToken");
 
             if (!token) {
-                await AsyncStorage.removeItem("authToken");
+                await SecureStore.deleteItemAsync("authToken");
                 useUserStore.getState().logout();
                 return;
             }
@@ -80,7 +81,7 @@ export const useAuth = () => {
             const data = await response.json();
 
             if (!response.ok) {
-                await AsyncStorage.removeItem("authToken");
+                await SecureStore.deleteItemAsync("authToken");
                 useUserStore.getState().logout();
                 return;
             }
@@ -98,7 +99,7 @@ export const useAuth = () => {
 
     const logout = async () => {
         try {
-            await AsyncStorage.removeItem("authToken");
+            await SecureStore.deleteItemAsync("authToken");
             useUserStore.getState().logout();
         } catch (error) {
             console.error("Logout error:", error);
@@ -106,8 +107,8 @@ export const useAuth = () => {
     };
 
     const deleteUser = async () => {
-        const token = await AsyncStorage.getItem("authToken");
         try {
+            const token = await AsyncStorage.getItem("authToken");
             const response = await fetch(`${API_URL}/api/user/rm`, {
                 method: "DELETE",
                 headers: {
@@ -118,7 +119,7 @@ export const useAuth = () => {
                 console.error("Failed to delete user.");
                 return;
             }
-            await AsyncStorage.removeItem("authToken");
+            await SecureStore.deleteItemAsync("authToken");
             useUserStore.getState().logout();
 
         } catch (error) {

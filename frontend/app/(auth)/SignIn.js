@@ -12,6 +12,7 @@ import { Checkbox } from 'expo-checkbox';
 import MapView from "react-native-maps";
 import { Link, router } from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as SecureStore from "expo-secure-store";
 
 import { signInSchema } from "../../src/validation/userInfoSchema";
 import { Mail, KeyRound } from 'lucide-react-native';
@@ -51,10 +52,13 @@ export default function SignIn() {
 
             if (rememberMe) {
                 await AsyncStorage.setItem("savedEmail", values.email);
-                await AsyncStorage.setItem("savedPassword", values.password);
+                await SecureStore.setItemAsync(
+                    "savedPassword",
+                    values.password
+                );
             } else {
                 await AsyncStorage.removeItem("savedEmail");
-                await AsyncStorage.removeItem("savedPassword");
+                await SecureStore.deleteItemAsync("savedPassword");
             }
 
             resetForm();
@@ -82,7 +86,9 @@ export default function SignIn() {
     useEffect(() => {
         const loadSavedLogin = async () => {
             const savedEmail = await AsyncStorage.getItem("savedEmail");
-            const savedPassword = await AsyncStorage.getItem("savedPassword");
+            const savedPassword = await SecureStore.getItemAsync(
+                "savedPassword"
+            );
 
             if (savedEmail && savedPassword) {
                 setValues({

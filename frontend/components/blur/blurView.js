@@ -1,17 +1,12 @@
-import React from "react";
-import { StyleSheet } from "react-native";
-import { BottomSheetBackgroundProps } from "@gorhom/bottom-sheet";
 import { BlurView } from "expo-blur";
 
-
 const GlassBackground = ({ style, theme }) => {
-    console.log(theme.colors.primary);
     return (
         <BlurView
             intensity={15}
             tint={
-                theme.dark
-                    ? "systemUltraThinMaterialDark"
+                theme.dark ?
+                    "systemUltraThinMaterialDark"
                     : "systemUltraThinMaterialLight"
             }
             style={[
@@ -27,6 +22,5 @@ const GlassBackground = ({ style, theme }) => {
         />
     );
 };
-
 
 export default GlassBackground;
