@@ -1,18 +1,26 @@
 import { Pressable, View } from "react-native";
 import { TextInput, List, Text, Divider } from "react-native-paper";
-import { ChevronDown, ChevronUp, RulerDimensionLine, Languages, SunMoon, UserRoundCog } from "lucide-react-native";
+import { ChevronDown, ChevronUp, RulerDimensionLine, Languages, AtSign, SunMoon, Trash, UserRoundCog, LogOut } from "lucide-react-native";
 import { useTranslation } from "react-i18next";
 import { useState, useMemo, useEffect } from "react";
 import { useSettingsStore } from "../../store/settingsStore";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useUserStore } from "../../store/userStore";
+import { router } from "expo-router";
+import ButtonComponent from '../Button/Button';
+import { useAuth } from "../../src/hooks/useAuth";
 
 export default function GeneralSettings({ theme }) {
 
     const { t } = useTranslation();
     const { i18n } = useTranslation();
+    const { logout } = useAuth();
 
+    const user = useUserStore((state) => state.user);
     const distanceUnit = useSettingsStore((state) => state.distanceUnit);
     const setDistanceUnit = useSettingsStore((state) => state.setDistanceUnit);
+    const themeSetting = useSettingsStore(state => state.theme);
+    const setTheme = useSettingsStore(state => state.setTheme);
 
     const [unitExpand, setUnitExpand] = useState(false);
     const [languageExpand, setLanguageExpand] = useState(false);
@@ -366,7 +374,7 @@ export default function GeneralSettings({ theme }) {
                                         transform: [{ translateY: -8 }],
                                     }}
                                 >
-                                    test
+                                    {themeSetting}
                                 </Text>
 
                                 {unitExpand ? (
@@ -404,7 +412,7 @@ export default function GeneralSettings({ theme }) {
                         >
                             <Pressable
                                 onPress={() => {
-
+                                    setTheme('Light')
                                     setThemeExpand(false)
                                 }}
                                 style={{
@@ -428,7 +436,7 @@ export default function GeneralSettings({ theme }) {
 
                             <Pressable
                                 onPress={() => {
-
+                                    setTheme('System')
                                     setThemeExpand(false)
                                 }}
                                 style={{
@@ -451,7 +459,7 @@ export default function GeneralSettings({ theme }) {
 
                             <Pressable
                                 onPress={() => {
-
+                                    setTheme('Dark')
                                     setThemeExpand(false)
                                 }}
                                 style={{
@@ -521,7 +529,7 @@ export default function GeneralSettings({ theme }) {
                                         transform: [{ translateY: -8 }],
                                     }}
                                 >
-                                    test
+                                    {user ? user.username : 'Guest'}
                                 </Text>
 
                                 {accountExpand ? (
@@ -540,16 +548,183 @@ export default function GeneralSettings({ theme }) {
                             </View>
                         )}
                     >
-                        <View
-                            style={{
-                                flexDirection: 'row',
-                                flexWrap: 'wrap',
-                            }}
-                        >
-                            <Text>
-                                test
-                            </Text>
-                        </View>
+                        {user ? (
+
+                            <View
+                                style={{
+                                    marginHorizontal: 15,
+                                    marginBottom: 10,
+                                    marginTop: -5,
+                                    height: 170,
+                                    width: '91%',
+                                    justifyContent: 'center',
+                                    borderWidth: 0.5,
+                                    borderTopWidth: 0,
+                                    borderBottomLeftRadius: 24,
+                                    borderBottomRightRadius: 24,
+                                    borderColor: theme.colors.secondaryLight + '80',
+                                    backgroundColor: theme.colors.surface + '20',
+                                }}
+                            >
+                                <View>
+                                    <View style={{
+                                        flexDirection: 'row',
+                                        gap: 10,
+                                        marginLeft: -20,
+                                        alignItems: 'center'
+                                    }}>
+                                        <AtSign
+                                            size={16}
+                                            color={theme.colors.secondaryLight +'99'}
+                                            strokeWidth={2}
+                                        />
+                                        <Text
+                                            variant="bodyMedium"
+                                            style={{ color: theme.colors.secondaryDark }}>
+                                            User name:
+                                        </Text>
+                                        <Text style={{
+                                            color: theme.colors.text
+                                        }}>
+                                            {user.username}
+                                        </Text>
+                                    </View>
+
+                                </View>
+
+                                <Divider horizontalInset style={{ marginLeft: -20 }} />
+
+                                <ButtonComponent
+                                    onPress={() => {
+                                        router.push("/SignIn");
+                                        logout();
+                                    }}
+                                    backgroundColor={theme.colors.primaryDarker + "23"}
+                                    borderColor={theme.colors.error + "30"}
+                                    style={{
+                                        width: "100%",
+                                        marginTop: '24',
+                                        marginLeft: -20,
+                                    }}
+                                >
+                                    <View
+                                        style={{
+                                            width: "100%",
+                                            height: "100%",
+                                            alignItems: "center",
+                                            justifyContent: "center",
+                                            flexDirection: 'row'
+                                        }}
+                                    >
+                                        <LogOut
+                                            size={18}
+                                            color={theme.colors.primaryDarker}
+                                            strokeWidth={2}
+                                        />
+
+                                        <Text
+                                            style={{
+                                                color: theme.colors.primaryDarker,
+                                                fontSize: 15,
+                                                fontWeight: "500",
+                                                marginLeft: 15
+                                            }}
+                                        >
+                                            Sign Out
+                                        </Text>
+
+                                    </View>
+                                </ButtonComponent>
+
+                                <ButtonComponent
+                                    // onPress={handleCancel}
+                                    backgroundColor={theme.colors.error + '15'}
+                                    borderColor={theme.colors.error + '50'}
+                                    style={{
+                                        width: '100%',
+                                        marginTop: '8',
+                                        marginLeft: -20,
+                                    }}
+                                >
+                                    <View
+                                        style={{
+                                            width: "100%",
+                                            height: "100%",
+                                            alignItems: "center",
+                                            justifyContent: "center",
+                                            flexDirection: 'row'
+                                        }}
+                                    >
+                                        <Trash
+                                            size={18}
+                                            color={theme.colors.error}
+                                            strokeWidth={2}
+                                        />
+                                        <Text
+                                            style={{
+                                                color: theme.colors.error,
+                                                marginLeft: 15
+                                            }}>
+                                            Delete account
+                                        </Text>
+                                    </View>
+                                </ButtonComponent>
+
+                            </View>
+                        ) : (
+                            <View style={{
+                                marginHorizontal: 15,
+                                marginBottom: 10,
+                                marginTop: -5,
+                                height: 150,
+                                width: '91%',
+                                justifyContent: 'center',
+                                borderWidth: 0.5,
+                                borderTopWidth: 0,
+                                borderBottomLeftRadius: 24,
+                                borderBottomRightRadius: 24,
+                                borderColor: theme.colors.secondaryLight + '80',
+                                backgroundColor: theme.colors.surface + '20',
+                                gap: 10,
+                                paddingRight: 45
+                            }}>
+                                <Text variant="titleMedium"
+                                    style={{
+                                        color: theme.colors.error,
+                                        textAlign: 'center'
+                                    }}>
+                                    Nothing to show to you!
+                                </Text>
+                                <Pressable onPress={() => router.push("/SignIn")}>
+                                    <Text
+                                        style={{
+                                            color: theme.colors.secondaryDarker,
+                                            fontWeight: "600",
+                                            textAlign: 'center'
+                                        }}
+                                    >
+                                        Sign in
+                                    </Text>
+                                </Pressable>
+                                <Text style={{ textAlign: 'center' }}>
+                                    or
+                                </Text>
+                                <Pressable onPress={() => router.push("/SignUp")}>
+                                    <Text
+                                        style={{
+                                            color: theme.colors.secondaryDarker,
+                                            fontWeight: "600",
+                                            textAlign: 'center'
+                                        }}
+                                    >
+                                        Create account
+                                    </Text>
+                                </Pressable>
+                                <Text style={{ textAlign: 'center' }}>
+                                    to see what's here.
+                                </Text>
+                            </View>
+                        )}
                     </List.Accordion>
                 </View>
 
