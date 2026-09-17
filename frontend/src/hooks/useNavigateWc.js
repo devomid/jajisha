@@ -1,24 +1,22 @@
 import { useWcDataStore } from "../../store/wcDataStore";
 import * as Location from "expo-location";
+import useWaitingSystemStore from "../../store/waitingSystemStore";
 
 export const useNavigateToToilet = () => {
 
-    const setNavigationRoute =
-        useWcDataStore(state => state.setNavigationRoute);
-
-    const setNavigationDistance =
-        useWcDataStore(state => state.setNavigationDistance);
-
-    const setNavigationDuration =
-        useWcDataStore(state => state.setNavigationDuration);
-
-    const setNavigationStatus =
-        useWcDataStore(state => state.setNavigationStatus);
+    const setNavigationRoute = useWcDataStore(state => state.setNavigationRoute);
+    const setNavigationDistance = useWcDataStore(state => state.setNavigationDistance);
+    const setNavigationDuration = useWcDataStore(state => state.setNavigationDuration);
+    const setNavigationStatus = useWcDataStore(state => state.setNavigationStatus);
+    const setGetCurrentLocationWaiting = useWaitingSystemStore(state => state.setGetCurrentLocationWaiting);
+    const setGetCurrentLocationEndWaiting = useWaitingSystemStore(state => state.setGetCurrentLocationEndWaiting);
+    const setCalculatingDistanceWaiting = useWaitingSystemStore(state => state.setCalculatingDistanceWaiting);
+    const setCalculatingDistanceEndWaiting = useWaitingSystemStore(state => state.setCalculatingDistanceEndWaiting);
 
     const navigateToToilet = async (toilet) => {
 
         try {
-
+            setGetCurrentLocationWaiting();
             const { status } =
                 await Location.requestForegroundPermissionsAsync();
 
@@ -73,11 +71,14 @@ export const useNavigateToToilet = () => {
             console.error("NAVIGATION ERROR:", error);
 
             setNavigationStatus("idle");
+        } finally {
+            setGetCurrentLocationEndWaiting();
         }
     };
 
     const calculateToiletDistance = async (toilet) => {
         try {
+            setCalculatingDistanceWaiting();
             const { status } =
                 await Location.requestForegroundPermissionsAsync();
 
@@ -126,6 +127,8 @@ export const useNavigateToToilet = () => {
 
         } catch (error) {
             console.error("TOILET DISTANCE ERROR:", error);
+        } finally {
+            setCalculatingDistanceEndWaiting();
         }
     };
 

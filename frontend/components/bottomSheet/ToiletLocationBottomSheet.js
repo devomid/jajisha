@@ -50,6 +50,61 @@ const ToiletInfo = forwardRef(({ curentLocation, onPresent }, ref) => {
     const programmaticAmenitiesHeightRef = useRef(false);
     const amenitiesAnimation = useRef(new Animated.Value(0)).current;
 
+    const amenitiesIcon = () => {
+
+        const amenities = [
+            {
+                key: "western",
+                name: "western",
+                Icon: Toilet
+            },
+            {
+                key: "iranian",
+                name: "iranian",
+                Icon: Toilet
+            },
+            {
+                key: "babyChanging",
+                name: "Baby Room",
+                Icon: Baby
+            },
+            {
+                key: "wheelchairAccessible",
+                name: "Accessibility",
+                Icon: Accessibility
+            },
+            {
+                key: "handDryer",
+                name: "Hand dryer",
+                Icon: Wind
+            },
+            {
+                key: "soap",
+                name: "soap",
+                Icon: SoapDispenserDroplet
+            },
+            {
+                key: "toiletPaper",
+                name: "Toilet paper",
+                Icon: Toilet
+            },
+            {
+                key: "warmWater",
+                name: "Warm water",
+                Icon: Droplets
+            },
+        ];
+
+        return amenities.filter(
+            amenity =>
+                toilet?.amenities?.[amenity.key]
+        );
+    };
+
+    const amenities = amenitiesIcon();
+    const visibleAmenities = amenities.slice(0, 3);
+    const hasMoreAmenities = amenities.length > 3;
+
     const snapPoints = useMemo(() => [
         "39.5%", "48%", "65%", "86%"
     ], []);
@@ -90,6 +145,16 @@ const ToiletInfo = forwardRef(({ curentLocation, onPresent }, ref) => {
         overflow: "hidden",
     };
 
+    const formatDuration = () => {
+
+        if (typeof duration !== "number") { return "--"; }
+        const minutes = Math.round(duration / 60);
+        if (minutes < 60) { return `${minutes} min`; }
+        const hours = Math.floor(minutes / 60);
+        const remainingMinutes = minutes % 60;
+        return `${hours}h ${remainingMinutes}min`;
+    };
+
     const handleSheetChanges = useCallback(
         (index) => {
             if (index === 1) {
@@ -117,71 +182,6 @@ const ToiletInfo = forwardRef(({ curentLocation, onPresent }, ref) => {
         },
         [onPresent, ref]
     );
-
-    const amenitiesIcon = () => {
-
-        const amenities = [
-            {
-                key: "western",
-                name: "western",
-                Icon: Toilet
-            },
-            {
-                key: "iranian",
-                name: "iranian",
-                Icon: Toilet
-            },
-            {
-                key: "babyChanging",
-                name: "Baby Room",
-                Icon: Baby
-            },
-            {
-                key: "wheelchairAccessible",
-                name: "Accessibility",
-                Icon: Accessibility
-            },
-            {
-                key: "handDryer",
-                name: "Hand dryer",
-                Icon: Wind
-            },
-            {
-                key: "soap",
-                name: "soap",
-                Icon: SoapDispenserDroplet
-            },
-            {
-                key: "toiletPaper",
-                name: "Toilet paper",
-                Icon: Toilet
-            },
-            {
-                key: "warmwater",
-                name: "Warm water",
-                Icon: Droplets
-            },
-        ];
-
-        return amenities.filter(
-            amenity =>
-                toilet?.amenities?.[amenity.key]
-        );
-    };
-
-    const amenities = amenitiesIcon();
-    const visibleAmenities = amenities.slice(0, 3);
-    const hasMoreAmenities = amenities.length > 3;
-
-    const formatDuration = () => {
-
-        if (typeof duration !== "number") { return "--"; }
-        const minutes = Math.round(duration / 60);
-        if (minutes < 60) { return `${minutes} min`; }
-        const hours = Math.floor(minutes / 60);
-        const remainingMinutes = minutes % 60;
-        return `${hours}h ${remainingMinutes}min`;
-    };
 
     const handleMore = () => {
 

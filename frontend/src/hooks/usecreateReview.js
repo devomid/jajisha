@@ -1,13 +1,20 @@
 import { API_URL } from "../config/api";
 import { useWcDataStore } from "../../store/wcDataStore";
 import { useUserStore } from "../../store/userStore";
+import useWaitingSystemStore from "../../store/waitingSystemStore";
 
 export const useCreateReview = () => {
     const toiletId = useWcDataStore((state) => state.selectedToilet?._id);
     const user = useUserStore((state) => state.user);
 
     const createReview = async ({ reviewText, ratings }) => {
+
+        const setCreateReviewWaiting = useWaitingSystemStore(state => state.setCreateReviewWaiting);
+        const setCreateReviewEndWaiting = useWaitingSystemStore(state => state.setCreateReviewEndWaiting);
+
         try {
+            setCreateReviewWaiting();
+
             if (!user?.token) {
                 console.log("Cannot create review: user is not authenticated");
                 return false;
@@ -45,6 +52,8 @@ export const useCreateReview = () => {
         } catch (error) {
             console.log("Error saving review:", error);
             return false;
+        } finally {
+            setCreateReviewEndWaiting();
         }
     };
 

@@ -1,9 +1,12 @@
 import { useEffect } from "react";
 import { useWcDataStore } from "../../store/wcDataStore";
 import { API_URL } from "../config/api";
+import useWaitingSystemStore from "../../store/waitingSystemStore";
 
 export const useGetWc = () => {
 
+    const setGetWcsWaiting = useWaitingSystemStore(state => state.setGetWcsWaiting);
+    const setGetWcsEndWaiting = useWaitingSystemStore(state => state.setGetWcsEndWaiting);
     const setToilets = useWcDataStore(state => state.setToilets);
 
     useEffect(() => {
@@ -13,8 +16,8 @@ export const useGetWc = () => {
     const getWc = async () => {
 
         try {
-
-            const response = await fetch(`${API_URL }/api/toilets`, {
+            setGetWcsWaiting();
+            const response = await fetch(`${API_URL}/api/toilets`, {
                 method: "GET",
                 headers: { "Content-Type": 'application/json' },
             });
@@ -36,12 +39,20 @@ export const useGetWc = () => {
         } catch (error) {
             console.log("Error get all WCs", error);
             return null;
+        } finally {
+            setGetWcsEndWaiting();
         }
     };
 
     const getWcReviews = async (toiletId) => {
+
+        const setGetWcReviewWaiting = useWaitingSystemStore(state => state.setGetWcReviewWaiting);
+        const setGetWcReviewEndWaiting = useWaitingSystemStore(state => state.setGetWcReviewEndWaiting);
+
         try {
-            const response = await fetch(`${API_URL }/api/toilets/reviews/${toiletId}`, {
+
+            setGetWcReviewWaiting();
+            const response = await fetch(`${API_URL}/api/toilets/reviews/${toiletId}`, {
                 method: "GET",
                 headers: { "Content-Type": 'application/json' },
             });
@@ -62,6 +73,8 @@ export const useGetWc = () => {
 
         } catch (error) {
             console.log("Error get WC reviews", error);
+        } finally {
+            setGetWcReviewEndWaiting();
         }
     }
     return ({

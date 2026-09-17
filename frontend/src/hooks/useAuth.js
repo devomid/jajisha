@@ -2,11 +2,18 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useUserStore } from "../../store/userStore";
 import { API_URL } from "../config/api";
 import * as SecureStore from "expo-secure-store";
+import useWaitingSystemStore from '../../store/waitingSystemStore';
 
 export const useAuth = () => {
+
     const signUp = async (username, firstName, lastName, email, password) => {
+
+        const setSignupWaiting = useWaitingSystemStore(state => state.setSignupWaiting);
+        const setSignupEndWaiting = useWaitingSystemStore(state => state.setSignupEndWaiting);
+
         try {
-            // console.log("Here is in Hook", username, firstName, lastName, email, password);
+            setSignupWaiting();
+
             const response = await fetch(`${API_URL}/api/user/su`, {
                 method: "POST",
                 headers: { "Content-Type": 'application/json' },
@@ -34,10 +41,18 @@ export const useAuth = () => {
             console.log("Error Sign up!", error);
             return false;
         }
+        finally {
+            setSignupEndWaiting();
+        }
     };
 
     const signIn = async (email, password) => {
+
+        const setSigninWaiting = useWaitingSystemStore(state => state.setSigninWaiting);
+        const setSigninEndWaiting = useWaitingSystemStore(state => state.setSigninEndWaiting);
+
         try {
+            setSigninWaiting();
             const response = await fetch(`${API_URL}/api/user/si`, {
                 method: "POST",
                 headers: { "Content-Type": 'application/json' },
@@ -58,11 +73,18 @@ export const useAuth = () => {
         } catch (error) {
             console.log("Error Sign in!", error);
             return false;
+        } finally {
+            setSigninEndWaiting();
         }
     }
 
     const restoreUser = async () => {
+
+        const setRestoreUserWaiting = useWaitingSystemStore(state => state.setRestoreUserWaiting);
+        const setRestoreUserEndWaiting = useWaitingSystemStore(state => state.setRestoreUserEndWaiting);
+
         try {
+            setRestoreUserWaiting();
             const token = await SecureStore.getItemAsync("authToken");
 
             if (!token) {
@@ -91,23 +113,36 @@ export const useAuth = () => {
                 token,
             });
 
-
         } catch (error) {
             console.log("Restore user error:", error);
+        } finally {
+            setRestoreUserEndWaiting();
         }
     };
 
     const logout = async () => {
+
+        const setLogoutWaiting = useWaitingSystemStore(state => state.setLogoutWaiting);
+        const setLogoutEndWaiting = useWaitingSystemStore(state => state.setLogoutEndWaiting);
+
         try {
+            setLogoutWaiting();
             await SecureStore.deleteItemAsync("authToken");
             useUserStore.getState().logout();
         } catch (error) {
             console.error("Logout error:", error);
+        } finally {
+            setLogoutEndWaiting();
         }
     };
 
     const deleteUser = async () => {
+
+        const setDeleteUserWaiting = useWaitingSystemStore(state => state.setDeleteUserWaiting);
+        const setDeleteUserEndWaiting = useWaitingSystemStore(state => state.setDeleteUserEndWaiting);
+
         try {
+            setDeleteUserWaiting();
             const token = await AsyncStorage.getItem("authToken");
             const response = await fetch(`${API_URL}/api/user/rm`, {
                 method: "DELETE",
@@ -124,6 +159,8 @@ export const useAuth = () => {
 
         } catch (error) {
             console.error("Logout error:", error);
+        } finally {
+            setDeleteUserEndWaiting();
         }
     }
 
