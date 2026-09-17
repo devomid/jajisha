@@ -9,7 +9,8 @@ import { useTranslation } from "react-i18next";
 import { useWcDataStore } from "../../store/wcDataStore";
 import GlassBackground from "../../components/blur/blurView";
 import { Navigation } from 'lucide-react-native';
-
+import { useSettingsStore } from "../../store/settingsStore";
+import { formatDistance } from "../../src/utils/distance";
 
 
 const RoutePreview = forwardRef(
@@ -187,19 +188,22 @@ const RoutePreview = forwardRef(
 
                 />), []);
 
-        const formatDistance = () => {
+        // const formatDistance = () => {
 
-            if (distance == null) {
-                return "--";
-            }
+        //     if (distance == null) {
+        //         return "--";
+        //     }
 
-            if (distance < 1000) {
-                return `${Math.round(distance)} m`;
-            }
+        //     if (distance < 1000) {
+        //         return `${Math.round(distance)} m`;
+        //     }
 
-            return `${(distance / 1000).toFixed(1)} km`;
+        //     return `${(distance / 1000).toFixed(1)} km`;
 
-        };
+        // };
+        const distanceUnit = useSettingsStore(
+            state => state.distanceUnit
+        );
 
         const formatDuration = () => {
 
@@ -444,7 +448,7 @@ const RoutePreview = forwardRef(
                                                 .surface,
                                     }}
                                 >
-                                    {formatDistance()}
+                                    {formatDistance(distance, distanceUnit)}
                                 </Text>
 
                             </View>

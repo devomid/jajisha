@@ -63,7 +63,8 @@ import {
 import CommentSection from "../comments/commentGallery";
 import CommentComponent from "../cards/commentCardComponentSmall";
 import RateAndCommentSheet from "../rating/rateAndCommentSheet";
-
+import { useSettingsStore } from "../../store/settingsStore";
+import { formatDistance } from "../../src/utils/distance";
 
 const ToiletInfo = forwardRef(({ curentLocation, onPresent }, ref) => {
 
@@ -96,6 +97,8 @@ const ToiletInfo = forwardRef(({ curentLocation, onPresent }, ref) => {
     );
 
     const { distance, duration } = toiletRouteInfo;
+
+    
 
     const snapPoints = useMemo(
         () => ["39.5%", "48%", "65%", "86%"],
@@ -331,13 +334,18 @@ const ToiletInfo = forwardRef(({ curentLocation, onPresent }, ref) => {
      * ---------------------------------------------------------
      */
 
-    const formattedDistance =
-        typeof distance === "number"
-            ? distance < 1000
-                ? `${Math.round(distance)} m`
-                : `${(distance / 1000).toFixed(1)} km`
-            : "--";
+    // const formattedDistance =
+    //     typeof distance === "number"
+    //         ? distance < 1000
+    //             ? `${Math.round(distance)} m`
+    //             : `${(distance / 1000).toFixed(1)} km`
+    //         : "--";
 
+    const distanceUnit = useSettingsStore(
+        state => state.distanceUnit
+    );
+
+    // const distanceUnit = "Metric";
 
     const formatDuration = () => {
 
@@ -744,7 +752,7 @@ const ToiletInfo = forwardRef(({ curentLocation, onPresent }, ref) => {
                                     strokeWidth={2}
                                 />
 
-                                {formattedDistance && (
+                                {formatDistance && (
 
                                     <Text
                                         style={{
@@ -755,7 +763,7 @@ const ToiletInfo = forwardRef(({ curentLocation, onPresent }, ref) => {
                                         }}
                                         variant="bodySmall"
                                     >
-                                        {formattedDistance}
+                                        {formatDistance(distance, distanceUnit)}
                                     </Text>
 
                                 )}
@@ -1263,8 +1271,8 @@ const ToiletInfo = forwardRef(({ curentLocation, onPresent }, ref) => {
                                             setIscommenting={setIscommenting}
                                             iscommentsOpen={iscommentsOpen}
                                             setIscommentsOpen={setIscommentsOpen}
-                                            />
-                                            
+                                        />
+
                                         <ButtonComponent
                                             onPress={() => {
                                                 setIscommenting(true);
