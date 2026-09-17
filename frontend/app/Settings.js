@@ -9,12 +9,14 @@ import { useEffect, useState } from "react";
 import GeneralSettings from "../components/setting/general";
 import MapSettings from "../components/setting/map";
 import AboutSettings from "../components/setting/about";
+import { useSettingsStore } from "../store/settingsStore";
 
 export default function Settings() {
   const pageName = "Settings"
   const theme = useTheme();
   const currentLocation = useCurrentLocation();
   const [region, setRegion] = useState(null);
+  const mapType = useSettingsStore(state => state.mapType);
 
   useEffect(() => {
     if (!currentLocation?.coords) return;
@@ -42,6 +44,7 @@ export default function Settings() {
 
       {/* MAP — full screen background */}
       <MapView
+        mapType={mapType}
         style={StyleSheet.absoluteFillObject}
         showsUserLocation={false}
         initialRegion={region}
@@ -81,7 +84,7 @@ export default function Settings() {
         <PageHeader pageName={pageName} />
 
         <ScrollView style={{
-          marginBottom:10
+          marginBottom: 10
         }}>
 
           <GeneralSettings theme={theme} />

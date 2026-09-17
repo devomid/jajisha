@@ -145,7 +145,7 @@ const signInUser = async (req, res) => {
                 error: "Invalid credentials.",
             });
         }
-        
+
         const token = createToken(user._id);
 
         res.status(200).json({
@@ -186,16 +186,32 @@ const getUser = async (req, res) => {
         )
     } catch (error) {
         console.error("Get user error:", error);
-
-        return res.status(500).json({
-            message: "Failed to load user",
-        });
+        return res.status(500).json({ message: "Failed to load user", });
     }
 };
+
+const removeUser = async (req, res) => {
+    try {
+        const id = req.user._id;
+        const deletedUser = await User.findByIdAndDelete(id);
+
+        if (!deletedUser) {
+            return res.status(404).json({ error: "User not found." })
+        }
+
+        res.status(204).send();
+
+    } catch (error) {
+        console.error("Get user error:", error);
+        res.status(500).json({ error: "Failed to delete user." })
+    }
+
+}
 
 
 module.exports = {
     signUpUser,
     signInUser,
     getUser,
+    removeUser
 }

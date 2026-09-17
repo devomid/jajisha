@@ -6,12 +6,14 @@ import { BlurView } from "expo-blur";
 import PageHeader from "../components/topNav/topNav";
 import useCurrentLocation from "../src/hooks/useCurrentLocation";
 import { useEffect, useState } from "react";
+import { useSettingsStore } from "../store/settingsStore";
 
 export default function About() {
   const pageName = "About"
   const theme = useTheme();
   const currentLocation = useCurrentLocation();
   const [region, setRegion] = useState(null);
+  const mapType = useSettingsStore(state => state.mapType);
 
   useEffect(() => {
     if (!currentLocation?.coords) return;
@@ -39,6 +41,7 @@ export default function About() {
 
       {/* MAP — full screen background */}
       <MapView
+        mapType={mapType}
         style={StyleSheet.absoluteFillObject}
         showsUserLocation={false}
         initialRegion={region}

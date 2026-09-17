@@ -10,6 +10,7 @@ import { Text, Button, useTheme } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { View, StyleSheet, Pressable, TextInput } from "react-native";
 import { signInSchema } from "../../src/validation/userInfoSchema";
+import { useSettingsStore } from "../../store/settingsStore";
 
 import { Mail, KeyRound, ShieldCheck, ContactRound, UserRound, AtSign } from 'lucide-react-native';
 
@@ -21,6 +22,7 @@ export default function SignUp() {
     const theme = useTheme();
     const currentLocation = useCurrentLocation();
     const { signUp } = useAuth();
+    const mapType = useSettingsStore(state => state.mapType);
 
     const [region, setRegion] = useState(null);
 
@@ -83,6 +85,7 @@ export default function SignUp() {
             {/* MAP BACKGROUND */}
             {region && (
                 <MapView
+                    mapType={mapType}
                     style={StyleSheet.absoluteFillObject}
                     showsUserLocation={false}
                     initialRegion={region}

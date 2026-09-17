@@ -1,17 +1,20 @@
-import { View } from "react-native";
+import { Linking, View, Pressable } from "react-native";
 import { TextInput, List, Text } from "react-native-paper";
-import { ChevronDown, ChevronUp, Info, Scale, SunMoon, UserRoundCog } from "lucide-react-native";
+import { ChevronDown, ChevronUp, Info, Scale, SunMoon, UserRoundCog, Cat, ExternalLink } from "lucide-react-native";
 import { useTranslation } from "react-i18next";
 import { useState, useMemo, useEffect } from "react";
+import Constants from 'expo-constants';
+import ButtonComponent from '../Button/Button';
 
 
 export default function AboutSettings({ theme }) {
     const { t } = useTranslation();
-    const [expandedAmenities, setExpandedAmenities] = useState(false);
-    const [expandedRatings, setExpandedRatings] = useState(false);
+    const [aboutExpand, setAboutExpand] = useState(false);
+    const [privacyPolicyExpand, setPrivacyPolicyExpand] = useState(false);
+    const appVersion = Constants.expoConfig?.version;
 
-
-    const handlePressAmenities = () => setExpandedAmenities(!expandedAmenities);
+    const handlePressAbouts = () => setAboutExpand(!aboutExpand);
+    const handlePressPrivacyPolicy = () => setPrivacyPolicyExpand(!privacyPolicyExpand);
 
     return (
         <View style={{
@@ -39,8 +42,8 @@ export default function AboutSettings({ theme }) {
                 }}>
                     <List.Accordion
                         title={"About Jajisha"}
-                        expanded={expandedAmenities}
-                        onPress={handlePressAmenities}
+                        expanded={aboutExpand}
+                        onPress={handlePressAbouts}
                         style={{
                             height: 44,
                             backgroundColor: theme.colors.secondaryLighter + "25",
@@ -84,10 +87,9 @@ export default function AboutSettings({ theme }) {
                                         transform: [{ translateY: -8 }],
                                     }}
                                 >
-                                    test
+                                    {appVersion}
                                 </Text>
-
-                                {expandedAmenities ? (
+                                {aboutExpand ? (
                                     <ChevronUp
                                         size={20}
                                         color={theme.colors.secondary}
@@ -105,95 +107,184 @@ export default function AboutSettings({ theme }) {
                     >
                         <View
                             style={{
-                                flexDirection: 'row',
-                                flexWrap: 'wrap',
+                                marginHorizontal: 15,
+                                marginBottom: 10,
+                                marginTop: -5,
+                                height: 132,
+                                width: '91%',
+                                justifyContent: 'center',
+                                paddingHorizontal: 16,
+                                borderWidth: 0.5,
+                                borderTopWidth: 0,
+                                borderBottomLeftRadius: 24,
+                                borderBottomRightRadius: 24,
+                                borderColor: theme.colors.secondaryLight + '80',
+                                backgroundColor: theme.colors.surface + '20',
                             }}
                         >
-                            <Text>
-                                test
-                            </Text>
+                            {/* App identity */}
+                            <View
+                                style={{
+                                    flexDirection: 'row',
+                                    alignItems: 'center',
+                                    justifyContent: 'space-between',
+                                    marginBottom: 8,
+                                }}
+                            >
+                                <View>
+                                    <Text
+                                        style={{
+                                            color: theme.colors.text,
+                                            fontSize: 15,
+                                            fontWeight: '600',
+                                        }}
+                                    >
+                                        Jajisha
+                                    </Text>
+
+                                    <Text
+                                        style={{
+                                            color: theme.colors.text + '75',
+                                            fontSize: 11,
+                                            marginTop: 1,
+                                        }}
+                                    >
+                                        Find public toilets around you
+                                    </Text>
+                                </View>
+
+                                <Text
+                                    style={{
+                                        color: theme.colors.secondary + '90',
+                                        fontSize: 11,
+                                    }}
+                                >
+                                    v{appVersion}
+                                </Text>
+                            </View>
+
+                            {/* Links */}
+                            <View
+                                style={{
+                                    flexDirection: 'row',
+                                    gap: 8,
+                                }}
+                            >
+                                <Pressable
+                                    onPress={() =>
+                                        Linking.openURL('https://github.com/devomid/jajisha')
+                                    }
+                                    style={({ pressed }) => ({
+                                        flex: 1,
+                                        height: 34,
+                                        borderRadius: 12,
+                                        flexDirection: 'row',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        gap: 6,
+                                        backgroundColor: pressed
+                                            ? theme.colors.secondary + '18'
+                                            : theme.colors.surface + '18',
+                                        borderWidth: 0.5,
+                                        borderColor: theme.colors.secondaryLight + '50',
+                                        opacity: pressed ? 0.7 : 1,
+                                    })}
+                                >
+                                    <Cat
+                                        size={15}
+                                        color={theme.colors.secondary}
+                                    />
+
+                                    <Text
+                                        style={{
+                                            color: theme.colors.text + '90',
+                                            fontSize: 11,
+                                        }}
+                                    >
+                                        GitHub
+                                    </Text>
+
+                                    <ExternalLink
+                                        size={11}
+                                        color={theme.colors.text + '55'}
+                                    />
+                                </Pressable>
+
+                                <Pressable
+                                    onPress={() =>
+                                        Linking.openURL(
+                                            'https://github.com/devomid/jajisha/blob/main/LICENSE'
+                                        )
+                                    }
+                                    style={({ pressed }) => ({
+                                        flex: 1,
+                                        height: 34,
+                                        borderRadius: 12,
+                                        flexDirection: 'row',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        gap: 6,
+                                        backgroundColor: pressed
+                                            ? theme.colors.secondary + '18'
+                                            : theme.colors.surface + '18',
+                                        borderWidth: 0.5,
+                                        borderColor: theme.colors.secondaryLight + '50',
+                                        opacity: pressed ? 0.7 : 1,
+                                    })}
+                                >
+                                    <Scale
+                                        size={15}
+                                        color={theme.colors.secondary}
+                                    />
+
+                                    <Text
+                                        style={{
+                                            color: theme.colors.text + '90',
+                                            fontSize: 11,
+                                        }}
+                                    >
+                                        MIT License
+                                    </Text>
+
+                                    <ExternalLink
+                                        size={11}
+                                        color={theme.colors.text + '55'}
+                                    />
+                                </Pressable>
+                            </View>
                         </View>
                     </List.Accordion>
                 </View>
 
                 <View>
-                    <List.Accordion
-                        title={"Privacy Policy"}
-                        expanded={expandedAmenities}
-                        onPress={handlePressAmenities}
+                    <ButtonComponent
+                        onPress={handlePressPrivacyPolicy}
+                        backgroundColor={theme.colors.secondary + '18'}
+                        borderColor={theme.colors.secondaryLight + '50'}
                         style={{
-                            height: 44,
-                            backgroundColor: theme.colors.secondaryLighter + "25",
-                            borderWidth: 0.5,
-                            borderColor: theme.colors.surface + '99',
-                            borderRadius: 14,
-                            paddingHorizontal: 10,
-                            shadowColor: "#000",
-                            shadowOffset: {
-                                width: 0,
-                                height: 20,
-                            },
-                            shadowOpacity: 0.7,
-                            shadowRadius: 15,
-                            elevation: 10,
-                            marginBottom: 5,
+                            width: '100%',
+                            marginTop: 9,
+                            marginBottom: 9,
                         }}
-                        theme={{
-                            colors: {
-                                background: 'transparent',
-                                surface: 'transparent',
-                            },
-                        }}
-                        titleStyle={{ color: theme.colors.secondary + '99', transform: [{ translateY: -8 }], fontSize: 14 }}
-                        left={() => (<Scale
-                            size={18}
-                            color={theme.colors.secondary + '95'}
-                        />)} // remove default arrow
-                        right={() => (
-                            <View
-                                style={{
-                                    flexDirection: "row",
-                                    alignItems: "center",
-                                    gap: 8,
-                                }}
-                            >
-                                <Text
-                                    style={{
-                                        color: theme.colors.text + '85',
-                                        fontSize: 13,
-                                        transform: [{ translateY: -8 }],
-                                    }}
-                                >
-                                    test
-                                </Text>
-
-                                {expandedAmenities ? (
-                                    <ChevronUp
-                                        size={20}
-                                        color={theme.colors.secondary}
-                                        style={{ transform: [{ translateY: -4 }] }}
-                                    />
-                                ) : (
-                                    <ChevronDown
-                                        size={20}
-                                        color={theme.colors.secondary}
-                                        style={{ transform: [{ translateY: -4 }] }}
-                                    />
-                                )}
-                            </View>
-                        )}
                     >
-                        <View
-                            style={{
-                                flexDirection: 'row',
-                                flexWrap: 'wrap',
-                            }}
-                        >
-                            <Text>
-                                test
+                        <View style={{
+                            width: '100%',
+                            height:'100%',
+                            flexDirection: 'row',
+                            alignItems: 'center',
+                            overflow: 'hidden',
+                            paddingLeft: 10,
+                            gap:18
+                        }}>
+                            <Scale
+                                size={18}
+                                color={theme.colors.secondary + '95'}
+                            />
+                            <Text style={{ color: theme.colors.secondary + '99' }}>
+                                Privacy Policy
                             </Text>
                         </View>
-                    </List.Accordion>
+                    </ButtonComponent>
                 </View>
 
             </View>

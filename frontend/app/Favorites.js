@@ -11,6 +11,7 @@ import { Redirect } from "expo-router";
 import ToiletCard from "../components/cards/ToiletCards";
 import { ScrollView } from "react-native";
 import { useAuth } from "../src/hooks/useAuth";
+import { useSettingsStore } from "../store/settingsStore";
 
 export default function Favorites() {
   const { restoreUser } = useAuth();
@@ -20,6 +21,7 @@ export default function Favorites() {
   const currentLocation = useCurrentLocation();
   const [region, setRegion] = useState(null);
   const favoriteToilets = user.favoriteToilets;
+  const mapType = useSettingsStore(state => state.mapType);
 
   useEffect(() => {
     if (!currentLocation?.coords) return;
@@ -55,6 +57,7 @@ export default function Favorites() {
 
       {/* MAP — full screen background */}
       <MapView
+        mapType={mapType}
         style={StyleSheet.absoluteFillObject}
         showsUserLocation={false}
         initialRegion={region}

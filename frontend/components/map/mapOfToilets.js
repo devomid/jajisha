@@ -3,7 +3,8 @@ import { useWcDataStore } from "../../store/wcDataStore";
 import { useTheme } from "react-native-paper";
 import { useNavigateToToilet } from "../../src/hooks/useNavigateWc";
 import { useTranslation } from "react-i18next";
-import {useGetWc}from '../../src/hooks/useGetWc'
+import { useGetWc } from '../../src/hooks/useGetWc';
+import { useSettingsStore } from "../../store/settingsStore";
 
 import * as Location from "expo-location";
 import { View, Pressable, Text, Image, Platform, } from "react-native";
@@ -27,6 +28,9 @@ const MapOfToilets = forwardRef(({ currentLocation, onMarkerPress, isPickingLoca
     const setPickedLocation = useWcDataStore(state => state.setPickedLocation);
     const clearNavigation = useWcDataStore(state => state.clearNavigation);
     const navigation = useWcDataStore(state => state.navigation);
+    const mapType = useSettingsStore(state => state.mapType);
+    const showMyLocation = useSettingsStore(state => state.showMyLocation);
+    const showCompass = useSettingsStore(state => state.showCompass);
     const {
         target: navigationTarget,
         route: navigationRoute,
@@ -594,9 +598,11 @@ const MapOfToilets = forwardRef(({ currentLocation, onMarkerPress, isPickingLoca
 
         <View style={{ flex: 1, }}>
             <MapView
+                mapType={mapType}
                 ref={mapRef}
                 style={{ flex: 1, }}
                 showsUserLocation={false}
+                showsCompass={showCompass}
                 followsUserLocation={false}
                 initialRegion={region}
                 rotateEnabled={navigationStatus !== "navigating"}
@@ -612,7 +618,7 @@ const MapOfToilets = forwardRef(({ currentLocation, onMarkerPress, isPickingLoca
                         setMapCenter(newRegion);
                     }}>
 
-                {(navigationCoordinate || currentLocation) && (
+                {(navigationCoordinate || currentLocation) && showMyLocation && (
 
                     <Marker
                         coordinate={navigationCoordinate || {

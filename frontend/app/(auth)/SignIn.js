@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useAuth } from "../../src/hooks/useAuth";
 import { useFormik } from "formik";
 import useCurrentLocation from "../../src/hooks/useCurrentLocation";
+import { useSettingsStore } from "../../store/settingsStore";
 
 import { SafeAreaView } from "react-native-safe-area-context";
 import { View, StyleSheet, Pressable, TextInput } from "react-native";
@@ -24,6 +25,7 @@ export default function SignIn() {
     const { signIn } = useAuth();
     const [region, setRegion] = useState(null);
     const [rememberMe, setRememberMe] = useState(false);
+    const mapType = useSettingsStore(state => state.mapType);
 
     const {
         values,
@@ -101,6 +103,7 @@ export default function SignIn() {
             {/* MAP BACKGROUND */}
             {region && (
                 <MapView
+                    mapType={mapType}
                     style={StyleSheet.absoluteFillObject}
                     showsUserLocation={false}
                     initialRegion={region}

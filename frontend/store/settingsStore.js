@@ -7,6 +7,15 @@ export const useSettingsStore = create(
         (set) => ({
             distanceUnit: "Metric",
             theme: "System",
+            mapType: 'standard',
+            showMyLocation: true,
+            showCompass: true,
+
+            setShowCompass: (showCompass) => set({ showCompass }),
+
+            setShowMyLocation: (showMyLocation) => set({ showMyLocation }),
+
+            setMapType: (mapType) => set({ mapType }),
 
             setDistanceUnit: (distanceUnit) =>
                 set({ distanceUnit }),

@@ -1,17 +1,29 @@
-import { View } from "react-native";
-import { TextInput, List, Text } from "react-native-paper";
+import { View, Pressable } from "react-native";
+import { TextInput, List, Text, Divider } from "react-native-paper";
 import { ChevronDown, ChevronUp, Navigation2, Compass, MapPinPen } from "lucide-react-native";
 import { useTranslation } from "react-i18next";
 import { useState, useMemo, useEffect } from "react";
+import { useSettingsStore } from "../../store/settingsStore";
 
 
 export default function MapSettings({ theme }) {
     const { t } = useTranslation();
-    const [expandedAmenities, setExpandedAmenities] = useState(false);
-    const [expandedRatings, setExpandedRatings] = useState(false);
+    const [mapTypeExpand, setMapTypeExpand] = useState(false);
+    const [myLocExpand, setMyLocExpand] = useState(false);
+    const [compassExpand, setCompassExpand] = useState(false);
 
+    const mapType = useSettingsStore(state => state.mapType);
+    const setMapType = useSettingsStore(state => state.setMapType);
 
-    const handlePressAmenities = () => setExpandedAmenities(!expandedAmenities);
+    const showMyLocation = useSettingsStore(state => state.showMyLocation);
+    const setShowMyLocation = useSettingsStore(state => state.setShowMyLocation);
+
+    const showCompass = useSettingsStore(state => state.showCompass);
+    const setShowCompass = useSettingsStore(state => state.setShowCompass);
+
+    const handlePressMapType = () => setMapTypeExpand(!mapTypeExpand);
+    const handlePressShowMyLoc = () => setMyLocExpand(!myLocExpand);
+    const handlePressShowCompass = () => setCompassExpand(!compassExpand);
 
     return (
         <View style={{
@@ -39,8 +51,8 @@ export default function MapSettings({ theme }) {
                 }}>
                     <List.Accordion
                         title={"Map type"}
-                        expanded={expandedAmenities}
-                        onPress={handlePressAmenities}
+                        expanded={mapTypeExpand}
+                        onPress={handlePressMapType}
                         style={{
                             height: 44,
                             backgroundColor: theme.colors.secondaryLighter + "25",
@@ -84,10 +96,10 @@ export default function MapSettings({ theme }) {
                                         transform: [{ translateY: -8 }],
                                     }}
                                 >
-                                    test
+                                    {mapType}
                                 </Text>
 
-                                {expandedAmenities ? (
+                                {mapTypeExpand ? (
                                     <ChevronUp
                                         size={20}
                                         color={theme.colors.secondary}
@@ -103,15 +115,90 @@ export default function MapSettings({ theme }) {
                             </View>
                         )}
                     >
-                        <View
-                            style={{
-                                flexDirection: 'row',
-                                flexWrap: 'wrap',
-                            }}
+                        <View style={{
+                            marginHorizontal: 15,
+                            marginBottom: 10,
+                            marginTop: -5,
+                            height: 120,
+                            width: '91%',
+                            justifyContent: 'center',
+                            borderWidth: 0.5,
+                            borderTopWidth: 0,
+                            borderBottomLeftRadius: 24,
+                            borderBottomRightRadius: 24,
+                            borderColor: theme.colors.secondaryLight + '80',
+                            backgroundColor: theme.colors.surface + '20',
+                        }}
                         >
-                            <Text>
-                                test
-                            </Text>
+                            <Pressable
+                                onPress={() => {
+                                    setMapType("standard")
+                                    setMapTypeExpand(false)
+                                }}
+                                style={{
+                                    width: '100%',
+                                    padding: 0,
+                                    paddingVertical: 10,
+                                    marginLeft: -20
+                                }}
+                            >
+                                {({ pressed }) => (
+                                    <Text style={{
+                                        color: pressed ?
+                                            theme.colors.secondaryLight :
+                                            theme.colors.primaryDarker
+
+                                    }}>Standard</Text>
+                                )}
+                            </Pressable>
+
+                            <Divider horizontalInset style={{ marginLeft: -20 }} />
+
+                            <Pressable
+                                onPress={() => {
+                                    setMapType("satellite")
+                                    setMapTypeExpand(false)
+                                }}
+                                style={{
+                                    width: '100%',
+                                    padding: 0,
+                                    paddingVertical: 10,
+                                    marginLeft: -20,
+                                }}>
+                                {({ pressed }) => (
+                                    <Text style={{
+                                        color: pressed ?
+                                            theme.colors.secondaryLight :
+                                            theme.colors.primaryDarker
+
+                                    }}>Satellite</Text>
+                                )}
+                            </Pressable>
+
+                            <Divider horizontalInset style={{ marginLeft: -20 }} />
+
+                            <Pressable
+                                onPress={() => {
+                                    setMapType("hybrid")
+                                    setMapTypeExpand(false)
+                                }}
+                                style={{
+                                    width: '100%',
+                                    padding: 0,
+                                    paddingVertical: 10,
+                                    marginLeft: -20
+                                }}
+                            >
+                                {({ pressed }) => (
+                                    <Text style={{
+                                        color: pressed ?
+                                            theme.colors.secondaryLight :
+                                            theme.colors.primaryDarker
+
+                                    }}>Hybrid</Text>
+                                )}
+                            </Pressable>
+
                         </View>
                     </List.Accordion>
                 </View>
@@ -119,8 +206,8 @@ export default function MapSettings({ theme }) {
                 <View>
                     <List.Accordion
                         title={"Show my location"}
-                        expanded={expandedAmenities}
-                        onPress={handlePressAmenities}
+                        expanded={myLocExpand}
+                        onPress={handlePressShowMyLoc}
                         style={{
                             height: 44,
                             backgroundColor: theme.colors.secondaryLighter + "25",
@@ -164,10 +251,10 @@ export default function MapSettings({ theme }) {
                                         transform: [{ translateY: -8 }],
                                     }}
                                 >
-                                    test
+                                    {showMyLocation ? "Do" : "Don't"}
                                 </Text>
 
-                                {expandedAmenities ? (
+                                {myLocExpand ? (
                                     <ChevronUp
                                         size={20}
                                         color={theme.colors.secondary}
@@ -183,24 +270,75 @@ export default function MapSettings({ theme }) {
                             </View>
                         )}
                     >
-                        <View
-                            style={{
-                                flexDirection: 'row',
-                                flexWrap: 'wrap',
-                            }}
+                        <View style={{
+                            marginHorizontal: 15,
+                            marginBottom: 10,
+                            marginTop: -5,
+                            height: 88,
+                            width: '91%',
+                            justifyContent: 'center',
+                            borderWidth: 0.5,
+                            borderTopWidth: 0,
+                            borderBottomLeftRadius: 24,
+                            borderBottomRightRadius: 24,
+                            borderColor: theme.colors.secondaryLight + '80',
+                            backgroundColor: theme.colors.surface + '20',
+                        }}
                         >
-                            <Text>
-                                test
-                            </Text>
+                            <Pressable
+                                onPress={() => {
+                                    setShowMyLocation(true)
+                                    setMyLocExpand(false)
+                                }}
+                                style={{
+                                    width: '100%',
+                                    padding: 0,
+                                    paddingVertical: 10,
+                                    marginLeft: -20
+                                }}
+                            >
+                                {({ pressed }) => (
+                                    <Text style={{
+                                        color: pressed ?
+                                            theme.colors.secondaryLight :
+                                            theme.colors.primaryDarker
+
+                                    }}>Show my location</Text>
+                                )}
+                            </Pressable>
+
+                            <Divider horizontalInset style={{ marginLeft: -20 }} />
+
+                            <Pressable
+                                onPress={() => {
+                                    setShowMyLocation(false)
+                                    setMyLocExpand(false)
+                                }}
+                                style={{
+                                    width: '100%',
+                                    padding: 0,
+                                    paddingVertical: 10,
+                                    marginLeft: -20,
+                                }}>
+                                {({ pressed }) => (
+                                    <Text style={{
+                                        color: pressed ?
+                                            theme.colors.secondaryLight :
+                                            theme.colors.primaryDarker
+
+                                    }}>Don't show my location</Text>
+                                )}
+                            </Pressable>
+
                         </View>
                     </List.Accordion>
                 </View>
 
                 <View>
                     <List.Accordion
-                        title={"Theme"}
-                        expanded={expandedAmenities}
-                        onPress={handlePressAmenities}
+                        title={"Show Compass"}
+                        expanded={compassExpand}
+                        onPress={handlePressShowCompass}
                         style={{
                             height: 44,
                             backgroundColor: theme.colors.secondaryLighter + "25",
@@ -244,10 +382,10 @@ export default function MapSettings({ theme }) {
                                         transform: [{ translateY: -8 }],
                                     }}
                                 >
-                                    test
+                                    {showCompass ? "Do" : "Don't"}
                                 </Text>
 
-                                {expandedAmenities ? (
+                                {compassExpand ? (
                                     <ChevronUp
                                         size={20}
                                         color={theme.colors.secondary}
@@ -263,15 +401,65 @@ export default function MapSettings({ theme }) {
                             </View>
                         )}
                     >
-                        <View
-                            style={{
-                                flexDirection: 'row',
-                                flexWrap: 'wrap',
-                            }}
+                        <View style={{
+                            marginHorizontal: 15,
+                            marginBottom: 10,
+                            marginTop: -5,
+                            height: 88,
+                            width: '91%',
+                            justifyContent: 'center',
+                            borderWidth: 0.5,
+                            borderTopWidth: 0,
+                            borderBottomLeftRadius: 24,
+                            borderBottomRightRadius: 24,
+                            borderColor: theme.colors.secondaryLight + '80',
+                            backgroundColor: theme.colors.surface + '20',
+                        }}
                         >
-                            <Text>
-                                test
-                            </Text>
+                            <Pressable
+                                onPress={() => {
+                                    setShowCompass(true)
+                                    setCompassExpand(false)
+                                }}
+                                style={{
+                                    width: '100%',
+                                    padding: 0,
+                                    paddingVertical: 10,
+                                    marginLeft: -20
+                                }}
+                            >
+                                {({ pressed }) => (
+                                    <Text style={{
+                                        color: pressed ?
+                                            theme.colors.secondaryLight :
+                                            theme.colors.primaryDarker
+
+                                    }}>Show compass</Text>
+                                )}
+                            </Pressable>
+
+                            <Divider horizontalInset style={{ marginLeft: -20 }} />
+
+                            <Pressable
+                                onPress={() => {
+                                    setShowCompass(false)
+                                    setCompassExpand(false)
+                                }}
+                                style={{
+                                    width: '100%',
+                                    padding: 0,
+                                    paddingVertical: 10,
+                                    marginLeft: -20,
+                                }}>
+                                {({ pressed }) => (
+                                    <Text style={{
+                                        color: pressed ?
+                                            theme.colors.secondaryLight :
+                                            theme.colors.primaryDarker
+
+                                    }}>Don't show Compass</Text>
+                                )}
+                            </Pressable>
                         </View>
                     </List.Accordion>
                 </View>

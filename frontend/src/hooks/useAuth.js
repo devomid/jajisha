@@ -6,7 +6,7 @@ export const useAuth = () => {
     const signUp = async (username, firstName, lastName, email, password) => {
         try {
             // console.log("Here is in Hook", username, firstName, lastName, email, password);
-            const response = await fetch(`${API_URL }/api/user/su`, {
+            const response = await fetch(`${API_URL}/api/user/su`, {
                 method: "POST",
                 headers: { "Content-Type": 'application/json' },
                 body: JSON.stringify({
@@ -37,7 +37,7 @@ export const useAuth = () => {
 
     const signIn = async (email, password) => {
         try {
-            const response = await fetch(`${API_URL }/api/user/si`, {
+            const response = await fetch(`${API_URL}/api/user/si`, {
                 method: "POST",
                 headers: { "Content-Type": 'application/json' },
                 body: JSON.stringify({ email, password })
@@ -70,7 +70,7 @@ export const useAuth = () => {
                 return;
             }
 
-            const response = await fetch(`${API_URL }/api/user/returnMe`, {
+            const response = await fetch(`${API_URL}/api/user/returnMe`, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
@@ -105,6 +105,27 @@ export const useAuth = () => {
         }
     };
 
+    const deleteUser = async () => {
+        const token = await AsyncStorage.getItem("authToken");
+        try {
+            const response = await fetch(`${API_URL}/api/user/rm`, {
+                method: "DELETE",
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            })
+            if (!response.ok) {
+                console.error("Failed to delete user.");
+                return;
+            }
+            await AsyncStorage.removeItem("authToken");
+            useUserStore.getState().logout();
 
-    return ({ signUp, signIn, restoreUser, logout });
+        } catch (error) {
+            console.error("Logout error:", error);
+        }
+    }
+
+
+    return ({ signUp, signIn, restoreUser, logout, deleteUser });
 }

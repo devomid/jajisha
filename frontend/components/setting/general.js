@@ -15,6 +15,7 @@ export default function GeneralSettings({ theme }) {
     const { t } = useTranslation();
     const { i18n } = useTranslation();
     const { logout } = useAuth();
+    const { deleteUser } = useAuth();
 
     const user = useUserStore((state) => state.user);
     const distanceUnit = useSettingsStore((state) => state.distanceUnit);
@@ -596,7 +597,7 @@ export default function GeneralSettings({ theme }) {
 
                                 <ButtonComponent
                                     onPress={() => {
-                                        router.push("/SignIn");
+                                        router.push("/Settings");
                                         logout();
                                     }}
                                     backgroundColor={theme.colors.primaryDarker + "23"}
@@ -637,7 +638,10 @@ export default function GeneralSettings({ theme }) {
                                 </ButtonComponent>
 
                                 <ButtonComponent
-                                    // onPress={handleCancel}
+                                    onPress={() => {
+                                        router.push("/Settings");
+                                        deleteUser();
+                                    }}
                                     backgroundColor={theme.colors.error + '15'}
                                     borderColor={theme.colors.error + '50'}
                                     style={{
