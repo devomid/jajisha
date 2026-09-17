@@ -9,7 +9,11 @@ const GlassBackground = ({ style, theme }) => {
     return (
         <BlurView
             intensity={15}
-            tint="systemUltraThinMaterialLight"
+            tint={
+                theme.dark
+                    ? "systemUltraThinMaterialDark"
+                    : "systemUltraThinMaterialLight"
+            }
             style={[
                 style,
                 {

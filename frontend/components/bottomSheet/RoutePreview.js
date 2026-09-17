@@ -152,19 +152,10 @@ const RoutePreview = forwardRef(
         }, []);
 
         const handleCancel = () => {
-            console.log("ROUTE PREVIEW >>> CANCEL");
 
             useWcDataStore.getState().clearNavigation();
-
-            // Tell Home that the next ToiletInfo presentation
-            // must open at snap point 1.
             onReopenToiletInfo?.();
-
             ref.current?.dismiss();
-
-            setTimeout(() => {
-                toiletInfoBottomSheetRef.current?.present();
-            }, 350);
         };
 
         const handleStartNavigation = () => {

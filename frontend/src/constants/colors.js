@@ -32,36 +32,37 @@ const Colors = {
         nav: "#0057fa",
     },
     dark: {
-        primary: "#F4B400",
-        primaryDark: "#f4a000",
-        primaryDarker:"#f49000",
-        primaryLight:"#f5ca29",
-        primaryLighter:"#f8e082",
-        secondary: "#7C3AED",
-        secondaryDark:"#602cdd",
-        secondaryDarker:"#5025d7",
-        secondaryLight:"#a77bf5",
-        secondaryLighter:"#dac8fa",
+        primary: "#a77200",
+        primaryLight: "#ad9247",
+        primaryLighter: "#c3af78",
+        primaryDark: "#775c12",
+        primaryDarker: "#5C4A16",
 
-        focused: "#fed76c",
-        unfocused: "#a291bd",
+        secondary: "#8474ff",
+        secondaryDark: "#5227ae",
+        secondaryDarker: "#3f1e86",
+        secondaryLight: "#8664ea",
+        secondaryLighter: "#b995ff",
 
-        background: "#1F2937",
-        surface: "#2e3644",
+        focused: "#F4B400",
+        unfocused: "#8B7AA8",
 
-        text: "#E6E6E6",
-        textSecondary: "#7a8390",
+        background: "#111827",
+        surface: "#1F2937",
 
-        border: "#E2E8F0",
+        text: "#F3F4F6",
+        textSecondary: "#9CA3AF",
 
-        success: "#22C55E",
-        warning: "#F59E0B",
-        error: "#FF4D4F",
+        border: "#374151",
+
+        success: "#34D399",
+        warning: "#FBBF24",
+        error: "#F87171",
 
         white: "#FFFFFF",
         black: "#000000",
 
-        nav: "#1d9dff",
+        nav: "#60A5FA",
     }
 };
 
