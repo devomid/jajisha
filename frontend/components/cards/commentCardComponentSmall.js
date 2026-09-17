@@ -5,11 +5,11 @@ import { Divider } from "react-native-paper";
 export default function CommentCardComponentSmall({ theme, review }) {
 
     const ratings = review?.ratings
-        ? Object.values(review.ratings)
+        ? Object.values(review?.ratings)
         : [];
 
     const overallRating = ratings.length
-        ? ratings.reduce((sum, value) => sum + value, 0) / ratings.length
+        ? (ratings.reduce((sum, value) => sum + value, 0) / ratings.length).toFixed(1)
         : 0;
 
 
@@ -26,30 +26,30 @@ export default function CommentCardComponentSmall({ theme, review }) {
         const minutes = Math.floor(seconds / 60);
 
         if (minutes < 60) {
-            return `${ minutes } ${ minutes === 1 ? "minute" : "minutes" } ago`;
+            return `${minutes} ${minutes === 1 ? "minute" : "minutes"} ago`;
         }
 
         const hours = Math.floor(minutes / 60);
 
         if (hours < 24) {
-            return `${ hours } ${ hours === 1 ? "hour" : "hours" } ago`;
+            return `${hours} ${hours === 1 ? "hour" : "hours"} ago`;
         }
 
         const days = Math.floor(hours / 24);
 
         if (days < 30) {
-            return `${ days } ${ days === 1 ? "day" : "days" } ago`;
+            return `${days} ${days === 1 ? "day" : "days"} ago`;
         }
 
         const months = Math.floor(days / 30);
 
         if (months < 12) {
-            return `${ months } ${ months === 1 ? "month" : "months" } ago`;
+            return `${months} ${months === 1 ? "month" : "months"} ago`;
         }
 
         const years = Math.floor(months / 12);
 
-        return `${ years } ${ years === 1 ? "year" : "years" } ago`;
+        return `${years} ${years === 1 ? "year" : "years"} ago`;
     };
 
 

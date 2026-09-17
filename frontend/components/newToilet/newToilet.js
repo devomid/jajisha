@@ -314,7 +314,7 @@ export default function NewToilet({ theme, }) {
                         color={theme.colors.secondary + '95'}
                     />)} // remove default arrow
                     right={() =>
-                        expandedAmenities ? (
+                        expandedRatings ? (
                             <ChevronUp size={20} color={theme.colors.secondary} style={{ transform: [{ translateY: -4 }] }} />
                         ) : (
                             <ChevronDown size={20} color={theme.colors.secondary} style={{ transform: [{ translateY: -4 }] }} />

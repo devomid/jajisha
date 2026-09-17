@@ -315,8 +315,8 @@ const ToiletInfo = forwardRef(({ curentLocation, onPresent }, ref) => {
                 Icon: Toilet
             },
             {
-                key: "Warm water",
-                name: "warmWater",
+                key: "warmwater",
+                name: "Warm water",
                 Icon: Droplets
             },
         ];
@@ -990,7 +990,7 @@ const ToiletInfo = forwardRef(({ curentLocation, onPresent }, ref) => {
                                                 color={
                                                     theme.colors.secondaryLight
                                                 }
-                                                    fill={theme.colors.secondaryLighter+ '99'}
+                                                fill={theme.colors.secondaryLighter + '99'}
                                                 strokeWidth={2}
                                             />
 

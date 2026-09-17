@@ -5,11 +5,11 @@ import { Divider } from 'react-native-paper';
 export default function CommentCardComponentBig({ theme, review }) {
     
     const ratings = review?.ratings
-        ? Object.values(review.ratings)
+        ? Object.values(review?.ratings)
         : [];
 
     const overallRating = ratings.length
-        ? ratings.reduce((sum, value) => sum + value, 0) / ratings.length
+        ? (ratings.reduce((sum, value) => sum + value, 0) / ratings.length).toFixed(1)
         : 0;
 
     const getTimeAgo = (date) => {

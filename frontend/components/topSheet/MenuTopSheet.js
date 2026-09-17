@@ -25,7 +25,7 @@ const TopSheet = forwardRef((props, ref) => {
     const language = i18n.language;
     const theme = useTheme();
     const backdropOpacity = useSharedValue(0);
-    const translateY = useSharedValue(0);
+    const translateY = useSharedValue(-1000);
     const { logout } = useAuth();
     const [sheetHeight, setSheetHeight] = useState(0);
     const close = useTopSheetStore((state) => state.close);
