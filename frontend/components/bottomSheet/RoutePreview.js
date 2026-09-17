@@ -8,9 +8,10 @@ import { Image } from "react-native";
 import { useTranslation } from "react-i18next";
 import { useWcDataStore } from "../../store/wcDataStore";
 import GlassBackground from "../../components/blur/blurView";
-import { Navigation } from 'lucide-react-native';
+import { Navigation, Road, Timer, MapPin, Toilet } from 'lucide-react-native';
 import { useSettingsStore } from "../../store/settingsStore";
 import { formatDistance } from "../../src/utils/distance";
+import ButtonComponent from "../Button/Button";
 
 
 const RoutePreview = forwardRef(
@@ -23,7 +24,7 @@ const RoutePreview = forwardRef(
         const navigation = useWcDataStore(state => state.navigation);
         const toilet = useWcDataStore((state) => state.selectedToilet);
         const { target, route, distance, duration, status, } = navigation;
-        const snapPoints = useMemo(() => ["70%"], []);
+        const snapPoints = useMemo(() => ["75%"], []);
         const shouldReopenToiletInfo = useRef(false);
 
         const origin = useMemo(() => {
@@ -188,19 +189,6 @@ const RoutePreview = forwardRef(
 
                 />), []);
 
-        // const formatDistance = () => {
-
-        //     if (distance == null) {
-        //         return "--";
-        //     }
-
-        //     if (distance < 1000) {
-        //         return `${Math.round(distance)} m`;
-        //     }
-
-        //     return `${(distance / 1000).toFixed(1)} km`;
-
-        // };
         const distanceUnit = useSettingsStore(
             state => state.distanceUnit
         );
@@ -247,6 +235,12 @@ const RoutePreview = forwardRef(
                 backgroundComponent={(props) => (
                     <GlassBackground {...props} theme={theme} />
                 )}
+                containerStyle={{
+                    borderRadius: 48,
+                    marginBottom: 12,
+                    marginHorizontal: 12,
+                    overflow: "hidden",
+                }}
 
                 handleStyle={{
                     backgroundColor: "transparent",
@@ -265,38 +259,37 @@ const RoutePreview = forwardRef(
                     <View style={{
                         width: '100%',
                         display: 'flex',
-                        alignItems: 'flex-start',
-                        justifyContent: 'flex-start',
+                        alignItems: 'centert',
+                        justifyContent: 'center',
                         flexDirection: 'row',
-                        marginTop: 15,
-                        marginLeft: 32
+                        gap: 15,
+                        marginBottom: 14
                     }}>
-                        <View style={{ marginTop: 8 }}>
-                            <Navigation color={theme.colors.secondaryDarker + '99'} size={35} />
-                        </View>
-                        <View style={{
-                            marginLeft: 18,
-                            marginBottom: 14,
-                        }}>
-                            <Text
-                                style={{ color: theme.colors.secondaryDarker + '99' }}
-                                variant='headlineMedium'>
-                                Rout Prview
-                            </Text>
-                            {/* <Text numberOfLines={1} style={{ color: theme.colors.secondaryDarker + '99', marginRight: 14 }}>
-                                to {toilet.name} ({toilet.address})
-                            </Text> */}
-                        </View>
+
+                        <Navigation
+                            color={theme.colors.secondaryDarker + '99'}
+                            size={18}
+                            style={{
+                                marginTop: 5
+                            }} />
+                        <Text
+                            variant="titleMedium"
+                            style={{
+                                color: theme.colors.secondaryDarker + '90',
+                            }}>
+                            Route preview
+                        </Text>
                     </View>
+
                     <View
                         style={{
                             height: 300,
                             marginHorizontal: 20,
-                            borderRadius: 14,
+                            borderRadius: 24,
                             overflow: "hidden",
                             position: "relative",
                             borderWidth: 0.5,
-                            borderColor: theme.colors.secondary + '70',
+                            borderColor: theme.colors.secondary + '80',
                             marginBottom: 10
                         }}
                     >
@@ -355,8 +348,8 @@ const RoutePreview = forwardRef(
                                         routeCoordinates
                                     }
 
-                                    strokeWidth={3}
-
+                                    strokeWidth={1.5}
+                                    lineDashPattern={[1, 3]}
                                     strokeColor={
                                         theme.colors
                                             .secondary
@@ -408,77 +401,164 @@ const RoutePreview = forwardRef(
                     ROUTE INFORMATION
                 ========================= */}
 
+                    <View style={{
+                        width: '100%',
+                        flexDirection: 'row',
+                        gap: 5,
+                        justifyContent: 'center',
+                    }}>
+                        <View
+                            style={{
+                                paddingHorizontal: 14,
+                                borderWidth: 0.5,
+                                borderColor: theme.colors.secondary + '70',
+                                backgroundColor: theme.colors.secondary + '15',
+                                width: '35%',
+                                height: 44,
+                                borderRadius: 16,
+                                flexDirection: 'row',
+                                alignItems: 'center',
+                                justifyContent: 'flex-start',
+                                gap: 10,
+                            }}
+                        >
+                            <Toilet
+                                size={17}
+                                strokeWidth={1.8}
+                                color={theme.colors.secondary + "90"}
+                            />
+
+                            <Text
+                                variant="labelLarge"
+                                style={{
+                                    color: theme.colors.secondary,
+                                }}
+                            >
+                                {toilet?.name}
+                            </Text>
+                        </View>
+                        <View
+                            style={{
+                                paddingHorizontal: 14,
+                                borderWidth: 0.5,
+                                borderColor: theme.colors.secondary + '70',
+                                backgroundColor: theme.colors.secondary + '15',
+                                width: '54%',
+                                height: 44,
+                                alignSelf: 'center',
+                                borderRadius: 16,
+                                marginBottom: 10,
+
+                                flexDirection: 'row',
+                                alignItems: 'center',
+                                justifyContent: 'flex-start',
+                                gap: 10,
+                            }}
+                        >
+                            <MapPin
+                                size={17}
+                                strokeWidth={1.8}
+                                color={theme.colors.secondary + "90"}
+                            />
+
+                            <Text
+                                variant="bodySmall"
+                                numberOfLines={2}
+                                ellipsizeMode="tail"
+                                style={{
+                                    color: theme.colors.secondary,
+                                    flex: 1,
+                                    flexShrink: 1,
+                                }}
+                            >
+                                {toilet?.address}
+                            </Text>
+                        </View>
+                    </View>
+
                     <View
                         style={{
                             paddingHorizontal: 14,
                             borderWidth: 0.5,
                             borderColor: theme.colors.secondary + '70',
+                            backgroundColor: theme.colors.secondary + '15',
                             width: '90%',
-                            height:'12%',
+                            height: 44,
                             alignSelf: 'center',
-                            borderRadius: 14,
+                            borderRadius: 16,
                             marginBottom: 10,
-                            
+
+                            flexDirection: 'row',
+                            alignItems: 'center',
+                            justifyContent: 'flex-start',
+                            gap: 10,
                         }}
-                        >
+                    >
+                        <Road
+                            size={17}
+                            strokeWidth={1.8}
+                            color={theme.colors.secondary + "90"}
+                        />
 
-                        <View
+                        <Text
+                            variant="labelLarge"
                             style={{
-                                flexDirection: "row",
-                                gap: 30,
-                                height: '100%',
-                                width:'100%',
+                                color: theme.colors.secondary,
                             }}
-                            >
-
-                            <View style={{
-                                height: '100%',
-                                width:'50%',
-                                borderRightColor: theme.colors.primary +'90',
-                                borderRightWidth: 0.5,
-                                justifyContent: 'center',
-                                alignItems: 'center',
-                            }}>
-
-                                <Text
-                                    variant="titleLarge"
-                                    style={{
-                                        color:
-                                        theme.colors
-                                                .surface,
-                                    }}
-                                >
-                                    {formatDistance(distance, distanceUnit)}
-                                </Text>
-
-                            </View>
-
-
-                            <View style={{
-                                height: '100%',
-                                width: '50%',
-                                borderRightColor: 'red',
-                                borderRightWidth: 0.5,
-                                justifyContent: 'center',
-                                alignItems: 'center',
-                            }}>
-                                <Text
-                                    variant="titleLarge"
-                                    style={{
-                                        color:
-                                            theme.colors
-                                                .surface,
-                                    }}
-                                >
-                                    {formatDuration()}
-                                </Text>
-
-                            </View>
-
-                        </View>
-
+                        >
+                            Distance to WC:
+                        </Text>
+                        <Text
+                            variant="bodyLarge"
+                            style={{
+                                color: theme.colors.text,
+                            }}
+                        >
+                            {formatDistance(distance, distanceUnit)}
+                        </Text>
                     </View>
 
+                    <View
+                        style={{
+                            paddingHorizontal: 14,
+                            borderWidth: 0.5,
+                            borderColor: theme.colors.secondary + '70',
+                            backgroundColor: theme.colors.secondary + '15',
+                            width: '90%',
+                            height: 44,
+                            alignSelf: 'center',
+                            borderRadius: 16,
+                            marginBottom: 10,
+
+                            flexDirection: 'row',
+                            alignItems: 'center',
+                            justifyContent: 'flex-start',
+                            gap: 10,
+                        }}
+                    >
+                        <Timer
+                            size={17}
+                            strokeWidth={1.8}
+                            color={theme.colors.secondary + "90"}
+                        />
+
+                        <Text
+                            variant="labelLarge"
+                            style={{
+                                color: theme.colors.secondary,
+                            }}
+                        >
+                            ETA to WC:
+                        </Text>
+                        <Text
+                            variant="bodyLarge"
+                            style={{
+                                color: theme.colors.text,
+                            }}
+                        >
+                            {formatDuration()}
+                        </Text>
+                    </View>
 
                     {/* =========================
                     BUTTONS
@@ -496,153 +576,36 @@ const RoutePreview = forwardRef(
 
                         <View
                             style={{
-                                flexDirection: "row",
+                                flexDirection: 'row',
                                 gap: 10,
+                                marginBottom: 20
                             }}
                         >
-
-                            {/* START */}
-
-                            <Pressable
+                            <ButtonComponent
+                                onPress={handleCancel}
+                                backgroundColor={theme.colors.error + '18'}
+                                borderColor={theme.colors.error + '50'}
                                 style={{
-                                    flex: 1,
+                                    width: '30%',
                                 }}
-
-                                disabled={
-                                    isRouting ||
-                                    !route
-                                }
-
-                                onPress={
-                                    handleStartNavigation
-                                }
                             >
+                                <Text style={{ color: theme.colors.error }}>{t("AddWcBottomSheet.cancel")}</Text>
+                            </ButtonComponent>
 
-                                {({ pressed }) => (
-
-                                    <BlurView
-                                        intensity={15}
-                                        tint="extraLight"
-
-                                        style={{
-                                            borderRadius: 34,
-                                            overflow: "hidden",
-
-                                            transform: [
-                                                {
-                                                    scale:
-                                                        pressed
-                                                            ? 0.95
-                                                            : 1,
-                                                },
-                                            ],
-                                        }}
-                                    >
-
-                                        <View
-                                            style={{
-                                                justifyContent:
-                                                    "center",
-
-                                                alignItems:
-                                                    "center",
-
-                                                paddingVertical:
-                                                    25,
-
-                                                borderRadius:
-                                                    38,
-
-                                                backgroundColor:
-                                                    theme.colors
-                                                        .success +
-                                                    "55",
-
-                                                opacity:
-                                                    isRouting
-                                                        ? 0.4
-                                                        : 1,
-                                            }}
-                                        >
-
-                                            <Text>
-                                                Navigate
-                                            </Text>
-
-                                        </View>
-
-                                    </BlurView>
-
-                                )}
-
-                            </Pressable>
-
-
-                            {/* CANCEL */}
-
-                            <Pressable
+                            <ButtonComponent
+                                onPress={handleStartNavigation}
+                                backgroundColor={theme.colors.success + '18'}
+                                borderColor={theme.colors.secondaryLight + '50'}
                                 style={{
-                                    flex: 1,
+                                    width: '70%',
                                 }}
-
-                                onPress={
-                                    handleCancel
-                                }
                             >
-
-                                {({ pressed }) => (
-
-                                    <BlurView
-                                        intensity={15}
-                                        tint="extraLight"
-
-                                        style={{
-                                            borderRadius: 34,
-                                            overflow: "hidden",
-
-                                            transform: [
-                                                {
-                                                    scale:
-                                                        pressed
-                                                            ? 0.95
-                                                            : 1,
-                                                },
-                                            ],
-                                        }}
-                                    >
-
-                                        <View
-                                            style={{
-                                                justifyContent:
-                                                    "center",
-
-                                                alignItems:
-                                                    "center",
-
-                                                paddingVertical:
-                                                    25,
-
-                                                borderRadius:
-                                                    38,
-
-                                                backgroundColor:
-                                                    theme.colors
-                                                        .error +
-                                                    "55",
-                                            }}
-                                        >
-
-                                            <Text>
-                                                Cancel
-                                            </Text>
-
-                                        </View>
-
-                                    </BlurView>
-
-                                )}
-
-                            </Pressable>
+                                <Text style={{
+                                    color: theme.colors.secondaryLight
+                                }}>
+                                    Start Navigation
+                                </Text>
+                            </ButtonComponent>
 
                         </View>
 
@@ -656,3 +619,5 @@ const RoutePreview = forwardRef(
 
 
 export default RoutePreview;
+
+

@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 import { useState, useMemo, useEffect } from "react";
 import Constants from 'expo-constants';
 import ButtonComponent from '../Button/Button';
+import { router } from "expo-router";
 
 
 export default function AboutSettings({ theme }) {
@@ -14,7 +15,7 @@ export default function AboutSettings({ theme }) {
     const appVersion = Constants.expoConfig?.version;
 
     const handlePressAbouts = () => setAboutExpand(!aboutExpand);
-    const handlePressPrivacyPolicy = () => setPrivacyPolicyExpand(!privacyPolicyExpand);
+    const handlePressPrivacyPolicy = () => router.push("/About");
 
     return (
         <View style={{

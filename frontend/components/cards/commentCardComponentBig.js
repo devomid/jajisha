@@ -3,12 +3,14 @@ import StarRating from "react-native-star-rating-widget";
 import { Divider } from 'react-native-paper';
 
 export default function CommentCardComponentBig({ theme, review }) {
-    const overallRating = (
-        Object.values(review.ratings).reduce(
-            (sum, rating) => sum + rating,
-            0
-        ) / Object.values(review.ratings).length
-    ).toFixed(1);
+    
+    const ratings = review?.ratings
+        ? Object.values(review.ratings)
+        : [];
+
+    const overallRating = ratings.length
+        ? ratings.reduce((sum, value) => sum + value, 0) / ratings.length
+        : 0;
 
     const getTimeAgo = (date) => {
         const seconds = Math.floor(
@@ -108,7 +110,7 @@ export default function CommentCardComponentBig({ theme, review }) {
                 }}
             >
                 <Text style={{ color: theme.colors.text + '80' }}>
-                    {review.user.username}
+                    {review.user?.username ?? "Anonymous"}
                 </Text>
 
                 <Text style={{ color: theme.colors.text + '80' }}>

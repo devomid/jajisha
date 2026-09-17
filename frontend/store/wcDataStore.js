@@ -58,6 +58,13 @@ export const useWcDataStore = create((set) => ({
         distance: null,
         duration: null,
     },
+    openToiletInfo: false,
+
+    requestOpenToiletInfo: () =>
+        set({ openToiletInfo: true }),
+
+    clearOpenToiletInfo: () =>
+        set({ openToiletInfo: false }),
 
     setToiletRouteInfo: (distance, duration) =>
         set({

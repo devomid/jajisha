@@ -1,33 +1,36 @@
-import { View, Image } from "react-native";
+import { View, Image, Pressable } from "react-native";
 import { useWcDataStore } from "../../store/wcDataStore";
 import { useTheme, Text } from "react-native-paper";
-import StarRating from "react-native-star-rating-widget";
-import { Toilet } from "lucide-react-native";
+import { MapPin, Road, Route, Star, Timer } from "lucide-react-native";
 import ButtonComponent from "../Button/Button";
 import { useTopSheetStore } from "../../store/menuStore";
 import { router } from "expo-router";
+import { formatDistance } from "../../src/utils/distance";
+import { useSettingsStore } from "../../store/settingsStore";
 
-const ToiletCard = ({toilet}) => {
+const ToiletCard = ({ toilet, onPress }) => {
     const theme = useTheme();
-    const setNavigationTarget = useWcDataStore(state => state.setNavigationTarget);
 
-    const navigation = useWcDataStore(
-        (state) => state.navigation
+    const setNavigationTarget = useWcDataStore(
+        state => state.setNavigationTarget
     );
 
-    const { distance, duration } = navigation || {};
+    const toiletRouteInfo = useWcDataStore(
+        state => state.toiletRouteInfo
+    );
+
+    const { distance, duration } = toiletRouteInfo;
+
+    const distanceUnit = useSettingsStore(
+        state => state.distanceUnit
+    );
 
     if (!toilet) return null;
 
-    const formattedDistance =
-        distance == null
-            ? "--"
-            : distance < 1000
-                ? `${Math.round(distance)} m`
-                : `${(distance / 1000).toFixed(1)} km`;
-
     const formatDuration = () => {
-        if (duration == null) return "--";
+        if (typeof duration !== "number") {
+            return "--";
+        }
 
         const minutes = Math.round(duration / 60);
 
@@ -38,183 +41,298 @@ const ToiletCard = ({toilet}) => {
         const hours = Math.floor(minutes / 60);
         const remainingMinutes = minutes % 60;
 
-        return remainingMinutes === 0
-            ? `${hours}h`
-            : `${hours}h ${remainingMinutes}min`;
+        return `${hours}h ${remainingMinutes}min`;
     };
 
     return (
-        <View
+        <Pressable
+            onPress={onPress}
             style={{
-                flexDirection: "row",
-
-                width: "96%",
-                height: 128,
-
+                width: "94%",
+                height: 150,
                 alignSelf: "center",
 
-                marginVertical: 5,
+                marginVertical: 6,
+                padding: 7,
 
-                padding: 6,
+                flexDirection: "row",
 
                 borderWidth: 0.5,
-                borderRadius: 14,
-
-                backgroundColor:
-                    theme.colors.secondary + "30",
+                borderRadius: 24,
 
                 borderColor:
-                    theme.colors.secondary + "80",
+                    theme.colors.secondaryLight + "80",
+
+                backgroundColor:
+                    theme.colors.secondary + "10",
+
+                overflow: "hidden",
             }}
         >
 
             {/* IMAGE */}
+
             <Image
                 source={require("../../assets/picPlaceHolder.png")}
                 style={{
-                    width: "29%",
+                    width: 120,
                     height: "100%",
 
-                    marginRight: 7,
+                    borderRadius: 19,
 
                     borderWidth: 0.5,
-                    borderRadius: 12,
-
                     borderColor:
-                        theme.colors.secondary + "80",
+                        theme.colors.secondaryLight + "45",
 
-                    resizeMode: "contain",
+                    resizeMode: "cover",
                 }}
             />
 
 
-            {/* RIGHT SIDE */}
+            {/* CONTENT */}
+
             <View
                 style={{
                     flex: 1,
+                    marginLeft: 11,
+
                     paddingVertical: 2,
-                    gap: 12
+                    paddingRight: 3,
+
+                    justifyContent: "space-between",
                 }}
             >
 
-                {/* NAME / DISTANCE / DURATION */}
-                <View
-                    style={{
-                        flexDirection: "row",
-                        alignItems: "center",
+                {/* TOP */}
 
-                        width: "100%",
-                    }}
-                >
+                <View>
+
+                    {/* TITLE */}
+
                     <Text
                         numberOfLines={1}
                         ellipsizeMode="tail"
-                        variant="titleLarge"
+                        variant="titleMedium"
                         style={{
-                            flex: 1,
-
-                            color: theme.colors.surface,
-
-                            marginRight: 5,
+                            color: theme.colors.text,
+                            fontWeight: "700",
                         }}
                     >
                         {toilet.name}
                     </Text>
 
-                    {/* RATING */}
+
+                    {/* ADDRESS */}
+
                     <View
                         style={{
                             flexDirection: "row",
                             alignItems: "center",
-                            gap: 3,
-                            marginRight: 30
+
+                            gap: 5,
+                            marginTop: 2,
                         }}
                     >
-                        <Text
-                            variant="bodySmall"
-                            style={{
-                                color: theme.colors.text,
-                            }}
-                        >
-                            {toilet.ratingSummary.average.toFixed(1)} / 5
-                        </Text>
+
+                        <MapPin
+                            size={13}
+                            color={theme.colors.text + "70"}
+                            strokeWidth={2}
+                        />
 
                         <Text
+                            numberOfLines={1}
+                            ellipsizeMode="tail"
                             variant="bodySmall"
                             style={{
-                                color: theme.colors.text,
+                                flex: 1,
+                                color: theme.colors.text + "80",
                             }}
                         >
-                            ({toilet.ratingSummary.count} vote)
+                            {toilet.address}
                         </Text>
+
                     </View>
 
-                    <Text
-                        variant="bodySmall"
-                        style={{
-                            color: theme.colors.text,
-                        }}
-                    >
-                        {formattedDistance}
-                    </Text>
-
-                    <Text
-                        variant="bodySmall"
-                        style={{
-                            color: theme.colors.text,
-
-                            marginLeft: 5,
-                        }}
-                    >
-                        {formatDuration()}
-                    </Text>
                 </View>
 
 
-                {/* ADDRESS */}
-                <Text
-                    numberOfLines={1}
-                    ellipsizeMode="tail"
-                    variant="bodySmall"
+                {/* META */}
+
+                <View
                     style={{
-                        color:
-                            theme.colors.secondaryDarker,
+                        flexDirection: "row",
+                        alignItems: "center",
+
+                        gap: 10,
                     }}
                 >
-                    {toilet.address}
-                </Text>
 
-                {/* BUTTON */}
+                    {/* RATING */}
+
+                    <View
+                        style={{
+                            flexDirection: "row",
+                            alignItems: "center",
+                            gap: 4,
+                        }}
+                    >
+
+                        <Star
+                            size={13}
+                            color={theme.colors.secondaryLight}
+                            fill={theme.colors.secondaryLight}
+                            strokeWidth={1.8}
+                        />
+
+                        <Text
+                            variant="bodySmall"
+                            style={{
+                                color: theme.colors.text,
+                                fontWeight: "600",
+                            }}
+                        >
+                            {toilet.ratingSummary.average.toFixed(1)}
+                        </Text>
+
+                        <Text
+                            variant="bodySmall"
+                            style={{
+                                color: theme.colors.text + "65",
+                            }}
+                        >
+                            ({toilet.ratingSummary.count})
+                        </Text>
+
+                    </View>
+
+
+                    {/* DISTANCE */}
+
+                    <View
+                        style={{
+                            flexDirection: "row",
+                            alignItems: "center",
+                            gap: 4,
+                        }}
+                    >
+
+                        <Road
+                            size={16}
+                            color={
+                                theme.colors.secondaryLight + "90"
+                            }
+                            strokeWidth={2}
+                        />
+
+                        <Text
+                            variant="bodySmall"
+                            style={{
+                                color:
+                                    theme.colors.secondaryDark +
+                                    "99",
+                            }}
+                        >
+                            {formatDistance(
+                                distance,
+                                distanceUnit
+                            )}
+                        </Text>
+
+                    </View>
+
+
+                    {/* TIME */}
+
+                    <View
+                        style={{
+                            flexDirection: "row",
+                            alignItems: "center",
+                            gap: 4,
+                        }}
+                    >
+
+                        <Timer
+                            size={16}
+                            color={
+                                theme.colors.secondaryLight + "90"
+                            }
+                            strokeWidth={2}
+                        />
+
+                        <Text
+                            variant="bodySmall"
+                            style={{
+                                color:
+                                    theme.colors.secondaryDark +
+                                    "99",
+                            }}
+                        >
+                            {formatDuration()}
+                        </Text>
+
+                    </View>
+
+                </View>
+
+
+                {/* ROUTE BUTTON */}
+
                 <ButtonComponent
                     onPress={() => {
                         useTopSheetStore.getState().close();
-                        router.push('/');
+                        router.push("/");
                         setNavigationTarget(toilet);
                     }}
                     backgroundColor={
-                        theme.colors.nav + "40"
+                        theme.colors.nav + "20"
                     }
                     borderColor={
-                        theme.colors.secondaryLighter + "80"
+                        theme.colors.nav + "55"
                     }
                     style={{
                         width: "100%",
-                        height: 32,
+                        height: 31,
+                        marginTop: 3,
+                        marginBottom: 12,
                     }}
                 >
-                    <Text
-                        variant="labelSmall"
+
+                    <View
                         style={{
-                            color:
-                                theme.colors.primaryLighter,
+                            flexDirection: "row",
+                            alignItems: "center",
+                            justifyContent: "center",
+
+                            gap: 7,
+
+                            width: "100%",
+                            height: "100%",
                         }}
                     >
-                        Show route to WC
-                    </Text>
+
+                        <Route
+                            size={14}
+                            color={theme.colors.nav}
+                            strokeWidth={2}
+                        />
+
+                        <Text
+                            variant="labelMedium"
+                            style={{
+                                color: theme.colors.nav,
+                            }}
+                        >
+                            Show route
+                        </Text>
+
+                    </View>
+
                 </ButtonComponent>
 
             </View>
-        </View>
+
+        </Pressable>
     );
 };
 

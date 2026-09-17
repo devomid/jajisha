@@ -98,7 +98,7 @@ const ToiletInfo = forwardRef(({ curentLocation, onPresent }, ref) => {
 
     const { distance, duration } = toiletRouteInfo;
 
-    
+
 
     const snapPoints = useMemo(
         () => ["39.5%", "48%", "65%", "86%"],
@@ -344,8 +344,6 @@ const ToiletInfo = forwardRef(({ curentLocation, onPresent }, ref) => {
     const distanceUnit = useSettingsStore(
         state => state.distanceUnit
     );
-
-    // const distanceUnit = "Metric";
 
     const formatDuration = () => {
 
@@ -819,6 +817,9 @@ const ToiletInfo = forwardRef(({ curentLocation, onPresent }, ref) => {
                                     color={
                                         theme.colors.secondaryLight
                                     }
+                                    fill={
+                                        theme.colors.primaryLight
+                                    }
                                     strokeWidth={2}
                                 />
 
@@ -989,6 +990,7 @@ const ToiletInfo = forwardRef(({ curentLocation, onPresent }, ref) => {
                                                 color={
                                                     theme.colors.secondaryLight
                                                 }
+                                                    fill={theme.colors.secondaryLighter+ '99'}
                                                 strokeWidth={2}
                                             />
 

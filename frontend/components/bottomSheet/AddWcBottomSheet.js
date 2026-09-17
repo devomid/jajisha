@@ -118,17 +118,17 @@ const AddWc = forwardRef((props, ref) => {
                         marginBottom: 20
                     }}
                 >
-                        <ButtonComponent
-                            onPress={handleCancel}
-                            backgroundColor={theme.colors.error + '18'}
-                            borderColor={theme.colors.error + '50'}
-                            style={{
-                                width: '30%',
-                            }}
-                        >
-                            <Text style={{ color: theme.colors.error }}>{t("AddWcBottomSheet.cancel")}</Text>
+                    <ButtonComponent
+                        onPress={handleCancel}
+                        backgroundColor={theme.colors.error + '18'}
+                        borderColor={theme.colors.error + '50'}
+                        style={{
+                            width: '30%',
+                        }}
+                    >
+                        <Text style={{ color: theme.colors.error }}>{t("AddWcBottomSheet.cancel")}</Text>
                     </ButtonComponent>
-                    
+
                     <ButtonComponent
                         onPress={handleAdd}
                         backgroundColor={theme.colors.secondary + '18'}

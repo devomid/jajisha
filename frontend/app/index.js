@@ -30,10 +30,8 @@ export default function Home() {
 
     const isPickingLocation = useWcDataStore(state => state.isPickingLocation);
     const navigationStatus = useWcDataStore(state => state.navigation.status);
-    // const shouldOpenDrawer = useDrawerStore((state) => state.shouldOpenDrawer);
-
-    // const reset = useDrawerStore((state) => state.reset);
-
+    const openToiletInfo = useWcDataStore(state => state.openToiletInfo);
+    const clearOpenToiletInfo = useWcDataStore(state => state.clearOpenToiletInfo);
 
     const { t } = useTranslation();
     const { restoreUser } = useAuth();
@@ -46,14 +44,26 @@ export default function Home() {
     const routePreviewBottomSheetRef = useRef(null);
     const navigation = useNavigation();
 
-    // useFocusEffect(
-    //     useCallback(() => {
-    //         if (shouldOpenDrawer) {
-    //             navigation.openDrawer();
-    //             reset();
-    //         }
-    //     }, [shouldOpenDrawer])
-    // );
+    useEffect(() => {
+
+        if (!openToiletInfo) {
+            return;
+        }
+
+        const timer = setTimeout(() => {
+
+            toiletInfoBottomSheetRef.current?.present();
+
+            clearOpenToiletInfo();
+
+        }, 350);
+
+        return () => clearTimeout(timer);
+
+    }, [
+        openToiletInfo,
+        clearOpenToiletInfo
+    ]);
 
     useEffect(() => {
         if (navigationStatus !== "preview") {
@@ -457,20 +467,20 @@ export default function Home() {
                 )}
             </View>
 
-                <ToiletInfo
-                    ref={toiletInfoBottomSheetRef}
-                    curentLocation={curentLocation}
-                    onPresent={(index) => {
-                        if (
-                            index === 0 &&
-                            reopenToiletInfoAtSecondSnapRef.current
-                        ) {
-                            reopenToiletInfoAtSecondSnapRef.current = false;
+            <ToiletInfo
+                ref={toiletInfoBottomSheetRef}
+                curentLocation={curentLocation}
+                onPresent={(index) => {
+                    if (
+                        index === 0 &&
+                        reopenToiletInfoAtSecondSnapRef.current
+                    ) {
+                        reopenToiletInfoAtSecondSnapRef.current = false;
 
-                            toiletInfoBottomSheetRef.current?.snapToIndex(1);
-                        }
-                    }}
-                />
+                        toiletInfoBottomSheetRef.current?.snapToIndex(1);
+                    }
+                }}
+            />
             <AddWc ref={addWcBottomSheetRef} />
             <RoutePreview
                 ref={routePreviewBottomSheetRef}
