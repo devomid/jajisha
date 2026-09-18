@@ -21,10 +21,11 @@ import AddWc from "../components/bottomSheet/AddWcBottomSheet";
 import RoutePreview from '../components/bottomSheet/RoutePreview';
 import SearchButton from '../components/searchBar/animatedSearchBtn';
 import MenuTopSheet from '../components/topSheet/MenuTopSheet';
+import { useToast } from "react-native-toast-notifications";
 
 
 export default function Home() {
-
+    const toast = useToast();
     useGetWc()
 
     const isPickingLocation = useWcDataStore(state => state.isPickingLocation);
@@ -77,8 +78,12 @@ export default function Home() {
     }, [navigationStatus]);
 
     useEffect(() => {
-        restoreUser()
-    }, [])
+        if (!toast?.show) {
+            return;
+        }
+
+        restoreUser();
+    }, [toast, restoreUser]);
 
     const onMarkerPress = (toilet) => {
         console.log("1. marker pressed");

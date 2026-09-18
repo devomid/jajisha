@@ -21,13 +21,15 @@ export default function useCurrentLocation() {
 
             if (status !== "granted") {
 
-                toast.show("Location Permission must be granted!", {
-                    type: "custom",
-                    data: {
-                        type: "warning",
-                        text2: "Please allow location access in Settings.",
-                    },
-                });
+                if (toast?.show) {
+                    toast.show("Location Permission must be granted!", {
+                        type: "custom",
+                        data: {
+                            type: "warning",
+                            text2: "Please allow location access in Settings.",
+                        },
+                    })
+                };
 
                 return;
             }

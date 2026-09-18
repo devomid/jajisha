@@ -38,13 +38,15 @@ export const useAuth = () => {
                 // const errorRes = await response.json();
                 // console.log("Signup error:", errorRes);
 
-                toast.show("Could not sign you up", {
-                    type: "custom",
-                    data: {
-                        type: "error",
-                        text2: "Try again a few moments later.",
-                    },
-                });
+                if (toast?.show) {
+                    toast.show("Could not sign you up", {
+                        type: "custom",
+                        data: {
+                            type: "error",
+                            text2: "Try again a few moments later.",
+                        },
+                    })
+                };
                 return null;
             };
 
@@ -55,24 +57,28 @@ export const useAuth = () => {
                 token: jsonRes.token,
             });
 
-            toast.show("Account created successfully.", {
-                type: "custom",
-                data: {
-                    type: "success",
-                },
-            });
+            if (toast?.show) {
+                toast.show("Account created successfully.", {
+                    type: "custom",
+                    data: {
+                        type: "success",
+                    },
+                })
+            };
 
             return;
 
         } catch (error) {
             // console.log("Error Sign up!", error);
-            toast.show("Something went wrong signing up!", {
-                type: "custom",
-                data: {
-                    type: "error",
-                    text2: "It can be our servers or your connection. Check and try again.",
-                },
-            });
+            if (toast?.show) {
+                toast.show("Something went wrong signing up!", {
+                    type: "custom",
+                    data: {
+                        type: "error",
+                        text2: "It can be our servers or your connection. Check and try again.",
+                    },
+                })
+            };
             return null;
         }
         finally {
@@ -81,8 +87,7 @@ export const useAuth = () => {
     };
 
     const signIn = async (email, password) => {
-        console.log("TOAST API:", toast);
-        console.log("TOAST SHOW:", toast?.show);
+
         const waitingId = startWaiting("Checking account info...");
 
         try {
@@ -97,23 +102,27 @@ export const useAuth = () => {
                 // const errorRes = await response.json();
                 // console.log("Signin error:", errorRes);
 
-                toast.show("Could not sign you in", {
-                    type: "custom",
-                    data: {
-                        type: "error",
-                        text2: "Try again a few moments later.",
-                    },
-                });
+                if (toast?.show) {
+                    toast.show("Could not sign you in", {
+                        type: "custom",
+                        data: {
+                            type: "error",
+                            text2: "Try again a few moments later.",
+                        },
+                    })
+                };
 
                 return null;
             };
 
-            toast.show("Signed you in successfully.", {
-                type: "custom",
-                data: {
-                    type: "success",
-                },
-            });
+            if (toast?.show) {
+                toast.show("Signed you in successfully.", {
+                    type: "custom",
+                    data: {
+                        type: "success",
+                    },
+                })
+            };
 
             const jsonRes = await response.json();
             await SecureStore.setItemAsync("authToken", jsonRes.token);
@@ -126,13 +135,15 @@ export const useAuth = () => {
         } catch (error) {
             // console.log("Error Sign in!", error);
 
-            toast.show("Something went wrong signing in!", {
-                type: "custom",
-                data: {
-                    type: "error",
-                    text2: "It can be our servers or your connection. Check and try again.",
-                },
-            });
+            if (toast?.show) {
+                toast.show("Something went wrong signing in!", {
+                    type: "custom",
+                    data: {
+                        type: "error",
+                        text2: "It can be our servers or your connection. Check and try again.",
+                    },
+                })
+            };
 
             return null;
         } finally {
@@ -166,13 +177,15 @@ export const useAuth = () => {
                 await SecureStore.deleteItemAsync("authToken");
                 useUserStore.getState().logout();
 
-                toast.show("Could not get your data", {
-                    type: "custom",
-                    data: {
-                        type: "error",
-                        text2: "Please check your connection!.",
-                    },
-                });
+                if (toast?.show) {
+                    toast.show("Could not get your data", {
+                        type: "custom",
+                        data: {
+                            type: "error",
+                            text2: "Please check your connection!.",
+                        },
+                    })
+                };
 
                 return;
             }
@@ -184,13 +197,15 @@ export const useAuth = () => {
 
         } catch (error) {
             // console.log("Restore user error:", error);
-            toast.show("Something went wrong signing in!", {
-                type: "custom",
-                data: {
-                    type: "error",
-                    text2: "It can be our servers or your connection. Check and try again.",
-                },
-            });
+            if (toast?.show) {
+                toast.show("Something went wrong signing in!", {
+                    type: "custom",
+                    data: {
+                        type: "error",
+                        text2: "It can be our servers or your connection. Check and try again.",
+                    },
+                })
+            };
 
         } finally {
             endWaiting(waitingId);
@@ -206,13 +221,15 @@ export const useAuth = () => {
             useUserStore.getState().logout();
         } catch (error) {
             // console.error("Logout error:", error);
-            toast.show("Something went wrong logging out!", {
-                type: "custom",
-                data: {
-                    type: "error",
-                    text2: "It can be our servers or your connection. Check and try again.",
-                },
-            });
+            if (toast?.show) {
+                toast.show("Something went wrong logging out!", {
+                    type: "custom",
+                    data: {
+                        type: "error",
+                        text2: "It can be our servers or your connection. Check and try again.",
+                    },
+                })
+            };
 
         } finally {
             endWaiting(waitingId);
@@ -233,13 +250,15 @@ export const useAuth = () => {
             })
             if (!response.ok) {
                 // console.error("Failed to delete user.");
-                toast.show("Could not delete account", {
-                    type: "custom",
-                    data: {
-                        type: "error",
-                        text2: "Try again a few moments later.",
-                    },
-                });
+                if (toast?.show) {
+                    toast.show("Could not delete account", {
+                        type: "custom",
+                        data: {
+                            type: "error",
+                            text2: "Try again a few moments later.",
+                        },
+                    })
+                };
                 return;
             }
             await SecureStore.deleteItemAsync("authToken");
@@ -247,13 +266,15 @@ export const useAuth = () => {
 
         } catch (error) {
             // console.error("Logout error:", error);
-            toast.show("Something went wrong deleting user account!", {
-                type: "custom",
-                data: {
-                    type: "error",
-                    text2: "It can be our servers or your connection. Check and try again.",
-                },
-            });
+            if (toast?.show) {
+                toast.show("Something went wrong deleting user account!", {
+                    type: "custom",
+                    data: {
+                        type: "error",
+                        text2: "It can be our servers or your connection. Check and try again.",
+                    },
+                })
+            };
         } finally {
             endWaiting(waitingId);
         }

@@ -7,21 +7,22 @@ import * as ToastNotifications from "react-native-toast-notifications";
 
 
 export const useGetWc = () => {
-    
+
     const toast = useToast();
-    
+
     const setGetWcsWaiting = useWaitingSystemStore(state => state.setGetWcsWaiting);
     const setGetWcsEndWaiting = useWaitingSystemStore(state => state.setGetWcsEndWaiting);
     const setToilets = useWcDataStore(state => state.setToilets);
     const startWaiting = useWaitingSystemStore(state => state.startWaiting);
     const updateWaiting = useWaitingSystemStore(state => state.updateWaiting);
     const endWaiting = useWaitingSystemStore(state => state.endWaiting);
-    
+
     useEffect(() => {
-        console.log("TOAST MODULE:", ToastNotifications);
-        console.log("TOAST:", toast);
-        getWc()
-    }, [])
+        if (!toast?.show) {
+            return;
+        }
+        getWc();
+    }, [toast])
 
     const getWc = async () => {
 
@@ -40,13 +41,15 @@ export const useGetWc = () => {
                 // const error = await response.text();
                 // console.log(error);
 
-                toast.show("Could not get toilets", {
-                    type: "custom",
-                    data: {
-                        type: "error",
-                        text2: "Try again a few moments later or check connection.",
-                    },
-                });
+                if (toast?.show) {
+                    toast.show("Could not get toilets", {
+                        type: "custom",
+                        data: {
+                            type: "error",
+                            text2: "Try again a few moments later or check connection.",
+                        },
+                    })
+                };
                 return null;
             };
             const jsonRes = await response.json();
@@ -55,13 +58,15 @@ export const useGetWc = () => {
 
         } catch (error) {
             // console.log("Error get all WCs", error);
-            toast.show("Something went wrong getting WC!", {
-                type: "custom",
-                data: {
-                    type: "error",
-                    text2: "It can be our servers or your connection. Check and try again.",
-                },
-            });
+            if (toast?.show) {
+                toast.show("Something went wrong getting WC!", {
+                    type: "custom",
+                    data: {
+                        type: "error",
+                        text2: "It can be our servers or your connection. Check and try again.",
+                    },
+                })
+            };
             return null;
         } finally {
             endWaiting(waitingId);
@@ -84,13 +89,15 @@ export const useGetWc = () => {
                 // console.log("Status:", response.status);
                 // const error = await response.text();
                 // console.log(error);
-                toast.show("Could not get toilets", {
-                    type: "custom",
-                    data: {
-                        type: "error",
-                        text2: "Try again a few moments later or check connection.",
-                    },
-                });
+                if (toast?.show) {
+                    toast.show("Could not get toilets", {
+                        type: "custom",
+                        data: {
+                            type: "error",
+                            text2: "Try again a few moments later or check connection.",
+                        },
+                    })
+                };
                 return null;
             };
 
@@ -100,13 +107,15 @@ export const useGetWc = () => {
 
         } catch (error) {
             // console.log("Error get WC reviews", error);
-            toast.show("Something went wrong getting WC!", {
-                type: "custom",
-                data: {
-                    type: "error",
-                    text2: "It can be our servers or your connection. Check and try again.",
-                },
-            });
+            if (toast?.show) {
+                toast.show("Something went wrong getting WC!", {
+                    type: "custom",
+                    data: {
+                        type: "error",
+                        text2: "It can be our servers or your connection. Check and try again.",
+                    },
+                })
+            };
 
         } finally {
             endWaiting(waitingId);

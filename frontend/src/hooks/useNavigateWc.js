@@ -29,13 +29,15 @@ export const useNavigateToToilet = () => {
             )
             if (status !== "granted") {
                 // console.log("Location permission denied");
-                toast.show("Location Permission must be granted!", {
-                    type: "custom",
-                    data: {
-                        type: "warning",
-                        text2: "Please allow location access in Settings.",
-                    },
-                });
+                if (toast?.show) {
+                    toast.show("Location Permission must be granted!", {
+                        type: "custom",
+                        data: {
+                            type: "warning",
+                            text2: "Please allow location access in Settings.",
+                        },
+                    })
+                };
                 return;
             }
 
@@ -68,13 +70,15 @@ export const useNavigateToToilet = () => {
 
             if (data.code !== "Ok") {
                 // console.log("OSRM ERROR:", data.code);
-                toast.show("Could not get map and location", {
-                    type: "custom",
-                    data: {
-                        type: "error",
-                        text2: "Try again a few moments later.",
-                    },
-                });
+                if (toast?.show) {
+                    toast.show("Could not get map and location", {
+                        type: "custom",
+                        data: {
+                            type: "error",
+                            text2: "Try again a few moments later.",
+                        },
+                    })
+                };
                 return;
             }
 
@@ -89,13 +93,15 @@ export const useNavigateToToilet = () => {
 
         } catch (error) {
             // console.error("NAVIGATION ERROR:", error);
-            toast.show("Something went wrong getting map features!", {
-                type: "custom",
-                data: {
-                    type: "error",
-                    text2: "It can be our servers or your connection. Check and try again.",
-                },
-            });
+            if (toast?.show) {
+                toast.show("Something went wrong getting map features!", {
+                    type: "custom",
+                    data: {
+                        type: "error",
+                        text2: "It can be our servers or your connection. Check and try again.",
+                    },
+                })
+            };
             setNavigationStatus("idle");
 
         } finally {
@@ -172,13 +178,15 @@ export const useNavigateToToilet = () => {
 
         } catch (error) {
             // console.error("TOILET DISTANCE ERROR:", error);
-            toast.show("Something went wrong getting map features!", {
-                type: "custom",
-                data: {
-                    type: "error",
-                    text2: "It can be our servers or your connection. Check and try again.",
-                },
-            });
+            if (toast?.show) {
+                toast.show("Something went wrong getting map features!", {
+                    type: "custom",
+                    data: {
+                        type: "error",
+                        text2: "It can be our servers or your connection. Check and try again.",
+                    },
+                })
+            };
         } finally {
             endWaiting(waitingId);
         }

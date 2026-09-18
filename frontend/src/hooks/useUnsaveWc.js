@@ -17,23 +17,27 @@ export const useUnsaveWc = () => {
     const unsaveWc = async () => {
 
         if (!token) {
-            toast.show("You can not save places!", {
-                type: "custom",
-                data: {
-                    type: "warning",
-                    text2: "Sign in or create an account.",
-                },
-            });
+            if (toast?.show) {
+                toast.show("You can not save places!", {
+                    type: "custom",
+                    data: {
+                        type: "warning",
+                        text2: "Sign in or create an account.",
+                    },
+                })
+            };
             return null;
         }
         if (!toilet?._id) {
-            toast.show("This toilet can not be saved!", {
-                type: "custom",
-                data: {
-                    type: "warning",
-                    text2: "Something's wrong that you can't do anything about it.",
-                },
-            });
+            if (toast?.show) {
+                toast.show("This toilet can not be saved!", {
+                    type: "custom",
+                    data: {
+                        type: "warning",
+                        text2: "Something's wrong that you can't do anything about it.",
+                    },
+                })
+            };
             return null;
         }
         const waitingId = startWaiting("Removing from favorites...");
@@ -52,26 +56,30 @@ export const useUnsaveWc = () => {
 
             if (!response.ok) {
                 // const errorText = await response.text();
-                toast.show("Could not unsave toilet", {
-                    type: "custom",
-                    data: {
-                        type: "error",
-                        text2: "Try again a few moments later.",
-                    },
-                });
+                if (toast?.show) {
+                    toast.show("Could not unsave toilet", {
+                        type: "custom",
+                        data: {
+                            type: "error",
+                            text2: "Try again a few moments later.",
+                        },
+                    })
+                };
                 return null;
             }
             return;
 
         } catch (error) {
             // console.log("Error unsaving WC:", error);
-            toast.show("Something went wrong unsaving WC!", {
-                type: "custom",
-                data: {
-                    type: "error",
-                    text2: "It can be our servers or your connection. Check and try again.",
-                },
-            });
+            if (toast?.show) {
+                toast.show("Something went wrong unsaving WC!", {
+                    type: "custom",
+                    data: {
+                        type: "error",
+                        text2: "It can be our servers or your connection. Check and try again.",
+                    },
+                })
+            };
             return null;
 
         } finally {

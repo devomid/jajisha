@@ -37,12 +37,14 @@ export const useCreateReview = () => {
             
             if (!toiletId) {
                 // console.log("Cannot create review: toilet ID is missing");
-                toast.show("Toilet not found!", {
-                    type: "custom",
-                    data: {
-                        type: "error",
-                    },
-                });
+                if (toast?.show) {
+                    toast.show("Toilet not found!", {
+                        type: "custom",
+                        data: {
+                            type: "error",
+                        },
+                    })
+                };
                 return null;
             }
 
@@ -66,13 +68,15 @@ export const useCreateReview = () => {
                 // console.log("Status:", response.status);
                 // console.log(await response.text());
 
-                toast.show("Could not add review", {
-                    type: "custom",
-                    data: {
-                        type: "error",
-                        text2: "Try again a few moments later.",
-                    },
-                });
+                if (toast?.show) {
+                    toast.show("Could not add review", {
+                        type: "custom",
+                        data: {
+                            type: "error",
+                            text2: "Try again a few moments later.",
+                        },
+                    })
+                };
 
                 return null;
             }
@@ -81,13 +85,15 @@ export const useCreateReview = () => {
 
         } catch (error) {
             // console.log("Error saving review:", error);
-            toast.show("Something went wrong adding review!", {
-                type: "custom",
-                data: {
-                    type: "error",
-                    text2: "It can be our servers or your connection. Check and try again.",
-                },
-            });
+            if (toast?.show) {
+                toast.show("Something went wrong adding review!", {
+                    type: "custom",
+                    data: {
+                        type: "error",
+                        text2: "It can be our servers or your connection. Check and try again.",
+                    },
+                })
+            };
             return null;
         } finally {
             endWaiting(waitingId);

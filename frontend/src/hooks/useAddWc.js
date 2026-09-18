@@ -48,13 +48,15 @@ export const useAddWc = () => {
                 // console.log("Status:", response.status);
                 // console.log(await response.text());
 
-                toast.show("Could not add toilet", {
-                    type: "custom",
-                    data: {
-                        type: "error",
-                        text2: "Try again a few moments later.",
-                    },
-                });
+                if (toast?.show) {
+                    toast.show("Could not add toilet", {
+                        type: "custom",
+                        data: {
+                            type: "error",
+                            text2: "Try again a few moments later.",
+                        },
+                    })
+                };
 
                 return null;
             };
@@ -62,24 +64,28 @@ export const useAddWc = () => {
             const newToilet = await response.json();
             addToilet(newToilet);
 
-            toast.show("Toilet added to map", {
-                type: "custom",
-                data: {
-                    type: "success",
-                    text2: "Thanks for expanding our data.",
-                },
-            });
+            if (toast?.show) {
+                toast.show("Toilet added to map", {
+                    type: "custom",
+                    data: {
+                        type: "success",
+                        text2: "Thanks for expanding our data.",
+                    },
+                })
+            };
             return newToilet;
 
         } catch (error) {
             // console.log("Error adding WC:", error);
-            toast.show("Something went wrong adding WC!", {
-                type: "custom",
-                data: {
-                    type: "error",
-                    text2: "It can be our servers or your connection. Check and try again.",
-                },
-            });
+            if (toast?.show) {
+                toast.show("Something went wrong adding WC!", {
+                    type: "custom",
+                    data: {
+                        type: "error",
+                        text2: "It can be our servers or your connection. Check and try again.",
+                    },
+                })
+            };
             return null;
 
         } finally {
