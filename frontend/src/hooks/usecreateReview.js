@@ -6,14 +6,16 @@ import useWaitingSystemStore from "../../store/waitingSystemStore";
 export const useCreateReview = () => {
     const toiletId = useWcDataStore((state) => state.selectedToilet?._id);
     const user = useUserStore((state) => state.user);
-    const setCreateReviewWaiting = useWaitingSystemStore(state => state.setCreateReviewWaiting);
-    const setCreateReviewEndWaiting = useWaitingSystemStore(state => state.setCreateReviewEndWaiting);
+    const startWaiting = useWaitingSystemStore(state => state.startWaiting);
+    const updateWaiting = useWaitingSystemStore(state => state.updateWaiting);
+    const endWaiting = useWaitingSystemStore(state => state.endWaiting);
+
 
     const createReview = async ({ reviewText, ratings }) => {
 
+        const waitingId = startWaiting("You really reviewd a Toilet? Just wait...");
 
         try {
-            setCreateReviewWaiting("You really reviewd a Toilet? Just wait...");
 
             if (!user?.token) {
                 console.log("Cannot create review: user is not authenticated");
@@ -53,7 +55,7 @@ export const useCreateReview = () => {
             console.log("Error saving review:", error);
             return false;
         } finally {
-            setCreateReviewEndWaiting();
+            endWaiting(waitingId);
         }
     };
 

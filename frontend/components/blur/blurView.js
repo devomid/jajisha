@@ -3,7 +3,7 @@ import { BlurView } from "expo-blur";
 const GlassBackground = ({ style, theme }) => {
     return (
         <BlurView
-            intensity={15}
+            intensity={19}
             tint={
                 theme.dark ?
                     "systemUltraThinMaterialDark"

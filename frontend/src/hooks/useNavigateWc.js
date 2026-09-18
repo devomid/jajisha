@@ -8,18 +8,21 @@ export const useNavigateToToilet = () => {
     const setNavigationDistance = useWcDataStore(state => state.setNavigationDistance);
     const setNavigationDuration = useWcDataStore(state => state.setNavigationDuration);
     const setNavigationStatus = useWcDataStore(state => state.setNavigationStatus);
-    const setGetCurrentLocationWaiting = useWaitingSystemStore(state => state.setGetCurrentLocationWaiting);
-    const setGetCurrentLocationEndWaiting = useWaitingSystemStore(state => state.setGetCurrentLocationEndWaiting);
-    const setCalculatingDistanceWaiting = useWaitingSystemStore(state => state.setCalculatingDistanceWaiting);
-    const setCalculatingDistanceEndWaiting = useWaitingSystemStore(state => state.setCalculatingDistanceEndWaiting);
+    const startWaiting = useWaitingSystemStore(state => state.startWaiting);
+    const updateWaiting = useWaitingSystemStore(state => state.updateWaiting);
+    const endWaiting = useWaitingSystemStore(state => state.endWaiting);
 
     const navigateToToilet = async (toilet) => {
 
-        try {
-            setGetCurrentLocationWaiting("Locating...");
-            const { status } =
-                await Location.requestForegroundPermissionsAsync();
+        const waitingId = startWaiting("Locating...");
 
+        try {
+            const { status } = await Location.requestForegroundPermissionsAsync();
+
+            updateWaiting(
+                waitingId,
+                "Finding you..."
+            )
             if (status !== "granted") {
                 console.log("Location permission denied");
                 return;
@@ -72,13 +75,15 @@ export const useNavigateToToilet = () => {
 
             setNavigationStatus("idle");
         } finally {
-            setGetCurrentLocationEndWaiting();
+            endWaiting(waitingId);
         }
     };
 
     const calculateToiletDistance = async (toilet) => {
+
+        const waitingId = startWaiting("Finding a fast way to there...");
+
         try {
-            setCalculatingDistanceWaiting("Finding a fast way to there...");
             const { status } =
                 await Location.requestForegroundPermissionsAsync();
 
@@ -113,7 +118,7 @@ export const useNavigateToToilet = () => {
             const response = await fetch(url);
             const data = await response.json();
 
-            setCalculatingDistanceWaiting("Hold it...")
+            updateWaiting(waitingId, "Hold it...")
 
             if (data.code !== "Ok") {
                 console.log("OSRM ERROR:", data.code);
@@ -130,7 +135,7 @@ export const useNavigateToToilet = () => {
         } catch (error) {
             console.error("TOILET DISTANCE ERROR:", error);
         } finally {
-            setCalculatingDistanceEndWaiting();
+            endWaiting(waitingId);
         }
     };
 

@@ -9,14 +9,15 @@ export const useAddWc = () => {
     const user = useUserStore((state) => state.user);
     const token = user?.token
 
-    const setAddWcWaiting = useWaitingSystemStore(state => state.setAddWcWaiting);
-    const setAddWcEndWaiting = useWaitingSystemStore(state => state.setAddWcEndWaiting);
+    const startWaiting = useWaitingSystemStore(state => state.startWaiting);
+    const updateWaiting = useWaitingSystemStore(state => state.updateWaiting);
+    const endWaiting = useWaitingSystemStore(state => state.endWaiting);
 
     const addWc = async () => {
 
         if (!token) return null;
 
-        setAddWcWaiting("Checking if the toilet is real...")
+        const waitingId = startWaiting("Checking if the toilet is real...");
 
         try {
             const response = await fetch(
@@ -33,7 +34,10 @@ export const useAddWc = () => {
                 }
             );
 
-            setAddWcWaiting("Map is having a new WC...")
+            updateWaiting(
+                waitingId,
+                "Map is having a new WC..."
+            );
 
             if (!response.ok) {
                 console.log("Response is not OK");
@@ -45,13 +49,14 @@ export const useAddWc = () => {
             const newToilet = await response.json();
 
             addToilet(newToilet);
-            
+
             return newToilet;
         } catch (error) {
             console.log("Error adding WC:", error);
             return null;
+
         } finally {
-            setAddWcEndWaiting();
+            endWaiting(waitingId);
         }
     };
 

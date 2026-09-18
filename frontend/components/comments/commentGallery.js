@@ -42,6 +42,7 @@ export default function CommentGallery({ theme, iscommenting, setIscommenting, i
 
                         {hasMoreComments && (
                             <View
+                                key="more-comments"
                                 style={{
                                     alignItems: "center",
                                     justifyContent: "center",

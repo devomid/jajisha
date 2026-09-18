@@ -8,8 +8,9 @@ export const useGetWc = () => {
     const setGetWcsWaiting = useWaitingSystemStore(state => state.setGetWcsWaiting);
     const setGetWcsEndWaiting = useWaitingSystemStore(state => state.setGetWcsEndWaiting);
     const setToilets = useWcDataStore(state => state.setToilets);
-    const setGetWcReviewWaiting = useWaitingSystemStore(state => state.setGetWcReviewWaiting);
-    const setGetWcReviewEndWaiting = useWaitingSystemStore(state => state.setGetWcReviewEndWaiting);
+    const startWaiting = useWaitingSystemStore(state => state.startWaiting);
+    const updateWaiting = useWaitingSystemStore(state => state.updateWaiting);
+    const endWaiting = useWaitingSystemStore(state => state.endWaiting);
 
     useEffect(() => {
         getWc()
@@ -17,8 +18,10 @@ export const useGetWc = () => {
 
     const getWc = async () => {
 
+        const waitingId = startWaiting("Finding toilets near you...");
+
         try {
-            setGetWcsWaiting("Finding toilets near you...");
+
             const response = await fetch(`${API_URL}/api/toilets`, {
                 method: "GET",
                 headers: { "Content-Type": 'application/json' },
@@ -42,16 +45,16 @@ export const useGetWc = () => {
             console.log("Error get all WCs", error);
             return null;
         } finally {
-            setGetWcsEndWaiting();
+            endWaiting(waitingId);
         }
     };
 
     const getWcReviews = async (toiletId) => {
 
+        const waitingId = startWaiting("Loading things...");
 
         try {
 
-            setGetWcReviewWaiting();
             const response = await fetch(`${API_URL}/api/toilets/reviews/${toiletId}`, {
                 method: "GET",
                 headers: { "Content-Type": 'application/json' },
@@ -74,7 +77,7 @@ export const useGetWc = () => {
         } catch (error) {
             console.log("Error get WC reviews", error);
         } finally {
-            setGetWcReviewEndWaiting();
+            endWaiting(waitingId);
         }
     }
     return ({

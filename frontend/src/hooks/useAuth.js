@@ -6,23 +6,15 @@ import useWaitingSystemStore from '../../store/waitingSystemStore';
 
 export const useAuth = () => {
 
-    const setSignupWaiting = useWaitingSystemStore(state => state.setSignupWaiting);
-    const setSignupEndWaiting = useWaitingSystemStore(state => state.setSignupEndWaiting);
-    const setSigninWaiting = useWaitingSystemStore(state => state.setSigninWaiting);
-    const setSigninEndWaiting = useWaitingSystemStore(state => state.setSigninEndWaiting);
-    const setRestoreUserWaiting = useWaitingSystemStore(state => state.setRestoreUserWaiting);
-    const setRestoreUserEndWaiting = useWaitingSystemStore(state => state.setRestoreUserEndWaiting);
-    const setLogoutWaiting = useWaitingSystemStore(state => state.setLogoutWaiting);
-    const setLogoutEndWaiting = useWaitingSystemStore(state => state.setLogoutEndWaiting);
-    const setDeleteUserWaiting = useWaitingSystemStore(state => state.setDeleteUserWaiting);
-    const setDeleteUserEndWaiting = useWaitingSystemStore(state => state.setDeleteUserEndWaiting);
+    const startWaiting = useWaitingSystemStore(state => state.startWaiting);
+    const updateWaiting = useWaitingSystemStore(state => state.updateWaiting);
+    const endWaiting = useWaitingSystemStore(state => state.endWaiting);
 
     const signUp = async (username, firstName, lastName, email, password) => {
 
+        const waitingId = startWaiting("Checking your info...");
 
         try {
-            setSignupWaiting("Checking your info...");
-
             const response = await fetch(`${API_URL}/api/user/su`, {
                 method: "POST",
                 headers: { "Content-Type": 'application/json' },
@@ -34,7 +26,11 @@ export const useAuth = () => {
                     password
                 })
             });
-            setSignupWaiting("Let's get you back home...")
+            updateWaiting(
+                waitingId,
+                "Making account..."
+            )
+
             if (response.ok) {
                 const jsonRes = await response.json();
                 await SecureStore.setItemAsync("authToken", jsonRes.token);
@@ -42,7 +38,6 @@ export const useAuth = () => {
                     ...jsonRes.user,
                     token: jsonRes.token,
                 });
-                setSignupWaiting("")
                 return;
             } else {
                 const errorRes = await response.json();
@@ -54,20 +49,21 @@ export const useAuth = () => {
             return false;
         }
         finally {
-            setSignupEndWaiting();
+            endWaiting(waitingId);
         }
     };
 
     const signIn = async (email, password) => {
 
+        const waitingId = startWaiting("Checking account info...");
 
         try {
-            setSigninWaiting();
             const response = await fetch(`${API_URL}/api/user/si`, {
                 method: "POST",
                 headers: { "Content-Type": 'application/json' },
                 body: JSON.stringify({ email, password })
             });
+            updateWaiting(waitingId, "Putting your stuff back...")
             if (response.ok) {
                 const jsonRes = await response.json();
                 await SecureStore.setItemAsync("authToken", jsonRes.token);
@@ -84,15 +80,15 @@ export const useAuth = () => {
             console.log("Error Sign in!", error);
             return false;
         } finally {
-            setSigninEndWaiting();
+            endWaiting(waitingId);
         }
     }
 
     const restoreUser = async () => {
 
+        const waitingId = startWaiting("Remembering you");
 
         try {
-            setRestoreUserWaiting();
             const token = await SecureStore.getItemAsync("authToken");
 
             if (!token) {
@@ -124,29 +120,29 @@ export const useAuth = () => {
         } catch (error) {
             console.log("Restore user error:", error);
         } finally {
-            setRestoreUserEndWaiting();
+            endWaiting(waitingId);
         }
     };
 
     const logout = async () => {
 
+        const waitingId = startWaiting("Logging out...");
 
         try {
-            setLogoutWaiting();
             await SecureStore.deleteItemAsync("authToken");
             useUserStore.getState().logout();
         } catch (error) {
             console.error("Logout error:", error);
         } finally {
-            setLogoutEndWaiting();
+            endWaiting(waitingId);
         }
     };
 
     const deleteUser = async () => {
 
+        const waitingId = startWaiting("Throwing your stuff to toilet...");
 
         try {
-            setDeleteUserWaiting();
             const token = await AsyncStorage.getItem("authToken");
             const response = await fetch(`${API_URL}/api/user/rm`, {
                 method: "DELETE",
@@ -164,7 +160,7 @@ export const useAuth = () => {
         } catch (error) {
             console.error("Logout error:", error);
         } finally {
-            setDeleteUserEndWaiting();
+            endWaiting(waitingId);
         }
     }
 

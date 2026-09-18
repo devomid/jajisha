@@ -4,8 +4,9 @@ import { API_URL } from "../config/api";
 import useWaitingSystemStore from "../../store/waitingSystemStore";
 
 export const useUnsaveWc = () => {
-    const setUnsaveWcWaiting = useWaitingSystemStore(state => state.setUnsaveWcWaiting);
-    const setUnsaveWcEndWaiting = useWaitingSystemStore(state => state.setUnsaveWcEndWaiting);
+    const startWaiting = useWaitingSystemStore(state => state.startWaiting);
+    const updateWaiting = useWaitingSystemStore(state => state.updateWaiting);
+    const endWaiting = useWaitingSystemStore(state => state.endWaiting);
     const toilet = useWcDataStore((state) => state.selectedToilet);
     const user = useUserStore((state) => state.user);
     const token = user?.token;
@@ -13,8 +14,9 @@ export const useUnsaveWc = () => {
     const unsaveWc = async () => {
         if (!token || !toilet?._id) return false;
 
+        const waitingId = startWaiting("Removing from favorites...");
+
         try {
-            setUnsaveWcWaiting("Removing from favorites...");
             const response = await fetch(
                 `${API_URL}/api/managment/unSavedToilets/${toilet._id}`,
                 {
@@ -37,7 +39,7 @@ export const useUnsaveWc = () => {
             return;
 
         } finally {
-            setUnsaveWcEndWaiting();
+            endWaiting(waitingId);
         }
     };
 

@@ -6,15 +6,17 @@ import useWaitingSystemStore from "../../store/waitingSystemStore";
 export const useSaveWc = () => {
     const toilet = useWcDataStore((state) => state.selectedToilet);
     const user = useUserStore((state) => state.user);
-    const setSaveWcWaiting = useWaitingSystemStore(state => state.setSaveWcWaiting);
-    const setSaveWcEndWaiting = useWaitingSystemStore(state => state.setSaveWcEndWaiting);
+    const startWaiting = useWaitingSystemStore(state => state.startWaiting);
+    const updateWaiting = useWaitingSystemStore(state => state.updateWaiting);
+    const endWaiting = useWaitingSystemStore(state => state.endWaiting);
     const token = user?.token;
 
     const saveWc = async () => {
         if (!token || !toilet?._id) return false;
 
+        const waitingId = startWaiting("Saving to favorites");
+
         try {
-            setSaveWcWaiting("Saving to favorites");
             const response = await fetch(
                 `${API_URL}/api/managment/saveToilets/${toilet._id}`,
                 {
@@ -26,8 +28,6 @@ export const useSaveWc = () => {
                 }
             );
 
-            console.log("SAVE STATUS:", response.status);
-
             if (!response.ok) {
                 const errorText = await response.text();
 
@@ -36,15 +36,13 @@ export const useSaveWc = () => {
                 return false;
             }
 
-            console.log("SAVE SUCCESS:", toilet._id);
-
             return true;
 
         } catch (error) {
             console.log("Error saving WC:", error);
             return false;
         } finally {
-            setSaveWcEndWaiting();
+            endWaiting(waitingId);
         }
     };
 
