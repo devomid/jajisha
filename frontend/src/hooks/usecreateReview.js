@@ -2,8 +2,13 @@ import { API_URL } from "../config/api";
 import { useWcDataStore } from "../../store/wcDataStore";
 import { useUserStore } from "../../store/userStore";
 import useWaitingSystemStore from "../../store/waitingSystemStore";
+import { useToast } from "react-native-toast-notifications";
+
 
 export const useCreateReview = () => {
+
+    const toast = useToast();
+
     const toiletId = useWcDataStore((state) => state.selectedToilet?._id);
     const user = useUserStore((state) => state.user);
     const startWaiting = useWaitingSystemStore(state => state.startWaiting);
@@ -18,13 +23,27 @@ export const useCreateReview = () => {
         try {
 
             if (!user?.token) {
-                console.log("Cannot create review: user is not authenticated");
-                return false;
-            }
+                // console.log("Cannot create review: user is not authenticated");
 
+                toast.show("User not found!", {
+                    type: "custom",
+                    data: {
+                        type: "error",
+                    },
+                });
+                
+                return null;
+            }
+            
             if (!toiletId) {
-                console.log("Cannot create review: toilet ID is missing");
-                return false;
+                // console.log("Cannot create review: toilet ID is missing");
+                toast.show("Toilet not found!", {
+                    type: "custom",
+                    data: {
+                        type: "error",
+                    },
+                });
+                return null;
             }
 
             const response = await fetch(
@@ -43,17 +62,33 @@ export const useCreateReview = () => {
             );
 
             if (!response.ok) {
-                console.log("Response is not OK");
-                console.log("Status:", response.status);
-                console.log(await response.text());
-                return false;
+                // console.log("Response is not OK");
+                // console.log("Status:", response.status);
+                // console.log(await response.text());
+
+                toast.show("Could not add review", {
+                    type: "custom",
+                    data: {
+                        type: "error",
+                        text2: "Try again a few moments later.",
+                    },
+                });
+
+                return null;
             }
 
-            return true;
+            return;
 
         } catch (error) {
-            console.log("Error saving review:", error);
-            return false;
+            // console.log("Error saving review:", error);
+            toast.show("Something went wrong adding review!", {
+                type: "custom",
+                data: {
+                    type: "error",
+                    text2: "It can be our servers or your connection. Check and try again.",
+                },
+            });
+            return null;
         } finally {
             endWaiting(waitingId);
         }

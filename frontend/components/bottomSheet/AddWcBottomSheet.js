@@ -4,13 +4,12 @@ import GlassBackground from "../../components/blur/blurView";
 import NewToilet from "../newToilet/newToilet";
 import { useTheme } from "react-native-paper";
 import { BottomSheetScrollView } from '@gorhom/bottom-sheet';
-import { View, Pressable, Text } from "react-native";
+import { View, Pressable, Text, Easing } from "react-native";
 import { BlurView } from "expo-blur";
 import { useTranslation } from "react-i18next";
 import { useAddWc } from "../../src/hooks/useAddWc";
 import { useWcDataStore } from "../../store/wcDataStore";
 import ButtonComponent from "../Button/Button";
-
 
 const AddWc = forwardRef((props, ref) => {
     const { t } = useTranslation();

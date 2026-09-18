@@ -7,7 +7,7 @@ import CommentWriteAndRate from "../comments/writeCommentAndRate";
 import ButtonComponent from "../Button/Button";
 import { useTranslation } from "react-i18next";
 import { useWcDataStore } from "../../store/wcDataStore";
-import { useCreateReview } from "../../src/hooks/usecreateReview";
+import { useCreateReview } from "../../src/hooks/useCreateReview";
 import CommentCardComponentBig from "../cards/commentCardComponentBig";
 import WriteCommandAndRate from "../comments/writeCommentAndRate";
 

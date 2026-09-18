@@ -3,8 +3,11 @@ import { useUserStore } from "../../store/userStore";
 import { API_URL } from "../config/api";
 import * as SecureStore from "expo-secure-store";
 import useWaitingSystemStore from '../../store/waitingSystemStore';
+import { useToast } from "react-native-toast-notifications";
 
 export const useAuth = () => {
+
+    const toast = useToast();
 
     const startWaiting = useWaitingSystemStore(state => state.startWaiting);
     const updateWaiting = useWaitingSystemStore(state => state.updateWaiting);
@@ -31,22 +34,46 @@ export const useAuth = () => {
                 "Making account..."
             )
 
-            if (response.ok) {
-                const jsonRes = await response.json();
-                await SecureStore.setItemAsync("authToken", jsonRes.token);
-                useUserStore.getState().setUser({
-                    ...jsonRes.user,
-                    token: jsonRes.token,
+            if (!response.ok) {
+                // const errorRes = await response.json();
+                // console.log("Signup error:", errorRes);
+
+                toast.show("Could not sign you up", {
+                    type: "custom",
+                    data: {
+                        type: "error",
+                        text2: "Try again a few moments later.",
+                    },
                 });
-                return;
-            } else {
-                const errorRes = await response.json();
-                console.log("Signup error:", errorRes);
-                return false;
-            }
+                return null;
+            };
+
+            const jsonRes = await response.json();
+            await SecureStore.setItemAsync("authToken", jsonRes.token);
+            useUserStore.getState().setUser({
+                ...jsonRes.user,
+                token: jsonRes.token,
+            });
+
+            toast.show("Account created successfully.", {
+                type: "custom",
+                data: {
+                    type: "success",
+                },
+            });
+
+            return;
+
         } catch (error) {
-            console.log("Error Sign up!", error);
-            return false;
+            // console.log("Error Sign up!", error);
+            toast.show("Something went wrong signing up!", {
+                type: "custom",
+                data: {
+                    type: "error",
+                    text2: "It can be our servers or your connection. Check and try again.",
+                },
+            });
+            return null;
         }
         finally {
             endWaiting(waitingId);
@@ -54,7 +81,8 @@ export const useAuth = () => {
     };
 
     const signIn = async (email, password) => {
-
+        console.log("TOAST API:", toast);
+        console.log("TOAST SHOW:", toast?.show);
         const waitingId = startWaiting("Checking account info...");
 
         try {
@@ -63,22 +91,50 @@ export const useAuth = () => {
                 headers: { "Content-Type": 'application/json' },
                 body: JSON.stringify({ email, password })
             });
-            updateWaiting(waitingId, "Putting your stuff back...")
-            if (response.ok) {
-                const jsonRes = await response.json();
-                await SecureStore.setItemAsync("authToken", jsonRes.token);
-                useUserStore.getState().setUser({
-                    ...jsonRes.user,
-                    token: jsonRes.token,
-                }); return true;
-            } else {
-                const errorRes = await response.json();
-                console.log("Signin error:", errorRes);
-                return false;
-            }
+            updateWaiting(waitingId, "Putting your stuff back...");
+
+            if (!response.ok) {
+                // const errorRes = await response.json();
+                // console.log("Signin error:", errorRes);
+
+                toast.show("Could not sign you in", {
+                    type: "custom",
+                    data: {
+                        type: "error",
+                        text2: "Try again a few moments later.",
+                    },
+                });
+
+                return null;
+            };
+
+            toast.show("Signed you in successfully.", {
+                type: "custom",
+                data: {
+                    type: "success",
+                },
+            });
+
+            const jsonRes = await response.json();
+            await SecureStore.setItemAsync("authToken", jsonRes.token);
+            useUserStore.getState().setUser({
+                ...jsonRes.user,
+                token: jsonRes.token,
+
+            }); return;
+
         } catch (error) {
-            console.log("Error Sign in!", error);
-            return false;
+            // console.log("Error Sign in!", error);
+
+            toast.show("Something went wrong signing in!", {
+                type: "custom",
+                data: {
+                    type: "error",
+                    text2: "It can be our servers or your connection. Check and try again.",
+                },
+            });
+
+            return null;
         } finally {
             endWaiting(waitingId);
         }
@@ -109,6 +165,15 @@ export const useAuth = () => {
             if (!response.ok) {
                 await SecureStore.deleteItemAsync("authToken");
                 useUserStore.getState().logout();
+
+                toast.show("Could not get your data", {
+                    type: "custom",
+                    data: {
+                        type: "error",
+                        text2: "Please check your connection!.",
+                    },
+                });
+
                 return;
             }
 
@@ -118,7 +183,15 @@ export const useAuth = () => {
             });
 
         } catch (error) {
-            console.log("Restore user error:", error);
+            // console.log("Restore user error:", error);
+            toast.show("Something went wrong signing in!", {
+                type: "custom",
+                data: {
+                    type: "error",
+                    text2: "It can be our servers or your connection. Check and try again.",
+                },
+            });
+
         } finally {
             endWaiting(waitingId);
         }
@@ -132,7 +205,15 @@ export const useAuth = () => {
             await SecureStore.deleteItemAsync("authToken");
             useUserStore.getState().logout();
         } catch (error) {
-            console.error("Logout error:", error);
+            // console.error("Logout error:", error);
+            toast.show("Something went wrong logging out!", {
+                type: "custom",
+                data: {
+                    type: "error",
+                    text2: "It can be our servers or your connection. Check and try again.",
+                },
+            });
+
         } finally {
             endWaiting(waitingId);
         }
@@ -151,14 +232,28 @@ export const useAuth = () => {
                 }
             })
             if (!response.ok) {
-                console.error("Failed to delete user.");
+                // console.error("Failed to delete user.");
+                toast.show("Could not delete account", {
+                    type: "custom",
+                    data: {
+                        type: "error",
+                        text2: "Try again a few moments later.",
+                    },
+                });
                 return;
             }
             await SecureStore.deleteItemAsync("authToken");
             useUserStore.getState().logout();
 
         } catch (error) {
-            console.error("Logout error:", error);
+            // console.error("Logout error:", error);
+            toast.show("Something went wrong deleting user account!", {
+                type: "custom",
+                data: {
+                    type: "error",
+                    text2: "It can be our servers or your connection. Check and try again.",
+                },
+            });
         } finally {
             endWaiting(waitingId);
         }

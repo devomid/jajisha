@@ -13,6 +13,9 @@ import { getPaperTheme } from "../src/constants/paperTheme";
 import { initI18n } from "../src/i18n";
 import WaitingOverlay from "../components/waiting/waitingOverlay";
 
+import { ToastProvider } from "react-native-toast-notifications";
+import AppToast from "../components/toast/appToast";
+
 export default function RootLayout() {
     const scheme = useColorScheme();
     const themeSetting = useSettingsStore(state => state.theme);
@@ -45,7 +48,20 @@ export default function RootLayout() {
                     settings={{ rippleEffectEnabled: false }}
                     theme={theme}
                 >
-                    <Slot />
+                    <ToastProvider
+                        placement="top"
+                        duration={3000}
+                        animationType="zoom-in"
+                        animationDuration={290}
+                        swipeEnabled={true}
+                        renderType={{
+                            custom: (toast) => (
+                                <AppToast {...toast} />
+                            ),
+                        }}
+                    >
+                        <Slot />
+                    </ToastProvider>
                     <WaitingOverlay />
                 </PaperProvider>
             </BottomSheetModalProvider>

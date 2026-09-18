@@ -1,8 +1,12 @@
 import { useWcDataStore } from "../../store/wcDataStore";
 import * as Location from "expo-location";
 import useWaitingSystemStore from "../../store/waitingSystemStore";
+import { useToast } from "react-native-toast-notifications";
+
 
 export const useNavigateToToilet = () => {
+
+    const toast = useToast();
 
     const setNavigationRoute = useWcDataStore(state => state.setNavigationRoute);
     const setNavigationDistance = useWcDataStore(state => state.setNavigationDistance);
@@ -24,7 +28,14 @@ export const useNavigateToToilet = () => {
                 "Finding you..."
             )
             if (status !== "granted") {
-                console.log("Location permission denied");
+                // console.log("Location permission denied");
+                toast.show("Location Permission must be granted!", {
+                    type: "custom",
+                    data: {
+                        type: "warning",
+                        text2: "Please allow location access in Settings.",
+                    },
+                });
                 return;
             }
 
@@ -56,7 +67,14 @@ export const useNavigateToToilet = () => {
             const data = await response.json();
 
             if (data.code !== "Ok") {
-                console.log("OSRM ERROR:", data.code);
+                // console.log("OSRM ERROR:", data.code);
+                toast.show("Could not get map and location", {
+                    type: "custom",
+                    data: {
+                        type: "error",
+                        text2: "Try again a few moments later.",
+                    },
+                });
                 return;
             }
 
@@ -70,10 +88,16 @@ export const useNavigateToToilet = () => {
             setNavigationStatus("preview");
 
         } catch (error) {
-
-            console.error("NAVIGATION ERROR:", error);
-
+            // console.error("NAVIGATION ERROR:", error);
+            toast.show("Something went wrong getting map features!", {
+                type: "custom",
+                data: {
+                    type: "error",
+                    text2: "It can be our servers or your connection. Check and try again.",
+                },
+            });
             setNavigationStatus("idle");
+
         } finally {
             endWaiting(waitingId);
         }
@@ -88,7 +112,14 @@ export const useNavigateToToilet = () => {
                 await Location.requestForegroundPermissionsAsync();
 
             if (status !== "granted") {
-                console.log("Location permission denied");
+                // console.log("Location permission denied");
+                toast.show("Location Permission must be granted!", {
+                    type: "custom",
+                    data: {
+                        type: "warning",
+                        text2: "Please allow location access in Settings.",
+                    },
+                });
                 return;
             }
 
@@ -121,7 +152,14 @@ export const useNavigateToToilet = () => {
             updateWaiting(waitingId, "Hold it...")
 
             if (data.code !== "Ok") {
-                console.log("OSRM ERROR:", data.code);
+                // console.log("OSRM ERROR:", data.code);
+                toast.show("Could not get map and location", {
+                    type: "custom",
+                    data: {
+                        type: "error",
+                        text2: "Try again a few moments later.",
+                    },
+                });
                 return;
             }
 
@@ -133,7 +171,14 @@ export const useNavigateToToilet = () => {
             );
 
         } catch (error) {
-            console.error("TOILET DISTANCE ERROR:", error);
+            // console.error("TOILET DISTANCE ERROR:", error);
+            toast.show("Something went wrong getting map features!", {
+                type: "custom",
+                data: {
+                    type: "error",
+                    text2: "It can be our servers or your connection. Check and try again.",
+                },
+            });
         } finally {
             endWaiting(waitingId);
         }

@@ -5,7 +5,6 @@ export function getPaperTheme(isDark) {
     const c = isDark ? Colors.dark : Colors.light;
 
     const baseTheme = isDark ? MD3DarkTheme : MD3LightTheme;
-
     return {
         ...baseTheme,
 

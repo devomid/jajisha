@@ -2,8 +2,13 @@ import { useWcDataStore } from "../../store/wcDataStore";
 import { useUserStore } from "../../store/userStore";
 import { API_URL } from "../config/api";
 import useWaitingSystemStore from "../../store/waitingSystemStore";
+import { useToast } from "react-native-toast-notifications";
+
 
 export const useSaveWc = () => {
+
+    const toast = useToast();
+
     const toilet = useWcDataStore((state) => state.selectedToilet);
     const user = useUserStore((state) => state.user);
     const startWaiting = useWaitingSystemStore(state => state.startWaiting);
@@ -12,8 +17,27 @@ export const useSaveWc = () => {
     const token = user?.token;
 
     const saveWc = async () => {
-        if (!token || !toilet?._id) return false;
 
+        if (!token) {
+            toast.show("You can not save places!", {
+                type: "custom",
+                data: {
+                    type: "warning",
+                    text2: "Sign in or create an account.",
+                },
+            });
+            return null;
+        }
+        if (!toilet?._id) {
+            toast.show("This toilet can not be saved!", {
+                type: "custom",
+                data: {
+                    type: "warning",
+                    text2: "Something's wrong that you can't do anything about it.",
+                },
+            });
+            return null;
+        }
         const waitingId = startWaiting("Saving to favorites");
 
         try {
@@ -29,18 +53,32 @@ export const useSaveWc = () => {
             );
 
             if (!response.ok) {
-                const errorText = await response.text();
+                // const errorText = await response.text();
+                // console.log("SAVE FAILED:", errorText);
+                toast.show("Could not save toilet", {
+                    type: "custom",
+                    data: {
+                        type: "error",
+                        text2: "Try again a few moments later.",
+                    },
+                });
 
-                console.log("SAVE FAILED:", errorText);
-
-                return false;
+                return null;
             }
 
-            return true;
+            return;
 
         } catch (error) {
-            console.log("Error saving WC:", error);
-            return false;
+
+            // console.log("Error saving WC:", error);
+            toast.show("Something went wrong saving WC!", {
+                type: "custom",
+                data: {
+                    type: "error",
+                    text2: "It can be our servers or your connection. Check and try again.",
+                },
+            });
+            return null;
         } finally {
             endWaiting(waitingId);
         }

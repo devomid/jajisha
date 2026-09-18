@@ -2,8 +2,12 @@ import { useWcDataStore } from "../../store/wcDataStore";
 import { useUserStore } from "../../store/userStore";
 import { API_URL } from "../config/api";
 import useWaitingSystemStore from '../../store/waitingSystemStore';
+import { useToast } from "react-native-toast-notifications";
+
 
 export const useAddWc = () => {
+    const toast = useToast();
+
     const wcData = useWcDataStore((state) => state.wcData);
     const addToilet = useWcDataStore((state) => state.addToilet);
     const user = useUserStore((state) => state.user);
@@ -40,19 +44,42 @@ export const useAddWc = () => {
             );
 
             if (!response.ok) {
-                console.log("Response is not OK");
-                console.log("Status:", response.status);
-                console.log(await response.text());
+                // console.log("Response is not OK");
+                // console.log("Status:", response.status);
+                // console.log(await response.text());
+
+                toast.show("Could not add toilet", {
+                    type: "custom",
+                    data: {
+                        type: "error",
+                        text2: "Try again a few moments later.",
+                    },
+                });
+
                 return null;
-            }
+            };
 
             const newToilet = await response.json();
-
             addToilet(newToilet);
 
+            toast.show("Toilet added to map", {
+                type: "custom",
+                data: {
+                    type: "success",
+                    text2: "Thanks for expanding our data.",
+                },
+            });
             return newToilet;
+
         } catch (error) {
-            console.log("Error adding WC:", error);
+            // console.log("Error adding WC:", error);
+            toast.show("Something went wrong adding WC!", {
+                type: "custom",
+                data: {
+                    type: "error",
+                    text2: "It can be our servers or your connection. Check and try again.",
+                },
+            });
             return null;
 
         } finally {
