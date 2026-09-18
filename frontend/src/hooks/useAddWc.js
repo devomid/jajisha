@@ -13,9 +13,11 @@ export const useAddWc = () => {
     const setAddWcEndWaiting = useWaitingSystemStore(state => state.setAddWcEndWaiting);
 
     const addWc = async () => {
-        setAddWcWaiting("Checking if the toilet is real...")
+
         if (!token) return null;
-        setAddWcWaiting();
+
+        setAddWcWaiting("Checking if the toilet is real...")
+
         try {
             const response = await fetch(
                 `${API_URL}/api/toilets`,
@@ -30,7 +32,9 @@ export const useAddWc = () => {
                     }),
                 }
             );
+
             setAddWcWaiting("Map is having a new WC...")
+
             if (!response.ok) {
                 console.log("Response is not OK");
                 console.log("Status:", response.status);
@@ -41,7 +45,7 @@ export const useAddWc = () => {
             const newToilet = await response.json();
 
             addToilet(newToilet);
-            setAddWcWaiting("Toilet is online now!")
+            
             return newToilet;
         } catch (error) {
             console.log("Error adding WC:", error);
