@@ -14,7 +14,6 @@ import { useTheme, Text } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { BlurView } from "expo-blur";
 import { Menu, LocateFixed, ZoomOut, ZoomIn, Search } from 'lucide-react-native';
-import { Matrix, snakeFrames } from 'react-native-dotgrid';
 
 import MapOfToilets from '../components/map/mapOfToilets';
 import ToiletInfo from "../components/bottomSheet/ToiletLocationBottomSheet";
@@ -117,103 +116,7 @@ export default function Home() {
                 onMarkerPress={onMarkerPress}
                 onAddWcPress={onAddWcPress}
             />
-            {navigationStatus === "routing" && (
-                <View
-                    pointerEvents='none'
-                    style={{
-                        position: "absolute",
-                        top: 0,
-                        left: 0,
-                        right: 0,
-                        bottom: 0,
-                        justifyContent: "center",
-                        alignItems: "center",
-                        zIndex: 1000,
-                        gap: 40
-                    }}
-                >
-                    <Matrix
-                        rows={2}
-                        cols={5}
-                        frames={snakeFrames}
-                        size={28}
-                        gap={28}
-                        fps={13}
-                        loop
-                        palette={{
-                            on: theme.colors.secondary,
-                            off: theme.colors.surface + '10',
-                        }}
-                    />
-                    <Matrix
-                        rows={4}
-                        cols={5}
-                        frames={snakeFrames}
-                        size={28}
-                        gap={28}
-                        fps={13}
-                        loop
-                        palette={{
-                            on: theme.colors.secondary,
-                            off: theme.colors.surface + '10',
-                        }}
-                        style={{
-                            transform: [{ rotate: '90deg' }],
-                        }}
-                    />
-                    <Matrix
-                        rows={2}
-                        cols={5}
-                        frames={snakeFrames}
-                        size={28}
-                        gap={28}
-                        fps={13}
-                        loop
-                        palette={{
-                            on: theme.colors.secondary,
-                            off: theme.colors.surface + '10',
-                        }}
-                    />
-                    <BlurView
-                        intensity={9}
-                        tint="dark"
-                        style={{
-                            position: "absolute",
-
-                            width: 80,
-                            height: 80,
-                            borderRadius: 20,
-                            overflow: "hidden",
-
-                            backgroundColor: theme.colors.primaryLight + "40",
-
-                            alignItems: "center",
-                            justifyContent: "center",
-
-                            shadowColor: "#000",
-                            shadowOffset: {
-                                width: 0,
-                                height: 8,
-                            },
-                            shadowOpacity: 0.12,
-                            shadowRadius: 18,
-                            elevation: 10,
-
-                            zIndex: 2,
-                        }}
-                    >
-                        <Text
-                            variant='labelLarge'
-                            style={{
-                                textAlign: "center",
-                                width: "100%",
-                                color: theme.colors.secondaryDarker
-                            }}>
-                            Calculating route
-                        </Text>
-                    </BlurView>
-                </View>
-            )}
+            
             <SafeAreaView
                 style={{
                     position: "absolute",

@@ -14,7 +14,7 @@ export const useSaveWc = () => {
         if (!token || !toilet?._id) return false;
 
         try {
-            setSaveWcWaiting();
+            setSaveWcWaiting("Saving to favorites");
             const response = await fetch(
                 `${API_URL}/api/managment/saveToilets/${toilet._id}`,
                 {

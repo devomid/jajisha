@@ -13,7 +13,7 @@ export default function useCurrentLocation() {
 
         (async () => {
 
-            setGetCurrentLocationWaiting();
+            // setGetCurrentLocationWaiting();
 
             const { status } = await Location.requestForegroundPermissionsAsync();
 
@@ -22,10 +22,10 @@ export default function useCurrentLocation() {
             const current = await Location.getCurrentPositionAsync({});
 
             setLocation(current);
+            // setGetCurrentLocationEndWaiting();
         })();
     }, []);
 
-    setGetCurrentLocationEndWaiting();
     return location;
 }
 

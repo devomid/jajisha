@@ -14,7 +14,7 @@ export const useUnsaveWc = () => {
         if (!token || !toilet?._id) return false;
 
         try {
-            setUnsaveWcWaiting();
+            setUnsaveWcWaiting("Removing from favorites...");
             const response = await fetch(
                 `${API_URL}/api/managment/unSavedToilets/${toilet._id}`,
                 {

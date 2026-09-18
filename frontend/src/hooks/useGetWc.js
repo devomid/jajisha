@@ -18,7 +18,7 @@ export const useGetWc = () => {
     const getWc = async () => {
 
         try {
-            setGetWcsWaiting();
+            setGetWcsWaiting("Finding toilets near you...");
             const response = await fetch(`${API_URL}/api/toilets`, {
                 method: "GET",
                 headers: { "Content-Type": 'application/json' },

@@ -21,7 +21,7 @@ export const useAuth = () => {
 
 
         try {
-            setSignupWaiting();
+            setSignupWaiting("Checking your info...");
 
             const response = await fetch(`${API_URL}/api/user/su`, {
                 method: "POST",
@@ -34,13 +34,16 @@ export const useAuth = () => {
                     password
                 })
             });
+            setSignupWaiting("Let's get you back home...")
             if (response.ok) {
                 const jsonRes = await response.json();
                 await SecureStore.setItemAsync("authToken", jsonRes.token);
                 useUserStore.getState().setUser({
                     ...jsonRes.user,
                     token: jsonRes.token,
-                }); return true;
+                });
+                setSignupWaiting("")
+                return;
             } else {
                 const errorRes = await response.json();
                 console.log("Signup error:", errorRes);

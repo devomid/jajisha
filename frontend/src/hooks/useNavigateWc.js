@@ -16,7 +16,7 @@ export const useNavigateToToilet = () => {
     const navigateToToilet = async (toilet) => {
 
         try {
-            setGetCurrentLocationWaiting();
+            setGetCurrentLocationWaiting("Locating...");
             const { status } =
                 await Location.requestForegroundPermissionsAsync();
 
@@ -78,7 +78,7 @@ export const useNavigateToToilet = () => {
 
     const calculateToiletDistance = async (toilet) => {
         try {
-            setCalculatingDistanceWaiting();
+            setCalculatingDistanceWaiting("Finding a fast way to there...");
             const { status } =
                 await Location.requestForegroundPermissionsAsync();
 
@@ -112,6 +112,8 @@ export const useNavigateToToilet = () => {
 
             const response = await fetch(url);
             const data = await response.json();
+
+            setCalculatingDistanceWaiting("Hold it...")
 
             if (data.code !== "Ok") {
                 console.log("OSRM ERROR:", data.code);

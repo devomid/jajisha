@@ -3,113 +3,214 @@ import { create } from "zustand";
 const useWaitingSystemStore = create(set => ({
 
     signinWaiting: false,
+    signinWaitingText: "",
+
     signupWaiting: false,
+    signupWaitingText: "",
+
     deleteUserWaiting: false,
+    deleteUserWaitingText: "",
+
     logoutWaiting: false,
+    logoutWaitingText: "",
+
 
     addWcWaiting: false,
+    addWcWaitingText: "",
+
     restoreUserWaiting: false,
+    restoreUserWaitingText: "",
+
     createReviewWaiting: false,
+    createReviewWaitingText: "",
+
 
     getCurrentLocationWaiting: false,
+    getCurrentLocationWaitingText: "",
+
     getWcsWaiting: false,
+    getWcsWaitingText: "",
 
     saveWcWaiting: false,
+    saveWcWaitingText: "",
+
     unsaveWcWaiting: false,
+    unsaveWcWaitingText: "",
 
     getWcReviewWaiting: false,
+    getWcReviewWaitingText: "",
 
     calculatingDistanceWaiting: false,
+    calculatingDistanceWaitingText: "",
 
 
-    setCalculatingDistanceWaiting: () =>
-        set({ calculatingDistanceWaiting: true }),
+    setCalculatingDistanceWaiting: (text = "") =>
+        set({
+            calculatingDistanceWaiting: true,
+            calculatingDistanceWaitingText: text
+        }),
 
     setCalculatingDistanceEndWaiting: () =>
-        set({ calculatingDistanceWaiting: false }),
+        set({
+            calculatingDistanceWaiting: false,
+            calculatingDistanceWaitingText: ""
+        }),
 
-    setGetWcReviewWaiting: () =>
-        set({ getWcReviewWaiting: true }),
+
+    setGetWcReviewWaiting: (text = "") =>
+        set({
+            getWcReviewWaiting: true,
+            getWcReviewWaitingText: text
+        }),
 
     setGetWcReviewEndWaiting: () =>
-        set({ getWcReviewWaiting: false }),
+        set({
+            getWcReviewWaiting: false,
+            getWcReviewWaitingText: ""
+        }),
 
 
-    setSigninWaiting: () =>
-        set({ signinWaiting: true }),
+    setSigninWaiting: (text = "") =>
+        set({
+            signinWaiting: true,
+            signinWaitingText: text
+        }),
 
     setSigninEndWaiting: () =>
-        set({ signinWaiting: false }),
+        set({
+            signinWaiting: false,
+            signinWaitingText: ""
+        }),
 
 
-    setSignupWaiting: () =>
-        set({ signupWaiting: true }),
+    setSignupWaiting: (text = "") =>
+        set({
+            signupWaiting: true,
+            signupWaitingText: text
+        }),
 
     setSignupEndWaiting: () =>
-        set({ signupWaiting: false }),
+        set({
+            signupWaiting: false,
+            signupWaitingText: ""
+        }),
 
 
-    setDeleteUserWaiting: () =>
-        set({ deleteUserWaiting: true }),
+    setDeleteUserWaiting: (text = "") =>
+        set({
+            deleteUserWaiting: true,
+            deleteUserWaitingText: text
+        }),
 
     setDeleteUserEndWaiting: () =>
-        set({ deleteUserWaiting: false }),
+        set({
+            deleteUserWaiting: false,
+            deleteUserWaitingText: ""
+        }),
 
 
-    setLogoutWaiting: () =>
-        set({ logoutWaiting: true }),
+    setLogoutWaiting: (text = "") =>
+        set({
+            logoutWaiting: true,
+            logoutWaitingText: text
+        }),
 
     setLogoutEndWaiting: () =>
-        set({ logoutWaiting: false }),
+        set({
+            logoutWaiting: false,
+            logoutWaitingText: ""
+        }),
 
 
-    setAddWcWaiting: () =>
-        set({ addWcWaiting: true }),
+    setAddWcWaiting: (text = "") =>
+        set({
+            addWcWaiting: true,
+            addWcWaitingText: text
+        }),
 
     setAddWcEndWaiting: () =>
-        set({ addWcWaiting: false }),
+        set({
+            addWcWaiting: false,
+            addWcWaitingText: ""
+        }),
 
 
-    setRestoreUserWaiting: () =>
-        set({ restoreUserWaiting: true }),
+    setRestoreUserWaiting: (text = "") =>
+        set({
+            restoreUserWaiting: true,
+            restoreUserWaitingText: text
+        }),
 
     setRestoreUserEndWaiting: () =>
-        set({ restoreUserWaiting: false }),
+        set({
+            restoreUserWaiting: false,
+            restoreUserWaitingText: ""
+        }),
 
 
-    setCreateReviewWaiting: () =>
-        set({ createReviewWaiting: true }),
+    setCreateReviewWaiting: (text = "") =>
+        set({
+            createReviewWaiting: true,
+            createReviewWaitingText: text
+        }),
 
     setCreateReviewEndWaiting: () =>
-        set({ createReviewWaiting: false }),
+        set({
+            createReviewWaiting: false,
+            createReviewWaitingText: ""
+        }),
 
 
-    setGetCurrentLocationWaiting: () =>
-        set({ getCurrentLocationWaiting: true }),
+    setGetCurrentLocationWaiting: (text = "") =>
+        set({
+            getCurrentLocationWaiting: true,
+            getCurrentLocationWaitingText: text
+        }),
 
     setGetCurrentLocationEndWaiting: () =>
-        set({ getCurrentLocationWaiting: false }),
+        set({
+            getCurrentLocationWaiting: false,
+            getCurrentLocationWaitingText: ""
+        }),
 
 
-    setGetWcsWaiting: () =>
-        set({ getWcsWaiting: true }),
+    setGetWcsWaiting: (text = "") =>
+        set({
+            getWcsWaiting: true,
+            getWcsWaitingText: text
+        }),
 
     setGetWcsEndWaiting: () =>
-        set({ getWcsWaiting: false }),
+        set({
+            getWcsWaiting: false,
+            getWcsWaitingText: ""
+        }),
 
 
-    setSaveWcWaiting: () =>
-        set({ saveWcWaiting: true }),
+    setSaveWcWaiting: (text = "") =>
+        set({
+            saveWcWaiting: true,
+            saveWcWaitingText: text
+        }),
 
     setSaveWcEndWaiting: () =>
-        set({ saveWcWaiting: false }),
+        set({
+            saveWcWaiting: false,
+            saveWcWaitingText: ""
+        }),
 
 
-    setUnsaveWcWaiting: () =>
-        set({ unsaveWcWaiting: true }),
+    setUnsaveWcWaiting: (text = "") =>
+        set({
+            unsaveWcWaiting: true,
+            unsaveWcWaitingText: text
+        }),
 
     setUnsaveWcEndWaiting: () =>
-        set({ unsaveWcWaiting: false }),
+        set({
+            unsaveWcWaiting: false,
+            unsaveWcWaitingText: ""
+        }),
 
 }));
 

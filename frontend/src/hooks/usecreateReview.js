@@ -13,7 +13,7 @@ export const useCreateReview = () => {
 
 
         try {
-            setCreateReviewWaiting();
+            setCreateReviewWaiting("You really reviewd a Toilet? Just wait...");
 
             if (!user?.token) {
                 console.log("Cannot create review: user is not authenticated");
