@@ -60,22 +60,21 @@ const RoutePreview = forwardRef(
         }, [route]);
 
         const destination = useMemo(() => {
+            const coordinates = target?.location?.coordinates;
 
             if (
-                !target?.location?.coordinates ||
-                target.location.coordinates.length < 2
+                !Array.isArray(coordinates) ||
+                coordinates.length < 2 ||
+                !Number.isFinite(coordinates[0]) ||
+                !Number.isFinite(coordinates[1])
             ) {
                 return null;
             }
 
             return {
-                latitude:
-                    target.location.coordinates[1],
-
-                longitude:
-                    target.location.coordinates[0],
+                latitude: coordinates[1],
+                longitude: coordinates[0],
             };
-
         }, [target]);
 
 
