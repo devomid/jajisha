@@ -40,27 +40,7 @@ const MapOfToilets = forwardRef(({ currentLocation, onMarkerPress, isPickingLoca
         status: navigationStatus,
     } = navigation;
 
-    const handleToiletPress = async (toilet) => {
-        useWcDataStore.getState().clearToiletRouteInfo();
-        setSelectedToilet(toilet);
-        calculateToiletDistance(toilet);
-        onMarkerPress(toilet);
 
-        const reviews = await getWcReviews(toilet._id);
-
-        const currentSelectedToilet =
-            useWcDataStore.getState().selectedToilet;
-
-        if (currentSelectedToilet?._id !== toilet._id) {
-            return;
-        }
-
-        setSelectedToilet({
-            ...toilet,
-            reviews,
-        });
-    };
-    // nprmal map
     const [latitudeDelta, setLatitudeDelta] = useState(0.02);
     const initialRegion = {
         latitude: currentLocation.coords.latitude,
@@ -71,30 +51,17 @@ const MapOfToilets = forwardRef(({ currentLocation, onMarkerPress, isPickingLoca
 
     const regionRef = useRef(initialRegion);
     const [region, setRegion] = useState(initialRegion);
-
-    // navigation location
     const navigationLocationRef = useRef(null);
     const [navigationLocation, setNavigationLocation] = useState(null);
-
-
-    // navigation heading
     const headingRef = useRef(0);
     const [heading, setHeading] = useState(0);
-
-
-    // navigation camer
     const navigationAltitudeRef = useRef(700);
     const navigationPitchRef = useRef(55);
-
-    // camera animation lock
     const cameraAnimationRef = useRef(false);
-
-
-    //subscription
     const locationSubscriptionRef = useRef(null);
     const headingSubscriptionRef = useRef(null);
-
-    // route
+    const routeRequestedRef = useRef(null);
+    const markerSize = Math.max(40, Math.min(85, 60 * Math.pow(0.02 / latitudeDelta, 0.25)));
     const navigationRouteCoordinates = navigationRoute?.coordinates?.map(
         ([longitude, latitude]) => ({
             latitude,
@@ -102,8 +69,6 @@ const MapOfToilets = forwardRef(({ currentLocation, onMarkerPress, isPickingLoca
         })
     ) || [];
 
-
-    //current navigation coordinates
     const navigationCoordinate =
         navigationLocation?.coords ? {
             latitude: navigationLocation.coords.latitude,
@@ -368,41 +333,6 @@ const MapOfToilets = forwardRef(({ currentLocation, onMarkerPress, isPickingLoca
         ]
     );
 
-
-    // marker size
-    const markerSize = Math.max(40, Math.min(85, 60 * Math.pow(0.02 / latitudeDelta, 0.25)));
-
-
-    // add location
-    const handleAddLocation = async () => {
-
-        if (!mapCenter) { return; }
-
-        const results = await Location.reverseGeocodeAsync({
-            latitude: mapCenter.latitude,
-            longitude: mapCenter.longitude,
-        }
-        );
-
-        const place = results[0];
-        const address = [
-            place.name,
-            place.street,
-            place.city,
-            place.region,
-            place.country,
-        ].filter(Boolean).join(", ");
-
-        setPickedLocation({
-            latitude: mapCenter.latitude,
-            longitude: mapCenter.longitude,
-            address,
-        });
-
-        onAddWcPress();
-    };
-
-
     // navigation tracking
     useEffect(() => {
 
@@ -460,9 +390,9 @@ const MapOfToilets = forwardRef(({ currentLocation, onMarkerPress, isPickingLoca
                         const gpsHeading = location.coords.heading;
                         const speed = location.coords.speed;
                         if (
-                            gpsHeading != null &&
+                            Number.isFinite(gpsHeading) &&
                             gpsHeading >= 0 &&
-                            speed != null &&
+                            Number.isFinite(speed) &&
                             speed > 1
                         ) {
                             headingRef.current = gpsHeading;
@@ -482,10 +412,18 @@ const MapOfToilets = forwardRef(({ currentLocation, onMarkerPress, isPickingLoca
 
                 headingSubscriptionRef.current = await Location.watchHeadingAsync(headingData => {
 
-                    if (!mounted) { return; }
+                    if (!mounted) {
+                        return;
+                    }
                     let newHeading = headingData.trueHeading;
-                    if (newHeading < 0) { newHeading = headingData.magHeading; }
-                    if (newHeading == null || newHeading < 0) { return; }
+
+                    if (!Number.isFinite(newHeading) || newHeading < 0) {
+                        newHeading = headingData.magHeading;
+                    }
+
+                    if (!Number.isFinite(newHeading) || newHeading < 0) {
+                        return;
+                    }
 
                     // normalize
                     newHeading = (newHeading + 360) % 360;
@@ -509,9 +447,6 @@ const MapOfToilets = forwardRef(({ currentLocation, onMarkerPress, isPickingLoca
         };
     }, [navigationStatus,]);
 
-    // route calculation
-    const routeRequestedRef = useRef(null);
-
     useEffect(() => {
         if (!navigationTarget) {
             routeRequestedRef.current = null;
@@ -528,7 +463,6 @@ const MapOfToilets = forwardRef(({ currentLocation, onMarkerPress, isPickingLoca
         navigateToToilet(navigationTarget);
     }, [navigationTarget, navigateToToilet]);
 
-
     //initial navigation camera
     useEffect(() => {
 
@@ -538,7 +472,6 @@ const MapOfToilets = forwardRef(({ currentLocation, onMarkerPress, isPickingLoca
     }, [navigationStatus,
         navigationCoordinate,]);
 
-
     // compass camera update
     useEffect(() => {
 
@@ -547,45 +480,27 @@ const MapOfToilets = forwardRef(({ currentLocation, onMarkerPress, isPickingLoca
         updateNavigationCamera(navigationCoordinate, heading, 200);
     }, [heading,]);
 
+    const handleToiletPress = async (toilet) => {
+        useWcDataStore.getState().clearToiletRouteInfo();
+        setSelectedToilet(toilet);
+        calculateToiletDistance(toilet);
+        onMarkerPress(toilet);
 
-    // cancel navigation
-    // const handleCancelNavigation = () => {
+        const reviews = await getWcReviews(toilet._id);
 
-    //     locationSubscriptionRef.current?.remove();
-    //     headingSubscriptionRef.current?.remove();
-    //     locationSubscriptionRef.current = null;
-    //     headingSubscriptionRef.current = null;
-    //     navigationLocationRef.current = null;
+        const currentSelectedToilet =
+            useWcDataStore.getState().selectedToilet;
 
-    //     clearNavigation();
+        if (currentSelectedToilet?._id !== toilet._id) {
+            return;
+        }
 
-    //     // restore normal camer
-    //     if (mapRef.current && currentLocation) {
-    //         const normalRegion = {
-    //             latitude: currentLocation.coords.latitude,
-    //             longitude: currentLocation.coords.longitude,
-    //             latitudeDelta: 0.02,
-    //             longitudeDelta: 0.02,
-    //         };
+        setSelectedToilet({
+            ...toilet,
+            reviews,
+        });
+    };
 
-    //         regionRef.current = normalRegion;
-    //         setRegion(normalRegion);
-    //         setLatitudeDelta(0.02);
-    //         mapRef.current.animateCamera({
-    //             center: {
-    //                 latitude: currentLocation.coords.latitude,
-    //                 longitude: currentLocation.coords.longitude,
-    //             },
-    //             heading: 0,
-    //             pitch: 0,
-    //             altitude: 1000,
-    //         },
-    //             {
-    //                 duration: 500,
-    //             }
-    //         );
-    //     }
-    // };
     const handleCancelNavigation = () => {
         // Stop GPS
         locationSubscriptionRef.current?.remove();
@@ -625,6 +540,55 @@ const MapOfToilets = forwardRef(({ currentLocation, onMarkerPress, isPickingLoca
         );
 
         clearNavigation();
+    };
+
+    const handleAddLocation = async () => {
+        try {
+
+            if (!mapCenter) { return; }
+
+            const results = await Location.reverseGeocodeAsync({
+                latitude: mapCenter.latitude,
+                longitude: mapCenter.longitude,
+            }
+            );
+
+            const place = results[0];
+
+            if (!place) {
+                toast.show("Could not determine this location", {
+                    type: "custom",
+                    data: {
+                        type: "warning",
+                        text2: "Please choose another location.",
+                    },
+                });
+                return;
+            } const address = [
+                place.name,
+                place.street,
+                place.city,
+                place.region,
+                place.country,
+            ].filter(Boolean).join(", ");
+
+            setPickedLocation({
+                latitude: mapCenter.latitude,
+                longitude: mapCenter.longitude,
+                address,
+            });
+
+            onAddWcPress();
+
+        } catch (error) {
+            toast.show("Could not determine this location", {
+                type: "custom",
+                data: {
+                    type: "error",
+                    text2: "Please check your location services and try again.",
+                },
+            });
+        }
     };
 
 

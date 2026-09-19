@@ -1,16 +1,29 @@
 import * as Yup from "yup";
 
 export const signInSchema = Yup.object().shape({
-    email: Yup.string().email("Invalid email address").required("Email is required"),
-    password: Yup.string().min(5).required("Password is required"),
+    email: Yup.string()
+        .email("Invalid email address")
+        .required("Email is required"),
+    password: Yup.string()
+        .min(5)
+        .required("Password is required"),
 });
 
-const signUpSchema = Yup.object({
-    name: Yup.string()
+export const signUpSchema = Yup.object({
+    username: Yup.string()
         .trim()
-        .required("Name is required"),
+        .required("Username is required"),
+
+    firstName: Yup.string()
+        .trim()
+        .required("First name is required"),
+
+    lastName: Yup.string()
+        .trim()
+        .required("Last name is required"),
 
     email: Yup.string()
+        .trim()
         .email("Invalid email address")
         .required("Email is required"),
 
@@ -18,11 +31,8 @@ const signUpSchema = Yup.object({
         .min(8, "Password must be at least 8 characters")
         .required("Password is required"),
 
-    birthYear: Yup.number()
-        .typeError("Birth year must be a number")
-        .integer("Birth year must be a whole number")
-        .min(1900, "Invalid birth year")
-        .max(new Date().getFullYear(), "Invalid birth year")
-        .required("Birth year is required"),
+    confirmPassword: Yup.string()
+        .oneOf([Yup.ref("password")], "Passwords must match")
+        .required("Confirm password is required"),
 });
 

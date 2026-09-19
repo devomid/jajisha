@@ -6,10 +6,10 @@ import useCurrentLocation from "../../src/hooks/useCurrentLocation";
 import MapView from "react-native-maps";
 import { BlurView } from "expo-blur";
 import { router } from "expo-router";
-import { Text, Button, useTheme } from "react-native-paper";
+import { Text, useTheme } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { View, StyleSheet, Pressable, TextInput } from "react-native";
-import { signInSchema } from "../../src/validation/userInfoSchema";
+import { signUpSchema, } from "../../src/validation/userInfoSchema";
 import { useSettingsStore } from "../../store/settingsStore";
 
 import { Mail, KeyRound, ShieldCheck, ContactRound, UserRound, AtSign } from 'lucide-react-native';
@@ -44,7 +44,7 @@ export default function SignUp() {
             confirmPassword: ""
         },
 
-        validationSchema: signInSchema,
+        validationSchema: signUpSchema,
 
         onSubmit: async (values, { resetForm }) => {
             const isSignedUp = await signUp(
@@ -179,13 +179,13 @@ export default function SignUp() {
                             />
 
                             <FormInput
-                                label="Password"
+                                label="Confirm Password"
                                 icon={ShieldCheck}
-                                value={values.password}
-                                onChangeText={handleChange("password")}
-                                onBlur={handleBlur("password")}
-                                error={errors.password}
-                                touched={touched.password}
+                                value={values.confirmPassword}
+                                onChangeText={handleChange("confirmPassword")}
+                                onBlur={handleBlur("confirmPassword")}
+                                error={errors.confirmPassword}
+                                touched={touched.confirmPassword}
                                 theme={theme}
                                 secureTextEntry
                                 autoCapitalize="none"
