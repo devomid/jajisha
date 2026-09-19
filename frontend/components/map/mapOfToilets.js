@@ -441,7 +441,18 @@ const MapOfToilets = forwardRef(({ currentLocation, onMarkerPress, isPickingLoca
                 },
                     location => {
 
-                        if (!mounted) { return; }
+                        if (!mounted) {
+                            return;
+                        }
+
+                        const { latitude, longitude } = location.coords;
+
+                        if (
+                            !Number.isFinite(latitude) ||
+                            !Number.isFinite(longitude)
+                        ) {
+                            return;
+                        }
 
                         navigationLocationRef.current = location;
                         setNavigationLocation(location);
