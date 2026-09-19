@@ -128,7 +128,14 @@ export const useNavigateToToilet = () => {
     };
 
     const calculateToiletDistance = async (toilet) => {
-
+        
+        if (
+            !toilet?.location?.coordinates ||
+            toilet.location.coordinates.length < 2
+        ) {
+            return;
+        }
+        
         try {
             const { status } =
                 await Location.requestForegroundPermissionsAsync();

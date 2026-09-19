@@ -41,15 +41,23 @@ const MapOfToilets = forwardRef(({ currentLocation, onMarkerPress, isPickingLoca
     } = navigation;
 
     const handleToiletPress = async (toilet) => {
+        useWcDataStore.getState().clearToiletRouteInfo();
         setSelectedToilet(toilet);
         calculateToiletDistance(toilet);
         onMarkerPress(toilet);
 
         const reviews = await getWcReviews(toilet._id);
 
+        const currentSelectedToilet =
+            useWcDataStore.getState().selectedToilet;
+
+        if (currentSelectedToilet?._id !== toilet._id) {
+            return;
+        }
+
         setSelectedToilet({
             ...toilet,
-            reviews
+            reviews,
         });
     };
     // nprmal map

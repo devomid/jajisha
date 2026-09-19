@@ -216,11 +216,11 @@ const RoutePreview = forwardRef(
                 snapPoints={snapPoints}
                 enableDynamicSizing={false}
                 backdropComponent={renderBackdrop}
-                onPresent={() => {
-                    console.log("ROUTE PREVIEW >>> PRESENTED");
-                }}
                 onDismiss={() => {
-                    console.log("ROUTE PREVIEW >>> DISMISSED");
+                    if (useWcDataStore.getState().navigation.status === "preview") {
+                        useWcDataStore.getState().clearNavigation();
+                    }
+
                     onDismiss?.();
                 }}
 
