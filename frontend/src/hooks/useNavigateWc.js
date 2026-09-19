@@ -207,6 +207,13 @@ export const useNavigateToToilet = () => {
 
             const selectedRoute = data.routes[0];
 
+            const currentSelectedToilet =
+                useWcDataStore.getState().selectedToilet;
+
+            if (currentSelectedToilet?._id !== toilet._id) {
+                return;
+            }
+
             useWcDataStore.getState().setToiletRouteInfo(
                 selectedRoute.distance,
                 selectedRoute.duration
