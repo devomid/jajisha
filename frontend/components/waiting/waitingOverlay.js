@@ -14,8 +14,11 @@ export default function WaitingOverlay() {
     const waitingText = useWaitingSystemStore(
         state => state.waitingText
     );
+    const waitingVisible = useWaitingSystemStore(
+        state => state.waitingVisible
+    );
 
-    if (!waiting) {
+    if (!waiting || !waitingVisible) {
         return null;
     }
 

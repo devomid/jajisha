@@ -10,6 +10,7 @@ import { useUnsaveWc } from "../../src/hooks/useUnsaveWc";
 import { useAuth } from "../../src/hooks/useAuth";
 import { useSettingsStore } from "../../store/settingsStore";
 import { formatDistance } from "../../src/utils/distance";
+import useWaitingSystemStore from "../../store/waitingSystemStore";
 
 import { BlurView } from "expo-blur";
 import { Text, useTheme } from "react-native-paper";
@@ -29,6 +30,7 @@ const ToiletInfo = forwardRef(({ curentLocation, onPresent }, ref) => {
     const setNavigationTarget = useWcDataStore(state => state.setNavigationTarget);
     const toiletRouteInfo = useWcDataStore(state => state.toiletRouteInfo);
     const distanceUnit = useSettingsStore(state => state.distanceUnit);
+    const hideWaiting = useWaitingSystemStore(state => state.hideWaiting);
 
     const { restoreUser } = useAuth();
     const { t } = useTranslation();
@@ -282,11 +284,6 @@ const ToiletInfo = forwardRef(({ curentLocation, onPresent }, ref) => {
         setIsSaved(saved);
     }, [toilet, user]);
 
-
-    useEffect(() => {
-        restoreUser();
-    }, []);
-
     useEffect(() => {
         Animated.timing(amenitiesAnimation, {
             toValue: showAllAmenities ? 1 : 0,
@@ -309,7 +306,10 @@ const ToiletInfo = forwardRef(({ curentLocation, onPresent }, ref) => {
             enableDynamicSizing={false}
             onChange={handleSheetChanges}
             backdropComponent={renderBackdrop}
-            onPresent={() => { onPresent?.(); }}
+            onPresent={() => {
+                hideWaiting();
+                onPresent?.();
+            }}
             containerStyle={{
                 borderRadius: 48,
                 marginBottom: 12,

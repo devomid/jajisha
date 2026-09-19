@@ -4,6 +4,7 @@ const useWaitingSystemStore = create((set) => ({
     waiting: false,
     waitingText: "",
     waitingId: null,
+    waitingVisible: false,
 
     startWaiting: (text = "") => {
         const id = Date.now() + Math.random();
@@ -12,10 +13,17 @@ const useWaitingSystemStore = create((set) => ({
             waiting: true,
             waitingText: text,
             waitingId: id,
+            waitingVisible: true,
         });
 
         return id;
     },
+
+    hideWaiting: () =>
+        set({ waitingVisible: false }),
+
+    showWaiting: () =>
+        set({ waitingVisible: true }),
 
     updateWaiting: (id, text = "") =>
         set((state) => {
@@ -38,6 +46,7 @@ const useWaitingSystemStore = create((set) => ({
                 waiting: false,
                 waitingText: "",
                 waitingId: null,
+                waitingVisible: false,
             };
         }),
 }));

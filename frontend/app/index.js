@@ -77,13 +77,13 @@ export default function Home() {
         return () => clearTimeout(timer);
     }, [navigationStatus]);
 
-    useEffect(() => {
-        if (!toast?.show) {
-            return;
-        }
+    // useEffect(() => {
+    //     if (!toast?.show) {
+    //         return;
+    //     }
 
-        restoreUser();
-    }, [toast, restoreUser]);
+    //     restoreUser();
+    // }, [toast]);
 
     const onMarkerPress = (toilet) => {
         console.log("1. marker pressed");
