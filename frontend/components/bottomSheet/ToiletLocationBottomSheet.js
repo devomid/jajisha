@@ -481,7 +481,7 @@ const ToiletInfo = forwardRef(({ curentLocation, onPresent }, ref) => {
                                     }}
                                     variant="bodySmall"
                                 >
-                                    {toilet.ratingSummary.average.toFixed(1)}
+                                    {toilet?.ratingSummary.average.toFixed(1)}
                                 </Text>
 
                                 <Text
@@ -490,7 +490,7 @@ const ToiletInfo = forwardRef(({ curentLocation, onPresent }, ref) => {
                                     }}
                                     variant="bodySmall"
                                 >
-                                    ({toilet.ratingSummary.count}{" "}vote)
+                                    ({toilet?.ratingSummary.count}{" "}vote)
                                 </Text>
                             </View>
 

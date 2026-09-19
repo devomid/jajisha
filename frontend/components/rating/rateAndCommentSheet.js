@@ -10,7 +10,7 @@ import { useWcDataStore } from "../../store/wcDataStore";
 import { useCreateReview } from "../../src/hooks/useCreateReview";
 import CommentCardComponentBig from "../cards/commentCardComponentBig";
 import WriteCommandAndRate from "../comments/writeCommentAndRate";
-
+import { MessageCircle } from "lucide-react-native";
 
 export default function RateAndCommentSheet({ theme, toilet, iscommenting, iscommentsOpen, setIscommenting, setIscommentsOpen }) {
     const ratings = toilet.ratingSummary;
@@ -171,7 +171,7 @@ export default function RateAndCommentSheet({ theme, toilet, iscommenting, iscom
                                     alignItems: 'center'
                                 }}
                             >
-                                <Text>No Review yet.</Text>
+                                <Text>No Review yet</Text>
 
                                 <ButtonComponent
                                     onPress={() => {

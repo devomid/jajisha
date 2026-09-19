@@ -23,7 +23,6 @@ export default function Favorites() {
   const theme = useTheme();
   const currentLocation = useCurrentLocation();
   const [region, setRegion] = useState(null);
-  const favoriteToilets = user.favoriteToilets;
   const mapType = useSettingsStore(state => state.mapType);
   const close = useTopSheetStore((state) => state.close);
 
@@ -37,10 +36,12 @@ export default function Favorites() {
       longitudeDelta: 0.02,
     });
   }, [currentLocation]);
-  
+
   if (!user) {
     return <Redirect href="/SignIn" />;
-  }
+  };
+  
+  const favoriteToilets = user.favoriteToilets;
 
   if (!region) {
     return (
