@@ -28,17 +28,20 @@ const RoutePreview = forwardRef(
         const shouldReopenToiletInfo = useRef(false);
 
         const origin = useMemo(() => {
+            const latitude = curentLocation?.coords?.latitude;
+            const longitude = curentLocation?.coords?.longitude;
+
             if (
-                !curentLocation?.coords?.latitude ||
-                !curentLocation?.coords?.longitude
+                !Number.isFinite(latitude) ||
+                !Number.isFinite(longitude)
             ) {
                 return null;
             }
-            return {
-                latitude: curentLocation.coords.latitude,
-                longitude: curentLocation.coords.longitude,
-            };
 
+            return {
+                latitude,
+                longitude,
+            };
         }, [curentLocation]);
 
         const routeCoordinates = useMemo(() => {
