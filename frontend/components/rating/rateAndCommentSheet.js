@@ -27,45 +27,45 @@ export default function RateAndCommentSheet({ theme, toilet, iscommenting, iscom
         });
 
         if (review) {
-            setSelectedToilet((current) => {
-                if (!current) return current;
+            const current = useWcDataStore.getState().selectedToilet;
 
-                const oldCount = current.ratingSummary.count;
-                const newCount = oldCount + 1;
+            if (!current) return;
 
-                const newRatingSummary = {
-                    ...current.ratingSummary,
-                    count: newCount,
-                };
+            const oldCount = current.ratingSummary.count;
+            const newCount = oldCount + 1;
 
-                const fields = [
-                    "cleanliness",
-                    "odor",
-                    "amenitiesHealth",
-                    "light",
-                    "privacy",
-                    "crowd",
-                ];
+            const newRatingSummary = {
+                ...current.ratingSummary,
+                count: newCount,
+            };
 
-                fields.forEach((field) => {
-                    newRatingSummary[field] =
-                        (
-                            current.ratingSummary[field] * oldCount +
-                            review.ratings[field]
-                        ) / newCount;
-                });
+            const fields = [
+                "cleanliness",
+                "odor",
+                "amenitiesHealth",
+                "light",
+                "privacy",
+                "crowd",
+            ];
 
-                newRatingSummary.average =
-                    fields.reduce(
-                        (sum, field) => sum + newRatingSummary[field],
-                        0
-                    ) / fields.length;
+            fields.forEach((field) => {
+                newRatingSummary[field] =
+                    (
+                        current.ratingSummary[field] * oldCount +
+                        review.ratings[field]
+                    ) / newCount;
+            });
 
-                return {
-                    ...current,
-                    ratingSummary: newRatingSummary,
-                    reviews: [review, ...(current.reviews ?? [])],
-                };
+            newRatingSummary.average =
+                fields.reduce(
+                    (sum, field) => sum + newRatingSummary[field],
+                    0
+                ) / fields.length;
+
+            setSelectedToilet({
+                ...current,
+                ratingSummary: newRatingSummary,
+                reviews: [review, ...(current.reviews ?? [])],
             });
 
             setIscommenting(false);
@@ -187,7 +187,7 @@ export default function RateAndCommentSheet({ theme, toilet, iscommenting, iscom
                 </View>
 
                 {iscommenting ? (
-                    <WriteCommandAndRate theme={theme}/>
+                    <WriteCommandAndRate theme={theme} />
                 ) : (
                     <>
                         {comments?.length > 0 ? (
