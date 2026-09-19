@@ -15,6 +15,7 @@ export const useNavigateToToilet = () => {
     const startWaiting = useWaitingSystemStore(state => state.startWaiting);
     const updateWaiting = useWaitingSystemStore(state => state.updateWaiting);
     const endWaiting = useWaitingSystemStore(state => state.endWaiting);
+    const clearNavigation = useWcDataStore(state => state.clearNavigation);
 
     const navigateToToilet = async (toilet) => {
 
@@ -38,6 +39,7 @@ export const useNavigateToToilet = () => {
                         },
                     })
                 };
+                clearNavigation();
                 return;
             }
 
@@ -79,8 +81,24 @@ export const useNavigateToToilet = () => {
                         },
                     })
                 };
+
+                clearNavigation();
                 return;
-            }
+            };
+            if (!data.routes?.length || !data.routes[0]?.geometry) {
+                if (toast?.show) {
+                    toast.show("Could not get map and location", {
+                        type: "custom",
+                        data: {
+                            type: "error",
+                            text2: "No usable route was returned. Try again.",
+                        },
+                    });
+                }
+
+                clearNavigation();
+                return;
+            };
 
             const selectedRoute = data.routes[0];
 
@@ -102,7 +120,7 @@ export const useNavigateToToilet = () => {
                     },
                 })
             };
-            setNavigationStatus("idle");
+            clearNavigation();
 
         } finally {
             endWaiting(waitingId);
@@ -110,7 +128,6 @@ export const useNavigateToToilet = () => {
     };
 
     const calculateToiletDistance = async (toilet) => {
-
 
         try {
             const { status } =
@@ -164,6 +181,20 @@ export const useNavigateToToilet = () => {
                         text2: "Try again a few moments later.",
                     },
                 });
+
+                return;
+            }
+            if (!data.routes?.length || !data.routes[0]?.geometry) {
+                if (toast?.show) {
+                    toast.show("Could not get map and location", {
+                        type: "custom",
+                        data: {
+                            type: "error",
+                            text2: "No usable route was returned. Try again.",
+                        },
+                    });
+                }
+
                 return;
             }
 

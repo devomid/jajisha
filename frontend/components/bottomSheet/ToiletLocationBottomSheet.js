@@ -34,8 +34,7 @@ const ToiletInfo = forwardRef(({ curentLocation, onPresent }, ref) => {
     const { restoreUser } = useAuth();
     const { t } = useTranslation();
     const theme = useTheme();
-    const { saveWc } = useManagingWc();
-    const { unsave } = useManagingWc();
+    const { saveWc, unsaveWc } = useManagingWc();
     const { distance, duration } = toiletRouteInfo;
 
     const [sheetIndex, setSheetIndex] = useState(0);
@@ -221,7 +220,7 @@ const ToiletInfo = forwardRef(({ curentLocation, onPresent }, ref) => {
         try {
 
             if (isSaved) {
-                const success = await unsave();
+                const success = await unsaveWc();
 
                 if (success) {
                     setIsSaved(false);
