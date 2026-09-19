@@ -67,7 +67,7 @@ export const useUnsaveWc = () => {
                 };
                 return null;
             }
-            return;
+            return true;
 
         } catch (error) {
             // console.log("Error unsaving WC:", error);

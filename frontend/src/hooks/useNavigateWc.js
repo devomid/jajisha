@@ -111,7 +111,6 @@ export const useNavigateToToilet = () => {
 
     const calculateToiletDistance = async (toilet) => {
 
-        const waitingId = startWaiting("Finding a fast way to there...");
 
         try {
             const { status } =
@@ -155,7 +154,6 @@ export const useNavigateToToilet = () => {
             const response = await fetch(url);
             const data = await response.json();
 
-            updateWaiting(waitingId, "Hold it...")
 
             if (data.code !== "Ok") {
                 // console.log("OSRM ERROR:", data.code);
@@ -187,8 +185,6 @@ export const useNavigateToToilet = () => {
                     },
                 })
             };
-        } finally {
-            endWaiting(waitingId);
         }
     };
 

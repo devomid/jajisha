@@ -72,7 +72,7 @@ export const useSaveWc = () => {
                 return null;
             }
 
-            return;
+            return true;
 
         } catch (error) {
 

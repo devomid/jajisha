@@ -38,13 +38,16 @@ const MapOfToilets = forwardRef(({ currentLocation, onMarkerPress, isPickingLoca
     } = navigation;
 
     const handleToiletPress = async (toilet) => {
-        const reviews = await getWcReviews(toilet._id)
+        setSelectedToilet(toilet);
+        calculateToiletDistance(toilet);
+        onMarkerPress(toilet);
+
+        const reviews = await getWcReviews(toilet._id);
+
         setSelectedToilet({
             ...toilet,
             reviews
-        })
-        calculateToiletDistance(toilet);
-        onMarkerPress(toilet);
+        });
     };
     // nprmal map
     const [latitudeDelta, setLatitudeDelta] = useState(0.02);
