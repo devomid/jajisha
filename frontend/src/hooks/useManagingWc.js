@@ -100,22 +100,19 @@ export const useManagingWc = () => {
     };
 
     const getWc = async () => {
-
         const waitingId = startWaiting("Finding toilets near you...");
 
-        try {
+        const requestStartedWith = new Set(
+            useWcDataStore.getState().toilets.map(toilet => toilet._id)
+        );
 
+        try {
             const response = await fetch(`${API_URL}/api/toilets`, {
                 method: "GET",
-                headers: { "Content-Type": 'application/json' },
+                headers: { "Content-Type": "application/json" },
             });
 
             if (!response.ok) {
-                // console.log('respons is not OK');
-                // console.log("Status:", response.status);
-                // const error = await response.text();
-                // console.log(error);
-
                 if (toast?.show) {
                     toast.show("Could not get toilets", {
                         type: "custom",
@@ -123,28 +120,31 @@ export const useManagingWc = () => {
                             type: "error",
                             text2: "Try again a few moments later or check connection.",
                         },
-                    })
-                };
+                    });
+                }
+
                 return null;
-            };
+            }
+
             const jsonRes = await response.json();
 
-            setToilets((currentToilets) => {
+            setToilets(currentToilets => {
                 const fetchedIds = new Set(
                     jsonRes.toilets.map(toilet => toilet._id)
                 );
 
-                const locallyAddedToilets = currentToilets.filter(
-                    toilet => !fetchedIds.has(toilet._id)
+                const addedDuringRequest = currentToilets.filter(
+                    toilet =>
+                        !requestStartedWith.has(toilet._id) &&
+                        !fetchedIds.has(toilet._id)
                 );
 
-                return [...jsonRes.toilets, ...locallyAddedToilets];
+                return [...jsonRes.toilets, ...addedDuringRequest];
             });
 
             return jsonRes.toilets;
 
         } catch (error) {
-            // console.log("Error get all WCs", error);
             if (toast?.show) {
                 toast.show("Something went wrong getting WC!", {
                     type: "custom",
@@ -152,8 +152,9 @@ export const useManagingWc = () => {
                         type: "error",
                         text2: "It can be our servers or your connection. \nCheck and try again.",
                     },
-                })
-            };
+                });
+            }
+
             return null;
         } finally {
             endWaiting(waitingId);

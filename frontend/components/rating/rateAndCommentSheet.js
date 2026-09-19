@@ -38,6 +38,7 @@ export default function RateAndCommentSheet({ theme, toilet, iscommenting, iscom
             };
             return;
         }
+        const toiletId = toilet?._id;
         const review = await createRiview({
             reviewText: wcData.review,
             ratings: wcData.ratings,
@@ -46,7 +47,9 @@ export default function RateAndCommentSheet({ theme, toilet, iscommenting, iscom
         if (review) {
             const current = useWcDataStore.getState().selectedToilet;
 
-            if (!current) return;
+            if (!current || current._id !== toiletId) {
+                return;
+            }
 
             const oldCount = current.ratingSummary.count;
             const newCount = oldCount + 1;

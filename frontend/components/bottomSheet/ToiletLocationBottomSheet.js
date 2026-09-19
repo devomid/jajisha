@@ -30,7 +30,6 @@ const ToiletInfo = forwardRef(({ curentLocation, onPresent }, ref) => {
     const toiletRouteInfo = useWcDataStore(state => state.toiletRouteInfo);
     const distanceUnit = useSettingsStore(state => state.distanceUnit);
     const hideWaiting = useWaitingSystemStore(state => state.hideWaiting);
-
     const { restoreUser } = useAuth();
     const { t } = useTranslation();
     const theme = useTheme();
@@ -215,6 +214,7 @@ const ToiletInfo = forwardRef(({ curentLocation, onPresent }, ref) => {
         if (saving || !toilet?._id) {
             return;
         }
+        const toiletId = toilet._id;
         setSaving(true);
 
         try {
@@ -223,14 +223,20 @@ const ToiletInfo = forwardRef(({ curentLocation, onPresent }, ref) => {
                 const success = await unsaveWc();
 
                 if (success) {
-                    setIsSaved(false);
+                    if (useWcDataStore.getState().selectedToilet?._id === toiletId) {
+                        setIsSaved(false);
+                    }
+
                     await restoreUser();
                 }
             } else {
                 const success = await saveWc();
 
                 if (success) {
-                    setIsSaved(true);
+                    if (useWcDataStore.getState().selectedToilet?._id === toiletId) {
+                        setIsSaved(true);
+                    }
+
                     await restoreUser();
                 }
             }
