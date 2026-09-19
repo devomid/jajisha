@@ -1,3 +1,4 @@
+import { useRef } from "react";
 import { useWcDataStore } from "../../store/wcDataStore";
 import * as Location from "expo-location";
 import useWaitingSystemStore from "../../store/waitingSystemStore";
@@ -7,6 +8,7 @@ import { useToast } from "react-native-toast-notifications";
 export const useNavigateToToilet = () => {
 
     const toast = useToast();
+    const distanceRequestRef = useRef(0);
 
     const setNavigationRoute = useWcDataStore(state => state.setNavigationRoute);
     const setNavigationDistance = useWcDataStore(state => state.setNavigationDistance);
@@ -18,7 +20,6 @@ export const useNavigateToToilet = () => {
     const clearNavigation = useWcDataStore(state => state.clearNavigation);
 
     const navigateToToilet = async (toilet) => {
-
         const waitingId = startWaiting("Locating...");
 
         try {
@@ -133,18 +134,21 @@ export const useNavigateToToilet = () => {
     };
 
     const calculateToiletDistance = async (toilet) => {
-        
+
         if (
             !toilet?.location?.coordinates ||
             toilet.location.coordinates.length < 2
         ) {
             return;
         }
-        
-        try {
-            const { status } =
-                await Location.requestForegroundPermissionsAsync();
 
+        const requestId = ++distanceRequestRef.current;
+
+        try {
+            const { status } = await Location.requestForegroundPermissionsAsync();
+            if (requestId !== distanceRequestRef.current) {
+                return;
+            }
             if (status !== "granted") {
                 // console.log("Location permission denied");
                 toast.show("Location Permission must be granted!", {
@@ -157,10 +161,12 @@ export const useNavigateToToilet = () => {
                 return;
             }
 
-            const currentLocation =
-                await Location.getCurrentPositionAsync({
-                    accuracy: Location.Accuracy.High,
-                });
+            const currentLocation = await Location.getCurrentPositionAsync({
+                accuracy: Location.Accuracy.High,
+            });
+            if (requestId !== distanceRequestRef.current) {
+                return;
+            }
 
             const origin = {
                 latitude: currentLocation.coords.latitude,
@@ -181,7 +187,13 @@ export const useNavigateToToilet = () => {
                 `?overview=false`;
 
             const response = await fetch(url);
+            if (requestId !== distanceRequestRef.current) {
+                return;
+            }
             const data = await response.json();
+            if (requestId !== distanceRequestRef.current) {
+                return;
+            }
 
 
             if (data.code !== "Ok") {
@@ -226,6 +238,9 @@ export const useNavigateToToilet = () => {
 
         } catch (error) {
             // console.error("TOILET DISTANCE ERROR:", error);
+            if (requestId !== distanceRequestRef.current) {
+                return;
+            }
             if (toast?.show) {
                 toast.show("Something went wrong getting map features!", {
                     type: "custom",
