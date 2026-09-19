@@ -184,7 +184,7 @@ export const useNavigateToToilet = () => {
 
                 return;
             }
-            if (!data.routes?.length || !data.routes[0]?.geometry) {
+            if (!data.routes?.length) {
                 if (toast?.show) {
                     toast.show("Could not get map and location", {
                         type: "custom",

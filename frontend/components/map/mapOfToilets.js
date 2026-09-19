@@ -405,6 +405,7 @@ const MapOfToilets = forwardRef(({ currentLocation, onMarkerPress, isPickingLoca
         navigationPitchRef.current = 55;
         headingRef.current = 0;
         setHeading(0);
+
         const startTracking = async () => {
             try {
                 const { status } = await Location.requestForegroundPermissionsAsync();
@@ -474,7 +475,7 @@ const MapOfToilets = forwardRef(({ currentLocation, onMarkerPress, isPickingLoca
                 });
 
             } catch (error) {
-                console.error("NAVIGATION TRACKING ERROR:", error);
+                clearNavigation();
             }
         };
 
