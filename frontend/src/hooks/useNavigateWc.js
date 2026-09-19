@@ -9,6 +9,7 @@ export const useNavigateToToilet = () => {
 
     const toast = useToast();
     const distanceRequestRef = useRef(0);
+    const navigationRequestRef = useRef(0);
 
     const setNavigationRoute = useWcDataStore(state => state.setNavigationRoute);
     const setNavigationDistance = useWcDataStore(state => state.setNavigationDistance);
@@ -21,9 +22,13 @@ export const useNavigateToToilet = () => {
 
     const navigateToToilet = async (toilet) => {
         const waitingId = startWaiting("Locating...");
+        const requestId = ++navigationRequestRef.current;
 
         try {
             const { status } = await Location.requestForegroundPermissionsAsync();
+            if (requestId !== navigationRequestRef.current) {
+                return;
+            };
 
             updateWaiting(
                 waitingId,
@@ -44,10 +49,12 @@ export const useNavigateToToilet = () => {
                 return;
             }
 
-            const currentLocation =
-                await Location.getCurrentPositionAsync({
-                    accuracy: Location.Accuracy.High,
-                });
+            const currentLocation = await Location.getCurrentPositionAsync({
+                accuracy: Location.Accuracy.High,
+            });
+            if (requestId !== navigationRequestRef.current) {
+                return;
+            }
 
             const origin = {
                 latitude: currentLocation.coords.latitude,
@@ -68,11 +75,20 @@ export const useNavigateToToilet = () => {
                 `?overview=full&geometries=geojson&steps=true`;
 
             const response = await fetch(url);
-
+            if (requestId !== navigationRequestRef.current) {
+                return;
+            }
             const data = await response.json();
+            if (requestId !== navigationRequestRef.current) {
+                return;
+            }
 
             if (data.code !== "Ok") {
                 // console.log("OSRM ERROR:", data.code);
+                if (requestId !== navigationRequestRef.current) {
+                    return;
+                };
+                
                 if (toast?.show) {
                     toast.show("Could not get map and location", {
                         type: "custom",
@@ -102,12 +118,12 @@ export const useNavigateToToilet = () => {
             };
 
             const selectedRoute = data.routes[0];
-            const currentNavigationTarget =
-                useWcDataStore.getState().navigation.target;
+            const currentNavigationTarget = useWcDataStore.getState().navigation.target;
 
             if (currentNavigationTarget?._id !== toilet._id) {
                 return;
-            }
+            };
+
             setNavigationRoute(selectedRoute.geometry);
             setNavigationDistance(selectedRoute.distance);
             setNavigationDuration(selectedRoute.duration);
