@@ -24,8 +24,7 @@ import MenuTopSheet from '../components/topSheet/MenuTopSheet';
 
 export default function Home() {
 
-    const { getWac } = useManagingWc();
-    getWac();
+    const { getWc } = useManagingWc();
 
     const isPickingLocation = useWcDataStore(state => state.isPickingLocation);
     const navigationStatus = useWcDataStore(state => state.navigation.status);
@@ -42,6 +41,9 @@ export default function Home() {
     const routePreviewBottomSheetRef = useRef(null);
     const navigation = useNavigation();
 
+    useEffect(() => {
+        getWc();
+    }, []);
     useEffect(() => {
 
         if (!openToiletInfo) {

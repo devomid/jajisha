@@ -346,11 +346,11 @@ export const useManagingWc = () => {
         }
     };
 
-    return (
+    return ({
         addWc,
         getWc,
         getWcReviews,
         saveWc,
         unsaveWc
-    )
+    })
 };
