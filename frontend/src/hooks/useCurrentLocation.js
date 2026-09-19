@@ -14,29 +14,49 @@ export default function useCurrentLocation() {
 
 
     useEffect(() => {
-
         (async () => {
+            try {
+                const { status } =
+                    await Location.requestForegroundPermissionsAsync();
 
-            const { status } = await Location.requestForegroundPermissionsAsync();
+                if (status !== "granted") {
+                    if (toast?.show) {
+                        toast.show("Location Permission must be granted!", {
+                            type: "custom",
+                            data: {
+                                type: "warning",
+                                text2: "Please allow location access in Settings.",
+                            },
+                        });
+                    }
 
-            if (status !== "granted") {
+                    return;
+                }
 
+                const current =
+                    await Location.getCurrentPositionAsync({});
+
+                const { latitude, longitude } = current.coords;
+
+                if (
+                    !Number.isFinite(latitude) ||
+                    !Number.isFinite(longitude)
+                ) {
+                    return;
+                }
+
+                setLocation(current);
+            } catch (error) {
                 if (toast?.show) {
-                    toast.show("Location Permission must be granted!", {
+                    toast.show("Could not get your location", {
                         type: "custom",
                         data: {
-                            type: "warning",
-                            text2: "Please allow location access in Settings.",
+                            type: "error",
+                            text2: "Please check your location services and try again.",
                         },
-                    })
-                };
-
-                return;
+                    });
+                }
             }
-
-            const current = await Location.getCurrentPositionAsync({});
-
-            setLocation(current);
         })();
     }, []);
 
