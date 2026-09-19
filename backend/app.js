@@ -1,6 +1,7 @@
 const express = require('express');
 const helmet = require('helmet');
 const cors = require('cors');
+const requestLogger = require("./logger/requestLogger");
 const toiletRoutes = require('./routes/toiletRoutes');
 const userRoutes = require('./routes/userRoutes');
 const managmentRoutes = require('./routes/managmentRoutes');
@@ -10,6 +11,7 @@ dotenv.config()
 
 // configs and middlwares
 const app = express();
+app.use(requestLogger);
 app.use(express.json({ limit: "1mb" }));
 app.use(express.static('public'));
 app.use(express.urlencoded({ extended: true, limit: "1mb" }));

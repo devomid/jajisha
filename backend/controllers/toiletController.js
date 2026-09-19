@@ -5,17 +5,23 @@ const User = require("../models/userModel");
 const Review = require("../models/reviewModel");
 
 const createToilet = async (req, res) => {
-    const session = await mongoose.startSession();
 
+    const session = await mongoose.startSession();
     try {
         const userId = req.user._id;
         const { wcData } = req.body;
 
         if (!wcData || typeof wcData !== "object") {
+            logger.warn({
+                body: req.body.toString(),
+            }, "id or wc data is not a valid object");
             return res.status(400).json({ message: "Invalid toilet data" });
         };
 
         if (typeof wcData.name !== "string" || !wcData.name.trim()) {
+            logger.warn({
+                wcName: wcData.name.toString(),
+            }, "id or wc data is not a valid object");
             return res.status(400).json({ message: "Toilet name is required" });
         };
 
@@ -30,11 +36,17 @@ const createToilet = async (req, res) => {
             longitude < -180 ||
             longitude > 180
         ) {
+            logger.warn({
+                location: wcData.location.toString(),
+            }, "invalid location");
             return res.status(400).json({ message: "Invalid location" });
         };
 
         const ratings = wcData.ratings;
         if (!ratings || typeof ratings !== "object") {
+            logger.warn({
+                wcData: wcData.toString(),
+            }, "invalid ratings object or no ratings");
             return res.status(400).json({ message: "Ratings are required" });
         };
 
@@ -54,6 +66,9 @@ const createToilet = async (req, res) => {
                 ratings[field] < 0 ||
                 ratings[field] > 5
             ) {
+                logger.warn({
+                    field: field.toString(),
+                }, "invalid ratings");
                 return res.status(400).json({
                     message: `Invalid rating: ${field}`,
                 });
@@ -63,6 +78,9 @@ const createToilet = async (req, res) => {
         const amenities = wcData.amenities;
 
         if (!amenities || typeof amenities !== "object") {
+            logger.warn({
+                wcData: wcData.toString(),
+            }, "invalid amenities object or no amenities");
             return res.status(400).json({ message: "Amenities are required" });
         }
 
@@ -79,6 +97,9 @@ const createToilet = async (req, res) => {
 
         for (const field of amenityFields) {
             if (typeof amenities[field] !== "boolean") {
+                logger.warn({
+                    field: field.toString(),
+                }, "invalid amenities");
                 return res.status(400).json({
                     message: `Invalid amenity: ${field}`,
                 });
@@ -86,6 +107,9 @@ const createToilet = async (req, res) => {
         }
 
         if (typeof wcData.isFree !== "boolean") {
+            logger.warn({
+                wcData: wcData.toString(),
+            }, "invalid isFree object or no isFree");
             return res.status(400).json({ message: "Invalid isFree value" });
         };
 
@@ -94,11 +118,17 @@ const createToilet = async (req, res) => {
             : Number(String(wcData.price ?? "").replace(/[,\s]/g, ""));
 
         if (!Number.isFinite(price) || price < 0) {
+            logger.warn({
+                price: price.toString(),
+            }, "invalid price object or no price");
             return res.status(400).json({ message: "Invalid price" });
         };
 
         const user = await User.exists({ _id: userId });
         if (!user) {
+            logger.warn({
+                userId: userId.toString(),
+            }, "youser not found");
             return res.status(404).json({ message: "User not found" });
         };
 
@@ -164,23 +194,33 @@ const createToilet = async (req, res) => {
         }], { session });
 
         await session.commitTransaction();
+        logger.info({
+            toilet: toilet.toString(),
+        }, "create toilet successful");
 
         res.status(201).json(toilet);
 
-    } catch (err) {
+    } catch (error) {
+        logger.error({
+            err: error,
+        }, "Get user failed");
         if (session.inTransaction()) {
             await session.abortTransaction();
         }
 
-        console.error(err);
-
-        if (err.name === "ValidationError") {
+        if (error.name === "ValidationError") {
+            logger.error({
+                err: error.name,
+            }, "Invalid toilet data.");
             return res.status(400).json({
                 message: "Invalid toilet data",
             });
         }
 
-        if (err.code === 11000) {
+        if (error.code === 11000) {
+            logger.error({
+                err: error.name,
+            }, "Toilet already exists.");
             return res.status(409).json({
                 message: "Toilet already exists",
             });
@@ -200,12 +240,15 @@ const getToilets = async (req, res) => {
             .select("-reviews -createdBy")
             .limit(1000)
             .lean();
+
+        logger.info("get toilets successful");
         res.status(200).json({ toilets });
 
     } catch (error) {
 
-        console.log(error);
-        res.status(500).json({
+        logger.error({
+            err: error.name,
+        }, "Failed to load toilets"); res.status(500).json({
             message: "Failed to load toilets",
         })
     }
@@ -215,6 +258,9 @@ const getToiletReviews = async (req, res) => {
     const { toiletId } = req.params;
 
     if (!mongoose.isValidObjectId(toiletId)) {
+        logger.warn({
+            toiletId: toiletId.toString(),
+        }, "id is not a valid object");
         return res.status(400).json({ message: "Invalid toilet ID" });
     }
 
@@ -224,7 +270,7 @@ const getToiletReviews = async (req, res) => {
             .sort({ createdAt: -1 })
             .limit(50)
             .lean();
-
+        logger.info("Get reviews successful");
         res.status(200).json({ reviews });
 
     } catch (error) {
