@@ -4,9 +4,9 @@ import { useEffect, useRef } from "react";
 import { useNavigation } from "expo-router";
 import { useTranslation } from "react-i18next";
 import { useWcDataStore } from '../store/wcDataStore';
-import { useGetWc } from '../src/hooks/useGetWc';
 import useCurrentLocation from '../src/hooks/useCurrentLocation';
 import { useTopSheetStore } from '../store/menuStore';
+import { useManagingWc } from '../src/hooks/useManagingWc';
 
 import { View, Pressable, Image } from "react-native";
 import { useTheme, Text } from "react-native-paper";
@@ -23,7 +23,9 @@ import MenuTopSheet from '../components/topSheet/MenuTopSheet';
 
 
 export default function Home() {
-    useGetWc()
+
+    const { getWac } = useManagingWc();
+    getWac();
 
     const isPickingLocation = useWcDataStore(state => state.isPickingLocation);
     const navigationStatus = useWcDataStore(state => state.navigation.status);
@@ -109,7 +111,7 @@ export default function Home() {
                 onMarkerPress={onMarkerPress}
                 onAddWcPress={onAddWcPress}
             />
-            
+
             <SafeAreaView
                 style={{
                     position: "absolute",

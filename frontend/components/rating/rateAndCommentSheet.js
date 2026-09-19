@@ -11,8 +11,11 @@ import { useCreateReview } from "../../src/hooks/useCreateReview";
 import CommentCardComponentBig from "../cards/commentCardComponentBig";
 import WriteCommandAndRate from "../comments/writeCommentAndRate";
 import { MessageCircle } from "lucide-react-native";
+import { useToast } from "react-native-toast-notifications";
 
 export default function RateAndCommentSheet({ theme, toilet, iscommenting, iscommentsOpen, setIscommenting, setIscommentsOpen }) {
+    const toast = useToast();
+
     const setWcData = useWcDataStore((state) => state.setWcData);
     const ratings = toilet.ratingSummary;
     const { t } = useTranslation();
@@ -20,8 +23,21 @@ export default function RateAndCommentSheet({ theme, toilet, iscommenting, iscom
     const createRiview = useCreateReview();
     const comments = toilet.reviews;
     const setSelectedToilet = useWcDataStore((state) => state.setSelectedToilet);
+    const user = useUserStore((state) => state.user);
 
     const handleSendReview = async () => {
+        if (wcData.review.trim().length < 10) {
+            if (toast?.show) {
+                toast.show("Could not add review", {
+                    type: "custom",
+                    data: {
+                        type: "error",
+                        text2: "Your text should be more than 10 and less than 200 charachter.",
+                    },
+                })
+            };
+            return;
+        }
         const review = await createRiview({
             reviewText: wcData.review,
             ratings: wcData.ratings,
@@ -66,7 +82,19 @@ export default function RateAndCommentSheet({ theme, toilet, iscommenting, iscom
             setSelectedToilet({
                 ...current,
                 ratingSummary: newRatingSummary,
-                reviews: [review, ...(current.reviews ?? [])],
+                reviews: [
+                    {
+                        ...review,
+                        user: {
+                            _id: user._id,
+                            username: user.username,
+                            firstName: user.firstName,
+                            lastName: user.lastName,
+                            avatar: user.avatar,
+                        },
+                    },
+                    ...(current.reviews ?? []),
+                ],
             });
 
             setWcData((prev) => ({
@@ -81,7 +109,7 @@ export default function RateAndCommentSheet({ theme, toilet, iscommenting, iscom
                     crowd: 0,
                 },
             }));
-            
+
             setIscommenting(false);
         }
     };

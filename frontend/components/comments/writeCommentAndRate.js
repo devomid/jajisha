@@ -28,7 +28,7 @@ export default function WriteCommandAndRate({ theme }) {
                 editable
                 multiline
                 numberOfLines={8}
-                maxLength={150}
+                maxLength={200}
                 placeholder="Write a comment..."
                 placeholderTextColor={theme.colors.text + "80"}
                 onChangeText={(text) =>

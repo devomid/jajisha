@@ -1,15 +1,14 @@
 import React, { forwardRef, useMemo, useCallback, useEffect } from "react";
-import { BottomSheetModal, BottomSheetView, BottomSheetBackdrop } from "@gorhom/bottom-sheet";
+import { BottomSheetModal, BottomSheetBackdrop } from "@gorhom/bottom-sheet";
 import GlassBackground from "../../components/blur/blurView";
 import NewToilet from "../newToilet/newToilet";
 import { useTheme } from "react-native-paper";
 import { BottomSheetScrollView } from '@gorhom/bottom-sheet';
-import { View, Pressable, Text, Easing } from "react-native";
-import { BlurView } from "expo-blur";
+import { View, Text } from "react-native";
 import { useTranslation } from "react-i18next";
-import { useAddWc } from "../../src/hooks/useAddWc";
 import { useWcDataStore } from "../../store/wcDataStore";
 import ButtonComponent from "../Button/Button";
+import { useManagingWc } from "../../src/hooks/useManagingWc";
 
 const AddWc = forwardRef((props, ref) => {
     const { t } = useTranslation();
@@ -17,7 +16,7 @@ const AddWc = forwardRef((props, ref) => {
     const isPickingLocation = useWcDataStore(state => state.isPickingLocation);
     const theme = useTheme();
     const snapPoints = useMemo(() => ["86%"], []);
-    const { addWc } = useAddWc();
+    const { addWc } = useManagingWc();
     const wcData = useWcDataStore((state) => state.wcData);
     const setWcData = useWcDataStore((state) => state.setWcData);
     const resetWcData = useWcDataStore(state => state.resetWcData);

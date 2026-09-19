@@ -5,11 +5,10 @@ import { router } from "expo-router";
 
 import { useWcDataStore } from "../../store/wcDataStore";
 import { useUserStore } from "../../store/userStore";
-import { useSaveWc } from "../../src/hooks/useSaveWc";
-import { useUnsaveWc } from "../../src/hooks/useUnsaveWc";
 import { useAuth } from "../../src/hooks/useAuth";
 import { useSettingsStore } from "../../store/settingsStore";
 import { formatDistance } from "../../src/utils/distance";
+import { useManagingWc } from '../../src/hooks/useManagingWc';
 import useWaitingSystemStore from "../../store/waitingSystemStore";
 
 import { BlurView } from "expo-blur";
@@ -35,8 +34,8 @@ const ToiletInfo = forwardRef(({ curentLocation, onPresent }, ref) => {
     const { restoreUser } = useAuth();
     const { t } = useTranslation();
     const theme = useTheme();
-    const saveWc = useSaveWc();
-    const unsave = useUnsaveWc();
+    const { saveWc } = useManagingWc();
+    const { unsave } = useManagingWc();
     const { distance, duration } = toiletRouteInfo;
 
     const [sheetIndex, setSheetIndex] = useState(0);

@@ -280,5 +280,11 @@ export const useAuth = () => {
     }
 
 
-    return ({ signUp, signIn, restoreUser, logout, deleteUser });
+    return ({
+        signUp,
+        signIn,
+        restoreUser,
+        logout,
+        deleteUser
+    });
 }
