@@ -82,7 +82,9 @@ export const useCreateReview = () => {
                 return null;
             }
 
-            return;
+            const jsonRes = await response.json();
+
+            return jsonRes.review;
 
         } catch (error) {
             // console.log("Error saving review:", error);

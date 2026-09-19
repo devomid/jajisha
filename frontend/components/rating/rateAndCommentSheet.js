@@ -18,14 +18,56 @@ export default function RateAndCommentSheet({ theme, toilet, iscommenting, iscom
     const wcData = useWcDataStore((state) => state.wcData);
     const createRiview = useCreateReview();
     const comments = toilet.reviews;
+    const setSelectedToilet = useWcDataStore((state) => state.setSelectedToilet);
 
     const handleSendReview = async () => {
-        const success = await createRiview({
+        const review = await createRiview({
             reviewText: wcData.review,
             ratings: wcData.ratings,
         });
 
-        if (success) {
+        if (review) {
+            setSelectedToilet((current) => {
+                if (!current) return current;
+
+                const oldCount = current.ratingSummary.count;
+                const newCount = oldCount + 1;
+
+                const newRatingSummary = {
+                    ...current.ratingSummary,
+                    count: newCount,
+                };
+
+                const fields = [
+                    "cleanliness",
+                    "odor",
+                    "amenitiesHealth",
+                    "light",
+                    "privacy",
+                    "crowd",
+                ];
+
+                fields.forEach((field) => {
+                    newRatingSummary[field] =
+                        (
+                            current.ratingSummary[field] * oldCount +
+                            review.ratings[field]
+                        ) / newCount;
+                });
+
+                newRatingSummary.average =
+                    fields.reduce(
+                        (sum, field) => sum + newRatingSummary[field],
+                        0
+                    ) / fields.length;
+
+                return {
+                    ...current,
+                    ratingSummary: newRatingSummary,
+                    reviews: [review, ...(current.reviews ?? [])],
+                };
+            });
+
             setIscommenting(false);
         }
     };
