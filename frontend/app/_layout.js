@@ -15,6 +15,7 @@ import WaitingOverlay from "../components/waiting/waitingOverlay";
 
 import { ToastProvider } from "react-native-toast-notifications";
 import AppToast from "../components/toast/appToast";
+import AuthBootstrap from "../components/auth/authBootStrap";
 
 export default function RootLayout() {
     const scheme = useColorScheme();
@@ -60,6 +61,7 @@ export default function RootLayout() {
                             ),
                         }}
                     >
+                        <AuthBootstrap/>
                         <Slot />
                     </ToastProvider>
                     <WaitingOverlay />

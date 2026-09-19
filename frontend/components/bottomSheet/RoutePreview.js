@@ -168,17 +168,18 @@ const RoutePreview = forwardRef(
 
 
         const renderBackdrop = useCallback(
-            (props) => (
+            (props) => {
+                return (
+                    <BottomSheetBackdrop
+                        {...props}
+                        opacity={0.3}
+                        appearsOnIndex={0}
+                        disappearsOnIndex={-1}
+                        pressBehavior="close"
+                        style={{ backgroundColor: theme.colors.primaryLighter + '60' }}
 
-                <BottomSheetBackdrop
-                    {...props}
-                    opacity={0.3}
-                    appearsOnIndex={0}
-                    disappearsOnIndex={-1}
-                    pressBehavior="close"
-                    style={{ backgroundColor: theme.colors.primaryLighter + '60' }}
-
-                />), []);
+                    />)
+            }, []);
 
         const distanceUnit = useSettingsStore(
             state => state.distanceUnit

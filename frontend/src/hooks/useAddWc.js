@@ -82,7 +82,7 @@ export const useAddWc = () => {
                     type: "custom",
                     data: {
                         type: "error",
-                        text2: "It can be our servers or your connection. Check and try again.",
+                        text2: "It can be our servers or your connection. \nCheck and try again.",
                     },
                 })
             };

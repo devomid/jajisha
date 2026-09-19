@@ -6,14 +6,13 @@ import { useTranslation } from "react-i18next";
 import { useWcDataStore } from '../store/wcDataStore';
 import { useGetWc } from '../src/hooks/useGetWc';
 import useCurrentLocation from '../src/hooks/useCurrentLocation';
-import { useAuth } from '../src/hooks/useAuth';
 import { useTopSheetStore } from '../store/menuStore';
 
 import { View, Pressable, Image } from "react-native";
 import { useTheme, Text } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { BlurView } from "expo-blur";
-import { Menu, LocateFixed, ZoomOut, ZoomIn, Search } from 'lucide-react-native';
+import { Menu, LocateFixed, ZoomOut, ZoomIn } from 'lucide-react-native';
 
 import MapOfToilets from '../components/map/mapOfToilets';
 import ToiletInfo from "../components/bottomSheet/ToiletLocationBottomSheet";
@@ -21,11 +20,9 @@ import AddWc from "../components/bottomSheet/AddWcBottomSheet";
 import RoutePreview from '../components/bottomSheet/RoutePreview';
 import SearchButton from '../components/searchBar/animatedSearchBtn';
 import MenuTopSheet from '../components/topSheet/MenuTopSheet';
-import { useToast } from "react-native-toast-notifications";
 
 
 export default function Home() {
-    const toast = useToast();
     useGetWc()
 
     const isPickingLocation = useWcDataStore(state => state.isPickingLocation);
@@ -34,7 +31,6 @@ export default function Home() {
     const clearOpenToiletInfo = useWcDataStore(state => state.clearOpenToiletInfo);
 
     const { t } = useTranslation();
-    const { restoreUser } = useAuth();
     const mapRef = useRef(null);
     const curentLocation = useCurrentLocation();
     const theme = useTheme();
@@ -76,14 +72,6 @@ export default function Home() {
 
         return () => clearTimeout(timer);
     }, [navigationStatus]);
-
-    useEffect(() => {
-        if (!toast?.show) {
-            return;
-        }
-
-        restoreUser();
-    }, [toast]);
 
     const onMarkerPress = (toilet) => {
         console.log("1. marker pressed");
