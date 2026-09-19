@@ -13,6 +13,7 @@ import WriteCommandAndRate from "../comments/writeCommentAndRate";
 import { MessageCircle } from "lucide-react-native";
 
 export default function RateAndCommentSheet({ theme, toilet, iscommenting, iscommentsOpen, setIscommenting, setIscommentsOpen }) {
+    const setWcData = useWcDataStore((state) => state.setWcData);
     const ratings = toilet.ratingSummary;
     const { t } = useTranslation();
     const wcData = useWcDataStore((state) => state.wcData);
@@ -68,6 +69,19 @@ export default function RateAndCommentSheet({ theme, toilet, iscommenting, iscom
                 reviews: [review, ...(current.reviews ?? [])],
             });
 
+            setWcData((prev) => ({
+                ...prev,
+                review: "",
+                ratings: {
+                    cleanliness: 0,
+                    odor: 0,
+                    amenitiesHealth: 0,
+                    light: 0,
+                    privacy: 0,
+                    crowd: 0,
+                },
+            }));
+            
             setIscommenting(false);
         }
     };
