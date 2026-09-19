@@ -339,6 +339,7 @@ const MapOfToilets = forwardRef(({ currentLocation, onMarkerPress, isPickingLoca
         if (navigationStatus !== "navigating") { return; }
 
         let mounted = true;
+
         navigationAltitudeRef.current = 700;
         navigationPitchRef.current = 55;
         headingRef.current = 0;
@@ -354,23 +355,71 @@ const MapOfToilets = forwardRef(({ currentLocation, onMarkerPress, isPickingLoca
                 }
 
                 if (status !== "granted") {
-                    // existing toast
+                    if (toast?.show) {
+                        toast.show("Location Permission must be granted!", {
+                            type: "custom",
+                            data: {
+                                type: "warning",
+                                text2: "Please allow location access in Settings.",
+                            },
+                        })
+                    };
+
                     clearNavigation();
                     return;
                 }
 
-                const locationSubscription = await Location.watchPositionAsync(
-                    {
-                        accuracy: Location.Accuracy.BestForNavigation,
-                        distanceInterval: 2,
-                        timeInterval: 500,
-                    },
-                    location => {
 
-                        // YOUR EXISTING GPS CALLBACK
-                        // unchanged
-                    }
-                );
+                // GPS
+                const locationSubscription =
+                    await Location.watchPositionAsync(
+                        {
+                            accuracy: Location.Accuracy.BestForNavigation,
+                            distanceInterval: 2,
+                            timeInterval: 500,
+                        },
+                        location => {
+
+                            if (!mounted) {
+                                return;
+                            }
+
+                            const { latitude, longitude } = location.coords;
+
+                            if (
+                                !Number.isFinite(latitude) ||
+                                !Number.isFinite(longitude)
+                            ) {
+                                return;
+                            }
+
+                            navigationLocationRef.current = location;
+                            setNavigationLocation(location);
+
+                            const gpsHeading = location.coords.heading;
+                            const speed = location.coords.speed;
+
+                            if (
+                                Number.isFinite(gpsHeading) &&
+                                gpsHeading >= 0 &&
+                                Number.isFinite(speed) &&
+                                speed > 1
+                            ) {
+                                headingRef.current = gpsHeading;
+                                setHeading(gpsHeading);
+                                return;
+                            }
+
+                            updateNavigationCamera(
+                                {
+                                    latitude: location.coords.latitude,
+                                    longitude: location.coords.longitude,
+                                },
+                                headingRef.current,
+                                300
+                            );
+                        }
+                    );
 
                 if (!mounted) {
                     locationSubscription.remove();
@@ -379,12 +428,37 @@ const MapOfToilets = forwardRef(({ currentLocation, onMarkerPress, isPickingLoca
 
                 locationSubscriptionRef.current = locationSubscription;
 
+
+                // Compass
                 const headingSubscription =
                     await Location.watchHeadingAsync(
                         headingData => {
 
-                            // YOUR EXISTING HEADING CALLBACK
-                            // unchanged
+                            if (!mounted) {
+                                return;
+                            }
+
+                            let newHeading = headingData.trueHeading;
+
+                            if (
+                                !Number.isFinite(newHeading) ||
+                                newHeading < 0
+                            ) {
+                                newHeading = headingData.magHeading;
+                            }
+
+                            if (
+                                !Number.isFinite(newHeading) ||
+                                newHeading < 0
+                            ) {
+                                return;
+                            }
+
+                            // normalize
+                            newHeading = (newHeading + 360) % 360;
+
+                            headingRef.current = newHeading;
+                            setHeading(newHeading);
                         }
                     );
 
@@ -404,8 +478,10 @@ const MapOfToilets = forwardRef(({ currentLocation, onMarkerPress, isPickingLoca
 
         return () => {
             mounted = false;
+
             locationSubscriptionRef.current?.remove();
             headingSubscriptionRef.current?.remove();
+
             locationSubscriptionRef.current = null;
             headingSubscriptionRef.current = null;
         };
@@ -432,20 +508,33 @@ const MapOfToilets = forwardRef(({ currentLocation, onMarkerPress, isPickingLoca
 
         if (navigationStatus !== "navigating") { return; }
         if (!navigationCoordinate) { return; }
-        updateNavigationCamera(navigationCoordinate, headingRef.current, 700);
-    }, [navigationStatus,
-        navigationCoordinate,]);
+
+        updateNavigationCamera(
+            navigationCoordinate,
+            headingRef.current,
+            700
+        );
+    }, [
+        navigationStatus,
+        navigationCoordinate,
+    ]);
 
     // compass camera update
     useEffect(() => {
 
         if (navigationStatus !== "navigating") { return; }
         if (!navigationCoordinate) { return; }
-        updateNavigationCamera(navigationCoordinate, heading, 200);
+
+        updateNavigationCamera(
+            navigationCoordinate,
+            heading,
+            200
+        );
     }, [heading,]);
 
     const handleToiletPress = async (toilet) => {
         useWcDataStore.getState().clearToiletRouteInfo();
+
         setSelectedToilet(toilet);
         calculateToiletDistance(toilet);
         onMarkerPress(toilet);
@@ -497,7 +586,6 @@ const MapOfToilets = forwardRef(({ currentLocation, onMarkerPress, isPickingLoca
         setLatitudeDelta(0.02);
 
         // Restore normal camera
-        // Restore normal camera
         mapRef.current?.animateToRegion(
             normalRegion,
             500
@@ -514,8 +602,7 @@ const MapOfToilets = forwardRef(({ currentLocation, onMarkerPress, isPickingLoca
             const results = await Location.reverseGeocodeAsync({
                 latitude: mapCenter.latitude,
                 longitude: mapCenter.longitude,
-            }
-            );
+            });
 
             const place = results[0];
 
@@ -528,7 +615,9 @@ const MapOfToilets = forwardRef(({ currentLocation, onMarkerPress, isPickingLoca
                     },
                 });
                 return;
-            } const address = [
+            }
+
+            const address = [
                 place.name,
                 place.street,
                 place.city,
@@ -573,7 +662,9 @@ const MapOfToilets = forwardRef(({ currentLocation, onMarkerPress, isPickingLoca
                 onRegionChangeComplete={
                     newRegion => {
 
-                        if (navigationStatus === "navigating") { return; }
+                        if (navigationStatus === "navigating") {
+                            return;
+                        }
 
                         regionRef.current = newRegion;
                         setLatitudeDelta(newRegion.latitudeDelta);
@@ -593,27 +684,31 @@ const MapOfToilets = forwardRef(({ currentLocation, onMarkerPress, isPickingLoca
                         flat={navigationStatus === "navigating"}
                     >
 
-                        <Image source={require("../../assets/locationMarker.png")}
+                        <Image
+                            source={require("../../assets/locationMarker.png")}
                             style={{
                                 width: 80,
                                 height: 80,
                                 resizeMode: "contain",
-                            }} />
+                            }}
+                        />
 
                     </Marker>
                 )}
 
 
-                {navigationStatus === "navigating" && navigationRouteCoordinates.length > 0 && (
+                {navigationStatus === "navigating" &&
+                    navigationRouteCoordinates.length > 0 && (
 
-                    <Polyline
-                        coordinates={navigationRouteCoordinates}
-                        strokeWidth={7}
-                        strokeColor={theme.colors.secondaryDarker}
-                        fillColor={theme.colors.primary}
-                        lineCap="round"
-                        lineJoin="round"
-                    />)}
+                        <Polyline
+                            coordinates={navigationRouteCoordinates}
+                            strokeWidth={7}
+                            strokeColor={theme.colors.secondaryDarker}
+                            fillColor={theme.colors.primary}
+                            lineCap="round"
+                            lineJoin="round"
+                        />
+                    )}
 
 
                 {!isPickingLocation &&
@@ -658,25 +753,27 @@ const MapOfToilets = forwardRef(({ currentLocation, onMarkerPress, isPickingLoca
                             </Marker>
                         ))}
 
-                {navigationStatus === "navigating" && navigationTarget?.location?.coordinates && (
+                {navigationStatus === "navigating" &&
+                    navigationTarget?.location?.coordinates && (
 
-                    <Marker
-                        coordinate={{
-                            latitude: navigationTarget.location.coordinates[1],
-                            longitude: navigationTarget.location.coordinates[0],
-                        }}
-                        centerOffset={{ x: 3, y: -20, }}
-                    >
+                        <Marker
+                            coordinate={{
+                                latitude: navigationTarget.location.coordinates[1],
+                                longitude: navigationTarget.location.coordinates[0],
+                            }}
+                            centerOffset={{ x: 3, y: -20, }}
+                        >
 
-                        <Image
-                            source={require("../../assets/toiletLocation.png")}
-                            style={{
-                                width: 50,
-                                height: 50,
-                                resizeMode: "contain",
-                            }} />
-                    </Marker>
-                )}
+                            <Image
+                                source={require("../../assets/toiletLocation.png")}
+                                style={{
+                                    width: 50,
+                                    height: 50,
+                                    resizeMode: "contain",
+                                }}
+                            />
+                        </Marker>
+                    )}
 
             </MapView>
 
@@ -762,9 +859,13 @@ const MapOfToilets = forwardRef(({ currentLocation, onMarkerPress, isPickingLoca
                                                 borderColor: theme.colors.success,
                                                 alignItems: "center",
                                                 paddingVertical: 30,
-                                                backgroundColor: pressed ? theme.colors.success + "70" : theme.colors.success + "45"
+                                                backgroundColor: pressed
+                                                    ? theme.colors.success + "70"
+                                                    : theme.colors.success + "45"
                                             }}>
-                                            <Text>{t("AddWcBottomSheet.add")}</Text>
+                                            <Text>
+                                                {t("AddWcBottomSheet.add")}
+                                            </Text>
                                         </View>
                                     </BlurView>
                                 )}
@@ -796,9 +897,13 @@ const MapOfToilets = forwardRef(({ currentLocation, onMarkerPress, isPickingLoca
                                                 borderColor: theme.colors.error,
                                                 alignItems: "center",
                                                 paddingVertical: 30,
-                                                backgroundColor: pressed ? theme.colors.error + "70" : theme.colors.error + "45",
+                                                backgroundColor: pressed
+                                                    ? theme.colors.error + "70"
+                                                    : theme.colors.error + "45",
                                             }}>
-                                            <Text>{t("AddWcBottomSheet.cancel")}</Text>
+                                            <Text>
+                                                {t("AddWcBottomSheet.cancel")}
+                                            </Text>
                                         </View>
                                     </BlurView>
                                 )}
@@ -827,7 +932,8 @@ const MapOfToilets = forwardRef(({ currentLocation, onMarkerPress, isPickingLoca
                                 shadowOpacity: 0.14,
                                 shadowRadius: 5,
                                 elevation: 3,
-                            }} />
+                            }}
+                        />
 
                     </View>
 
