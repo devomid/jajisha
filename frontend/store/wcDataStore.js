@@ -202,6 +202,7 @@ export const useWcDataStore = create((set) => ({
     resetWcData: () =>
         set({
             isPickingLocation: false,
+            pickedCoordinate: null,
             wcData: structuredClone(initialWcData),
         }),
 }));
