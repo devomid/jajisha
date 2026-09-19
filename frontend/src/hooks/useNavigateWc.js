@@ -101,7 +101,12 @@ export const useNavigateToToilet = () => {
             };
 
             const selectedRoute = data.routes[0];
+            const currentNavigationTarget =
+                useWcDataStore.getState().navigation.target;
 
+            if (currentNavigationTarget?._id !== toilet._id) {
+                return;
+            }
             setNavigationRoute(selectedRoute.geometry);
             setNavigationDistance(selectedRoute.distance);
             setNavigationDuration(selectedRoute.duration);
