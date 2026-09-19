@@ -3,18 +3,14 @@ import { useWcDataStore } from "../../store/wcDataStore";
 import { API_URL } from "../config/api";
 import useWaitingSystemStore from "../../store/waitingSystemStore";
 import { useToast } from "react-native-toast-notifications";
-import * as ToastNotifications from "react-native-toast-notifications";
 
 
 export const useGetWc = () => {
 
     const toast = useToast();
 
-    const setGetWcsWaiting = useWaitingSystemStore(state => state.setGetWcsWaiting);
-    const setGetWcsEndWaiting = useWaitingSystemStore(state => state.setGetWcsEndWaiting);
     const setToilets = useWcDataStore(state => state.setToilets);
     const startWaiting = useWaitingSystemStore(state => state.startWaiting);
-    const updateWaiting = useWaitingSystemStore(state => state.updateWaiting);
     const endWaiting = useWaitingSystemStore(state => state.endWaiting);
 
     useEffect(() => {

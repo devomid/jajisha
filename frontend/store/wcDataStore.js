@@ -6,7 +6,7 @@ const initialWcData = {
 
     location: {
         type: "Point",
-        coordinates: null, // [longitude, latitude]
+        coordinates: null,
     },
 
     address: "",
@@ -35,7 +35,7 @@ const initialWcData = {
         crowd: 0,
     },
 
-    review:"",
+    review: "",
 
     photos: [],
 };
@@ -47,6 +47,7 @@ export const useWcDataStore = create((set) => ({
     mapCenter: null,
     toilets: [],
     selectedToilet: null,
+    isPickingLocation: false,
     navigation: {
         target: null,
         route: null,
@@ -191,8 +192,8 @@ export const useWcDataStore = create((set) => ({
             wcData: {
                 ...state.wcData,
                 location: {
-                    latitude,
-                    longitude,
+                    type: "Point",
+                    coordinates: [longitude, latitude],
                 },
                 address,
             },

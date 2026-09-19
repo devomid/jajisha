@@ -44,9 +44,9 @@ export const useAddWc = () => {
             );
 
             if (!response.ok) {
-                // console.log("Response is not OK");
-                // console.log("Status:", response.status);
-                // console.log(await response.text());
+                console.log("Response is not OK");
+                console.log("Status:", response.status);
+                console.log(await response.text());
 
                 if (toast?.show) {
                     toast.show("Could not add toilet", {
