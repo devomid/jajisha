@@ -192,18 +192,14 @@ const ToiletCard = ({ toilet, onPress }) => {
                                 fontWeight: "600",
                             }}
                         >
-                            {toilet.ratingSummary.average.toFixed(1)}
-                        </Text>
-
+                            {toilet.ratingSummary?.average?.toFixed(1) ?? "0.0"}                        </Text>
                         <Text
                             variant="bodySmall"
                             style={{
                                 color: theme.colors.text + "65",
                             }}
                         >
-                            ({toilet.ratingSummary.count})
-                        </Text>
-
+                            {toilet.ratingSummary?.count ?? 0}                        </Text>
                     </View>
 
 

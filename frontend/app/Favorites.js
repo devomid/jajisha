@@ -39,11 +39,7 @@ export default function Favorites() {
       longitudeDelta: 0.02,
     });
   }, [currentLocation]);
-
-  useEffect(() => {
-    restoreUser()
-  }, [])
-
+  
   if (!user) {
     return <Redirect href="/SignIn" />;
   }
