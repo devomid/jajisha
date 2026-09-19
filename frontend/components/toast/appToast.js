@@ -124,7 +124,7 @@ const styles = StyleSheet.create({
 
     message: {
         fontSize: 15,
-        fontWeight: "600",
+        fontWeight: "700",
     },
 
     text2: {

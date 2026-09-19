@@ -25,18 +25,19 @@ export const useCreateReview = () => {
             if (!user?.token) {
                 // console.log("Cannot create review: user is not authenticated");
 
-                toast.show("User not found!", {
-                    type: "custom",
-                    data: {
-                        type: "error",
-                    },
-                });
-                
+                if (toast?.show) {
+                    toast.show("User not found!", {
+                        type: "custom",
+                        data: {
+                            type: "error",
+                        },
+                    })
+                };
+
                 return null;
             }
-            
+
             if (!toiletId) {
-                // console.log("Cannot create review: toilet ID is missing");
                 if (toast?.show) {
                     toast.show("Toilet not found!", {
                         type: "custom",

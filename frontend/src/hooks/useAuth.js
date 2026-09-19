@@ -66,7 +66,7 @@ export const useAuth = () => {
                 })
             };
 
-            return;
+            return true;
 
         } catch (error) {
             // console.log("Error Sign up!", error);
@@ -130,7 +130,7 @@ export const useAuth = () => {
                 ...jsonRes.user,
                 token: jsonRes.token,
 
-            }); return;
+            }); return true;
 
         } catch (error) {
             // console.log("Error Sign in!", error);

@@ -3,6 +3,7 @@ import { useAuth } from "../../src/hooks/useAuth";
 import { useFormik } from "formik";
 import useCurrentLocation from "../../src/hooks/useCurrentLocation";
 import { useSettingsStore } from "../../store/settingsStore";
+import { useTopSheetStore } from "../../store/menuStore";
 
 import { SafeAreaView } from "react-native-safe-area-context";
 import { View, StyleSheet, Pressable, TextInput } from "react-native";
@@ -27,6 +28,8 @@ export default function SignIn() {
     const [region, setRegion] = useState(null);
     const [rememberMe, setRememberMe] = useState(false);
     const mapType = useSettingsStore(state => state.mapType);
+      const close = useTopSheetStore((state) => state.close);
+    
 
     const {
         values,
@@ -47,7 +50,6 @@ export default function SignIn() {
 
         onSubmit: async (values, { resetForm }) => {
             const isSignedIn = await signIn(values.email, values.password);
-
             if (!isSignedIn) { return; }
 
             if (rememberMe) {
@@ -62,11 +64,13 @@ export default function SignIn() {
             }
 
             resetForm();
+            close();
             router.push('/');
         },
     });
 
     const handleCancel = () => {
+        close();
         router.replace('/')
     }
 
