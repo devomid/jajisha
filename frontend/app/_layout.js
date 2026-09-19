@@ -50,7 +50,7 @@ export default function RootLayout() {
                 >
                     <ToastProvider
                         placement="top"
-                        duration={3000}
+                        duration={4500}
                         animationType="zoom-in"
                         animationDuration={290}
                         swipeEnabled={true}

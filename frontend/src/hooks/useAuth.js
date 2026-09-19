@@ -1,4 +1,3 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useUserStore } from "../../store/userStore";
 import { API_URL } from "../config/api";
 import * as SecureStore from "expo-secure-store";
@@ -140,7 +139,7 @@ export const useAuth = () => {
                     type: "custom",
                     data: {
                         type: "error",
-                        text2: "It can be our servers or your connection. Check and try again.",
+                        text2: "It can be our servers or your connection. \nCheck and try again.",
                     },
                 })
             };
@@ -241,7 +240,7 @@ export const useAuth = () => {
         const waitingId = startWaiting("Throwing your stuff to toilet...");
 
         try {
-            const token = await AsyncStorage.getItem("authToken");
+            const token = await SecureStore.getItemAsync("authToken");
             const response = await fetch(`${API_URL}/api/user/rm`, {
                 method: "DELETE",
                 headers: {

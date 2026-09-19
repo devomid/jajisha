@@ -22,8 +22,8 @@ const Colors = {
 
         border: "#E2E8F0",
 
-        success: "#00f4b3",
-        warning: "#F59E0B",
+        success: "#00b3aa",
+        warning: "#d45f00",
         error: "#FF4D4F",
 
         white: "#FFFFFF",

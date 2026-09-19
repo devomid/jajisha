@@ -10,14 +10,12 @@ import { useUserStore } from "../store/userStore";
 import { Redirect } from "expo-router";
 import ToiletCard from "../components/cards/ToiletCards";
 import { ScrollView } from "react-native";
-import { useAuth } from "../src/hooks/useAuth";
 import { useSettingsStore } from "../store/settingsStore";
 import { useWcDataStore } from "../store/wcDataStore";
 import { router } from "expo-router";
 import { useTopSheetStore } from "../store/menuStore";
 
 export default function Favorites() {
-  const { restoreUser } = useAuth();
   const user = useUserStore((state) => state.user);
   const requestOpenToiletInfo = useWcDataStore(state => state.requestOpenToiletInfo);
   const setSelectedToilet = useWcDataStore(state => state.setSelectedToilet);
