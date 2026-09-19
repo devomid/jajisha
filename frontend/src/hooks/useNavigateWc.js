@@ -88,7 +88,7 @@ export const useNavigateToToilet = () => {
                 if (requestId !== navigationRequestRef.current) {
                     return;
                 };
-                
+
                 if (toast?.show) {
                     toast.show("Could not get map and location", {
                         type: "custom",
@@ -133,6 +133,9 @@ export const useNavigateToToilet = () => {
 
         } catch (error) {
             // console.error("NAVIGATION ERROR:", error);
+            if (requestId !== navigationRequestRef.current) {
+                return;
+            }
             if (toast?.show) {
                 toast.show("Something went wrong getting map features!", {
                     type: "custom",
