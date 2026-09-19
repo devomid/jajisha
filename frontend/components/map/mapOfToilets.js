@@ -5,6 +5,7 @@ import { useNavigateToToilet } from "../../src/hooks/useNavigateWc";
 import { useTranslation } from "react-i18next";
 import { useSettingsStore } from "../../store/settingsStore";
 import { useManagingWc } from "../../src/hooks/useManagingWc";
+import { useToast } from "react-native-toast-notifications";
 
 import * as Location from "expo-location";
 import { View, Pressable, Text, Image, Platform, } from "react-native";
@@ -14,6 +15,8 @@ import MapView, { Marker, Polyline, } from "react-native-maps";
 
 const MapOfToilets = forwardRef(({ currentLocation, onMarkerPress, isPickingLocation, onAddWcPress, }, ref) => {
 
+    const toast = useToast();
+
     const mapRef = useRef(null);
     const { t } = useTranslation();
     const theme = useTheme();
@@ -22,11 +25,11 @@ const MapOfToilets = forwardRef(({ currentLocation, onMarkerPress, isPickingLoca
 
     const toilets = useWcDataStore(state => state.toilets);
     const setSelectedToilet = useWcDataStore(state => state.setSelectedToilet);
+    const clearNavigation = useWcDataStore(state => state.clearNavigation);
     const mapCenter = useWcDataStore(state => state.mapCenter);
     const setMapCenter = useWcDataStore(state => state.setMapCenter);
     const stopPickingLocation = useWcDataStore(state => state.stopPickingLocation);
     const setPickedLocation = useWcDataStore(state => state.setPickedLocation);
-    const clearNavigation = useWcDataStore(state => state.clearNavigation);
     const navigation = useWcDataStore(state => state.navigation);
     const mapType = useSettingsStore(state => state.mapType);
     const showMyLocation = useSettingsStore(state => state.showMyLocation);
@@ -407,7 +410,16 @@ const MapOfToilets = forwardRef(({ currentLocation, onMarkerPress, isPickingLoca
                 const { status } = await Location.requestForegroundPermissionsAsync();
 
                 if (status !== "granted") {
-                    console.log("Location permission denied");
+                    if (toast?.show) {
+                        toast.show("Location Permission must be granted!", {
+                            type: "custom",
+                            data: {
+                                type: "warning",
+                                text2: "Please allow location access in Settings.",
+                            },
+                        })
+                    };
+                    clearNavigation();
                     return;
                 }
 
