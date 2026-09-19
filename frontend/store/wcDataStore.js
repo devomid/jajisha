@@ -156,8 +156,13 @@ export const useWcDataStore = create((set) => ({
             toilets: [...state.toilets, toilet],
         })),
 
-    setToilets: (toilets) =>
-        set({ toilets }),
+    setToilets: (updater) =>
+        set((state) => ({
+            toilets:
+                typeof updater === "function"
+                    ? updater(state.toilets)
+                    : updater,
+        })),
 
     setMapCenter: (region) =>
         set({

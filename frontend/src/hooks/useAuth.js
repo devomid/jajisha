@@ -114,6 +114,15 @@ export const useAuth = () => {
                 return null;
             };
 
+
+            const jsonRes = await response.json();
+            await SecureStore.setItemAsync("authToken", jsonRes.token);
+            useUserStore.getState().setUser({
+                ...jsonRes.user,
+                token: jsonRes.token,
+
+            });
+
             if (toast?.show) {
                 toast.show("Signed you in successfully.", {
                     type: "custom",
@@ -122,14 +131,7 @@ export const useAuth = () => {
                     },
                 })
             };
-
-            const jsonRes = await response.json();
-            await SecureStore.setItemAsync("authToken", jsonRes.token);
-            useUserStore.getState().setUser({
-                ...jsonRes.user,
-                token: jsonRes.token,
-
-            }); return true;
+            return true;
 
         } catch (error) {
             // console.log("Error Sign in!", error);
@@ -186,6 +188,12 @@ export const useAuth = () => {
                     })
                 };
 
+                return;
+            }
+
+            const currentToken = await SecureStore.getItemAsync("authToken");
+
+            if (currentToken !== token) {
                 return;
             }
 

@@ -237,7 +237,6 @@ export default function SignUp() {
                                 error={errors.username}
                                 touched={touched.username}
                                 theme={theme}
-                                secureTextEntry
                                 autoCapitalize="none"
                                 autoCorrect={false}
                             />

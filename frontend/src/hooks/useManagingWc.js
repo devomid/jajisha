@@ -128,7 +128,19 @@ export const useManagingWc = () => {
                 return null;
             };
             const jsonRes = await response.json();
-            setToilets(jsonRes.toilets);
+
+            setToilets((currentToilets) => {
+                const fetchedIds = new Set(
+                    jsonRes.toilets.map(toilet => toilet._id)
+                );
+
+                const locallyAddedToilets = currentToilets.filter(
+                    toilet => !fetchedIds.has(toilet._id)
+                );
+
+                return [...jsonRes.toilets, ...locallyAddedToilets];
+            });
+
             return jsonRes.toilets;
 
         } catch (error) {
