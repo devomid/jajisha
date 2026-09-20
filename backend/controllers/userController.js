@@ -89,7 +89,7 @@ const signUpUser = async (req, res) => {
         if (password.length < 8) {
             logger.warn({
                 requestId: req.id,
-            },"Signup rejected: password too short");
+            }, "Signup rejected: password too short");
 
             return res.status(400).json({
                 error: "Password is not strong enough.",
@@ -130,7 +130,9 @@ const signUpUser = async (req, res) => {
 
     } catch (error) {
         if (error.code === 11000) {
-            logger.warn("Signup rejected: duplicate account data");
+            logger.warn({
+                requestId: req.id,
+            }, "Signup rejected: duplicate account data");
             return res.status(409).json({
                 error: "Username or email is already in use.",
             });
@@ -159,7 +161,7 @@ const signInUser = async (req, res) => {
         ) {
             logger.warn({
                 requestId: req.id,
-            }," email or password no provided");
+            }, "Sign -in rejected: email or password not provided");
             return res.status(400).json({
                 error: "Email and password are required.",
             });
@@ -172,7 +174,7 @@ const signInUser = async (req, res) => {
         if (!user) {
             logger.warn({
                 requestId: req.id,
-            }, " Sign-in rejected: Invalid credentials");
+            }, " Sign-in rejected: invalid credentials");
             return res.status(401).json({
                 error: "Invalid credentials.",
             });
@@ -194,7 +196,7 @@ const signInUser = async (req, res) => {
         logger.info({
             requestId: req.id,
             userId: user._id,
-        }, "Signin successful");
+        }, "Sign-in successful");
 
         res.status(200).json({
             user: {
@@ -215,9 +217,9 @@ const signInUser = async (req, res) => {
         logger.error({
             requestId: req.id,
             err: error,
-        }, "Signin failed");
+        }, "Sign-in failed");
         return res.status(500).json({
-            error: "Failed to sign in.",
+            error: "Failed to sign-in.",
         });
     }
 };
@@ -230,7 +232,7 @@ const getUser = async (req, res) => {
             logger.warn({
                 requestId: req.id,
                 userId: id,
-            }, "Get user rejected: user not found");
+            }, "Get user rejected: invalid user ID");
             return res.status(404).json({ message: "User not found!" });
         };
         const user = await User.findById(id).select("-password").populate("favoriteToilets").populate("reviews");
@@ -238,7 +240,7 @@ const getUser = async (req, res) => {
             logger.warn({
                 requestId: req.id,
                 userId: id,
-            }, "id is not a valid object");
+            }, "Get user rejected: user not found");
             return res.status(404).json({ message: "User not found!" })
         };
         logger.info({

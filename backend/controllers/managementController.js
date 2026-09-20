@@ -75,7 +75,7 @@ const unsaveToilet = async (req, res) => {
             logger.warn({
                 toiletId,
                 requestId: req.id
-            }, "Toilet Id is not valid");
+            }, "Toilet lookup rejected: invalid ID");
             return res.status(404).json({ message: "Toilet not found" });
         }
 
@@ -129,20 +129,15 @@ const createReview = async (req, res) => {
     const userId = req.user._id;
     const { reviewText, ratings } = req.body;
 
-    // -------------------------
-    // Validate toilet ID
-    // -------------------------
-
     if (!mongoose.isValidObjectId(toiletId)) {
         logger.warn({
             toiletId,
             requestId: req.id
-        }, "toilet Id is not valid");
+        }, "Toilet lookup rejected: invalid ID");
         return res.status(404).json({
             message: "Toilet not found",
         });
     }
-
 
     if (typeof reviewText !== "string" || !reviewText.trim()) {
         logger.warn({
@@ -171,10 +166,6 @@ const createReview = async (req, res) => {
             message: "Review text must be between 10 and 200 characters",
         });
     }
-
-    // -------------------------
-    // Validate ratings
-    // -------------------------
 
     if (
         !ratings ||
@@ -222,10 +213,6 @@ const createReview = async (req, res) => {
         }
     }
 
-    // -------------------------
-    // Database transaction
-    // -------------------------
-
     const session = await mongoose.startSession();
 
     try {
@@ -252,10 +239,6 @@ const createReview = async (req, res) => {
             throw new Error("TOILET_NOT_FOUND");
         }
 
-        // -------------------------
-        // Create review
-        // -------------------------
-
         const [review] = await Review.create(
             [{
                 toilet: toiletId,
@@ -266,19 +249,9 @@ const createReview = async (req, res) => {
             { session }
         );
 
-        // -------------------------
-        // Update user
-        // -------------------------
-
         user.reviews.push(review._id);
 
         await user.save({ session });
-
-
-        // -------------------------
-        // Update toilet
-        // -------------------------
-
         toilet.reviews.push(review._id);
 
         const oldCount = toilet.ratingSummary.count;
@@ -290,8 +263,6 @@ const createReview = async (req, res) => {
             toilet.ratingSummary[field] =
                 ((oldAverage * oldCount) + ratings[field]) / newCount;
         }
-
-        // Overall average
 
         const total =
             toilet.ratingSummary.cleanliness +
@@ -307,11 +278,6 @@ const createReview = async (req, res) => {
         toilet.ratingSummary.count = newCount;
 
         await toilet.save({ session });
-
-        // -------------------------
-        // Commit
-        // -------------------------
-
         await session.commitTransaction();
 
         logger.info({
@@ -319,7 +285,7 @@ const createReview = async (req, res) => {
             requestId: req.id,
             toiletId,
             userId
-        }, "toilet reviews created successfully");
+        }, "Review created successfully");
 
         return res.status(201).json({
             message: "Review created successfully",

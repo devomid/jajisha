@@ -58,7 +58,6 @@ const authorize = async (req, res, next) => {
 
     } catch (error) {
         logger.warn({
-            err: error,
             requestId: req.id,
         }, "Authorization rejected: invalid or expired token");
 

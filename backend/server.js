@@ -4,7 +4,6 @@ const app = require('./app');
 const logger = require("./logger/logger");
 
 dotenv.config();
-logger.info("dotEnv configured in server");
 
 const requiredEnv = ["MONGOURI", "PORT", "SECRET_KEY", "CLIENT_ORIGIN"];
 const missingEnv = requiredEnv.filter((key) => !process.env[key]);
@@ -21,7 +20,9 @@ const mongoUrl = process.env.MONGOURI;
 const portNumber = Number(process.env.PORT);
 
 if (!Number.isInteger(portNumber) || portNumber < 1 || portNumber > 65535) {
-    logger.warn("Invalid port number");
+    logger.warn({
+        portNumber
+    },"Invalid port number");
     process.exit(1);
 }
 
@@ -57,6 +58,6 @@ mongoose.connect(mongoUrl)
     .catch((error) => {
         logger.error({
             err: error,
-        }, "Databse connection failed");
+        }, "DB connection failed");
         process.exit(1);
     });

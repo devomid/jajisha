@@ -44,7 +44,7 @@ const createToilet = async (req, res) => {
             logger.warn({
                 requestId: req.id,
                 userId
-            }, "invalid toilet location");
+            }, "Invalid toilet location");
             return res.status(400).json({ message: "Invalid location" });
         };
 
@@ -95,7 +95,7 @@ const createToilet = async (req, res) => {
             logger.warn({
                 requestId: req.id,
                 userId
-            }, "invalid amenities object or no amenities");
+            }, "Invalid amenities object or no amenities");
             return res.status(400).json({ message: "Amenities are required" });
         }
 
@@ -116,7 +116,7 @@ const createToilet = async (req, res) => {
                     field,
                     requestId: req.id,
                     userId
-                }, "invalid amenities");
+                }, "Invalid amenities");
                 return res.status(400).json({
                     message: `Invalid amenity: ${field}`,
                 });
@@ -148,7 +148,7 @@ const createToilet = async (req, res) => {
             logger.warn({
                 userId,
                 requestId: req.id
-            }, "user not found");
+            }, "User not found");
             return res.status(404).json({ message: "User not found" });
         };
 
@@ -272,7 +272,7 @@ const getToilets = async (req, res) => {
 
         logger.info({
             requestId: req.id
-        }, "get toilets successful");
+        }, "Get toilets successful");
         res.status(200).json({ toilets });
 
     } catch (error) {
@@ -292,8 +292,9 @@ const getToiletReviews = async (req, res) => {
 
     if (!mongoose.isValidObjectId(toiletId)) {
         logger.warn({
-            toiletId: toiletId.toString(),
-        }, "id is not a valid object");
+            requestId: req.id,
+            toiletId,
+        }, "Get reviews rejected: invalid toilet ID");
         return res.status(400).json({ message: "Invalid toilet ID" });
     }
 

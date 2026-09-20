@@ -9,8 +9,6 @@ const dotenv = require('dotenv');
 const logger = require("./logger/logger");
 
 dotenv.config()
-logger.info("dotEnv configured in app");
-
 
 // configs and middlwares
 const app = express();
