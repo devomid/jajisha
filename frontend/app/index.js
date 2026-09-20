@@ -1,18 +1,17 @@
 import 'react-native-reanimated';
 import 'expo-router/entry';
 import { useEffect, useRef } from "react";
-import { useNavigation } from "expo-router";
-import { useTranslation } from "react-i18next";
-import { useWcDataStore } from '../store/wcDataStore';
-import useCurrentLocation from '../src/hooks/useCurrentLocation';
-import { useTopSheetStore } from '../store/menuStore';
-import { useManagingWc } from '../src/hooks/useManagingWc';
 
+import { Menu, LocateFixed, ZoomOut, ZoomIn } from 'lucide-react-native';
+import { useTheme } from "react-native-paper";
 import { View, Pressable, Image } from "react-native";
-import { useTheme, Text } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { BlurView } from "expo-blur";
-import { Menu, LocateFixed, ZoomOut, ZoomIn } from 'lucide-react-native';
+
+import { useTopSheetStore } from '../store/menuStore';
+import { useManagingWc } from '../src/hooks/useManagingWc';
+import useCurrentLocation from '../src/hooks/useCurrentLocation';
+import { useWcDataStore } from '../store/wcDataStore';
 
 import MapOfToilets from '../components/map/mapOfToilets';
 import ToiletInfo from "../components/bottomSheet/ToiletLocationBottomSheet";
@@ -25,13 +24,6 @@ import MenuTopSheet from '../components/topSheet/MenuTopSheet';
 export default function Home() {
 
     const { getWc } = useManagingWc();
-
-    const isPickingLocation = useWcDataStore(state => state.isPickingLocation);
-    const navigationStatus = useWcDataStore(state => state.navigation.status);
-    const openToiletInfo = useWcDataStore(state => state.openToiletInfo);
-    const clearOpenToiletInfo = useWcDataStore(state => state.clearOpenToiletInfo);
-
-    const { t } = useTranslation();
     const mapRef = useRef(null);
     const curentLocation = useCurrentLocation();
     const theme = useTheme();
@@ -39,11 +31,32 @@ export default function Home() {
     const reopenToiletInfoAtSecondSnapRef = useRef(false);
     const addWcBottomSheetRef = useRef(null);
     const routePreviewBottomSheetRef = useRef(null);
-    const navigation = useNavigation();
+
+    const clearOpenToiletInfo = useWcDataStore(state => state.clearOpenToiletInfo);
+    const isPickingLocation = useWcDataStore(state => state.isPickingLocation);
+    const navigationStatus = useWcDataStore(state => state.navigation.status);
+    const openToiletInfo = useWcDataStore(state => state.openToiletInfo);
+
+    const onMarkerPress = (toilet) => {
+
+        if (navigationStatus !== "idle") {
+            return;
+        }
+
+        setTimeout(() => {
+            toiletInfoBottomSheetRef.current?.present();
+        }, 350);
+
+    };
+
+    const onAddWcPress = (toilet) => {
+        addWcBottomSheetRef.current?.present();
+    };
 
     useEffect(() => {
         getWc();
     }, []);
+
     useEffect(() => {
 
         if (!openToiletInfo) {
@@ -76,22 +89,6 @@ export default function Home() {
 
         return () => clearTimeout(timer);
     }, [navigationStatus]);
-
-    const onMarkerPress = (toilet) => {
-
-        if (navigationStatus !== "idle") {
-            return;
-        }
-
-        setTimeout(() => {
-            toiletInfoBottomSheetRef.current?.present();
-        }, 350);
-     
-    };
-
-    const onAddWcPress = (toilet) => {
-        addWcBottomSheetRef.current?.present();
-    };
 
     if (!curentLocation) return null;
 
@@ -148,7 +145,14 @@ export default function Home() {
                         }}
                     >
                         {({ pressed }) => (
-                            <Menu style={{ transform: [{ scale: pressed ? 0.9 : 1 }] }} size={20} color={theme.colors.primary} />
+                            <Menu
+                                size={18}
+                                strokeWidth={1.8}
+                                color={theme.colors.primary}
+                                style={{
+                                    transform: [{ scale: pressed ? 0.9 : 1 }]
+                                }}
+                            />
                         )}
                     </Pressable>
                 </BlurView>
@@ -212,7 +216,8 @@ export default function Home() {
                             {({ pressed }) => (
                                 <ZoomIn
                                     style={{ transform: [{ scale: pressed ? 0.95 : 1 }] }}
-                                    size={40}
+                                    size={35}
+                                    strokeWidth={1.8}
                                     color={
                                         pressed
                                             ? theme.colors.secondaryLight
@@ -257,13 +262,16 @@ export default function Home() {
                         >
                             {({ pressed }) => (
                                 <LocateFixed
-                                    style={{ transform: [{ scale: pressed ? 0.95 : 1 }] }}
-                                    size={40}
+                                    size={35}
+                                    strokeWidth={1.8}
                                     color={
                                         pressed
                                             ? theme.colors.primaryDark
                                             : theme.colors.secondaryLight
                                     }
+                                    style={{
+                                        transform: [{ scale: pressed ? 0.95 : 1 }]
+                                    }}
                                 />
                             )}
                         </Pressable>
@@ -303,18 +311,22 @@ export default function Home() {
                         >
                             {({ pressed }) => (
                                 <ZoomOut
-                                    style={{ transform: [{ scale: pressed ? 0.95 : 1 }] }}
-                                    size={40}
+                                    size={35}
+                                    strokeWidth={1.8}
                                     color={
                                         pressed
                                             ? theme.colors.secondaryLight
                                             : theme.colors.primary
                                     }
+                                    style={{
+                                        transform: [{ scale: pressed ? 0.95 : 1 }]
+                                    }}
                                 />
                             )}
                         </Pressable>
                     </BlurView>
                 </View>
+
                 {!isPickingLocation && (
                     <BlurView
                         intensity={0}
@@ -363,12 +375,8 @@ export default function Home() {
                 ref={toiletInfoBottomSheetRef}
                 curentLocation={curentLocation}
                 onPresent={(index) => {
-                    if (
-                        index === 0 &&
-                        reopenToiletInfoAtSecondSnapRef.current
-                    ) {
+                    if (index === 0 && reopenToiletInfoAtSecondSnapRef.current) {
                         reopenToiletInfoAtSecondSnapRef.current = false;
-
                         toiletInfoBottomSheetRef.current?.snapToIndex(1);
                     }
                 }}
@@ -378,8 +386,6 @@ export default function Home() {
                 ref={routePreviewBottomSheetRef}
                 curentLocation={curentLocation}
                 toiletInfoBottomSheetRef={toiletInfoBottomSheetRef}
-                onDismiss={() => {
-                }}
                 onReopenToiletInfo={() => {
                     reopenToiletInfoAtSecondSnapRef.current = true;
                 }}

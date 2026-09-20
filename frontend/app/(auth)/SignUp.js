@@ -1,30 +1,33 @@
 import { useEffect, useState } from "react";
-import { useAuth } from "../../src/hooks/useAuth"
+import { useTranslation } from "react-i18next";
 import { useFormik } from "formik";
-import useCurrentLocation from "../../src/hooks/useCurrentLocation";
+import { router } from "expo-router";
 
+import { Mail, KeyRound, ShieldCheck, UserRound, AtSign } from 'lucide-react-native';
+import { View, StyleSheet, Pressable } from "react-native";
+import { Text, useTheme } from "react-native-paper";
 import MapView from "react-native-maps";
 import { BlurView } from "expo-blur";
-import { router } from "expo-router";
-import { Text, useTheme } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { View, StyleSheet, Pressable, TextInput } from "react-native";
+
 import { signUpSchema, } from "../../src/validation/userInfoSchema";
 import { useSettingsStore } from "../../store/settingsStore";
-
-import { Mail, KeyRound, ShieldCheck, ContactRound, UserRound, AtSign } from 'lucide-react-native';
-
+import { useAuth } from "../../src/hooks/useAuth"
+import useCurrentLocation from "../../src/hooks/useCurrentLocation";
 
 import ButtonComponent from "../../components/Button/Button";
 import FormInput from "../../components/inpuField/formInput";
 
+
 export default function SignUp() {
+
+    const { t } = useTranslation();
     const theme = useTheme();
     const currentLocation = useCurrentLocation();
     const { signUp } = useAuth();
-    const mapType = useSettingsStore(state => state.mapType);
 
     const [region, setRegion] = useState(null);
+    const mapType = useSettingsStore(state => state.mapType);
 
     const {
         values,
@@ -44,7 +47,7 @@ export default function SignUp() {
             confirmPassword: ""
         },
 
-        validationSchema: signUpSchema,
+        validationSchema: signUpSchema(t),
 
         onSubmit: async (values, { resetForm }) => {
             const isSignedUp = await signUp(
@@ -80,19 +83,25 @@ export default function SignUp() {
     }, [currentLocation]);
 
     return (
-        <View style={styles.container}>
+        <View style={{
+            flex: 1,
+        }}>
 
-            {/* MAP BACKGROUND */}
             {region && (
                 <MapView
                     mapType={mapType}
-                    style={StyleSheet.absoluteFillObject}
+                    style={{
+                        position: 'absolute',
+                        left: 0,
+                        right: 0,
+                        top: 0,
+                        bottom: 0,
+                    }}
                     showsUserLocation={false}
                     initialRegion={region}
                 />
             )}
 
-            {/* BLUR */}
             <BlurView
                 intensity={15}
                 tint="light"
@@ -110,48 +119,61 @@ export default function SignUp() {
                 }}
             />
 
-            {/* PRIMARY COLOR OVERLAY */}
             <View
                 pointerEvents="none"
-                style={[
-                    StyleSheet.absoluteFillObject,
-                    {
-                        backgroundColor: theme.colors.primary,
-                        opacity: 0.18,
-                        borderRadius: 48,
-                        marginBottom: 12,
-                        marginTop: 12,
-                        marginHorizontal: 12,
-                        overflow: "hidden",
-                    },
-                ]}
+                style={{
+                    position: 'absolute',
+                    left: 0,
+                    right: 0,
+                    top: 0,
+                    bottom: 0,
+                    backgroundColor: theme.colors.primary,
+                    opacity: 0.18,
+                    borderRadius: 48,
+                    marginBottom: 12,
+                    marginTop: 12,
+                    marginHorizontal: 12,
+                    overflow: "hidden",
+                }}
             />
 
-            <SafeAreaView style={styles.safeArea}>
+            <SafeAreaView style={{
+                flex: 1,
+            }}>
 
                 {!region ? (
-                    // Keep the page structure while location loads
-                    <View style={styles.loadingContainer} />
+                    <View style={{
+                        flex: 1,
+                    }} />
                 ) : (
-                    <View style={styles.content}>
+                    <View style={{
+                        flex: 1,
+                    }}>
 
-                        {/* TITLE */}
-                        <View style={styles.titleContainer}>
+                        <View style={{
+                            width: "100%",
+                            paddingHorizontal: 25,
+                            marginTop: 70,
+                            marginBottom: 30,
+                        }}>
                             <Text style={{ color: theme.colors.secondaryDarker + '99' }} variant="displayLarge">
-                                Sign Up
+                                {t("app.auth.signup.signupTitle")}
                             </Text>
+
                             <Text style={{
                                 color: theme.colors.secondaryDarker + '99',
                                 marginLeft: 2
                             }} variant="bodyMedium">
-                                so you can save places.
+                                {t("app.auth.signup.signupSubTitle")}
                             </Text>
                         </View>
 
-                        {/* FORM */}
-                        <View style={styles.form}>
+                        <View style={{
+                            paddingHorizontal: 25,
+                            gap: 15,
+                        }}>
                             <FormInput
-                                label="Email"
+                                label={t("app.auth.signup.emailInput")}
                                 icon={Mail}
                                 value={values.email}
                                 onChangeText={handleChange("email")}
@@ -165,7 +187,7 @@ export default function SignUp() {
                             />
 
                             <FormInput
-                                label="Password"
+                                label={t("app.auth.signup.passwordInput")}
                                 icon={KeyRound}
                                 value={values.password}
                                 onChangeText={handleChange("password")}
@@ -179,7 +201,7 @@ export default function SignUp() {
                             />
 
                             <FormInput
-                                label="Confirm Password"
+                                label={t("app.auth.signup.confirmPasswordInput")}
                                 icon={ShieldCheck}
                                 value={values.confirmPassword}
                                 onChangeText={handleChange("confirmPassword")}
@@ -200,7 +222,7 @@ export default function SignUp() {
                                 justifyContent: 'space-between',
                             }}>
                                 <FormInput
-                                    label="First name"
+                                    label={t("app.auth.signup.firstnameInput")}
                                     icon={UserRound}
                                     value={values.firstName}
                                     onChangeText={handleChange("firstName")}
@@ -214,7 +236,7 @@ export default function SignUp() {
                                 />
 
                                 <FormInput
-                                    label="Last name"
+                                    label={t("app.auth.signup.lastnameInput")}
                                     icon={UserRound}
                                     value={values.lastName}
                                     onChangeText={handleChange("lastName")}
@@ -229,7 +251,7 @@ export default function SignUp() {
                             </View>
 
                             <FormInput
-                                label="User name"
+                                label={t("app.auth.signup.usernameInput")}
                                 icon={AtSign}
                                 value={values.username}
                                 onChangeText={handleChange("username")}
@@ -314,8 +336,10 @@ export default function SignUp() {
                                         width: '100%',
                                     }}
                                 >
-                                    <Text style={{ color: theme.colors.secondary }}>
-                                        Sign Up
+                                    <Text style={{
+                                        color: theme.colors.secondary
+                                    }}>
+                                        {t("app.auth.signup.signupBtn")}
                                     </Text>
                                 </ButtonComponent>
 
@@ -328,8 +352,10 @@ export default function SignUp() {
                                         marginTop: '15'
                                     }}
                                 >
-                                    <Text style={{ color: theme.colors.secondary }}>
-                                        Cancel
+                                    <Text style={{
+                                        color: theme.colors.secondary
+                                    }}>
+                                        {t("app.auth.signup.cancelBtn")}
                                     </Text>
                                 </ButtonComponent>
 
@@ -342,7 +368,7 @@ export default function SignUp() {
                                     <Text style={{
                                         color: theme.colors.text + '90'
                                     }}>
-                                        Alreadu have account?
+                                        {t("app.auth.signup.signupBottomText")}
                                     </Text>
 
                                     <Pressable onPress={() => router.push("/SignIn")}>
@@ -352,59 +378,15 @@ export default function SignUp() {
                                                 fontWeight: "600",
                                             }}
                                         >
-                                            Sign In
+                                            {t("app.auth.signup.signinLink")}
                                         </Text>
                                     </Pressable>
                                 </View>
                             </View>
-
-
                         </View>
                     </View>
                 )}
-
             </SafeAreaView>
         </View>
     );
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-    },
-
-    safeArea: {
-        flex: 1,
-    },
-
-    loadingContainer: {
-        flex: 1,
-    },
-
-    content: {
-        flex: 1,
-    },
-
-    titleContainer: {
-        width: "100%",
-        paddingHorizontal: 25,
-        marginTop: 70,
-        marginBottom: 30,
-    },
-
-    form: {
-        paddingHorizontal: 25,
-        gap: 15,
-    },
-
-    error: {
-        marginTop: -12,
-        marginLeft: 4,
-        fontSize: 12,
-        color: "#B00020",
-    },
-
-    button: {
-        marginTop: 15,
-    },
-});

@@ -1,35 +1,38 @@
 import { useEffect, useState } from "react";
-import { useAuth } from "../../src/hooks/useAuth";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as SecureStore from "expo-secure-store";
+import { useTranslation } from "react-i18next";
 import { useFormik } from "formik";
+import { router } from "expo-router";
+
+import { View, StyleSheet, Pressable } from "react-native";
+import { Mail, KeyRound } from 'lucide-react-native';
+import { Text, useTheme } from "react-native-paper";
+import MapView from "react-native-maps";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { BlurView } from "expo-blur";
+import { Checkbox } from 'expo-checkbox';
+
+import { signInSchema } from "../../src/validation/userInfoSchema";
+import { useAuth } from "../../src/hooks/useAuth";
 import useCurrentLocation from "../../src/hooks/useCurrentLocation";
 import { useSettingsStore } from "../../store/settingsStore";
 import { useTopSheetStore } from "../../store/menuStore";
-
-import { SafeAreaView } from "react-native-safe-area-context";
-import { View, StyleSheet, Pressable, TextInput } from "react-native";
-import { Text, Button, useTheme } from "react-native-paper";
-import { BlurView } from "expo-blur";
-import { Checkbox } from 'expo-checkbox';
-import MapView from "react-native-maps";
-import { Link, router } from "expo-router";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import * as SecureStore from "expo-secure-store";
-
-import { signInSchema } from "../../src/validation/userInfoSchema";
-import { Mail, KeyRound } from 'lucide-react-native';
 
 import ButtonComponent from "../../components/Button/Button";
 import FormInput from "../../components/inpuField/formInput";
 
 export default function SignIn() {
+    const { t } = useTranslation();
     const theme = useTheme();
     const currentLocation = useCurrentLocation();
     const { signIn } = useAuth();
+
     const [region, setRegion] = useState(null);
     const [rememberMe, setRememberMe] = useState(false);
     const mapType = useSettingsStore(state => state.mapType);
-      const close = useTopSheetStore((state) => state.close);
-    
+    const close = useTopSheetStore((state) => state.close);
+
 
     const {
         values,
@@ -46,7 +49,7 @@ export default function SignIn() {
             password: "",
         },
 
-        validationSchema: signInSchema,
+        validationSchema: signInSchema(t),
 
         onSubmit: async (values, { resetForm }) => {
             const isSignedIn = await signIn(values.email, values.password);
@@ -110,17 +113,14 @@ export default function SignIn() {
     return (
         <View style={{ flex: 1, }}>
 
-            {/* MAP BACKGROUND */}
             {region && (
                 <MapView
                     mapType={mapType}
                     style={StyleSheet.absoluteFillObject}
                     showsUserLocation={false}
                     initialRegion={region}
-                />
-            )}
+                />)}
 
-            {/* BLUR */}
             <BlurView
                 intensity={15}
                 tint="light"
@@ -138,32 +138,34 @@ export default function SignIn() {
                 }}
             />
 
-            {/* PRIMARY COLOR OVERLAY */}
             <View
                 pointerEvents="none"
-                style={[
-                    StyleSheet.absoluteFillObject,
-                    {
-                        backgroundColor: theme.colors.primary,
-                        opacity: 0.18,
-                        borderRadius: 48,
-                        marginBottom: 12,
-                        marginTop: 12,
-                        marginHorizontal: 12,
-                        overflow: "hidden",
-                    },
-                ]}
+                style={{
+                    position: 'absolute',
+                    top: 0,
+                    bottom: 0,
+                    right: 0,
+                    left: 0,
+                    backgroundColor: theme.colors.primary,
+                    opacity: 0.18,
+                    borderRadius: 48,
+                    marginBottom: 12,
+                    marginTop: 12,
+                    marginHorizontal: 12,
+                    overflow: "hidden",
+                }}
             />
 
             <SafeAreaView style={{ flex: 1, }}>
 
                 {!region ? (
-                    // Keep the page structure while location loads
-                    <View style={{ flex: 1, }} />
+                    <View
+                        style={{ flex: 1, }}
+                    />
                 ) : (
-                    <View style={{ flex: 1, }}>
-
-                        {/* TITLE */}
+                    <View
+                        style={{ flex: 1, }}
+                    >
                         <View style={{
                             width: "100%",
                             paddingHorizontal: 25,
@@ -172,21 +174,20 @@ export default function SignIn() {
                         }}>
                             <Text style={{ color: theme.colors.secondaryDarker + '99' }}
                                 variant="displayLarge">
-                                Sign In
+                                {t("app.auth.signin.signinTitle")}
                             </Text>
                             <Text style={{ color: theme.colors.secondaryDarker + '99', marginLeft: 2 }}
                                 variant="bodyMedium">
-                                to find best places to relief.
+                                {t("app.auth.signin.signinSubTitle")}
                             </Text>
                         </View>
 
-                        {/* FORM */}
                         <View style={{
                             paddingHorizontal: 25,
                             gap: 15,
                         }}>
                             <FormInput
-                                label="Email"
+                                label={t("app.auth.signin.emailInput")}
                                 icon={Mail}
                                 value={values.email}
                                 onChangeText={handleChange("email")}
@@ -200,7 +201,7 @@ export default function SignIn() {
                             />
 
                             <FormInput
-                                label="Password"
+                                label={t("app.auth.signin.passwordInput")}
                                 icon={KeyRound}
                                 value={values.password}
                                 onChangeText={handleChange("password")}
@@ -213,24 +214,27 @@ export default function SignIn() {
                                 autoCorrect={false}
                             />
 
-                            <View style={{ flexDirection: "row", alignItems: "center" }}>
+                            <View style={{
+                                flexDirection: "row",
+                                alignItems: "center"
+                            }}>
                                 <Checkbox
+                                    onValueChange={setRememberMe}
+                                    value={rememberMe}
+                                    color={rememberMe
+                                        ? theme.colors.primary
+                                        : theme.colors.secondaryLight}
                                     style={{
                                         margin: 10,
                                         width: 17,
                                         height: 17
                                     }}
-                                    value={rememberMe}
-                                    onValueChange={setRememberMe}
-                                    color={
-                                        rememberMe
-                                            ? theme.colors.primary
-                                            : theme.colors.secondaryLight
-                                    }
                                 />
 
-                                <Text style={{ color: theme.colors.secondary }}>
-                                    Remember me
+                                <Text style={{
+                                    color: theme.colors.secondary
+                                }}>
+                                    {t("app.auth.signin.rememberMe")}
                                 </Text>
                             </View>
 
@@ -266,8 +270,10 @@ export default function SignIn() {
                                         marginTop: '5'
                                     }}
                                 >
-                                    <Text style={{ color: theme.colors.secondary }}>
-                                        Sign In
+                                    <Text style={{
+                                        color: theme.colors.secondary
+                                    }}>
+                                        {t("app.auth.signin.signinBtn")}
                                     </Text>
                                 </ButtonComponent>
 
@@ -280,8 +286,10 @@ export default function SignIn() {
                                         marginTop: '15'
                                     }}
                                 >
-                                    <Text style={{ color: theme.colors.secondary }}>
-                                        Cancel
+                                    <Text style={{
+                                        color: theme.colors.secondary
+                                    }}>
+                                        {t("app.auth.signin.cancelBtn")}
                                     </Text>
                                 </ButtonComponent>
 
@@ -294,17 +302,18 @@ export default function SignIn() {
                                     <Text style={{
                                         color: theme.colors.text + '90'
                                     }}>
-                                        No account yet?
+                                        {t("app.auth.signin.signinBottomText")}
                                     </Text>
 
-                                    <Pressable onPress={() => router.push("/SignUp")}>
+                                    <Pressable
+                                        onPress={() => router.push("/SignUp")}>
                                         <Text
                                             style={{
                                                 color: theme.colors.secondaryDarker,
                                                 fontWeight: "600",
                                             }}
                                         >
-                                            Sign up
+                                            {t("app.auth.signin.signupLink")}
                                         </Text>
                                     </Pressable>
                                 </View>
@@ -313,7 +322,6 @@ export default function SignIn() {
                         </View>
                     </View>
                 )}
-
             </SafeAreaView>
         </View>
     );

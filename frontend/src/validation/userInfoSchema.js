@@ -1,38 +1,43 @@
 import * as Yup from "yup";
 
-export const signInSchema = Yup.object().shape({
-    email: Yup.string()
-        .email("Invalid email address")
-        .required("Email is required"),
-    password: Yup.string()
-        .min(5)
-        .required("Password is required"),
-});
+export const signInSchema = (t) =>
+    Yup.object().shape({
+        email: Yup.string()
+            .email(t("app.auth.signin.invalidEmailError"))
+            .required(t("app.auth.signin.requiredEmailError")),
 
-export const signUpSchema = Yup.object({
-    username: Yup.string()
-        .trim()
-        .required("Username is required"),
+        password: Yup.string()
+            .min(5, t("app.auth.signin.passwordMinError"))
+            .required(t("app.auth.signin.passwordRequiredError")),
+    });
 
-    firstName: Yup.string()
-        .trim()
-        .required("First name is required"),
+export const signUpSchema = (t) =>
+    Yup.object({
+        username: Yup.string()
+            .trim()
+            .required(t("app.auth.signup.usernameRequiredError")),
 
-    lastName: Yup.string()
-        .trim()
-        .required("Last name is required"),
+        firstName: Yup.string()
+            .trim()
+            .required(t("app.auth.signup.firstNameRequiredError")),
 
-    email: Yup.string()
-        .trim()
-        .email("Invalid email address")
-        .required("Email is required"),
+        lastName: Yup.string()
+            .trim()
+            .required(t("app.auth.signup.lastNameRequiredError")),
 
-    password: Yup.string()
-        .min(8, "Password must be at least 8 characters")
-        .required("Password is required"),
+        email: Yup.string()
+            .trim()
+            .email(t("app.auth.signup.invalidEmailError"))
+            .required(t("app.auth.signup.requiredEmailError")),
 
-    confirmPassword: Yup.string()
-        .oneOf([Yup.ref("password")], "Passwords must match")
-        .required("Confirm password is required"),
-});
+        password: Yup.string()
+            .min(8, t("app.auth.signup.passwordMinError"))
+            .required(t("app.auth.signup.passwordRequiredError")),
 
+        confirmPassword: Yup.string()
+            .oneOf(
+                [Yup.ref("password")],
+                t("app.auth.signup.passwordsMustMatchError")
+            )
+            .required(t("app.auth.signup.confirmPasswordRequiredError")),
+    });

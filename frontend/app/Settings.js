@@ -1,20 +1,24 @@
+import { useEffect, useState } from "react";
+
+import { Text, useTheme } from "react-native-paper";
 import { View, StyleSheet, ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Text, useTheme } from "react-native-paper";
 import MapView from "react-native-maps";
 import { BlurView } from "expo-blur";
-import PageHeader from "../components/topNav/topNav";
+
 import useCurrentLocation from "../src/hooks/useCurrentLocation";
-import { useEffect, useState } from "react";
+import { useSettingsStore } from "../store/settingsStore";
+
+import PageHeader from "../components/topNav/topNav";
 import GeneralSettings from "../components/setting/general";
 import MapSettings from "../components/setting/map";
 import AboutSettings from "../components/setting/about";
-import { useSettingsStore } from "../store/settingsStore";
 
 export default function Settings() {
   const pageName = "Settings"
   const theme = useTheme();
   const currentLocation = useCurrentLocation();
+
   const [region, setRegion] = useState(null);
   const mapType = useSettingsStore(state => state.mapType);
 
@@ -42,15 +46,19 @@ export default function Settings() {
   return (
     <View style={{ flex: 1, }}>
 
-      {/* MAP — full screen background */}
       <MapView
         mapType={mapType}
-        style={StyleSheet.absoluteFillObject}
+        style={{
+          position: 'absolute',
+          top: 0,
+          bottom: 0,
+          right: 0,
+          left: 0,
+        }}
         showsUserLocation={false}
         initialRegion={region}
       />
 
-      {/* PRIMARY COLOR + BLUR OVERLAY */}
       <BlurView
         intensity={15}
         tint="light"
@@ -67,22 +75,21 @@ export default function Settings() {
 
       <View
         pointerEvents="none"
-        style={[
-          StyleSheet.absoluteFillObject,
-          {
-            backgroundColor: theme.colors.primary,
-            opacity: 0.23,
-            margin: 12,
-            borderRadius: 48
-          },
-        ]}
+        style={{
+          position: 'absolute',
+          top: 0,
+          bottom: 0,
+          right: 0,
+          left: 0,
+          backgroundColor: theme.colors.primary,
+          opacity: 0.23,
+          margin: 12,
+          borderRadius: 48
+        }}
       />
 
-      {/* EVERYTHING ABOVE THE MAP */}
       <SafeAreaView style={{ flex: 1, }}>
-
         <PageHeader pageName={pageName} />
-
         <ScrollView style={{
           marginBottom: 10
         }}>

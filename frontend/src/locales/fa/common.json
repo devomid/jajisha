@@ -1,46 +1,110 @@
 {
-    "AddWcBottomSheet": {
-        "add": "افزودن",
-        "cancel": "انصراف"
+    "app": {
+        "auth": {
+            "signin": {
+                "signinTitle": "وارد حسابتان شوید",
+                "signinSubTitle": "تا به بهترین مکان ها دسترسی داشته باشید.",
+                "emailInput": "آدرس ایمیل",
+                "passwordInput": "رمز عبور",
+                "rememberMe": "مرا به یاد بیاور",
+                "signinBtn": "ورود به حساب",
+                "cancelBtn": "انصراف",
+                "signinBottomText": "هنوز حساب کاربری ندارید؟",
+                "signupLink": "ایجاد حساب کاربری",
+                "invalidEmailError": "لطفا آدرس صحیح وارد کنید",
+                "requiredEmailError": "وارد کردن ایمیل الزامی است",
+                "passwordMinError": "رمز کوتاه تر از حد مجاز است",
+                "passwordRequiredError": "وارد کردن رمز عبور الزامی است"
+            },
+            "signup": {
+                "signupTitle": "حساب کاربری بسازید",
+                "signupSubTitle": "تا بتوانید مکان ها را ذخیره کنید",
+                "emailInput": "آدرس ایمیل",
+                "passwordInput": "رمز عبور",
+                "confirmPasswordInput": "تکرار رمز عبور",
+                "firstnameInput": "نام",
+                "lastnameInput": "نام خانوادگی",
+                "usernameInput": "نام کاربری اختصاصی",
+                "signupBtn": "ایجاد حساب",
+                "cancelBtn": "انصراف",
+                "signupBottomText": "حساب کاربری دارید؟",
+                "signinLink": "ورودد به حساب کاربری",
+                "invalidEmailError": "لطفا آدرس صحیح وارد کنید",
+                "requiredEmailError": "وارد کردن ایمیل الزامی است",
+                "passwordMinError": "رمز کوتاه تر از حد مجاز است",
+                "passwordRequiredError": "وارد کردن رمز عبور الزامی است",
+                "passwordsMustMatchError": "رمز عبور همخوانی ندارد",
+                "confirmPasswordRequiredError": "تکرار رمز عبور الزامی است",
+                "firstNameRequiredError": "نام خود را وارد کنید",
+                "lastNameRequiredError": "نام خانوادگی خود را وارد کنید",
+                "usernameRequiredError": "نام کاربری خاص انتخاب کنبد"
+            }
+        },
+        "about": {},
+        "favorites": {
+            "noFavoritesText": "هنوز جایی ذخیره نکردید"
+        }
     },
-    "ToiletLocationBottomSheet": {
-        "toiletInfo": "اطلاعات توالت"
-    },
-    "drawer": {
-        "hello": "سلام",
-        "welcome": "خوش برگشتی,",
-        "account": "حساب کاربری",
-        "settings": "تنظیمات",
-        "favorites": "توالت های ذهیره شده",
-        "help": "راهنمایی",
-        "about": "درباره نرم افزار"
-    },
-    "newToilet": {
-        "western": "فرنگی",
-        "iranian": "ایرانی",
-        "wheelchairAccess": "دسترسی ویلچر",
-        "handDryer": "خشک کن دست",
-        "babyChange": "اتاق کودک",
-        "warmWater": "آب گرم",
-        "soap": "صابون و مایع دستشویی",
-        "toiletPaper": "دستمال توالت",
-        "toiletName": "عنوان توالت",
-        "chooseOnMap": "انتخاب از روی نقشه",
-        "location": "موقعیت جغرافیایی",
-        "address": "آدرس",
-        "free": "رایگان",
-        "price": "قیمت",
-        "amenities": "امکانات",
-        "rating": "امتیازدهی",
-        "description": "توضیحات تکمیلی"
-    },
-    "starRating": {
-        "cleanliness": "تمیزی و نظافت",
-        "odor": "بوی محیط",
-        "amenitiesHealth": "سلامت امکانات",
-        "light": "روشنایی",
-        "privacy": "حریم خصوصی و امنیت",
-        "crowd": "شلوغی",
-        "overall": "امتیاز کلی"
+    "components": {
+        "addWcBottomSheet": {
+            "addWcBtn": "افزودن توالت",
+            "cancelAddWcBtn": "انصراف"
+        },
+        "routePreview": {
+            "routePreviewTitle": "محاسبه مسیر",
+            "distanceTitle": "فاصله تا مقصد",
+            "etaTitle": "زمان رسیدن",
+            "navigateBtn": "آغاز مسیریابی",
+            "cancelNavigateBtn": "انصراف"
+        },
+        "ToiletLocationBottomSheet": {
+            "toiletInfo": "اطلاعات توالت",
+            "reviewTitle": "نظر",
+            "showRouteBtn": "محاسبه مسیر",
+            "amenitiesIcon": {
+                "western": "فرنگی",
+                "iranian": "ایرانی",
+                "babyChanging": "اتاق نوزاد",
+                "wheelchairAccessible": "دسترسی معلولین",
+                "handDryer": "خشک کن دست",
+                "soap": "صابون و مایع دستشویی",
+                "toiletPaper": "دستمال توالت",
+                "warmWater": "آب گرم"
+            },
+            "moreBtn": "بیشتر",
+            "lessBtn": "کمتر",
+            "rateAndWriteBtn": "نظر بدید"
+        },
+        "commentCardComponentBig":{},
+        "commentCardComponentSmall":{},
+        "toiletCard":{},
+        "newToilet": {
+            "western": "فرنگی",
+            "iranian": "ایرانی",
+            "wheelchairAccess": "دسترسی ویلچر",
+            "handDryer": "خشک کن دست",
+            "babyChange": "اتاق کودک",
+            "warmWater": "آب گرم",
+            "soap": "صابون و مایع دستشویی",
+            "toiletPaper": "دستمال توالت",
+            "toiletName": "عنوان توالت",
+            "chooseOnMap": "انتخاب از روی نقشه",
+            "location": "موقعیت جغرافیایی",
+            "address": "آدرس",
+            "free": "رایگان",
+            "price": "قیمت",
+            "amenities": "امکانات",
+            "rating": "امتیازدهی",
+            "description": "توضیحات تکمیلی"
+        },
+        "starRating": {
+            "cleanliness": "تمیزی و نظافت",
+            "odor": "بوی محیط",
+            "amenitiesHealth": "سلامت امکانات",
+            "light": "روشنایی",
+            "privacy": "حریم خصوصی و امنیت",
+            "crowd": "شلوغی",
+            "overall": "امتیاز کلی"
+        }
     }
 }

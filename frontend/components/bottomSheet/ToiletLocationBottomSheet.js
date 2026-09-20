@@ -1,21 +1,21 @@
 import { forwardRef, useMemo, useCallback, useState, useEffect, useRef, useImperativeHandle } from "react";
-import { View, Pressable, Share as RNShare, Animated, Easing, ActivityIndicator } from "react-native";
 import { useTranslation } from "react-i18next";
 import { router } from "expo-router";
 import { runOnJS } from "react-native-worklets";
 
+import { Save, SaveCheck, Share2, Star, MapPin, Road, Route, Timer, Ellipsis, Baby, Accessibility, Toilet, Droplets, SoapDispenserDroplet, Wind } from "lucide-react-native";
+import { View, Pressable, Share as RNShare, Animated, Easing, ActivityIndicator } from "react-native";
+import { Text, useTheme } from "react-native-paper";
+import { BlurView } from "expo-blur";
+import { BottomSheetModal, BottomSheetBackdrop, BottomSheetScrollView, } from "@gorhom/bottom-sheet";
+
 import { useWcDataStore } from "../../store/wcDataStore";
 import { useUserStore } from "../../store/userStore";
 import { useAuth } from "../../src/hooks/useAuth";
-import { useSettingsStore } from "../../store/settingsStore";
 import { formatDistance } from "../../src/utils/distance";
 import { useManagingWc } from '../../src/hooks/useManagingWc';
+import { useSettingsStore } from "../../store/settingsStore";
 import useWaitingSystemStore from "../../store/waitingSystemStore";
-
-import { BlurView } from "expo-blur";
-import { Text, useTheme } from "react-native-paper";
-import { BottomSheetModal, BottomSheetBackdrop, BottomSheetScrollView, } from "@gorhom/bottom-sheet";
-import { Save, SaveCheck, Share2, Star, MapPin, Road, Route, Timer, Ellipsis, Baby, Accessibility, Toilet, Droplets, SoapDispenserDroplet, Wind } from "lucide-react-native";
 
 import GlassBackground from "../../components/blur/blurView";
 import PhotoGallery from "../photoGallery/photoGallery";
@@ -25,18 +25,18 @@ import RateAndCommentSheet from "../rating/rateAndCommentSheet";
 
 const ToiletInfo = forwardRef(({ curentLocation, onPresent }, ref) => {
 
-    const user = useUserStore((state) => state.user);
-    const toilet = useWcDataStore((state) => state.selectedToilet);
-    const setNavigationTarget = useWcDataStore(state => state.setNavigationTarget);
-    const toiletRouteInfo = useWcDataStore(state => state.toiletRouteInfo);
-    const distanceUnit = useSettingsStore(state => state.distanceUnit);
-    const hideWaiting = useWaitingSystemStore(state => state.hideWaiting);
-    const { restoreUser } = useAuth();
+    const snapPoints = useMemo(() => [
+        "39.5%", "48%", "65%", "86%"
+    ], []);
+
     const { t } = useTranslation();
     const theme = useTheme();
+    const { restoreUser } = useAuth();
     const { saveWc, unsaveWc } = useManagingWc();
-    const { distance, duration } = toiletRouteInfo;
     const bottomSheetRef = useRef(null);
+    const lastStableIndexRef = useRef(0);
+    const programmaticAmenitiesHeightRef = useRef(false);
+
     const [sheetIndex, setSheetIndex] = useState(0);
     const [isAtAmenitiesHeight, setIsAtAmenitiesHeight] = useState(false);
     const [isSaved, setIsSaved] = useState(false);
@@ -46,52 +46,57 @@ const ToiletInfo = forwardRef(({ curentLocation, onPresent }, ref) => {
     const [iscommenting, setIscommenting] = useState(false);
     const [iscommentsOpen, setIscommentsOpen] = useState(false);
     const [isSharing, setIsSharing] = useState(false);
-
-    const lastStableIndexRef = useRef(0);
-    const programmaticAmenitiesHeightRef = useRef(false);
+    const user = useUserStore((state) => state.user);
+    const toilet = useWcDataStore((state) => state.selectedToilet);
+    const setNavigationTarget = useWcDataStore(state => state.setNavigationTarget);
+    const toiletRouteInfo = useWcDataStore(state => state.toiletRouteInfo);
+    const distanceUnit = useSettingsStore(state => state.distanceUnit);
+    const hideWaiting = useWaitingSystemStore(state => state.hideWaiting);
     const amenitiesAnimation = useRef(new Animated.Value(0)).current;
+
+    const { distance, duration } = toiletRouteInfo;
 
     const amenitiesIcon = () => {
 
         const amenities = [
             {
                 key: "western",
-                name: "western",
+                name: t("components.ToiletLocationBottomSheet.amenitiesIcon.western"),
                 Icon: Toilet
             },
             {
                 key: "iranian",
-                name: "iranian",
+                name: t("components.ToiletLocationBottomSheet.amenitiesIcon.iranian"),
                 Icon: Toilet
             },
             {
                 key: "babyChanging",
-                name: "Baby Room",
+                name: t("components.ToiletLocationBottomSheet.amenitiesIcon.babyChanging"),
                 Icon: Baby
             },
             {
                 key: "wheelchairAccessible",
-                name: "Accessibility",
+                name: t("components.ToiletLocationBottomSheet.amenitiesIcon.wheelchairAccessible"),
                 Icon: Accessibility
             },
             {
                 key: "handDryer",
-                name: "Hand dryer",
+                name: t("components.ToiletLocationBottomSheet.amenitiesIcon.handDryer"),
                 Icon: Wind
             },
             {
                 key: "soap",
-                name: "soap",
+                name: t("components.ToiletLocationBottomSheet.amenitiesIcon.soap"),
                 Icon: SoapDispenserDroplet
             },
             {
                 key: "toiletPaper",
-                name: "Toilet paper",
+                name: t("components.ToiletLocationBottomSheet.amenitiesIcon.toiletPaper"),
                 Icon: Toilet
             },
             {
                 key: "warmWater",
-                name: "Warm water",
+                name: t("components.ToiletLocationBottomSheet.amenitiesIcon.warmWater"),
                 Icon: Droplets
             },
         ];
@@ -106,32 +111,11 @@ const ToiletInfo = forwardRef(({ curentLocation, onPresent }, ref) => {
     const visibleAmenities = amenities.slice(0, 3);
     const hasMoreAmenities = amenities.length > 3;
 
-    const snapPoints = useMemo(() => [
-        "39.5%", "48%", "65%", "86%"
-    ], []);
-
     useImperativeHandle(ref, () => ({
         present: (...args) => bottomSheetRef.current?.present(...args),
         dismiss: (...args) => bottomSheetRef.current?.dismiss(...args),
         snapToIndex: (...args) => bottomSheetRef.current?.snapToIndex(...args),
     }), []);
-
-    const renderBackdrop = useCallback(
-        (props) => (
-            <BottomSheetBackdrop
-                {...props}
-                opacity={0.3}
-                appearsOnIndex={0}
-                disappearsOnIndex={-1}
-                pressBehavior="close"
-                style={{
-                    backgroundColor:
-                        theme.colors.primaryLighter + "60"
-                }}
-            />
-        ),
-        [theme]
-    );
 
     const extraAmenitiesAnimatedStyle = {
         maxHeight: amenitiesAnimation.interpolate({
@@ -289,7 +273,7 @@ const ToiletInfo = forwardRef(({ curentLocation, onPresent }, ref) => {
             });
 
             setIsSharing(false)
-            
+
         } catch (error) {
             //toast
             setIsSharing(false)
@@ -321,6 +305,23 @@ const ToiletInfo = forwardRef(({ curentLocation, onPresent }, ref) => {
         }).start();
     }, [showAllAmenities]);
 
+
+    const renderBackdrop = useCallback(
+        (props) => (
+            <BottomSheetBackdrop
+                {...props}
+                opacity={0.3}
+                appearsOnIndex={0}
+                disappearsOnIndex={-1}
+                pressBehavior="close"
+                style={{
+                    backgroundColor:
+                        theme.colors.primaryLighter + "60"
+                }}
+            />
+        ),
+        [theme]
+    );
     return (
 
         <BottomSheetModal
@@ -441,7 +442,6 @@ const ToiletInfo = forwardRef(({ curentLocation, onPresent }, ref) => {
                                     justifyContent: "center",
                                 }}
                             >
-
                                 <Road
                                     size={18}
                                     color={theme.colors.secondaryLight + "90"}
@@ -512,7 +512,8 @@ const ToiletInfo = forwardRef(({ curentLocation, onPresent }, ref) => {
                                     }}
                                     variant="bodySmall"
                                 >
-                                    ({toilet?.ratingSummary?.count ?? 0}{" "}vote)
+                                    ({toilet?.ratingSummary?.count ?? 0}{" "}
+                                    {t("components.ToiletLocationBottomSheet.reviewTitle")})
                                 </Text>
                             </View>
 
@@ -526,7 +527,7 @@ const ToiletInfo = forwardRef(({ curentLocation, onPresent }, ref) => {
 
                                 <ButtonComponent
                                     onPress={() => {
-                                            bottomSheetRef.current?.dismiss();
+                                        bottomSheetRef.current?.dismiss();
                                         setNavigationTarget(toilet);
                                     }}
                                     backgroundColor={theme.colors.nav + "15"}
@@ -559,7 +560,7 @@ const ToiletInfo = forwardRef(({ curentLocation, onPresent }, ref) => {
                                                 color: theme.colors.nav + "99",
                                             }}
                                         >
-                                            Show route
+                                            {t("components.ToiletLocationBottomSheet.showRouteBtn")}
                                         </Text>
 
                                     </View>
@@ -583,19 +584,19 @@ const ToiletInfo = forwardRef(({ curentLocation, onPresent }, ref) => {
                                             alignItems: "center",
                                             justifyContent: "center",
                                         }}
-                                        >
-                                            {isSharing ? (
-                                                <ActivityIndicator
-                                                    animating={true}
-                                                    color={theme.colors.secondary}
-                                                />
-                                            ) : (
-                                                <Share2
-                                                    size={18}
-                                                    color={theme.colors.secondaryLight}
-                                                        strokeWidth={2}
-                                                />  
-                                            )}
+                                    >
+                                        {isSharing ? (
+                                            <ActivityIndicator
+                                                animating={true}
+                                                color={theme.colors.secondary}
+                                            />
+                                        ) : (
+                                            <Share2
+                                                size={18}
+                                                color={theme.colors.secondaryLight}
+                                                strokeWidth={2}
+                                            />
+                                        )}
 
                                     </View>
 
@@ -642,11 +643,11 @@ const ToiletInfo = forwardRef(({ curentLocation, onPresent }, ref) => {
                         </View>
 
                         <BottomSheetScrollView
+                            showsVerticalScrollIndicator={false}
                             contentContainerStyle={{
                                 paddingHorizontal: 24,
                                 paddingBottom: 40,
                             }}
-                            showsVerticalScrollIndicator={false}
                         >
 
                             <View
@@ -698,7 +699,7 @@ const ToiletInfo = forwardRef(({ curentLocation, onPresent }, ref) => {
                                             }}
                                             numberOfLines={1}
                                         >
-                                            {t(name)}
+                                            {name}
                                         </Text>
 
                                     </BlurView>
@@ -743,7 +744,10 @@ const ToiletInfo = forwardRef(({ curentLocation, onPresent }, ref) => {
                                                 fontSize: 10,
                                             }}
                                         >
-                                            {showAllAmenities ? t("less") : t("more")}
+
+                                            {showAllAmenities ?
+                                                t("components.ToiletLocationBottomSheet.lessBtn") :
+                                                t("components.ToiletLocationBottomSheet.moreBtn")}
                                         </Text>
 
                                     </Pressable>
@@ -757,7 +761,6 @@ const ToiletInfo = forwardRef(({ curentLocation, onPresent }, ref) => {
                                         extraAmenitiesAnimatedStyle
                                     }
                                 >
-
                                     <View
                                         style={{
                                             width: "100%",
@@ -808,7 +811,7 @@ const ToiletInfo = forwardRef(({ curentLocation, onPresent }, ref) => {
                                                     }}
                                                     numberOfLines={1}
                                                 >
-                                                    {t(name)}
+                                                    {name}
                                                 </Text>
 
                                             </BlurView>
@@ -818,86 +821,26 @@ const ToiletInfo = forwardRef(({ curentLocation, onPresent }, ref) => {
 
                                 </Animated.View>
                             )}
-                            {user ? (
-                                <>
-                                    <View
+                            <>
+                                <View
+                                    theme={theme}
+                                    style={{
+                                        width: "100%",
+                                        alignItems: "flex-start",
+                                        marginBottom: 8,
+                                    }}
+                                >
+                                    <CommentSection
                                         theme={theme}
-                                        style={{
-                                            width: "100%",
-                                            alignItems: "flex-start",
-                                            marginBottom: 8,
-                                        }}
-                                    >
-                                        <CommentSection
-                                            theme={theme}
-                                            iscommenting={iscommenting}
-                                            setIscommenting={setIscommenting}
-                                            iscommentsOpen={iscommentsOpen}
-                                            setIscommentsOpen={setIscommentsOpen}
-                                        />
-
-                                        <ButtonComponent
-                                            onPress={() => {
-                                                setIscommenting(true);
-                                            }}
-                                            backgroundColor={theme.colors.secondary + '30'}
-                                            borderColor={theme.colors.secondaryLighter + '80'}
-                                            style={{
-                                                width: '100%',
-                                                marginTop: 15
-                                            }}
-                                        >
-                                            <Text style={{
-                                                color: theme.colors.surface,
-                                            }}>
-                                                rate and write a review
-                                            </Text>
-                                        </ButtonComponent>
-
-                                    </View>
-
-                                    <View>
-                                        <PhotoGallery />
-                                    </View>
-                                </>
-                            ) : (
-                                <View style={{
-                                    height: '150%',
-                                    width: '100%',
-                                    flexDirection: 'column',
-                                    justifyContent: 'center',
-                                    alignItems: 'center'
-                                }}>
-
-                                    <Text style={{
-                                        color: theme.colors.secondaryDark
-                                    }}>
-                                        sign in to see photos and reviews
-                                    </Text>
+                                        iscommenting={iscommenting}
+                                        setIscommenting={setIscommenting}
+                                        iscommentsOpen={iscommentsOpen}
+                                        setIscommentsOpen={setIscommentsOpen}
+                                    />
 
                                     <ButtonComponent
                                         onPress={() => {
-                                            router.push('/SignIn');
-                                        }}
-                                        backgroundColor={theme.colors.secondary + '30'}
-                                        borderColor={theme.colors.secondaryLighter + '80'}
-                                        style={{
-                                            width: '100%',
-                                            marginTop: 15
-                                        }}
-                                    >
-
-                                        <Text style={{
-                                            color: theme.colors.surface,
-                                        }}>
-                                            Sign In
-                                        </Text>
-
-                                    </ButtonComponent>
-
-                                    <ButtonComponent
-                                        onPress={() => {
-                                            router.push('/SignUp');
+                                            setIscommenting(true);
                                         }}
                                         backgroundColor={theme.colors.secondary + '30'}
                                         borderColor={theme.colors.secondaryLighter + '80'}
@@ -909,11 +852,16 @@ const ToiletInfo = forwardRef(({ curentLocation, onPresent }, ref) => {
                                         <Text style={{
                                             color: theme.colors.surface,
                                         }}>
-                                            Sign Up
+                                            {t("components.ToiletLocationBottomSheet.rateAndWriteBtn")}
                                         </Text>
                                     </ButtonComponent>
+
                                 </View>
-                            )}
+
+                                <View>
+                                    <PhotoGallery />
+                                </View>
+                            </>
 
                         </BottomSheetScrollView>
 

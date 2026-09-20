@@ -1,30 +1,35 @@
-import { View, StyleSheet } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { Text, useTheme } from "react-native-paper";
-import MapView from "react-native-maps";
-import { BlurView } from "expo-blur";
-import PageHeader from "../components/topNav/topNav";
-import useCurrentLocation from "../src/hooks/useCurrentLocation";
 import { useEffect, useState } from "react";
-import { useUserStore } from "../store/userStore";
-import { Redirect } from "expo-router";
-import ToiletCard from "../components/cards/ToiletCards";
+import { useTranslation } from 'react-i18next';
+import { Redirect, router } from "expo-router";
+
+import { View, StyleSheet } from "react-native";
+import { Text, useTheme } from "react-native-paper";
 import { ScrollView } from "react-native";
+import MapView from "react-native-maps";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { BlurView } from "expo-blur";
+
+import useCurrentLocation from "../src/hooks/useCurrentLocation";
+import { useUserStore } from "../store/userStore";
 import { useSettingsStore } from "../store/settingsStore";
 import { useWcDataStore } from "../store/wcDataStore";
-import { router } from "expo-router";
 import { useTopSheetStore } from "../store/menuStore";
 
+import ToiletCard from "../components/cards/ToiletCards";
+import PageHeader from "../components/topNav/topNav";
+
 export default function Favorites() {
-  const user = useUserStore((state) => state.user);
-  const requestOpenToiletInfo = useWcDataStore(state => state.requestOpenToiletInfo);
-  const setSelectedToilet = useWcDataStore(state => state.setSelectedToilet);
   const pageName = "Saved Toilets"
+  const { t } = useTranslation();
   const theme = useTheme();
   const currentLocation = useCurrentLocation();
+
   const [region, setRegion] = useState(null);
+  const requestOpenToiletInfo = useWcDataStore(state => state.requestOpenToiletInfo);
+  const setSelectedToilet = useWcDataStore(state => state.setSelectedToilet);
   const mapType = useSettingsStore(state => state.mapType);
   const close = useTopSheetStore((state) => state.close);
+  const user = useUserStore((state) => state.user);
 
   useEffect(() => {
     if (!currentLocation?.coords) return;
@@ -40,7 +45,7 @@ export default function Favorites() {
   if (!user) {
     return <Redirect href="/SignIn" />;
   };
-  
+
   const favoriteToilets = user.favoriteToilets;
 
   if (!region) {
@@ -56,7 +61,6 @@ export default function Favorites() {
   return (
     <View style={{ flex: 1, }}>
 
-      {/* MAP — full screen background */}
       <MapView
         mapType={mapType}
         style={StyleSheet.absoluteFillObject}
@@ -64,7 +68,6 @@ export default function Favorites() {
         initialRegion={region}
       />
 
-      {/* PRIMARY COLOR + BLUR OVERLAY */}
       <BlurView
         intensity={15}
         tint="light"
@@ -92,7 +95,6 @@ export default function Favorites() {
         ]}
       />
 
-      {/* EVERYTHING ABOVE THE MAP */}
       <SafeAreaView style={{ flex: 1 }}>
         <PageHeader pageName={pageName} />
 
@@ -127,7 +129,7 @@ export default function Favorites() {
             justifyContent: 'center'
           }}>
             <Text>
-              No saved place yet.
+              {t("app.favorites.noFavoritesText")}
             </Text>
           </View>
         )}

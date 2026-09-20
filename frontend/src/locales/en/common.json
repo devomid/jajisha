@@ -1,4 +1,45 @@
 {
+    "app": {
+        "auth": {
+            "signin": {
+                "signinTitle": "Sign In",
+                "signinSubTitle": "To have access to best locations",
+                "emailInput": "Email",
+                "passwordInput": "Password",
+                "rememberMe": "remember me",
+                "signinBtn": "Sign In",
+                "cancelBtn": "Cancel",
+                "signinBottomText": "No account yet?",
+                "signupLink": "Sign Up",
+                "emailError": "وارد کردن ایمیل الزامی است.",
+                "PasswordError": "برای ورود پسورد را وارد کنید."
+            },
+            "signup": {
+                "signupTitle": "حساب کاربری بسازید",
+                "signupSubTitle": "تا بتوانید مکان ها را ذخیره کنید",
+                "emailInput": "آدرس ایمیل",
+                "passwordInput": "رمز عبور",
+                "confirmPasswordInput": "تکرار رمز عبور",
+                "firstnameInput": "نام",
+                "lastnameInput": "نام خانوادگی",
+                "usernameInput": "نام کاربری اختصاصی",
+                "signupBtn": "ایجاد حساب",
+                "cancelBtn": "انصراف",
+                "signupBottomText": "حساب کاربری دارید؟",
+                "signinLink": "ورودد به حساب کاربری",
+                "emailError": "وارد کردن ایمیل الزامی است.",
+                "PasswordError": "وارد کردن رمز عبر الزامی است",
+                "confirmPasswordError": "رمز عبور همخوانی ندارد",
+                "firstnameError": "نام خود را وارد کنید",
+                "lastnameError": "نام خانوادگی خود را وارد کنید",
+                "usernameError": "نام کاربری خاص انتخاب کنبد"
+            }
+        },
+        "about": "",
+        "favorites": "",
+        "index": "",
+        "settings": ""
+    },
     "AddWcBottomSheet": {
         "add": "Add",
         "cancel": "Cancel"
