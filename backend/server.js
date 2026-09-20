@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const app = require('./app');
-const logger = require("../logger/logger");
+const logger = require("./logger/logger");
 
 dotenv.config();
 logger.info("dotEnv configured in server");
@@ -12,7 +12,8 @@ const missingEnv = requiredEnv.filter((key) => !process.env[key]);
 if (missingEnv.length > 0) {
     logger.warn({
         missingEnv: missingEnv.join(", "),
-    }, "some env variable are magically lost");
+    }, "Required environment variables are missing");
+
     process.exit(1);
 }
 
@@ -20,7 +21,7 @@ const mongoUrl = process.env.MONGOURI;
 const portNumber = Number(process.env.PORT);
 
 if (!Number.isInteger(portNumber) || portNumber < 1 || portNumber > 65535) {
-    logger.warn("port number is not valid");
+    logger.warn("Invalid port number");
     process.exit(1);
 }
 
@@ -28,7 +29,7 @@ if (!Number.isInteger(portNumber) || portNumber < 1 || portNumber > 65535) {
 const shutdown = async (signal) => {
     logger.info({
         signal: signal.toString(),
-    }, "recieved shut down signal. connection going to be closed");
+    }, "Shutdown signal received: closing database connection");
     await mongoose.connection.close();
     process.exit(0);
 };
@@ -47,10 +48,11 @@ mongoose.connection.on("error", (error) => {
 mongoose.connect(mongoUrl)
     .then(() => {
         app.listen(portNumber, () => {
-            logger.info("DB connection success!");
-            console.log(`server running on port: ${portNumber}`);
-            console.log('DB connection success!');
+            logger.info({
+                port: portNumber,
+            }, "Server started");
         });
+        logger.info("MongoDB connected successfully");
     })
     .catch((error) => {
         logger.error({

@@ -6,7 +6,6 @@ const dotenv = require('dotenv');
 const logger = require("../logger/logger");
 
 dotenv.config();
-logger.info("dotEnv configured in user controller");
 
 const secretKey = process.env.SECRET_KEY;
 const createToken = function (_id) {
@@ -29,12 +28,15 @@ const signUpUser = async (req, res) => {
         typeof email !== "string" ||
         typeof password !== "string"
     ) {
-        logger.warn("Signup rejected: Invalid signup data: firstname, lastname, username, email, password !== string");
+        logger.warn({
+            requestId: req.id,
+        }, "Signup rejected: invalid field types"
+        );
 
         return res.status(400).json({
             error: "Invalid signup data.",
         });
-    };
+    }
 
     if (
         !username.trim() ||
@@ -43,12 +45,15 @@ const signUpUser = async (req, res) => {
         !email.trim() ||
         !password.trim()
     ) {
-        logger.warn("Signup rejected: on of required fields is empty");
+        logger.warn({
+            requestId: req.id,
+        }, "Signup rejected: required field is empty"
+        );
 
         return res.status(400).json({
             error: "All signup fields are required.",
         });
-    };
+    }
 
     const normalizedUsername = username.trim();
     const normalizedFirstName = firstName.trim();
@@ -62,21 +67,30 @@ const signUpUser = async (req, res) => {
         ]);
 
         if (usernameExists) {
-            logger.warn("Signup rejected: duplicate account data: username");
+            logger.warn({
+                requestId: req.id,
+            }, "Signup rejected: username already in use");
+
             return res.status(400).json({
                 error: "Username is already in use.",
             });
         }
 
         if (emailExists) {
-            logger.warn("Signup rejected: duplicate account data: email");
+            logger.warn({
+                requestId: req.id,
+            }, "Signup rejected: email already in use");
+
             return res.status(400).json({
                 error: "Email is already in use.",
             });
         }
 
         if (password.length < 8) {
-            logger.warn("Signup rejected: bad password");
+            logger.warn({
+                requestId: req.id,
+            },"Signup rejected: password too short");
+
             return res.status(400).json({
                 error: "Password is not strong enough.",
             });
@@ -96,8 +110,7 @@ const signUpUser = async (req, res) => {
 
         logger.info({
             requestId: req.id,
-            username: normalizedUsername,
-            userId: user._id.toString(),
+            userId: user._id,
         }, "Signup successful");
 
         res.status(201).json({
@@ -124,6 +137,7 @@ const signUpUser = async (req, res) => {
         }
 
         logger.error({
+            requestId: req.id,
             err: error,
         }, "Signup failed");
 
@@ -143,7 +157,9 @@ const signInUser = async (req, res) => {
             !email.trim() ||
             !password
         ) {
-            logger.warn(" email or password no provided");
+            logger.warn({
+                requestId: req.id,
+            }," email or password no provided");
             return res.status(400).json({
                 error: "Email and password are required.",
             });
@@ -156,7 +172,7 @@ const signInUser = async (req, res) => {
         if (!user) {
             logger.warn({
                 requestId: req.id,
-            }, " Invalid credentials: !user on database");
+            }, " Sign-in rejected: Invalid credentials");
             return res.status(401).json({
                 error: "Invalid credentials.",
             });
@@ -165,7 +181,10 @@ const signInUser = async (req, res) => {
         const isPassCorrect = await bcrypt.compare(password, user.password);
 
         if (!isPassCorrect) {
-            logger.warn(" Invalid credentials: wrong pass");
+            logger.warn({
+                requestId: req.id,
+            }, "Sign-in rejected: invalid credentials");
+
             return res.status(401).json({
                 error: "Invalid credentials.",
             });
@@ -174,7 +193,7 @@ const signInUser = async (req, res) => {
         const token = createToken(user._id);
         logger.info({
             requestId: req.id,
-            userId: user._id.toString(),
+            userId: user._id,
         }, "Signin successful");
 
         res.status(200).json({
@@ -194,6 +213,7 @@ const signInUser = async (req, res) => {
 
     } catch (error) {
         logger.error({
+            requestId: req.id,
             err: error,
         }, "Signin failed");
         return res.status(500).json({
@@ -206,26 +226,30 @@ const getUser = async (req, res) => {
 
     try {
         const id = req.user._id;
-        if (!mongoose.isValidObjectId(id)) {
+        if (id && !mongoose.isValidObjectId(id)) {
             logger.warn({
-                userId: id.toString(),
-            }, "user not found");
+                requestId: req.id,
+                userId: id,
+            }, "Get user rejected: user not found");
             return res.status(404).json({ message: "User not found!" });
         };
         const user = await User.findById(id).select("-password").populate("favoriteToilets").populate("reviews");
         if (!user) {
             logger.warn({
-                userId: id.toString(),
+                requestId: req.id,
+                userId: id,
             }, "id is not a valid object");
             return res.status(404).json({ message: "User not found!" })
         };
         logger.info({
-            userId: user._id.toString(),
+            requestId: req.id,
+            userId: user._id,
         }, "Get user successful");
         return res.status(200).json(user)
 
     } catch (error) {
         logger.error({
+            requestId: req.id,
             err: error,
         }, "Get user failed");
         return res.status(500).json({ message: "Failed to load user", });
@@ -234,33 +258,50 @@ const getUser = async (req, res) => {
 
 const removeUser = async (req, res) => {
     try {
-        const id = req.user._id;
-        if (!mongoose.isValidObjectId(id)) {
-            logger.warn({
-                userId: id.toString(),
-            }, "id is not a valid object");
-            return res.status(404).json({ message: "User not found!" });
-        };
+        const userId = req.user._id;
 
-        const deletedUser = await User.findByIdAndDelete(id);
+        if (!mongoose.isValidObjectId(userId)) {
+            logger.warn({
+                requestId: req.id,
+                userId,
+            }, "Delete user rejected: invalid user ID");
+
+            return res.status(404).json({
+                message: "User not found!",
+            });
+        }
+
+        const deletedUser = await User.findByIdAndDelete(userId);
 
         if (!deletedUser) {
-            logger.warn("user not found");
-            return res.status(404).json({ error: "User not found." })
+            logger.warn({
+                requestId: req.id,
+                userId,
+            }, "Delete user rejected: user not found");
+
+            return res.status(404).json({
+                error: "User not found.",
+            });
         }
-        logger.warn({
-            userId: id.toString(),
-        }, "user delete successful");
-        res.status(204).send();
+
+        logger.info({
+            requestId: req.id,
+            userId,
+        }, "User deleted successfully");
+
+        return res.status(204).send();
 
     } catch (error) {
         logger.error({
+            requestId: req.id,
             err: error,
-        }, "delete user failed");
-        res.status(500).json({ error: "Failed to delete user." })
-    }
+        }, "Failed to delete user");
 
-}
+        return res.status(500).json({
+            error: "Failed to delete user.",
+        });
+    }
+};
 
 
 module.exports = {

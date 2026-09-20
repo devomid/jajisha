@@ -31,10 +31,10 @@ logger.info("Application middleware configured");
 app.get("/health", (req, res) => {
     logger.info({
         requestId: req.id,
-    }, "health check link called. returning status ok");
-    res.status(200).json({ status: "ok" })
-});
+    }, "Health check called: returning OK");
 
+    res.status(200).json({ status: "ok" });
+});
 //routes
 app.use("/api/toilets", toiletRoutes);
 app.use("/api/user", userRoutes);

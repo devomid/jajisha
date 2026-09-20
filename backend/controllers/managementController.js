@@ -11,19 +11,22 @@ const saveToilet = async (req, res) => {
     try {
         if (!mongoose.isValidObjectId(toiletId)) {
             logger.warn({
-                toiletId: toiletId.toString(),
-                requestId: req.id
-            }, "toilet Id is not valid");
-            return res.status(404).json({ message: "Toilet not found" });
+                requestId: req.id,
+                toiletId,
+            }, "Toilet lookup rejected: invalid ID");
+
+            return res.status(404).json({
+                message: "Toilet not found",
+            });
         }
 
         const toilet = await Toilet.exists({ _id: toiletId });
 
         if (!toilet) {
             logger.warn({
-                toiletId: toiletId.toString(),
+                toiletId,
                 requestId: req.id
-            }, "toilet not found on DB");
+            }, "Toilet not found on DB");
             return res.status(404).json({ message: "Toilet not found" });
         }
 
@@ -35,10 +38,10 @@ const saveToilet = async (req, res) => {
 
         if (!user) {
             logger.warn({
-                userId: userId.toString(),
-                toiletId: toiletId.toString(),
+                userId,
+                toiletId,
                 requestId: req.id
-            }, "Faild updating user favorite toilets");
+            }, "Save toilet rejected: user not found");
             return res.status(404).json({ message: "User not found" });
         }
 
@@ -53,6 +56,7 @@ const saveToilet = async (req, res) => {
     } catch (error) {
         logger.error({
             err: error,
+            requestId: req.id,
         }, "Failed to save toilet");
 
         return res.status(500).json({
@@ -68,9 +72,9 @@ const unsaveToilet = async (req, res) => {
     try {
         if (!mongoose.isValidObjectId(toiletId)) {
             logger.warn({
-                toiletId: toiletId.toString(),
+                toiletId,
                 requestId: req.id
-            }, "toilet Id is not valid");
+            }, "Toilet Id is not valid");
             return res.status(404).json({ message: "Toilet not found" });
         }
 
@@ -78,9 +82,9 @@ const unsaveToilet = async (req, res) => {
 
         if (!toilet) {
             logger.warn({
-                toiletId: toiletId.toString(),
+                toiletId,
                 requestId: req.id
-            }, "toilet not found on DB");
+            }, "Toilet not found on DB");
             return res.status(404).json({ message: "Toilet not found" });
         }
 
@@ -92,15 +96,15 @@ const unsaveToilet = async (req, res) => {
 
         if (!user) {
             logger.warn({
-                userId: userId.toString(),
-                toiletId: toiletId.toString(),
+                userId,
+                toiletId,
                 requestId: req.id
-            }, "Faild updating user favorite toilets");
+            }, "Unsave toilet rejected: user not found");
             return res.status(404).json({ message: "User not found" });
         }
         logger.info({
-            userId: userId.toString(),
-            toiletId: toiletId.toString(),
+            userId,
+            toiletId,
             requestId: req.id
         }, "Toilet unsaved successfully");
         return res.status(200).json({
@@ -130,7 +134,7 @@ const createReview = async (req, res) => {
 
     if (!mongoose.isValidObjectId(toiletId)) {
         logger.warn({
-            toiletId: toiletId.toString(),
+            toiletId,
             requestId: req.id
         }, "toilet Id is not valid");
         return res.status(404).json({
@@ -145,12 +149,11 @@ const createReview = async (req, res) => {
     if (typeof reviewText !== "string" || !reviewText.trim()) {
         logger.warn({
             requestId: req.id,
-            toiletId: toiletId,
-            userId: userId
-        }, "review text is not valid");
-        return res.status(400).json({
-            message: "Review text is required",
-        });
+            toiletId,
+            userId,
+            isReviewString: typeof reviewText === "string",
+            hasReviewText: typeof reviewText === "string" && Boolean(reviewText.trim()),
+        }, "Review text is not valid");
     }
 
     const trimmedReviewText = reviewText.trim();
@@ -161,8 +164,8 @@ const createReview = async (req, res) => {
     ) {
         logger.warn({
             requestId: req.id,
-            length: trimmedReviewText.length,
-        }, "review text is shorter or longer than valid lenght");
+            rviewLength: trimmedReviewText.length,
+        }, "Review text length is outside the allowed range");
         return res.status(400).json({
             message: "Review text must be between 10 and 200 characters",
         });
@@ -178,8 +181,12 @@ const createReview = async (req, res) => {
         Array.isArray(ratings)
     ) {
         logger.warn({
-            requestId: req.id
-        }, "ratings type is not object type or is absent");
+            requestId: req.id,
+            isPresent: Boolean(ratings),
+            isObject: typeof ratings === "object",
+            isArray: Array.isArray(ratings),
+        }, "Ratings validation failed");
+
         return res.status(400).json({
             message: "Ratings are required",
         });
@@ -204,7 +211,10 @@ const createReview = async (req, res) => {
             logger.warn({
                 requestId: req.id,
                 field,
-            }, "invalid ratings");
+                value: ratings[field],
+                valueType: typeof ratings[field],
+            }, "Invalid rating value");
+
             return res.status(400).json({
                 message: `Invalid rating: ${field}`,
             });
@@ -224,9 +234,10 @@ const createReview = async (req, res) => {
 
         if (!user) {
             logger.warn({
-                userId: userId.toString(),
-                requestId: req.id
-            }, "user not found");
+                requestId: req.id,
+                userId: userId?.toString(),
+            }, "User not found");
+
             throw new Error("USER_NOT_FOUND");
         }
 
@@ -261,7 +272,7 @@ const createReview = async (req, res) => {
         user.reviews.push(review._id);
 
         await user.save({ session });
-    
+
 
         // -------------------------
         // Update toilet
@@ -315,37 +326,55 @@ const createReview = async (req, res) => {
         });
 
     } catch (error) {
-        logger.error({
-            err: error,
-            requestId: req.id
-        }, "Create review failed");
-
         if (session.inTransaction()) {
             await session.abortTransaction();
         }
 
         if (error.message === "USER_NOT_FOUND") {
+            logger.warn({
+                requestId: req.id,
+                userId,
+            }, "Create review rejected: user not found");
+
             return res.status(404).json({
                 message: "User not found",
             });
         }
 
         if (error.message === "TOILET_NOT_FOUND") {
+            logger.warn({
+                requestId: req.id,
+                toiletId,
+                userId,
+            }, "Create review rejected: toilet not found");
+
             return res.status(404).json({
                 message: "Toilet not found",
             });
         }
 
         if (error.code === 11000) {
+            logger.warn({
+                requestId: req.id,
+                toiletId,
+                userId,
+            }, "Create review rejected: duplicate review");
+
             return res.status(409).json({
                 message: "You have already reviewed this toilet",
             });
         }
 
+        logger.error({
+            requestId: req.id,
+            userId,
+            toiletId,
+            err: error,
+        }, "Failed to create review");
+
         return res.status(500).json({
             message: "Failed to create review",
         });
-
     } finally {
         await session.endSession();
     }
