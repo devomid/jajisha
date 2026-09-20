@@ -298,6 +298,19 @@ const getToiletReviews = async (req, res) => {
         return res.status(400).json({ message: "Invalid toilet ID" });
     }
 
+    const toilet = await Toilet.exists({ _id: toiletId });
+
+    if (!toilet) {
+        logger.warn({
+            requestId: req.id,
+            toiletId,
+        }, "Get reviews rejected: toilet not found");
+
+        return res.status(404).json({
+            message: "Toilet not found",
+        });
+    }
+
     try {
         const reviews = await Review.find({ toilet: toiletId })
             .populate("user", "username firstName lastName avatar")
@@ -305,6 +318,7 @@ const getToiletReviews = async (req, res) => {
             .limit(50)
             .lean();
         logger.info({
+            toiletId,
             requestId: req.id
         }, "Get reviews successful");
         res.status(200).json({ reviews });

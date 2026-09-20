@@ -48,12 +48,13 @@ mongoose.connection.on("error", (error) => {
 
 mongoose.connect(mongoUrl)
     .then(() => {
+        logger.info("MongoDB connected successfully");
+        
         app.listen(portNumber, () => {
             logger.info({
                 port: portNumber,
             }, "Server started");
         });
-        logger.info("MongoDB connected successfully");
     })
     .catch((error) => {
         logger.error({

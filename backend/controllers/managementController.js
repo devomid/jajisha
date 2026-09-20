@@ -15,8 +15,8 @@ const saveToilet = async (req, res) => {
                 toiletId,
             }, "Toilet lookup rejected: invalid ID");
 
-            return res.status(404).json({
-                message: "Toilet not found",
+            return res.status(400).json({
+                message: "Invalid toilet ID",
             });
         }
 
@@ -76,7 +76,9 @@ const unsaveToilet = async (req, res) => {
                 toiletId,
                 requestId: req.id
             }, "Toilet lookup rejected: invalid ID");
-            return res.status(404).json({ message: "Toilet not found" });
+            return res.status(400).json({
+                message: "Invalid toilet ID",
+            });
         }
 
         const toilet = await Toilet.exists({ _id: toiletId });
@@ -134,8 +136,8 @@ const createReview = async (req, res) => {
             toiletId,
             requestId: req.id
         }, "Toilet lookup rejected: invalid ID");
-        return res.status(404).json({
-            message: "Toilet not found",
+        return res.status(400).json({
+            message: "Invalid toilet ID",
         });
     }
 

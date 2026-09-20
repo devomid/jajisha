@@ -161,7 +161,7 @@ const signInUser = async (req, res) => {
         ) {
             logger.warn({
                 requestId: req.id,
-            }, "Sign -in rejected: email or password not provided");
+            }, "Sign-in rejected: email or password not provided");
             return res.status(400).json({
                 error: "Email and password are required.",
             });
@@ -228,7 +228,7 @@ const getUser = async (req, res) => {
 
     try {
         const id = req.user._id;
-        if (id && !mongoose.isValidObjectId(id)) {
+        if (!mongoose.isValidObjectId(id)) {
             logger.warn({
                 requestId: req.id,
                 userId: id,
