@@ -162,6 +162,8 @@ const createReview = async (req, res) => {
     ) {
         logger.warn({
             requestId: req.id,
+            toiletId,
+            userId,
             reviewLength: trimmedReviewText.length,
         }, "Review text length is outside the allowed range");
         return res.status(400).json({
@@ -215,9 +217,9 @@ const createReview = async (req, res) => {
         }
     }
 
-    const session = await mongoose.startSession();
-
+    let session;
     try {
+        const session = await mongoose.startSession();
         session.startTransaction();
 
         const user = await User.findById(userId).session(session);
@@ -235,7 +237,7 @@ const createReview = async (req, res) => {
 
         if (!toilet) {
             logger.warn({
-                toiletId: toiletId.toString(),
+                toiletId,
                 requestId: req.id
             }, "toilet not found");
             throw new Error("TOILET_NOT_FOUND");
@@ -295,7 +297,7 @@ const createReview = async (req, res) => {
         });
 
     } catch (error) {
-        if (session.inTransaction()) {
+        if (session?.inTransaction()) {
             await session.abortTransaction();
         }
 
@@ -305,9 +307,9 @@ const createReview = async (req, res) => {
                 userId,
             }, "Create review rejected: user not found");
 
-            return res.status(404).json({
-                message: "User not found",
-            });
+            const error = new Error("User not found");
+            error.code = "USER_NOT_FOUND";
+            throw error;
         }
 
         if (error.message === "TOILET_NOT_FOUND") {
@@ -317,9 +319,9 @@ const createReview = async (req, res) => {
                 userId,
             }, "Create review rejected: toilet not found");
 
-            return res.status(404).json({
-                message: "Toilet not found",
-            });
+            const error = new Error("Toilet not found");
+            error.code = "TOILET_NOT_FOUND";
+            throw error;
         }
 
         if (error.code === 11000) {
@@ -345,7 +347,9 @@ const createReview = async (req, res) => {
             message: "Failed to create review",
         });
     } finally {
-        await session.endSession();
+        if (session) {
+            await session.endSession();
+        }
     }
 };
 

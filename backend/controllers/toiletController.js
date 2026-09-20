@@ -7,8 +7,9 @@ const logger = require("../logger/logger");
 
 const createToilet = async (req, res) => {
 
-    const session = await mongoose.startSession();
     const userId = req.user._id;
+    let session;
+
     try {
         const { wcData } = req.body;
 
@@ -162,6 +163,7 @@ const createToilet = async (req, res) => {
                 ratings.crowd
             ) / 6;
 
+        const session = await mongoose.startSession();
         session.startTransaction();
 
         // 1. Create Toilet
@@ -223,7 +225,7 @@ const createToilet = async (req, res) => {
         res.status(201).json(toilet);
 
     } catch (error) {
-        if (session.inTransaction()) {
+        if (session?.inTransaction()) {
             await session.abortTransaction();
         }
 
@@ -259,7 +261,9 @@ const createToilet = async (req, res) => {
             message: "Failed to create toilet.",
         });
     } finally {
-        await session.endSession();
+        if (session) {
+            await session.endSession();
+        }
     }
 };
 
@@ -296,22 +300,21 @@ const getToiletReviews = async (req, res) => {
             toiletId,
         }, "Get reviews rejected: invalid toilet ID");
         return res.status(400).json({ message: "Invalid toilet ID" });
-    }
-
-    const toilet = await Toilet.exists({ _id: toiletId });
-
-    if (!toilet) {
-        logger.warn({
-            requestId: req.id,
-            toiletId,
-        }, "Get reviews rejected: toilet not found");
-
-        return res.status(404).json({
-            message: "Toilet not found",
-        });
-    }
+    };
 
     try {
+        const toilet = await Toilet.exists({ _id: toiletId });
+
+        if (!toilet) {
+            logger.warn({
+                requestId: req.id,
+                toiletId,
+            }, "Get reviews rejected: toilet not found");
+
+            return res.status(404).json({
+                message: "Toilet not found",
+            });
+        }
         const reviews = await Review.find({ toilet: toiletId })
             .populate("user", "username firstName lastName avatar")
             .sort({ createdAt: -1 })
