@@ -154,6 +154,9 @@ const createReview = async (req, res) => {
             isReviewString: typeof reviewText === "string",
             hasReviewText: typeof reviewText === "string" && Boolean(reviewText.trim()),
         }, "Review text is not valid");
+        return res.status(400).json({
+            message: "Review text is not valid",
+        });
     }
 
     const trimmedReviewText = reviewText.trim();
@@ -164,7 +167,7 @@ const createReview = async (req, res) => {
     ) {
         logger.warn({
             requestId: req.id,
-            rviewLength: trimmedReviewText.length,
+            reviewLength: trimmedReviewText.length,
         }, "Review text length is outside the allowed range");
         return res.status(400).json({
             message: "Review text must be between 10 and 200 characters",
