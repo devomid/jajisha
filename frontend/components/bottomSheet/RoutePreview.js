@@ -13,7 +13,6 @@ import { useSettingsStore } from "../../store/settingsStore";
 import { formatDistance } from "../../src/utils/distance";
 import ButtonComponent from "../Button/Button";
 
-
 const RoutePreview = forwardRef(
     ({ curentLocation, toiletInfoBottomSheetRef, onDismiss, onReopenToiletInfo }, ref) => {
 

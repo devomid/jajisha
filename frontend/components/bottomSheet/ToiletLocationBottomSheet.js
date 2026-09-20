@@ -2,6 +2,7 @@ import { forwardRef, useMemo, useCallback, useState, useEffect, useRef, useImper
 import { View, Pressable, Share as RNShare, Animated, Easing } from "react-native";
 import { useTranslation } from "react-i18next";
 import { router } from "expo-router";
+import { runOnJS } from "react-native-worklets";
 
 import { useWcDataStore } from "../../store/wcDataStore";
 import { useUserStore } from "../../store/userStore";
@@ -160,7 +161,7 @@ const ToiletInfo = forwardRef(({ curentLocation, onPresent }, ref) => {
         return `${hours}h ${remainingMinutes}min`;
     };
 
-    const handleSheetChanges = useCallback(
+    const handleSheetChangesJS = useCallback(
         (index) => {
             if (index === 1) {
                 if (programmaticAmenitiesHeightRef.current) {
@@ -171,9 +172,11 @@ const ToiletInfo = forwardRef(({ curentLocation, onPresent }, ref) => {
                 }
 
                 const previousStableIndex = lastStableIndexRef.current;
+
                 requestAnimationFrame(() => {
                     bottomSheetRef.current?.snapToIndex(previousStableIndex);
                 });
+
                 return;
             }
 
@@ -183,10 +186,15 @@ const ToiletInfo = forwardRef(({ curentLocation, onPresent }, ref) => {
             if (index !== 1) {
                 setIsAtAmenitiesHeight(false);
             }
+
             onPresent?.(index);
         },
         [onPresent]
     );
+
+    const handleSheetChanges = useCallback((index) => {
+        runOnJS(handleSheetChangesJS)(index);
+    }, [handleSheetChangesJS]);
 
     const handleMore = () => {
 
