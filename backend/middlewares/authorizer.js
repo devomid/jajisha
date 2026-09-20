@@ -34,44 +34,63 @@ const authorize = async (req, res, next) => {
         return res.status(401).json({ error: 'Invalid authorization format' });
     }
 
+    let decodedToken;
+
     try {
-        const { _id } = jwt.verify(token, secretKey);
-
-        if (!mongoose.isValidObjectId(_id)) {
-            logger.warn({
-                requestId: req.id,
-            }, "Authorization rejected: invalid user ID in token");
-
-            return res.status(401).json({
-                error: "Invalid or expired token",
-            });
-        }
-
-        req.user = await User.findOne({ _id }).select('_id');
-
-        if (!req.user) {
-            logger.warn({
-                userId: _id.toString(),
-                requestId: req.id,
-            }, "Authorization rejected: user no longer exists");
-
-            return res.status(401).json({ error: 'User no longer exists' });
-        };
-
-        logger.info({
-            userId: _id.toString(),
-            requestId: req.id,
-        }, "User authorized successfully");
-
-        next();
-
+        decodedToken = jwt.verify(token, secretKey);
     } catch (error) {
         logger.warn({
             requestId: req.id,
         }, "Authorization rejected: invalid or expired token");
 
-        return res.status(401).json({ error: 'Invalid or expired token' });
-    };
+        return res.status(401).json({
+            error: "Invalid or expired token",
+        });
+    }
+
+    const { _id } = decodedToken;
+
+    if (!mongoose.isValidObjectId(_id)) {
+        logger.warn({
+            requestId: req.id,
+        }, "Authorization rejected: invalid user ID in token");
+
+        return res.status(401).json({
+            error: "Invalid or expired token",
+        });
+    }
+
+    try {
+        req.user = await User.findOne({ _id }).select("_id");
+    } catch (error) {
+        logger.error({
+            requestId: req.id,
+            userId: _id.toString(),
+            err: error,
+        }, "Authorization failed: user lookup error");
+
+        return res.status(500).json({
+            error: "Authorization failed",
+        });
+    }
+
+    if (!req.user) {
+        logger.warn({
+            userId: _id.toString(),
+            requestId: req.id,
+        }, "Authorization rejected: user no longer exists");
+
+        return res.status(401).json({
+            error: "User no longer exists",
+        });
+    }
+
+    logger.info({
+        userId: _id.toString(),
+        requestId: req.id,
+    }, "User authorized successfully");
+
+    next();
 };
 
 module.exports = authorize;
