@@ -1,5 +1,5 @@
 import { forwardRef, useMemo, useCallback, useState, useEffect, useRef, useImperativeHandle } from "react";
-import { View, Pressable, Share as RNShare, Animated, Easing } from "react-native";
+import { View, Pressable, Share as RNShare, Animated, Easing, ActivityIndicator } from "react-native";
 import { useTranslation } from "react-i18next";
 import { router } from "expo-router";
 import { runOnJS } from "react-native-worklets";
@@ -45,6 +45,7 @@ const ToiletInfo = forwardRef(({ curentLocation, onPresent }, ref) => {
     const [saving, setSaving] = useState(false);
     const [iscommenting, setIscommenting] = useState(false);
     const [iscommentsOpen, setIscommentsOpen] = useState(false);
+    const [isSharing, setIsSharing] = useState(false);
 
     const lastStableIndexRef = useRef(0);
     const programmaticAmenitiesHeightRef = useRef(false);
@@ -265,6 +266,7 @@ const ToiletInfo = forwardRef(({ curentLocation, onPresent }, ref) => {
     const handleShare = async () => {
 
         try {
+            setIsSharing(true);
             const coordinates = toilet?.location?.coordinates;
 
             if (
@@ -286,8 +288,11 @@ const ToiletInfo = forwardRef(({ curentLocation, onPresent }, ref) => {
                 message,
             });
 
+            setIsSharing(false)
+            
         } catch (error) {
             //toast
+            setIsSharing(false)
         }
     };
 
@@ -578,13 +583,19 @@ const ToiletInfo = forwardRef(({ curentLocation, onPresent }, ref) => {
                                             alignItems: "center",
                                             justifyContent: "center",
                                         }}
-                                    >
-
-                                        <Share2
-                                            size={18}
-                                            color={theme.colors.secondaryLight}
-                                            strokeWidth={2}
-                                        />
+                                        >
+                                            {isSharing ? (
+                                                <ActivityIndicator
+                                                    animating={true}
+                                                    color={theme.colors.secondary}
+                                                />
+                                            ) : (
+                                                <Share2
+                                                    size={18}
+                                                    color={theme.colors.secondaryLight}
+                                                        strokeWidth={2}
+                                                />  
+                                            )}
 
                                     </View>
 

@@ -799,10 +799,6 @@ export default function SearchButton({
         /*
          * Connect your filter sheet here later.
          */
-
-        console.log(
-            "Open filter UI"
-        );
     };
 
 

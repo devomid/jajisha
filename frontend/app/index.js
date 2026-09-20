@@ -78,27 +78,19 @@ export default function Home() {
     }, [navigationStatus]);
 
     const onMarkerPress = (toilet) => {
-        console.log("1. marker pressed");
 
         if (navigationStatus !== "idle") {
-            console.log("Navigation still active:", navigationStatus);
             return;
         }
 
         setTimeout(() => {
             toiletInfoBottomSheetRef.current?.present();
         }, 350);
-
-        console.log(
-            "2. ref exists:",
-            !!toiletInfoBottomSheetRef.current
-        );
+     
     };
 
     const onAddWcPress = (toilet) => {
-        // setSelectedToilet(toilet);
         addWcBottomSheetRef.current?.present();
-        // console.log("onAddWcPress");
     };
 
     if (!curentLocation) return null;
@@ -387,7 +379,6 @@ export default function Home() {
                 curentLocation={curentLocation}
                 toiletInfoBottomSheetRef={toiletInfoBottomSheetRef}
                 onDismiss={() => {
-                    console.log("HOME >>> ROUTE PREVIEW FULLY DISMISSED");
                 }}
                 onReopenToiletInfo={() => {
                     reopenToiletInfoAtSecondSnapRef.current = true;

@@ -23,14 +23,11 @@ export default function NewToilet({ theme, }) {
 
     const startPickingLocation =
         useWcDataStore(state => state.startPickingLocation);
-    // console.log("Picking:", isPickingLocation);
 
     const handleChooseOnMap = () => {
-        // console.log("Pressed");
         startPickingLocation();
     };
 
-    // console.log('test');
 
     const { t } = useTranslation();
 
@@ -55,7 +52,6 @@ export default function NewToilet({ theme, }) {
     const ratings = [
         {}
     ]
-    // const [rating, setRating] = useState(0);
 
     const updateAmenity = (key, value) => {
         setWcData(prev => ({
@@ -66,15 +62,6 @@ export default function NewToilet({ theme, }) {
             },
         }));
     };
-
-    // useEffect(() => {
-    //     console.log("Mounted");
-
-    //     return () => {
-    //         console.log("Unmounted");
-    //     };
-    // }, []);
-
 
     return (
         <View

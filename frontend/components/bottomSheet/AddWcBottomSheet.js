@@ -37,7 +37,6 @@ const AddWc = forwardRef((props, ref) => {
     };
 
     const handleSheetChanges = useCallback((index) => {
-        // console.log(index);
     }, []);
 
     const renderBackdrop = useCallback(
