@@ -1,11 +1,17 @@
 const jwt = require('jsonwebtoken');
 const dotenv = require('dotenv');
 const User = require('../models/userModel');
+const logger = require("../logger/logger");
 
 dotenv.config();
+logger.info("dotEnv configured");
+
 const secretKey = process.env.SECRET_KEY;
 
+
 if (!secretKey) {
+    logger.error({
+    }, "no secret key");
     throw new Error("SECRET_KEY is not configured");
 };
 
@@ -45,9 +51,10 @@ const authorize = async (req, res, next) => {
         next();
 
     } catch (error) {
-        logger.error({
-            err: error,
-        }, "authorize user failed");        return res.status(401).json({ error: 'Invalid or expired token' });
+        logger.warn({
+            warning: error.toString(),
+        }, "authorize user failed");
+        return res.status(401).json({ error: 'Invalid or expired token' });
     };
 };
 

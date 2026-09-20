@@ -3,6 +3,7 @@ const Toilet = require("../models/toiletModel")
 const Rating = require("../models/ratingModel");
 const User = require("../models/userModel");
 const Review = require("../models/reviewModel");
+const logger = require("../logger/logger");
 
 const createToilet = async (req, res) => {
 
@@ -274,8 +275,9 @@ const getToiletReviews = async (req, res) => {
         res.status(200).json({ reviews });
 
     } catch (error) {
-        console.error("Get toilet reviews error:", error);
-
+        logger.error({
+            err: error,
+        }, "Failed to load toilet reviews");
         res.status(500).json({
             message: "Failed to load toilet reviews",
         });

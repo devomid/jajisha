@@ -57,7 +57,6 @@ app.use((req, res) => {
 
 // error handler
 app.use((err, req, res, next) => {
-    console.error("Unhandled server error:", err);
     logger.error({
         err,
         requestId: req.id,

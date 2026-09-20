@@ -3,8 +3,11 @@ const User = require("../models/userModel");
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const dotenv = require('dotenv');
+const logger = require("../logger/logger");
 
 dotenv.config();
+logger.info("dotEnv configured");
+
 const secretKey = process.env.SECRET_KEY;
 const createToken = function (_id) {
     return jwt.sign({ _id }, secretKey, { expiresIn: '3d' })
@@ -169,7 +172,7 @@ const signInUser = async (req, res) => {
 
         const token = createToken(user._id);
         logger.info({
-            email: normalizedEmail,
+            requestId: req.id,
             userId: user._id.toString(),
         }, "Signin successful");
 
@@ -191,7 +194,7 @@ const signInUser = async (req, res) => {
     } catch (error) {
         logger.error({
             err: error,
-        }, "Signup failed");
+        }, "Signin failed");
         return res.status(500).json({
             error: "Failed to sign in.",
         });
@@ -246,7 +249,7 @@ const removeUser = async (req, res) => {
         }
         logger.warn({
             userId: id.toString(),
-        }, "user delet successful");
+        }, "user delete successful");
         res.status(204).send();
 
     } catch (error) {
