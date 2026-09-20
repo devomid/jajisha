@@ -30,11 +30,11 @@ const signUpUser = async (req, res) => {
     ) {
         logger.warn({
             requestId: req.id,
-        }, "Signup rejected: invalid field types"
+        }, "Sign-up rejected: invalid field types"
         );
 
         return res.status(400).json({
-            error: "Invalid signup data.",
+            error: "Invalid sign-up data.",
         });
     }
 
@@ -47,7 +47,7 @@ const signUpUser = async (req, res) => {
     ) {
         logger.warn({
             requestId: req.id,
-        }, "Signup rejected: required field is empty"
+        }, "Sign-up rejected: required field is empty"
         );
 
         return res.status(400).json({
@@ -69,9 +69,9 @@ const signUpUser = async (req, res) => {
         if (usernameExists) {
             logger.warn({
                 requestId: req.id,
-            }, "Signup rejected: username already in use");
+            }, "Sign-up rejected: username already in use");
 
-            return res.status(400).json({
+            return res.status(409).json({
                 error: "Username is already in use.",
             });
         }
@@ -79,9 +79,9 @@ const signUpUser = async (req, res) => {
         if (emailExists) {
             logger.warn({
                 requestId: req.id,
-            }, "Signup rejected: email already in use");
+            }, "Sign-up rejected: email is already in use");
 
-            return res.status(400).json({
+            return res.status(409).json({
                 error: "Email is already in use.",
             });
         }
@@ -174,7 +174,7 @@ const signInUser = async (req, res) => {
         if (!user) {
             logger.warn({
                 requestId: req.id,
-            }, " Sign-in rejected: invalid credentials");
+            }, "Sign-in rejected: invalid credentials");
             return res.status(401).json({
                 error: "Invalid credentials.",
             });
