@@ -728,9 +728,6 @@ const MapOfToilets = forwardRef(({ currentLocation, onMarkerPress, isPickingLoca
                                     x: 0.5,
                                     y: 1,
                                 }}
-                                onPress={() => {
-                                    handleToiletPress(toilet);
-                                }}
                             >
                                 <Pressable
                                     onPress={() => handleToiletPress(toilet)}

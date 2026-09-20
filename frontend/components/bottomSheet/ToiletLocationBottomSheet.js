@@ -1,4 +1,4 @@
-import { forwardRef, useMemo, useCallback, useState, useEffect, useRef } from "react";
+import { forwardRef, useMemo, useCallback, useState, useEffect, useRef, useImperativeHandle } from "react";
 import { View, Pressable, Share as RNShare, Animated, Easing } from "react-native";
 import { useTranslation } from "react-i18next";
 import { router } from "expo-router";
@@ -35,7 +35,7 @@ const ToiletInfo = forwardRef(({ curentLocation, onPresent }, ref) => {
     const theme = useTheme();
     const { saveWc, unsaveWc } = useManagingWc();
     const { distance, duration } = toiletRouteInfo;
-
+    const bottomSheetRef = useRef(null);
     const [sheetIndex, setSheetIndex] = useState(0);
     const [isAtAmenitiesHeight, setIsAtAmenitiesHeight] = useState(false);
     const [isSaved, setIsSaved] = useState(false);
@@ -108,6 +108,12 @@ const ToiletInfo = forwardRef(({ curentLocation, onPresent }, ref) => {
         "39.5%", "48%", "65%", "86%"
     ], []);
 
+    useImperativeHandle(ref, () => ({
+        present: (...args) => bottomSheetRef.current?.present(...args),
+        dismiss: (...args) => bottomSheetRef.current?.dismiss(...args),
+        snapToIndex: (...args) => bottomSheetRef.current?.snapToIndex(...args),
+    }), []);
+
     const renderBackdrop = useCallback(
         (props) => (
             <BottomSheetBackdrop
@@ -166,7 +172,7 @@ const ToiletInfo = forwardRef(({ curentLocation, onPresent }, ref) => {
 
                 const previousStableIndex = lastStableIndexRef.current;
                 requestAnimationFrame(() => {
-                    ref.current?.snapToIndex(previousStableIndex);
+                    bottomSheetRef.current?.snapToIndex(previousStableIndex);
                 });
                 return;
             }
@@ -179,7 +185,7 @@ const ToiletInfo = forwardRef(({ curentLocation, onPresent }, ref) => {
             }
             onPresent?.(index);
         },
-        [onPresent, ref]
+        [onPresent]
     );
 
     const handleMore = () => {
@@ -188,7 +194,7 @@ const ToiletInfo = forwardRef(({ curentLocation, onPresent }, ref) => {
         if (lastStableIndexRef.current === 0) {
             setIsAtAmenitiesHeight(true);
             programmaticAmenitiesHeightRef.current = true;
-            requestAnimationFrame(() => { ref.current?.snapToIndex(1); });
+            requestAnimationFrame(() => { bottomSheetRef.current?.snapToIndex(1); });
         }
     };
 
@@ -198,7 +204,7 @@ const ToiletInfo = forwardRef(({ curentLocation, onPresent }, ref) => {
 
         if (sheetIndex === 1) {
             programmaticAmenitiesHeightRef.current = false;
-            requestAnimationFrame(() => { ref.current?.snapToIndex(0); });
+            requestAnimationFrame(() => { bottomSheetRef.current?.snapToIndex(0); });
             return;
         }
     };
@@ -206,7 +212,7 @@ const ToiletInfo = forwardRef(({ curentLocation, onPresent }, ref) => {
     const handleSave = async () => {
 
         if (!user) {
-            ref.current?.dismiss();
+            bottomSheetRef.current?.dismiss();
             router.push("/SignIn");
             return;
         }
@@ -305,7 +311,7 @@ const ToiletInfo = forwardRef(({ curentLocation, onPresent }, ref) => {
     return (
 
         <BottomSheetModal
-            ref={ref}
+            ref={bottomSheetRef}
             snapPoints={snapPoints}
             enableDynamicSizing={false}
             onChange={handleSheetChanges}
@@ -507,7 +513,7 @@ const ToiletInfo = forwardRef(({ curentLocation, onPresent }, ref) => {
 
                                 <ButtonComponent
                                     onPress={() => {
-                                        ref.current?.dismiss();
+                                            bottomSheetRef.current?.dismiss();
                                         setNavigationTarget(toilet);
                                     }}
                                     backgroundColor={theme.colors.nav + "15"}
