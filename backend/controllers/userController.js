@@ -233,7 +233,7 @@ const getUser = async (req, res) => {
                 requestId: req.id,
                 userId: id,
             }, "Get user rejected: invalid user ID");
-            return res.status(404).json({ message: "User not found!" });
+            return res.status(400).json({ message: "Invalid user ID" });
         };
         const user = await User.findById(id).select("-password").populate("favoriteToilets").populate("reviews");
         if (!user) {
