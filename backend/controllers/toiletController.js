@@ -163,7 +163,7 @@ const createToilet = async (req, res) => {
                 ratings.crowd
             ) / 6;
 
-        const session = await mongoose.startSession();
+        session = await mongoose.startSession();
         session.startTransaction();
 
         // 1. Create Toilet

@@ -219,7 +219,7 @@ const createReview = async (req, res) => {
 
     let session;
     try {
-        const session = await mongoose.startSession();
+        session = await mongoose.startSession();
         session.startTransaction();
 
         const user = await User.findById(userId).session(session);
@@ -307,9 +307,9 @@ const createReview = async (req, res) => {
                 userId,
             }, "Create review rejected: user not found");
 
-            const error = new Error("User not found");
-            error.code = "USER_NOT_FOUND";
-            throw error;
+            return res.status(404).json({
+                message: "User not found",
+            });
         }
 
         if (error.message === "TOILET_NOT_FOUND") {
@@ -319,9 +319,9 @@ const createReview = async (req, res) => {
                 userId,
             }, "Create review rejected: toilet not found");
 
-            const error = new Error("Toilet not found");
-            error.code = "TOILET_NOT_FOUND";
-            throw error;
+            return res.status(404).json({
+                message: "Toilet not found",
+            });
         }
 
         if (error.code === 11000) {
