@@ -6,7 +6,7 @@ const dotenv = require('dotenv');
 const logger = require("../logger/logger");
 
 dotenv.config();
-logger.info("dotEnv configured");
+logger.info("dotEnv configured in user controller");
 
 const secretKey = process.env.SECRET_KEY;
 const createToken = function (_id) {
@@ -95,6 +95,7 @@ const signUpUser = async (req, res) => {
         const token = createToken(user._id);
 
         logger.info({
+            requestId: req.id,
             username: normalizedUsername,
             userId: user._id.toString(),
         }, "Signup successful");
@@ -154,7 +155,7 @@ const signInUser = async (req, res) => {
 
         if (!user) {
             logger.warn({
-                email: normalizedEmail,
+                requestId: req.id,
             }, " Invalid credentials: !user on database");
             return res.status(401).json({
                 error: "Invalid credentials.",
@@ -208,7 +209,7 @@ const getUser = async (req, res) => {
         if (!mongoose.isValidObjectId(id)) {
             logger.warn({
                 userId: id.toString(),
-            }, "id is not a valid object");
+            }, "user not found");
             return res.status(404).json({ message: "User not found!" });
         };
         const user = await User.findById(id).select("-password").populate("favoriteToilets").populate("reviews");

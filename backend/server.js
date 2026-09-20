@@ -4,7 +4,7 @@ const app = require('./app');
 const logger = require("../logger/logger");
 
 dotenv.config();
-logger.info("dotEnv configured");
+logger.info("dotEnv configured in server");
 
 const requiredEnv = ["MONGOURI", "PORT", "SECRET_KEY", "CLIENT_ORIGIN"];
 const missingEnv = requiredEnv.filter((key) => !process.env[key]);

@@ -4,7 +4,7 @@ const User = require('../models/userModel');
 const logger = require("../logger/logger");
 
 dotenv.config();
-logger.info("dotEnv configured");
+logger.info("dotEnv configured in authirizer");
 
 const secretKey = process.env.SECRET_KEY;
 
@@ -28,6 +28,7 @@ const authorize = async (req, res, next) => {
 
     if (scheme !== 'Bearer' || !token || extra) {
         logger.warn({
+            requestId: req.id,
             authScheme: req.headers.authorization?.split(" ")[0],
             authenticated: Boolean(req.user),
         }, "JWT scheme or token is invalid");
@@ -42,18 +43,21 @@ const authorize = async (req, res, next) => {
         if (!req.user) {
             logger.warn({
                 userId: _id.toString(),
+                requestId: req.id,
             }, "no such user");
             return res.status(401).json({ error: 'User no longer exists' });
         };
         logger.info({
             userId: _id.toString(),
+            requestId: req.id,
         }, "authorize user successful");
         next();
 
     } catch (error) {
         logger.warn({
-            warning: error.toString(),
-        }, "authorize user failed");
+            err: error,
+            requestId: req.id,
+        }, "Authorization failed");
         return res.status(401).json({ error: 'Invalid or expired token' });
     };
 };

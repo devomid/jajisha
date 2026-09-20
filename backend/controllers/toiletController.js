@@ -210,18 +210,12 @@ const createToilet = async (req, res) => {
         }
 
         if (error.name === "ValidationError") {
-            logger.error({
-                err: error,
-            }, "Invalid toilet data.");
             return res.status(400).json({
                 message: "Invalid toilet data",
             });
         }
 
         if (error.code === 11000) {
-            logger.error({
-                err: error,
-            }, "Toilet already exists.");
             return res.status(409).json({
                 message: "Toilet already exists",
             });
@@ -242,14 +236,18 @@ const getToilets = async (req, res) => {
             .limit(1000)
             .lean();
 
-        logger.info("get toilets successful");
+        logger.info({
+            requestId: req.id
+        }, "get toilets successful");
         res.status(200).json({ toilets });
 
     } catch (error) {
 
         logger.error({
-            err: error.name,
-        }, "Failed to load toilets"); res.status(500).json({
+            err: error,
+            requestId: req.id
+        }, "Failed to load toilets");
+        res.status(500).json({
             message: "Failed to load toilets",
         })
     }
@@ -271,12 +269,15 @@ const getToiletReviews = async (req, res) => {
             .sort({ createdAt: -1 })
             .limit(50)
             .lean();
-        logger.info("Get reviews successful");
+        logger.info({
+            requestId: req.id
+        }, "Get reviews successful");
         res.status(200).json({ reviews });
 
     } catch (error) {
         logger.error({
             err: error,
+            requestId: req.id
         }, "Failed to load toilet reviews");
         res.status(500).json({
             message: "Failed to load toilet reviews",

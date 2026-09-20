@@ -9,11 +9,10 @@ const dotenv = require('dotenv');
 const logger = require("./logger/logger");
 
 dotenv.config()
-logger.info("dotEnv configured");
+logger.info("dotEnv configured in app");
 
 
 // configs and middlwares
-logger.info("Application middleware configure starts");
 const app = express();
 app.use(requestLogger);
 app.use(express.json({ limit: "1mb" }));
@@ -50,7 +49,7 @@ app.use((req, res) => {
         method: req.method,
         url: req.originalUrl,
         userId: req.user?._id?.toString(),
-    },"Invalid route has been called. returning a middle finger");
+    },"Invalid route has been called.");
     res.status(404).json({ error: "Route not found", });
 });
 
@@ -63,7 +62,7 @@ app.use((err, req, res, next) => {
         method: req.method,
         url: req.originalUrl,
         userId: req.user?._id?.toString(),
-    }, "Unhandled server error. Server returned us middle finger");
+    }, "Unhandled server error.");
     res.status(500).json({ error: "Internal server error", });
 });
 
