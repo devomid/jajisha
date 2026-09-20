@@ -212,11 +212,11 @@ export const useManagingWc = () => {
                 return null;
             };
 
+            const jsonRes = await response.json();
             logger.info("Toilet reviews fetched successfully", {
                 toiletId,
                 count: jsonRes.reviews?.length ?? 0,
             });
-            const jsonRes = await response.json();
             return jsonRes.reviews;
 
 

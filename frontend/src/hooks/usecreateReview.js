@@ -83,11 +83,11 @@ export const useCreateReview = () => {
 
                 return null;
             }
+            const jsonRes = await response.json();
             logger.info("Review created successfully", {
                 toiletId,
                 reviewId: jsonRes.review?._id,
             });
-            const jsonRes = await response.json();
 
             return jsonRes.review;
 

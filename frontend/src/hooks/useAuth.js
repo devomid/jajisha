@@ -191,11 +191,9 @@ export const useAuth = () => {
                 await SecureStore.deleteItemAsync("authToken");
                 useUserStore.getState().logout();
 
-                const errorRes = await response.json();
-
                 logger.warn("User restore request failed", {
                     status: response.status,
-                    userRestoreError: errorRes
+                    userRestoreError: data
                 });
 
                 if (toast?.show) {
