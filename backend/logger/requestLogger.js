@@ -6,12 +6,6 @@ const requestLogger = pinoHttp({
     logger,
 
     genReqId: (req, res) => {
-        const existingId = req.headers["x-request-id"];
-
-        if (existingId) {
-            return existingId;
-        }
-
         const requestId = randomUUID();
 
         res.setHeader("X-Request-Id", requestId);

@@ -23,8 +23,17 @@ const toiletSchema = new mongoose.Schema(
             },
 
             coordinates: {
-                type: [Number], // [longitude, latitude]
+                type: [Number],
                 required: true,
+                validate: {
+                    validator: (value) =>
+                        value.length === 2 &&
+                        value[0] >= -180 &&
+                        value[0] <= 180 &&
+                        value[1] >= -90 &&
+                        value[1] <= 90,
+                    message: "Coordinates must be [longitude, latitude].",
+                },
             },
         },
 

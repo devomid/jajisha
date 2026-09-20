@@ -20,7 +20,17 @@ app.use(helmet());
 app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }));
 app.use(cors({
     credentials: true,
-    origin: process.env.CLIENT_ORIGIN,
+    origin: (origin, callback) => {
+        if (!origin || origin === process.env.CLIENT_ORIGIN) {
+            return callback(null, true);
+        }
+
+        logger.warn({
+            origin,
+        }, "CORS request rejected: origin not allowed");
+
+        return callback(new Error("CORS origin not allowed"));
+    },
     methods: ['GET', 'POST', 'DELETE', 'PATCH'],
 }));
 logger.info("Application middleware configured");
@@ -47,7 +57,8 @@ app.use((req, res) => {
         method: req.method,
         url: req.originalUrl,
         userId: req.user?._id?.toString(),
-    },"Invalid route has been called.");
+    }, "Invalid route has been called.");
+
     res.status(404).json({ error: "Route not found", });
 });
 
@@ -61,7 +72,11 @@ app.use((err, req, res, next) => {
         url: req.originalUrl,
         userId: req.user?._id?.toString(),
     }, "Unhandled server error.");
-    res.status(500).json({ error: "Internal server error", });
+
+    if (res.headersSent) {
+        return next(err);
+    }
+    return res.status(500).json({ error: "Internal server error", });
 });
 
 
