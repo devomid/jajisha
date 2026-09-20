@@ -142,9 +142,6 @@ const createReview = async (req, res) => {
         });
     }
 
-    // -------------------------
-    // Validate review text
-    // -------------------------
 
     if (typeof reviewText !== "string" || !reviewText.trim()) {
         logger.warn({
