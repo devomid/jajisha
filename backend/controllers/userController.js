@@ -268,7 +268,7 @@ const removeUser = async (req, res) => {
                 userId,
             }, "Delete user rejected: invalid user ID");
 
-            return res.status(404).json({
+            return res.status(400).json({
                 message: "User not found!",
             });
         }

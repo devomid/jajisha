@@ -1,3 +1,4 @@
+const mongoose = require("mongoose");
 const jwt = require('jsonwebtoken');
 const dotenv = require('dotenv');
 const User = require('../models/userModel');
@@ -28,8 +29,6 @@ const authorize = async (req, res, next) => {
     if (scheme !== 'Bearer' || !token || extra) {
         logger.warn({
             requestId: req.id,
-            authScheme: req.headers.authorization?.split(" ")[0],
-            authenticated: Boolean(req.user),
         }, "Authorization rejected: invalid JWT format");
 
         return res.status(401).json({ error: 'Invalid authorization format' });
@@ -37,6 +36,16 @@ const authorize = async (req, res, next) => {
 
     try {
         const { _id } = jwt.verify(token, secretKey);
+
+        if (!mongoose.isValidObjectId(_id)) {
+            logger.warn({
+                requestId: req.id,
+            }, "Authorization rejected: invalid user ID in token");
+
+            return res.status(401).json({
+                error: "Invalid or expired token",
+            });
+        }
 
         req.user = await User.findOne({ _id }).select('_id');
 
