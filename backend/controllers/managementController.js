@@ -46,6 +46,7 @@ const saveToilet = async (req, res) => {
         }
 
         logger.info({
+            requestId: req.id,
             userId: userId.toString(),
             toiletId: toiletId.toString(),
         }, "Toilet saved successfully");

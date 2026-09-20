@@ -19,7 +19,10 @@ export const useManagingWc = () => {
 
     const addWc = async () => {
 
-        if (!token) return null;
+        if (!token) {
+            logger.warn("Add toilet attempted without authentication");
+            return null;
+        }
 
         const waitingId = startWaiting("Checking if the toilet is real...");
 
@@ -50,9 +53,11 @@ export const useManagingWc = () => {
             );
 
             if (!response.ok) {
-                // console.log("Response is not OK");
-                // console.log("Status:", response.status);
-                // console.log(await response.text());
+                const errorRes = await response.json();
+                logger.warn("Add toilet request failed", {
+                    status: response.status,
+                    addToiletError: errorRes
+                });
 
                 if (toast?.show) {
                     toast.show("Could not add toilet", {
@@ -70,6 +75,9 @@ export const useManagingWc = () => {
             const newToilet = await response.json();
             addToilet(newToilet);
 
+            logger.info("Toilet added successfully", {
+                toiletId: newToilet?._id,
+            });
             if (toast?.show) {
                 toast.show("Toilet added to map", {
                     type: "custom",
@@ -82,7 +90,9 @@ export const useManagingWc = () => {
             return newToilet;
 
         } catch (error) {
-            // console.log("Error adding WC:", error);
+            logger.error("Add toilet request error", {
+                error: error.message,
+            });
             if (toast?.show) {
                 toast.show("Something went wrong adding WC!", {
                     type: "custom",
@@ -113,6 +123,11 @@ export const useManagingWc = () => {
             });
 
             if (!response.ok) {
+                const errorRes = await response.json();
+                logger.warn("Fetch toilet request failed", {
+                    status: response.status,
+                    getToietError: errorRes
+                });
                 if (toast?.show) {
                     toast.show("Could not get toilets", {
                         type: "custom",
@@ -125,6 +140,10 @@ export const useManagingWc = () => {
 
                 return null;
             }
+
+            logger.info("Toilets fetched successfully", {
+                count: jsonRes.toilets?.length ?? 0,
+            });
 
             const jsonRes = await response.json();
 
@@ -145,6 +164,9 @@ export const useManagingWc = () => {
             return jsonRes.toilets;
 
         } catch (error) {
+            logger.error("Fetch toilets request error", {
+                error: error.message,
+            });
             if (toast?.show) {
                 toast.show("Something went wrong getting WC!", {
                     type: "custom",
@@ -173,10 +195,11 @@ export const useManagingWc = () => {
             });
 
             if (!response.ok) {
-                // console.log('respons is not OK');
-                // console.log("Status:", response.status);
-                // const error = await response.text();
-                // console.log(error);
+                const errorRes = await response.json();
+                logger.warn("Fetch toilet reviews request failed", {
+                    status: response.status,
+                    getToietReviewsError: errorRes
+                });
                 if (toast?.show) {
                     toast.show("Could not get toilets", {
                         type: "custom",
@@ -189,12 +212,19 @@ export const useManagingWc = () => {
                 return null;
             };
 
+            logger.info("Toilet reviews fetched successfully", {
+                toiletId,
+                count: jsonRes.reviews?.length ?? 0,
+            });
             const jsonRes = await response.json();
             return jsonRes.reviews;
 
 
         } catch (error) {
-            // console.log("Error get WC reviews", error);
+            logger.error("Fetch toilet reviews error", {
+                error: error.message,
+                toiletId,
+            });
             if (toast?.show) {
                 toast.show("Something went wrong getting WC!", {
                     type: "custom",
@@ -213,6 +243,7 @@ export const useManagingWc = () => {
     const saveWc = async () => {
 
         if (!token) {
+            logger.warn("Save toilet attempted without authentication");
             if (toast?.show) {
                 toast.show("You can not save places!", {
                     type: "custom",
@@ -225,6 +256,7 @@ export const useManagingWc = () => {
             return null;
         }
         if (!toilet?._id) {
+            logger.warn("Save toilet attempted without selected toilet");
             if (toast?.show) {
                 toast.show("This toilet can not be saved!", {
                     type: "custom",
@@ -251,8 +283,11 @@ export const useManagingWc = () => {
             );
 
             if (!response.ok) {
-                // const errorText = await response.text();
-                // console.log("SAVE FAILED:", errorText);
+                const errorRes = await response.json();
+                logger.warn("Save toilet request failed", {
+                    status: response.status,
+                    saveToietError: errorRes
+                });
                 if (toast?.show) {
                     toast.show("Could not save toilet", {
                         type: "custom",
@@ -265,12 +300,17 @@ export const useManagingWc = () => {
 
                 return null;
             }
-
+            logger.info("Toilet saved successfully", {
+                toiletId: toilet._id,
+            });
             return true;
 
         } catch (error) {
 
-            // console.log("Error saving WC:", error);
+            logger.error("Save toilet request error", {
+                error: error.message,
+                toiletId: toilet._id,
+            });
             if (toast?.show) {
                 toast.show("Something went wrong saving WC!", {
                     type: "custom",
@@ -289,6 +329,7 @@ export const useManagingWc = () => {
     const unsaveWc = async () => {
 
         if (!token) {
+            logger.warn("Unsave toilet attempted without authentication");
             if (toast?.show) {
                 toast.show("You can not save places!", {
                     type: "custom",
@@ -301,6 +342,7 @@ export const useManagingWc = () => {
             return null;
         }
         if (!toilet?._id) {
+            logger.warn("Unsave toilet attempted without selected toilet");
             if (toast?.show) {
                 toast.show("This toilet can not be saved!", {
                     type: "custom",
@@ -327,7 +369,11 @@ export const useManagingWc = () => {
             );
 
             if (!response.ok) {
-                // const errorText = await response.text();
+                const errorRes = await response.json();
+                logger.warn("Unsave toilet request failed", {
+                    status: response.status,
+                    unsaveToietError: errorRes
+                });
                 if (toast?.show) {
                     toast.show("Could not unsave toilet", {
                         type: "custom",
@@ -339,10 +385,16 @@ export const useManagingWc = () => {
                 };
                 return null;
             }
+            logger.info("Toilet unsaved successfully", {
+                toiletId: toilet._id,
+            });
             return true;
 
         } catch (error) {
-            // console.log("Error unsaving WC:", error);
+            logger.error("Unsave toilet request error", {
+                error: error.message,
+                toiletId: toilet._id,
+            });
             if (toast?.show) {
                 toast.show("Something went wrong unsaving WC!", {
                     type: "custom",

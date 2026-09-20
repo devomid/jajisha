@@ -12,6 +12,7 @@ import CommentCardComponentBig from "../cards/commentCardComponentBig";
 import WriteCommandAndRate from "../comments/writeCommentAndRate";
 import { MessageCircle } from "lucide-react-native";
 import { useToast } from "react-native-toast-notifications";
+import { useUserStore } from "../../store/userStore";
 
 export default function RateAndCommentSheet({ theme, toilet, iscommenting, iscommentsOpen, setIscommenting, setIscommentsOpen }) {
     const toast = useToast();

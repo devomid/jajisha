@@ -139,7 +139,8 @@ const createToilet = async (req, res) => {
             logger.warn({
                 requestId: req.id,
                 userId,
-            }, "Invalid toilet price"); return res.status(400).json({ message: "Invalid price" });
+            }, "Invalid toilet price");
+            return res.status(400).json({ message: "Invalid price" });
         };
 
         const user = await User.exists({ _id: userId });

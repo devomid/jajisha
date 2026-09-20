@@ -35,7 +35,7 @@ export const useNavigateToToilet = () => {
                 "Finding you..."
             )
             if (status !== "granted") {
-                // console.log("Location permission denied");
+                logger.warn("Navigation location permission denied");
                 if (toast?.show) {
                     toast.show("Location Permission must be granted!", {
                         type: "custom",
@@ -74,6 +74,7 @@ export const useNavigateToToilet = () => {
                 `https://router.project-osrm.org/route/v1/driving/${coordinates}` +
                 `?overview=full&geometries=geojson&steps=true`;
 
+            logger.debug("Requesting navigation route");
             const response = await fetch(url);
             if (requestId !== navigationRequestRef.current) {
                 return;
@@ -84,7 +85,9 @@ export const useNavigateToToilet = () => {
             }
 
             if (data.code !== "Ok") {
-                // console.log("OSRM ERROR:", data.code);
+                logger.warn("Navigation route request failed", {
+                    code: data.code,
+                });
                 if (requestId !== navigationRequestRef.current) {
                     return;
                 };
@@ -98,7 +101,6 @@ export const useNavigateToToilet = () => {
                         },
                     })
                 };
-
                 clearNavigation();
                 return;
             };
@@ -112,6 +114,7 @@ export const useNavigateToToilet = () => {
                         },
                     });
                 }
+                logger.info("Navigation route calculated");
 
                 clearNavigation();
                 return;
@@ -132,7 +135,9 @@ export const useNavigateToToilet = () => {
             setNavigationStatus("preview");
 
         } catch (error) {
-            // console.error("NAVIGATION ERROR:", error);
+            logger.error("Navigation route error", {
+                error: error.message,
+            });
             if (requestId !== navigationRequestRef.current) {
                 return;
             }
@@ -169,7 +174,7 @@ export const useNavigateToToilet = () => {
                 return;
             }
             if (status !== "granted") {
-                // console.log("Location permission denied");
+                logger.warn("Distance calculation location permission denied");
                 toast.show("Location Permission must be granted!", {
                     type: "custom",
                     data: {
@@ -204,7 +209,7 @@ export const useNavigateToToilet = () => {
             const url =
                 `https://router.project-osrm.org/route/v1/driving/${coordinates}` +
                 `?overview=false`;
-
+            logger.debug("Requesting navigation route");
             const response = await fetch(url);
             if (requestId !== distanceRequestRef.current) {
                 return;
@@ -216,7 +221,9 @@ export const useNavigateToToilet = () => {
 
 
             if (data.code !== "Ok") {
-                // console.log("OSRM ERROR:", data.code);
+                logger.warn("Distance calculation route request failed", {
+                    code: data.code,
+                });
                 toast.show("Could not get map and location", {
                     type: "custom",
                     data: {
@@ -249,15 +256,16 @@ export const useNavigateToToilet = () => {
             if (currentSelectedToilet?._id !== toilet._id) {
                 return;
             }
-
+            logger.debug("Toilet distance calculated");
             useWcDataStore.getState().setToiletRouteInfo(
                 selectedRoute.distance,
                 selectedRoute.duration
             );
 
         } catch (error) {
-            // console.error("TOILET DISTANCE ERROR:", error);
-            if (requestId !== distanceRequestRef.current) {
+            logger.error("Toilet distance calculation error", {
+                error: error.message,
+            }); if (requestId !== distanceRequestRef.current) {
                 return;
             }
             if (toast?.show) {

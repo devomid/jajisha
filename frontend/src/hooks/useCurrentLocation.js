@@ -2,7 +2,7 @@ import * as Location from "expo-location";
 import { useEffect, useState } from "react";
 import useWaitingSystemStore from "../../store/waitingSystemStore";
 import { useToast } from "react-native-toast-notifications";
-
+import logger from "../utils/logger";
 
 export default function useCurrentLocation() {
 
@@ -20,6 +20,7 @@ export default function useCurrentLocation() {
                     await Location.requestForegroundPermissionsAsync();
 
                 if (status !== "granted") {
+                    logger.warn("Location permission denied");
                     if (toast?.show) {
                         toast.show("Location Permission must be granted!", {
                             type: "custom",
@@ -44,9 +45,13 @@ export default function useCurrentLocation() {
                 ) {
                     return;
                 }
-
+                logger.debug("Current location obtained");
                 setLocation(current);
+
             } catch (error) {
+                logger.error("Failed to get current location", {
+                    error: error.message,
+                });
                 if (toast?.show) {
                     toast.show("Could not get your location", {
                         type: "custom",

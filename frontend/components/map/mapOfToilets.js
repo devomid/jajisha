@@ -533,8 +533,10 @@ const MapOfToilets = forwardRef(({ currentLocation, onMarkerPress, isPickingLoca
     }, [heading,]);
 
     const handleToiletPress = async (toilet) => {
+        logger.debug("Toilet selected", {
+            toiletId: toilet._id,
+        });
         useWcDataStore.getState().clearToiletRouteInfo();
-
         setSelectedToilet(toilet);
         calculateToiletDistance(toilet);
         onMarkerPress(toilet);

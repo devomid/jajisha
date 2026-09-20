@@ -3,6 +3,7 @@ import { API_URL } from "../config/api";
 import * as SecureStore from "expo-secure-store";
 import useWaitingSystemStore from '../../store/waitingSystemStore';
 import { useToast } from "react-native-toast-notifications";
+import logger from "../utils/logger";
 
 export const useAuth = () => {
 
@@ -34,8 +35,11 @@ export const useAuth = () => {
             )
 
             if (!response.ok) {
-                // const errorRes = await response.json();
-                // console.log("Signup error:", errorRes);
+                const errorRes = await response.json();
+                logger.warn("Sign up request failed", {
+                    status: response.status,
+                    signupError: errorRes
+                });
 
                 if (toast?.show) {
                     toast.show("Could not sign you up", {
@@ -56,6 +60,8 @@ export const useAuth = () => {
                 token: jsonRes.token,
             });
 
+            logger.info("Sign up successful");
+
             if (toast?.show) {
                 toast.show("Account created successfully.", {
                     type: "custom",
@@ -68,7 +74,9 @@ export const useAuth = () => {
             return true;
 
         } catch (error) {
-            // console.log("Error Sign up!", error);
+            logger.error("Sign up request error", {
+                error: error.message,
+            });
             if (toast?.show) {
                 toast.show("Something went wrong signing up!", {
                     type: "custom",
@@ -98,8 +106,11 @@ export const useAuth = () => {
             updateWaiting(waitingId, "Putting your stuff back...");
 
             if (!response.ok) {
-                // const errorRes = await response.json();
-                // console.log("Signin error:", errorRes);
+                const errorRes = await response.json();
+                logger.warn("Sign in request failed", {
+                    status: response.status,
+                    signinError: errorRes
+                });
 
                 if (toast?.show) {
                     toast.show("Could not sign you in", {
@@ -122,7 +133,7 @@ export const useAuth = () => {
                 token: jsonRes.token,
 
             });
-
+            logger.info("Sign in successful");
             if (toast?.show) {
                 toast.show("Signed you in successfully.", {
                     type: "custom",
@@ -134,8 +145,9 @@ export const useAuth = () => {
             return true;
 
         } catch (error) {
-            // console.log("Error Sign in!", error);
-
+            logger.error("Sign in request error", {
+                error: error.message,
+            });
             if (toast?.show) {
                 toast.show("Something went wrong signing in!", {
                     type: "custom",
@@ -160,6 +172,7 @@ export const useAuth = () => {
             const token = await SecureStore.getItemAsync("authToken");
 
             if (!token) {
+                logger.debug("No saved authentication token found");
                 await SecureStore.deleteItemAsync("authToken");
                 useUserStore.getState().logout();
                 return;
@@ -177,6 +190,13 @@ export const useAuth = () => {
             if (!response.ok) {
                 await SecureStore.deleteItemAsync("authToken");
                 useUserStore.getState().logout();
+
+                const errorRes = await response.json();
+
+                logger.warn("User restore request failed", {
+                    status: response.status,
+                    userRestoreError: errorRes
+                });
 
                 if (toast?.show) {
                     toast.show("Could not get your data", {
@@ -196,14 +216,16 @@ export const useAuth = () => {
             if (currentToken !== token) {
                 return;
             }
-
+            logger.info("User session restored");
             useUserStore.getState().setUser({
                 ...data,
                 token,
             });
 
         } catch (error) {
-            // console.log("Restore user error:", error);
+            logger.error("User restore error", {
+                error: error.message,
+            });
             if (toast?.show) {
                 toast.show("Something went wrong signing in!", {
                     type: "custom",
@@ -226,8 +248,12 @@ export const useAuth = () => {
         try {
             await SecureStore.deleteItemAsync("authToken");
             useUserStore.getState().logout();
+            logger.info("User logged out");
+
         } catch (error) {
-            // console.error("Logout error:", error);
+            logger.error("Logout error", {
+                error: error.message,
+            });
             if (toast?.show) {
                 toast.show("Something went wrong logging out!", {
                     type: "custom",
@@ -256,7 +282,11 @@ export const useAuth = () => {
                 }
             })
             if (!response.ok) {
-                // console.error("Failed to delete user.");
+                const errorRes = await response.json();
+                logger.warn("Delete account request failed", {
+                    status: response.status,
+                    deleteError: errorRes
+                });
                 if (toast?.show) {
                     toast.show("Could not delete account", {
                         type: "custom",
@@ -272,7 +302,9 @@ export const useAuth = () => {
             useUserStore.getState().logout();
 
         } catch (error) {
-            // console.error("Logout error:", error);
+            logger.error("Delete account error", {
+                error: error.message,
+            });
             if (toast?.show) {
                 toast.show("Something went wrong deleting user account!", {
                     type: "custom",

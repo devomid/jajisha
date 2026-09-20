@@ -161,8 +161,7 @@ const RoutePreview = forwardRef(
         };
 
         const handleStartNavigation = () => {
-            console.log("ROUTE PREVIEW >>> START NAVIGATION");
-
+            logger.info("Navigation started");
             useWcDataStore.getState().startNavigation();
 
             ref.current?.dismiss();

@@ -23,8 +23,7 @@ export const useCreateReview = () => {
         try {
 
             if (!user?.token) {
-                // console.log("Cannot create review: user is not authenticated");
-
+                logger.warn("Create review attempted without authentication");
                 if (toast?.show) {
                     toast.show("User not found!", {
                         type: "custom",
@@ -38,6 +37,7 @@ export const useCreateReview = () => {
             }
 
             if (!toiletId) {
+                logger.warn("Create review attempted without selected toilet");
                 if (toast?.show) {
                     toast.show("Toilet not found!", {
                         type: "custom",
@@ -65,9 +65,11 @@ export const useCreateReview = () => {
             );
 
             if (!response.ok) {
-                // console.log("Response is not OK");
-                // console.log("Status:", response.status);
-                // console.log(await response.text());
+                const errorRes = await response.json();
+                logger.warn("Sign in request failed", {
+                    status: response.status,
+                    createToiletError: errorRes
+                });
 
                 if (toast?.show) {
                     toast.show("Could not add review", {
@@ -81,13 +83,19 @@ export const useCreateReview = () => {
 
                 return null;
             }
-
+            logger.info("Review created successfully", {
+                toiletId,
+                reviewId: jsonRes.review?._id,
+            });
             const jsonRes = await response.json();
 
             return jsonRes.review;
 
         } catch (error) {
-            // console.log("Error saving review:", error);
+            logger.error("Create review request error", {
+                error: error.message,
+                toiletId,
+            });
             if (toast?.show) {
                 toast.show("Something went wrong adding review!", {
                     type: "custom",
