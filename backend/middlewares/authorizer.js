@@ -10,34 +10,44 @@ if (!secretKey) {
 };
 
 const authorize = async (req, res, next) => {
-    // verify authorization
     const { authorization } = req.headers;
-    // console.log(authorization);
     if (!authorization) {
+        logger.error({
+            authorization: authorization.toString(),
+        }, "authorization problem");
         return res.status(401).json({ error: 'Authorization token requires!' })
     };
 
     const [scheme, token, extra] = authorization.split(' ');
 
     if (scheme !== 'Bearer' || !token || extra) {
+        logger.warn({
+            authScheme: req.headers.authorization?.split(" ")[0],
+            authenticated: Boolean(req.user),
+        }, "JWT scheme or token is invalid");
         return res.status(401).json({ error: 'Invalid authorization format' });
     }
 
     try {
         const { _id } = jwt.verify(token, secretKey);
-        // console.log('id from verification:', _id);
 
         req.user = await User.findOne({ _id }).select('_id');
 
         if (!req.user) {
+            logger.warn({
+                userId: _id.toString(),
+            }, "no such user");
             return res.status(401).json({ error: 'User no longer exists' });
         };
-
+        logger.info({
+            userId: _id.toString(),
+        }, "authorize user successful");
         next();
 
     } catch (error) {
-        // console.log(error);
-        return res.status(401).json({ error: 'Invalid or expired token' });
+        logger.error({
+            err: error,
+        }, "authorize user failed");        return res.status(401).json({ error: 'Invalid or expired token' });
     };
 };
 

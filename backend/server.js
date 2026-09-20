@@ -8,7 +8,9 @@ const requiredEnv = ["MONGOURI", "PORT", "SECRET_KEY", "CLIENT_ORIGIN"];
 const missingEnv = requiredEnv.filter((key) => !process.env[key]);
 
 if (missingEnv.length > 0) {
-    console.error(`Missing required environment variables: ${missingEnv.join(", ")}`);
+    logger.warn({
+        missingEnv: missingEnv.join(", "),
+    }, "some env variable are magically lost");
     process.exit(1);
 }
 
@@ -16,16 +18,16 @@ const mongoUrl = process.env.MONGOURI;
 const portNumber = Number(process.env.PORT);
 
 if (!Number.isInteger(portNumber) || portNumber < 1 || portNumber > 65535) {
-    console.error("PORT must be a valid number between 1 and 65535");
+    logger.warn("port number is not valid");
     process.exit(1);
 }
 
 // shutdown
 const shutdown = async (signal) => {
-    console.log(`${signal} received. Shutting down...`);
-
+    logger.info({
+        signal: signal.toString(),
+    }, "recieved shut down signal. connection going to be closed");
     await mongoose.connection.close();
-
     process.exit(0);
 };
 
@@ -34,17 +36,23 @@ process.on("SIGTERM", () => shutdown("SIGTERM"));
 
 // Database
 mongoose.connection.on("error", (error) => {
-    console.error("MongoDB connection error:", error);
+    logger.error({
+        err: error,
+    }, "MongoDB connection error");
+
 });
 
 mongoose.connect(mongoUrl)
     .then(() => {
         app.listen(portNumber, () => {
+            logger.info("DB connection success!");
             console.log(`server running on port: ${portNumber}`);
             console.log('DB connection success!');
         });
     })
     .catch((error) => {
-        console.error("Database connection failed:", error);
+        logger.error({
+            err: error,
+        }, "Databse connection failed");
         process.exit(1);
     });
