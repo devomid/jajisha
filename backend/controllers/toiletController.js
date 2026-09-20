@@ -14,14 +14,15 @@ const createToilet = async (req, res) => {
 
         if (!wcData || typeof wcData !== "object") {
             logger.warn({
-                body: req.body.toString(),
-            }, "id or wc data is not a valid object");
+                requestId: req.id.toString(),
+                userId: req.user?._id?.toString(),
+            }, "Invalid toilet data");
             return res.status(400).json({ message: "Invalid toilet data" });
         };
 
         if (typeof wcData.name !== "string" || !wcData.name.trim()) {
             logger.warn({
-                wcName: wcData.name.toString(),
+                requestId: req.id.toString(),
             }, "id or wc data is not a valid object");
             return res.status(400).json({ message: "Toilet name is required" });
         };
@@ -38,7 +39,7 @@ const createToilet = async (req, res) => {
             longitude > 180
         ) {
             logger.warn({
-                location: wcData.location.toString(),
+                requestId: req.id.toString(),
             }, "invalid location");
             return res.status(400).json({ message: "Invalid location" });
         };
@@ -46,7 +47,7 @@ const createToilet = async (req, res) => {
         const ratings = wcData.ratings;
         if (!ratings || typeof ratings !== "object") {
             logger.warn({
-                wcData: wcData.toString(),
+                requestId: req.id.toString(),
             }, "invalid ratings object or no ratings");
             return res.status(400).json({ message: "Ratings are required" });
         };
@@ -68,8 +69,10 @@ const createToilet = async (req, res) => {
                 ratings[field] > 5
             ) {
                 logger.warn({
-                    field: field.toString(),
-                }, "invalid ratings");
+                    requestId: req.id,
+                    userId: req.user?._id?.toString(),
+                    field,
+                }, "Invalid rating");
                 return res.status(400).json({
                     message: `Invalid rating: ${field}`,
                 });
@@ -80,7 +83,7 @@ const createToilet = async (req, res) => {
 
         if (!amenities || typeof amenities !== "object") {
             logger.warn({
-                wcData: wcData.toString(),
+                requestId: req.id.toString(),
             }, "invalid amenities object or no amenities");
             return res.status(400).json({ message: "Amenities are required" });
         }
@@ -108,9 +111,7 @@ const createToilet = async (req, res) => {
         }
 
         if (typeof wcData.isFree !== "boolean") {
-            logger.warn({
-                wcData: wcData.toString(),
-            }, "invalid isFree object or no isFree");
+            logger.warn("invalid isFree object or no isFree");
             return res.status(400).json({ message: "Invalid isFree value" });
         };
 
@@ -119,9 +120,7 @@ const createToilet = async (req, res) => {
             : Number(String(wcData.price ?? "").replace(/[,\s]/g, ""));
 
         if (!Number.isFinite(price) || price < 0) {
-            logger.warn({
-                price: price.toString(),
-            }, "invalid price object or no price");
+            logger.warn("invalid price object or no price");
             return res.status(400).json({ message: "Invalid price" });
         };
 
@@ -129,7 +128,7 @@ const createToilet = async (req, res) => {
         if (!user) {
             logger.warn({
                 userId: userId.toString(),
-            }, "youser not found");
+            }, "user not found");
             return res.status(404).json({ message: "User not found" });
         };
 
@@ -196,22 +195,23 @@ const createToilet = async (req, res) => {
 
         await session.commitTransaction();
         logger.info({
-            toilet: toilet.toString(),
-        }, "create toilet successful");
+            toiletId: toilet._id.toString(),
+            userId: userId.toString(),
+        }, "Create toilet successful");
 
         res.status(201).json(toilet);
 
     } catch (error) {
         logger.error({
             err: error,
-        }, "Get user failed");
+        }, "Create toilet failed");
         if (session.inTransaction()) {
             await session.abortTransaction();
         }
 
         if (error.name === "ValidationError") {
             logger.error({
-                err: error.name,
+                err: error,
             }, "Invalid toilet data.");
             return res.status(400).json({
                 message: "Invalid toilet data",
@@ -220,7 +220,7 @@ const createToilet = async (req, res) => {
 
         if (error.code === 11000) {
             logger.error({
-                err: error.name,
+                err: error,
             }, "Toilet already exists.");
             return res.status(409).json({
                 message: "Toilet already exists",

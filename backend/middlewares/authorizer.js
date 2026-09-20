@@ -18,9 +18,9 @@ if (!secretKey) {
 const authorize = async (req, res, next) => {
     const { authorization } = req.headers;
     if (!authorization) {
-        logger.error({
-            authorization: authorization.toString(),
-        }, "authorization problem");
+        logger.warn({
+            requestId: req.id,
+        }, "Authorization header is missing");
         return res.status(401).json({ error: 'Authorization token requires!' })
     };
 
