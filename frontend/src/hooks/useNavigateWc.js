@@ -3,7 +3,7 @@ import { useWcDataStore } from "../../store/wcDataStore";
 import * as Location from "expo-location";
 import useWaitingSystemStore from "../../store/waitingSystemStore";
 import { useToast } from "react-native-toast-notifications";
-
+import logger from "../utils/logger";
 
 export const useNavigateToToilet = () => {
 
@@ -209,7 +209,7 @@ export const useNavigateToToilet = () => {
             const url =
                 `https://router.project-osrm.org/route/v1/driving/${coordinates}` +
                 `?overview=false`;
-            logger.debug("Requesting navigation route");
+            logger.debug("Requesting toilet distance");
             const response = await fetch(url);
             if (requestId !== distanceRequestRef.current) {
                 return;

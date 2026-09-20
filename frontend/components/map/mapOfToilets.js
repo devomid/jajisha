@@ -6,7 +6,7 @@ import { useTranslation } from "react-i18next";
 import { useSettingsStore } from "../../store/settingsStore";
 import { useManagingWc } from "../../src/hooks/useManagingWc";
 import { useToast } from "react-native-toast-notifications";
-
+import logger from "../../src/utils/logger";
 import * as Location from "expo-location";
 import { View, Pressable, Text, Image, Platform, } from "react-native";
 import { BlurView } from "expo-blur";
@@ -14,7 +14,7 @@ import MapView, { Marker, Polyline, } from "react-native-maps";
 
 
 const MapOfToilets = forwardRef(({ currentLocation, onMarkerPress, isPickingLocation, onAddWcPress, }, ref) => {
-
+    console
     const toast = useToast();
 
     const mapRef = useRef(null);
@@ -729,8 +729,6 @@ const MapOfToilets = forwardRef(({ currentLocation, onMarkerPress, isPickingLoca
                                     y: 1,
                                 }}
                                 onPress={() => {
-                                    console.log("========== MARKER PRESSED ==========");
-                                    console.log(toilet._id);
                                     handleToiletPress(toilet);
                                 }}
                             >

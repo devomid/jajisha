@@ -3,7 +3,7 @@ import { useUserStore } from "../../store/userStore";
 import { API_URL } from "../config/api";
 import useWaitingSystemStore from '../../store/waitingSystemStore';
 import { useToast } from "react-native-toast-notifications";
-
+import logger from "../utils/logger";
 
 export const useManagingWc = () => {
     const toast = useToast();
@@ -141,12 +141,12 @@ export const useManagingWc = () => {
                 return null;
             }
 
+            
+            const jsonRes = await response.json();
+            
             logger.info("Toilets fetched successfully", {
                 count: jsonRes.toilets?.length ?? 0,
             });
-
-            const jsonRes = await response.json();
-
             setToilets(currentToilets => {
                 const fetchedIds = new Set(
                     jsonRes.toilets.map(toilet => toilet._id)

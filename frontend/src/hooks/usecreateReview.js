@@ -3,7 +3,7 @@ import { useWcDataStore } from "../../store/wcDataStore";
 import { useUserStore } from "../../store/userStore";
 import useWaitingSystemStore from "../../store/waitingSystemStore";
 import { useToast } from "react-native-toast-notifications";
-
+import logger from "../utils/logger";
 
 export const useCreateReview = () => {
 
@@ -66,7 +66,7 @@ export const useCreateReview = () => {
 
             if (!response.ok) {
                 const errorRes = await response.json();
-                logger.warn("Sign in request failed", {
+                logger.warn("Create review request failed", {
                     status: response.status,
                     createToiletError: errorRes
                 });
