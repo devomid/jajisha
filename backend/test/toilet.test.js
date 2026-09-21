@@ -62,7 +62,7 @@ describe('GET /api/toilets/reviews/:toiletId', () => {
                 light: 0,
                 privacy: 0,
                 crowd: 0
-            }
+            },
             createdBy: user._id,
         });
 
