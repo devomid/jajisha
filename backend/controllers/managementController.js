@@ -50,6 +50,7 @@ const saveToilet = async (req, res) => {
             userId: userId.toString(),
             toiletId: toiletId.toString(),
         }, "Toilet saved successfully");
+        
         return res.status(200).json({
             message: "Toilet saved successfully"
         });
@@ -230,7 +231,9 @@ const createReview = async (req, res) => {
                 userId: userId?.toString(),
             }, "User not found");
 
-            throw new Error("USER_NOT_FOUND");
+            const error = new Error("User not found");
+            error.code = "USER_NOT_FOUND";
+            throw error;
         }
 
         const toilet = await Toilet.findById(toiletId).session(session);
@@ -240,7 +243,9 @@ const createReview = async (req, res) => {
                 toiletId,
                 requestId: req.id
             }, "toilet not found");
-            throw new Error("TOILET_NOT_FOUND");
+            const error = new Error("Toilet not found");
+            error.code = "TOILET_NOT_FOUND";
+            throw error;
         }
 
         const [review] = await Review.create(
@@ -301,7 +306,7 @@ const createReview = async (req, res) => {
             await session.abortTransaction();
         }
 
-        if (error.message === "USER_NOT_FOUND") {
+        if (error.code === "USER_NOT_FOUND") {
             logger.warn({
                 requestId: req.id,
                 userId,
@@ -312,7 +317,7 @@ const createReview = async (req, res) => {
             });
         }
 
-        if (error.message === "TOILET_NOT_FOUND") {
+        if (error.code === "TOILET_NOT_FOUND") {
             logger.warn({
                 requestId: req.id,
                 toiletId,

@@ -275,7 +275,8 @@ const getToilets = async (req, res) => {
             .lean();
 
         logger.info({
-            requestId: req.id
+            requestId: req.id,
+            count: toilets.length
         }, "Get toilets successful");
         res.status(200).json({ toilets });
 
