@@ -1,6 +1,7 @@
 const request = require('supertest');
 const Toilet = require('../models/toiletModel');
 const app = require('../app');
+const User = require('../models/userModel');
 
 describe('GET /api/toilets', () => {
     it('should return 200 and an object containing toilets', async () => {
@@ -25,6 +26,13 @@ describe('GET /api/toilets/reviews/:toiletId', () => {
     });
 
     it('should return an empty reviews array for a valid toilet ID with no reviews', async () => {
+        const user = await User.create({
+            username: 'reviewtoiletuser',
+            firstName: 'Review',
+            lastName: 'User',
+            email: 'reviewtoilet@example.com',
+            password: 'password123'
+        });
         const toilet = await Toilet.create({
             name: 'Test Review Toilet',
             description: 'A toilet for review testing.',
@@ -55,6 +63,7 @@ describe('GET /api/toilets/reviews/:toiletId', () => {
                 privacy: 0,
                 crowd: 0
             }
+            createdBy: user._id,
         });
 
         const response = await request(app)

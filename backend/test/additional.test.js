@@ -248,16 +248,16 @@ describe('Additional API coverage', () => {
 
             const toilet = await Toilet.findById(toiletId);
 
-            expect(toilet.ratingSummary.count).toBe(1);
+            expect(toilet.ratingSummary.count).toBe(2);
             expect(toilet.ratingSummary.cleanliness).toBe(4);
             expect(toilet.ratingSummary.odor).toBe(5);
-            expect(toilet.ratingSummary.amenitiesHealth).toBe(3);
-            expect(toilet.ratingSummary.light).toBe(4);
-            expect(toilet.ratingSummary.privacy).toBe(5);
-            expect(toilet.ratingSummary.crowd).toBe(2);
+            expect(toilet.ratingSummary.amenitiesHealth).toBe(3.5);
+            expect(toilet.ratingSummary.light).toBe(4.5);
+            expect(toilet.ratingSummary.privacy).toBe(4.5);
+            expect(toilet.ratingSummary.crowd).toBe(3.5);
 
             expect(toilet.ratingSummary.average).toBe(
-                (4 + 5 + 3 + 4 + 5 + 2) / 6
+                (4 + 5 + 3.5 + 4.5 + 4.5 + 3.5) / 6
             );
         });
 
