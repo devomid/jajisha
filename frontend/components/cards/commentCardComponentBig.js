@@ -1,9 +1,10 @@
 import { View, Text } from "react-native";
 import StarRating from "react-native-star-rating-widget";
 import { Divider } from 'react-native-paper';
+import { useTranslation } from "react-i18next";
 
 export default function CommentCardComponentBig({ theme, review }) {
-    
+    const { t } = useTranslation();
     const ratings = review?.ratings
         ? Object.values(review?.ratings)
         : [];
@@ -24,7 +25,10 @@ export default function CommentCardComponentBig({ theme, review }) {
         const minutes = Math.floor(seconds / 60);
 
         if (minutes < 60) {
-            return `${minutes} ${minutes === 1 ? "minute" : "minutes"} ago`;
+            return `${minutes} ${minutes === 1 ?
+                t("components.commentCardComponentBig.getTimeAgo.minute") :
+                t("components.commentCardComponentBig.getTimeAgo.minutes") }
+                ${t("components.commentCardComponentBig.getTimeAgo.ago")}`
         }
 
         const hours = Math.floor(minutes / 60);
@@ -110,7 +114,7 @@ export default function CommentCardComponentBig({ theme, review }) {
                 }}
             >
                 <Text style={{ color: theme.colors.text + '80' }}>
-                    {review.user?.username ?? "Anonymous"}
+                    {review.user?.username ?? t("components.commentCardComponentBig.usernameText")}
                 </Text>
 
                 <Text style={{ color: theme.colors.text + '80' }}>

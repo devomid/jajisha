@@ -60,6 +60,11 @@
         "ToiletLocationBottomSheet": {
             "toiletInfo": "اطلاعات توالت",
             "reviewTitle": "نظر",
+            "min":"دقیقه",
+            "mile":"مایل",
+            "km":"کیلومتر",
+            "ft":"فوت",
+            "m":"متر",
             "showRouteBtn": "محاسبه مسیر",
             "amenitiesIcon": {
                 "western": "فرنگی",
@@ -73,9 +78,26 @@
             },
             "moreBtn": "بیشتر",
             "lessBtn": "کمتر",
+            "seeCommentsBtn":"دیدن تمام نظرها",
             "rateAndWriteBtn": "نظر بدید"
         },
-        "commentCardComponentBig":{},
+        "commentCardComponentBig":{
+            "getTimeAgo":{
+                "minute":"دقیقه",
+                "minutes":"دقیقه",
+                "hour":"ساعت",
+                "hours":"ساعت",
+                "day":"روز",
+                "days":"روز",
+                "month":"ماه",
+                "months":"ماه",
+                "year":"سال",
+                "years":"سال",
+                "ago":"پیش",
+                "justNow":"کمی قبل"
+            },
+            "usernameText":"مهمان"
+        },
         "commentCardComponentSmall":{},
         "toiletCard":{},
         "newToilet": {

@@ -4,7 +4,7 @@ import { useTheme } from "react-native-paper";
 import { useNavigateToToilet } from "../../src/hooks/useNavigateWc";
 import { useTranslation } from "react-i18next";
 import { useSettingsStore } from "../../store/settingsStore";
-import { useManagingWc } from "../../src/hooks/useManagingWc";
+// import { useManagingWc } from "../../src/hooks/useManagingWc";
 import { useToast } from "react-native-toast-notifications";
 import logger from "../../src/utils/logger";
 import * as Location from "expo-location";
@@ -21,7 +21,7 @@ const MapOfToilets = forwardRef(({ currentLocation, onMarkerPress, isPickingLoca
     const { t } = useTranslation();
     const theme = useTheme();
     const { navigateToToilet, calculateToiletDistance } = useNavigateToToilet();
-    const { getWcReviews } = useManagingWc()
+    // const { getWcReviews } = useManagingWc()
 
     const toilets = useWcDataStore(state => state.toilets);
     const setSelectedToilet = useWcDataStore(state => state.setSelectedToilet);
@@ -541,7 +541,7 @@ const MapOfToilets = forwardRef(({ currentLocation, onMarkerPress, isPickingLoca
         calculateToiletDistance(toilet);
         onMarkerPress(toilet);
 
-        const reviews = await getWcReviews(toilet._id);
+        // const reviews = await getWcReviews(toilet._id);
 
         const currentSelectedToilet =
             useWcDataStore.getState().selectedToilet;
@@ -552,7 +552,7 @@ const MapOfToilets = forwardRef(({ currentLocation, onMarkerPress, isPickingLoca
 
         setSelectedToilet({
             ...toilet,
-            reviews,
+            // reviews,
         });
     };
 

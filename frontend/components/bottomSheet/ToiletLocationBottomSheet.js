@@ -32,7 +32,7 @@ const ToiletInfo = forwardRef(({ curentLocation, onPresent }, ref) => {
     const { t } = useTranslation();
     const theme = useTheme();
     const { restoreUser } = useAuth();
-    const { saveWc, unsaveWc } = useManagingWc();
+    const { saveWc, unsaveWc, getWcReviews } = useManagingWc();
     const bottomSheetRef = useRef(null);
     const lastStableIndexRef = useRef(0);
     const programmaticAmenitiesHeightRef = useRef(false);
@@ -48,6 +48,7 @@ const ToiletInfo = forwardRef(({ curentLocation, onPresent }, ref) => {
     const [isSharing, setIsSharing] = useState(false);
     const user = useUserStore((state) => state.user);
     const toilet = useWcDataStore((state) => state.selectedToilet);
+    const setSelectedToilet = useWcDataStore(state => state.setSelectedToilet);
     const setNavigationTarget = useWcDataStore(state => state.setNavigationTarget);
     const toiletRouteInfo = useWcDataStore(state => state.toiletRouteInfo);
     const distanceUnit = useSettingsStore(state => state.distanceUnit);
@@ -140,10 +141,10 @@ const ToiletInfo = forwardRef(({ curentLocation, onPresent }, ref) => {
 
         if (typeof duration !== "number") { return "--"; }
         const minutes = Math.round(duration / 60);
-        if (minutes < 60) { return `${minutes} min`; }
+        if (minutes < 60) { return `${minutes} ${t("components.ToiletLocationBottomSheet.min")}`; }
         const hours = Math.floor(minutes / 60);
         const remainingMinutes = minutes % 60;
-        return `${hours}h ${remainingMinutes}min`;
+        return `${hours}h ${remainingMinutes} ${t("components.ToiletLocationBottomSheet.min")}`;
     };
 
     const handleSheetChangesJS = useCallback(
@@ -305,6 +306,14 @@ const ToiletInfo = forwardRef(({ curentLocation, onPresent }, ref) => {
         }).start();
     }, [showAllAmenities]);
 
+    useEffect(async () => {
+        const reviewData = await getWcReviews(toilet._id);
+        setSelectedToilet({
+            ...prev,
+            reviews: reviewData?.reviews ?? [],
+            userReview: reviewData?.userReview ?? null,
+        });
+    }, [])
 
     const renderBackdrop = useCallback(
         (props) => (
@@ -456,7 +465,7 @@ const ToiletInfo = forwardRef(({ curentLocation, onPresent }, ref) => {
                                         }}
                                         variant="bodySmall"
                                     >
-                                        {formatDistance(distance, distanceUnit)}
+                                        {formatDistance(distance, distanceUnit, t)}
                                     </Text>
                                 )}
 
@@ -838,6 +847,28 @@ const ToiletInfo = forwardRef(({ curentLocation, onPresent }, ref) => {
                                         setIscommentsOpen={setIscommentsOpen}
                                     />
 
+                                        {toilet?.userReview ? (
+                                        
+                                    <ButtonComponent
+                                        onPress={() => {
+                                            setIscommenting(true);
+                                        }}
+                                        backgroundColor={theme.colors.secondary + '30'}
+                                        borderColor={theme.colors.secondaryLighter + '80'}
+                                        style={{
+                                            width: '100%',
+                                            marginTop: 15
+                                        }}
+                                    >
+                                        <Text style={{
+                                            color: theme.colors.surface,
+                                        }}>
+                                                    {/* {t("components.ToiletLocationBottomSheet.rateAndWriteBtn")}  */}
+                                                    jdfkfhks
+                                        </Text>
+                                    </ButtonComponent>
+                                        ): (
+                                                
                                     <ButtonComponent
                                         onPress={() => {
                                             setIscommenting(true);
@@ -855,6 +886,8 @@ const ToiletInfo = forwardRef(({ curentLocation, onPresent }, ref) => {
                                             {t("components.ToiletLocationBottomSheet.rateAndWriteBtn")}
                                         </Text>
                                     </ButtonComponent>
+                                        )
+                                        }
 
                                 </View>
 

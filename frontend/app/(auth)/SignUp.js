@@ -198,6 +198,7 @@ export default function SignUp() {
                                 secureTextEntry
                                 autoCapitalize="none"
                                 autoCorrect={false}
+                                autoComplete="password-new"
                             />
 
                             <FormInput
@@ -212,6 +213,7 @@ export default function SignUp() {
                                 secureTextEntry
                                 autoCapitalize="none"
                                 autoCorrect={false}
+                                autoComplete="password-new"
                             />
 
                             <View style={{

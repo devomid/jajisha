@@ -68,18 +68,39 @@ export const useCreateReview = () => {
                 const errorRes = await response.json();
                 logger.warn("Create review request failed", {
                     status: response.status,
-                    createToiletError: errorRes
+                    createReviewError: errorRes
                 });
 
-                if (toast?.show) {
-                    toast.show("Could not add review", {
-                        type: "custom",
-                        data: {
-                            type: "error",
-                            text2: "Try again a few moments later.",
-                        },
-                    })
-                };
+
+                if (response.status === 409) {
+
+                    logger.debug("409 recieved", {
+                        status: response.status,
+                        createReviewError: errorRes
+                    });
+
+                    if (toast?.show) {
+                        toast.show("Could not add review", {
+                            type: "custom",
+                            data: {
+                                type: "error",
+                                text2: "You can not review a toilet more than one time.",
+                            },
+                        })
+                    };
+                } else {
+
+                    if (toast?.show) {
+                        toast.show("Could not add review", {
+                            type: "custom",
+                            data: {
+                                type: "error",
+                                text2: "Try again a few moments later.",
+                            },
+                        })
+                    };
+                }
+
 
                 return null;
             }

@@ -123,7 +123,11 @@ const AddWc = forwardRef((props, ref) => {
                             width: '30%',
                         }}
                     >
-                        <Text style={{ color: theme.colors.error }}>{t("components.addWcBottomSheet.cancelAddWcBtn")}</Text>
+                        <Text style={{
+                            color: theme.colors.error
+                        }}>
+                            {t("components.addWcBottomSheet.cancelAddWcBtn")}
+                        </Text>
                     </ButtonComponent>
 
                     <ButtonComponent
@@ -134,7 +138,11 @@ const AddWc = forwardRef((props, ref) => {
                             width: '70%',
                         }}
                     >
-                        <Text style={{ color: theme.colors.secondary }}>{t("components.addWcBottomSheet.addWcBtn")}</Text>
+                        <Text style={{
+                            color: theme.colors.secondary
+                        }}>{
+                                t("components.addWcBottomSheet.addWcBtn")}
+                        </Text>
                     </ButtonComponent>
 
                 </View>

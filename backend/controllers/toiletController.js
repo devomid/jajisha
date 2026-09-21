@@ -322,13 +322,20 @@ const getToiletReviews = async (req, res) => {
             .limit(50)
             .lean();
         
+        const userReview = req.user
+            ? await Review.findOne({
+                toilet: toiletId,
+                user: req.user._id,
+            }).lean()
+            : null;
+        
         logger.info({
             toiletId,
             requestId: req.id,
             count: reviews.length,
         }, "Get reviews successful");
 
-        res.status(200).json({ reviews });
+        res.status(200).json({ reviews, userReview });
 
     } catch (error) {
         logger.error({

@@ -141,9 +141,9 @@ export const useManagingWc = () => {
                 return null;
             }
 
-            
+
             const jsonRes = await response.json();
-            
+
             logger.info("Toilets fetched successfully", {
                 count: jsonRes.toilets?.length ?? 0,
             });
@@ -217,7 +217,11 @@ export const useManagingWc = () => {
                 toiletId,
                 count: jsonRes.reviews?.length ?? 0,
             });
-            return jsonRes.reviews;
+
+            return {
+                reviews: jsonRes.reviews,
+                userReview: jsonRes.userReview,
+            };
 
 
         } catch (error) {
