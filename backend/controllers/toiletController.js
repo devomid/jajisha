@@ -321,10 +321,13 @@ const getToiletReviews = async (req, res) => {
             .sort({ createdAt: -1 })
             .limit(50)
             .lean();
+        
         logger.info({
             toiletId,
-            requestId: req.id
+            requestId: req.id,
+            count: reviews.length,
         }, "Get reviews successful");
+
         res.status(200).json({ reviews });
 
     } catch (error) {
@@ -332,6 +335,7 @@ const getToiletReviews = async (req, res) => {
             err: error,
             requestId: req.id
         }, "Failed to load toilet reviews");
+
         res.status(500).json({
             message: "Failed to load toilet reviews",
         });
