@@ -145,8 +145,13 @@ export const useWcDataStore = create((set) => ({
                 status: "idle",
             },
         }),
-    setSelectedToilet: (toilet) =>
-        set({ selectedToilet: toilet }),
+    setSelectedToilet: (updater) =>
+        set((state) => ({
+            selectedToilet:
+                typeof updater === "function"
+                    ? updater(state.selectedToilet)
+                    : updater,
+        })),
 
     clearSelectedToilet: () =>
         set({ selectedToilet: null }),

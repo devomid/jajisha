@@ -312,11 +312,15 @@ const ToiletInfo = forwardRef(({ curentLocation, onPresent }, ref) => {
 
             const reviewData = await getWcReviews(toilet._id);
 
-            setSelectedToilet((prev) => ({
-                ...prev,
-                reviews: reviewData?.reviews ?? [],
-                userReview: reviewData?.userReview ?? null,
-            }));
+            setSelectedToilet((prev) => {
+                if (!prev) return prev;
+
+                return {
+                    ...prev,
+                    reviews: reviewData?.reviews ?? [],
+                    userReview: reviewData?.userReview ?? null,
+                };
+            });
         };
 
         fetchReviews();
@@ -854,47 +858,46 @@ const ToiletInfo = forwardRef(({ curentLocation, onPresent }, ref) => {
                                         setIscommentsOpen={setIscommentsOpen}
                                     />
 
-                                        {toilet?.userReview ? (
-                                        
-                                    <ButtonComponent
-                                        onPress={() => {
-                                            setIscommenting(true);
-                                        }}
-                                        backgroundColor={theme.colors.secondary + '30'}
-                                        borderColor={theme.colors.secondaryLighter + '80'}
-                                        style={{
-                                            width: '100%',
-                                            marginTop: 15
-                                        }}
-                                    >
-                                        <Text style={{
-                                            color: theme.colors.surface,
-                                        }}>
-                                                    {/* {t("components.ToiletLocationBottomSheet.rateAndWriteBtn")}  */}
-                                                    jdfkfhks
-                                        </Text>
-                                    </ButtonComponent>
-                                        ): (
-                                                
-                                    <ButtonComponent
-                                        onPress={() => {
-                                            setIscommenting(true);
-                                        }}
-                                        backgroundColor={theme.colors.secondary + '30'}
-                                        borderColor={theme.colors.secondaryLighter + '80'}
-                                        style={{
-                                            width: '100%',
-                                            marginTop: 15
-                                        }}
-                                    >
-                                        <Text style={{
-                                            color: theme.colors.surface,
-                                        }}>
-                                            {t("components.ToiletLocationBottomSheet.rateAndWriteBtn")}
-                                        </Text>
-                                    </ButtonComponent>
-                                        )
-                                        }
+                                    {toilet?.userReview ? (
+
+                                        <ButtonComponent
+                                            onPress={() => {
+                                                setIscommenting(true);
+                                            }}
+                                            backgroundColor={theme.colors.secondary + '30'}
+                                            borderColor={theme.colors.secondaryLighter + '80'}
+                                            style={{
+                                                width: '100%',
+                                                marginTop: 15
+                                            }}
+                                        >
+                                            <Text style={{
+                                                color: theme.colors.surface,
+                                            }}>
+                                                {t("components.ToiletLocationBottomSheet.rateAndWriteBtn")}
+                                            </Text>
+                                        </ButtonComponent>
+                                    ) : (
+
+                                        <ButtonComponent
+                                            onPress={() => {
+                                                setIscommentsOpen(true);
+                                            }}
+                                            backgroundColor={theme.colors.secondary + '30'}
+                                            borderColor={theme.colors.secondaryLighter + '80'}
+                                            style={{
+                                                width: '100%',
+                                                marginTop: 15
+                                            }}
+                                        >
+                                            <Text style={{
+                                                color: theme.colors.surface,
+                                            }}>
+                                                {t("components.ToiletLocationBottomSheet.seeCommentsBtn")}
+                                            </Text>
+                                        </ButtonComponent>
+                                    )
+                                    }
 
                                 </View>
 
