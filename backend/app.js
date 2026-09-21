@@ -8,7 +8,10 @@ const managmentRoutes = require('./routes/managmentRoutes');
 const dotenv = require('dotenv');
 const logger = require("./logger/logger");
 
-dotenv.config()
+// dotenv.config()
+dotenv.config({
+    quiet: true,
+});
 
 // configs and middlwares
 const app = express();
