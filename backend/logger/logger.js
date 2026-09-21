@@ -3,8 +3,7 @@ const pino = require("pino");
 const isProduction = process.env.NODE_ENV === "production";
 
 const logger = pino({
-    level: process.env.LOG_LEVEL || (isProduction ? "warn" : "debug"),
-
+    level: process.env.LOG_LEVEL || (process.env.NODE_ENV === "test" ? "silent" : isProduction ? "warn" : "debug"),
     ...(isProduction
         ? {}
         : {

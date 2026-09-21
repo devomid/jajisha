@@ -1,7 +1,10 @@
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 
-dotenv.config({ path: '.env.test' });
+dotenv.config({
+    path: '.env.test',
+    quiet: true,
+});
 
 beforeAll(async () => {
     await mongoose.connect(process.env.MONGOURI);
