@@ -306,14 +306,21 @@ const ToiletInfo = forwardRef(({ curentLocation, onPresent }, ref) => {
         }).start();
     }, [showAllAmenities]);
 
-    useEffect(async () => {
-        const reviewData = await getWcReviews(toilet._id);
-        setSelectedToilet({
-            ...prev,
-            reviews: reviewData?.reviews ?? [],
-            userReview: reviewData?.userReview ?? null,
-        });
-    }, [])
+    useEffect(() => {
+        const fetchReviews = async () => {
+            if (!toilet?._id) return;
+
+            const reviewData = await getWcReviews(toilet._id);
+
+            setSelectedToilet((prev) => ({
+                ...prev,
+                reviews: reviewData?.reviews ?? [],
+                userReview: reviewData?.userReview ?? null,
+            }));
+        };
+
+        fetchReviews();
+    }, [toilet?._id]);
 
     const renderBackdrop = useCallback(
         (props) => (
