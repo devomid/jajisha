@@ -91,7 +91,7 @@ describe('Authorization', () => {
 
         const response = await request(app)
             .get('/api/user/returnMe')
-            .set('Authorization', `Bearer ${ expiredToken } `);
+            .set('Authorization', `Bearer ${expiredToken} `);
 
         expect(response.statusCode).toBe(401);
         expect(response.body).toEqual({
@@ -142,7 +142,7 @@ describe('POST /api/user/su', () => {
 
         expect(response.statusCode).toBe(400);
         expect(response.body).toEqual({
-            error: 'Invalid signup data.'
+            error: 'Invalid sign-up data.'
         });
     });
 
@@ -194,7 +194,7 @@ describe('POST /api/user/su', () => {
         });
     });
 
-    it('should return 400 when username already exists', async () => {
+    it('should return 409 when username already exists', async () => {
         await request(app)
             .post('/api/user/su')
             .send(validUser);
@@ -206,13 +206,13 @@ describe('POST /api/user/su', () => {
                 email: 'different@example.com'
             });
 
-        expect(response.statusCode).toBe(400);
+        expect(response.statusCode).toBe(409);
         expect(response.body).toEqual({
             error: 'Username is already in use.'
         });
     });
 
-    it('should return 400 when email already exists', async () => {
+    it('should return 409 when email already exists', async () => {
         await request(app)
             .post('/api/user/su')
             .send(validUser);
@@ -224,7 +224,7 @@ describe('POST /api/user/su', () => {
                 username: 'differentuser'
             });
 
-        expect(response.statusCode).toBe(400);
+        expect(response.statusCode).toBe(409);
         expect(response.body).toEqual({
             error: 'Email is already in use.'
         });

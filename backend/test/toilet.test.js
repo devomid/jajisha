@@ -1,5 +1,5 @@
 const request = require('supertest');
-const mongoose = require('mongoose');
+const Toilet = require('../models/toiletModel');
 const app = require('../app');
 
 describe('GET /api/toilets', () => {
@@ -25,10 +25,40 @@ describe('GET /api/toilets/reviews/:toiletId', () => {
     });
 
     it('should return an empty reviews array for a valid toilet ID with no reviews', async () => {
-        const toiletId = new mongoose.Types.ObjectId();
+        const toilet = await Toilet.create({
+            name: 'Test Review Toilet',
+            description: 'A toilet for review testing.',
+            location: {
+                type: 'Point',
+                coordinates: [51.3890, 35.6892]
+            },
+            address: 'Test Street',
+            isFree: true,
+            price: 0,
+            amenities: {
+                western: true,
+                iranian: false,
+                wheelchairAccessible: true,
+                babyChanging: false,
+                soap: true,
+                toiletPaper: true,
+                warmWater: true,
+                handDryer: true
+            },
+            ratingSummary: {
+                count: 0,
+                average: 0,
+                cleanliness: 0,
+                odor: 0,
+                amenitiesHealth: 0,
+                light: 0,
+                privacy: 0,
+                crowd: 0
+            }
+        });
 
         const response = await request(app)
-            .get(`/api/toilets/reviews/${toiletId}`);
+            .get(`/api/toilets/reviews/${toilet._id}`);
 
         expect(response.statusCode).toBe(200);
         expect(response.body).toHaveProperty('reviews');

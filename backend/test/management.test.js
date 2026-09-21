@@ -104,14 +104,14 @@ describe('Toilet management', () => {
             });
         });
 
-        it('should return 404 for an invalid toilet ID', async () => {
+        it('should return 400 for an invalid toilet ID', async () => {
             const response = await request(app)
                 .patch('/api/managment/saveToilets/not-a-valid-id')
                 .set('Authorization', `Bearer ${token}`);
 
-            expect(response.statusCode).toBe(404);
+            expect(response.statusCode).toBe(400);
             expect(response.body).toEqual({
-                message: 'Toilet not found'
+                message: 'Invalid toilet ID'
             });
         });
 
@@ -155,14 +155,14 @@ describe('Toilet management', () => {
             });
         });
 
-        it('should return 404 for an invalid toilet ID', async () => {
+        it('should return 400 for an invalid toilet ID', async () => {
             const response = await request(app)
                 .delete('/api/managment/unSavedToilets/not-a-valid-id')
                 .set('Authorization', `Bearer ${token}`);
 
-            expect(response.statusCode).toBe(404);
+            expect(response.statusCode).toBe(400);
             expect(response.body).toEqual({
-                message: 'Toilet not found'
+                message: 'Invalid toilet ID'
             });
         });
 
@@ -222,6 +222,15 @@ describe('POST /api/managment/toiletManagement/:toiletId', () => {
         }
     };
 
+    const validRatings = {
+        cleanliness: 4,
+        odor: 5,
+        amenitiesHealth: 4,
+        light: 5,
+        privacy: 4,
+        crowd: 5
+    };
+
     let token;
     let toiletId;
 
@@ -249,7 +258,8 @@ describe('POST /api/managment/toiletManagement/:toiletId', () => {
             .post(`/api/managment/toiletManagement/${toiletId}`)
             .set('Authorization', `Bearer ${token}`)
             .send({
-                reviewText: 'This is a clean and useful public toilet.'
+                reviewText: 'This is a clean and useful public toilet.',
+                ratings: validRatings
             });
 
         expect(response.statusCode).toBe(201);
@@ -264,7 +274,8 @@ describe('POST /api/managment/toiletManagement/:toiletId', () => {
         const response = await request(app)
             .post(`/api/managment/toiletManagement/${toiletId}`)
             .send({
-                reviewText: 'This is a clean and useful public toilet.'
+                reviewText: 'This is a clean and useful public toilet.',
+                ratings: validRatings
             });
 
         expect(response.statusCode).toBe(401);
@@ -273,17 +284,18 @@ describe('POST /api/managment/toiletManagement/:toiletId', () => {
         });
     });
 
-    it('should return 404 for an invalid toilet ID', async () => {
+    it('should return 400 for an invalid toilet ID', async () => {
         const response = await request(app)
             .post('/api/managment/toiletManagement/not-a-valid-id')
             .set('Authorization', `Bearer ${token}`)
             .send({
-                reviewText: 'This is a clean and useful public toilet.'
+                reviewText: 'This is a clean and useful public toilet.',
+                ratings: validRatings
             });
 
-        expect(response.statusCode).toBe(404);
+        expect(response.statusCode).toBe(400);
         expect(response.body).toEqual({
-            message: 'Toilet not found'
+            message: 'Invalid toilet ID'
         });
     });
 
@@ -294,7 +306,8 @@ describe('POST /api/managment/toiletManagement/:toiletId', () => {
             .post(`/api/managment/toiletManagement/${fakeToiletId}`)
             .set('Authorization', `Bearer ${token}`)
             .send({
-                reviewText: 'This is a clean and useful public toilet.'
+                reviewText: 'This is a clean and useful public toilet.',
+                ratings: validRatings
             });
 
         expect(response.statusCode).toBe(404);
@@ -339,13 +352,14 @@ describe('POST /api/managment/toiletManagement/:toiletId', () => {
 
         expect(response.statusCode).toBe(400);
         expect(response.body).toEqual({
-            message: 'Review text is required'
+            message: 'Review text is not valid'
         });
     });
 
     it('should return 409 when the same user reviews the same toilet twice', async () => {
         const review = {
-            reviewText: 'This is a clean and useful public toilet.'
+            reviewText: 'This is a clean and useful public toilet.',
+            ratings: validRatings
         };
 
         const firstResponse = await request(app)
