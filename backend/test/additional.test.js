@@ -1,5 +1,4 @@
 const request = require('supertest');
-const mongoose = require('mongoose');
 const User = require('../models/userModel');
 const Toilet = require('../models/toiletModel');
 const app = require('../app');
@@ -53,6 +52,12 @@ describe('Additional API coverage', () => {
         const signupResponse = await request(app)
             .post('/api/user/su')
             .send(user);
+
+        console.log(
+            'SIGNUP RESPONSE:',
+            signupResponse.statusCode,
+            signupResponse.body
+        );
 
         expect(signupResponse.statusCode).toBe(201);
 
