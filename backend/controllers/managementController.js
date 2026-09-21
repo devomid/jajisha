@@ -33,7 +33,7 @@ const saveToilet = async (req, res) => {
         const user = await User.findByIdAndUpdate(
             userId,
             { $addToSet: { favoriteToilets: toiletId } },
-            { new: true }
+            { returnDocument: "after" }
         );
 
         if (!user) {
@@ -95,7 +95,7 @@ const unsaveToilet = async (req, res) => {
         const user = await User.findByIdAndUpdate(
             userId,
             { $pull: { favoriteToilets: toiletId } },
-            { new: true }
+            { returnDocument: "after" }
         );
 
         if (!user) {

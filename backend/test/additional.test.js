@@ -53,12 +53,6 @@ describe('Additional API coverage', () => {
             .post('/api/user/su')
             .send(user);
 
-        console.log(
-            'SIGNUP RESPONSE:',
-            signupResponse.statusCode,
-            signupResponse.body
-        );
-
         expect(signupResponse.statusCode).toBe(201);
 
         token = signupResponse.body.token;
