@@ -27,31 +27,38 @@ export default function CommentCardComponentBig({ theme, review }) {
         if (minutes < 60) {
             return `${minutes} ${minutes === 1 ?
                 t("components.commentCardComponentBig.getTimeAgo.minute") :
-                t("components.commentCardComponentBig.getTimeAgo.minutes") }
-                ${t("components.commentCardComponentBig.getTimeAgo.ago")}`
+                t("components.commentCardComponentBig.getTimeAgo.minutes")}`
         }
 
         const hours = Math.floor(minutes / 60);
 
         if (hours < 24) {
-            return `${hours} ${hours === 1 ? "hour" : "hours"} ago`;
+            return `${hours} ${hours === 1 ?
+                t("components.commentCardComponentBig.getTimeAgo.hour") :
+                t("components.commentCardComponentBig.getTimeAgo.hours")}`
         }
 
         const days = Math.floor(hours / 24);
 
         if (days < 30) {
-            return `${days} ${days === 1 ? "day" : "days"} ago`;
+            return `${days} ${days === 1 ?
+                t("components.commentCardComponentBig.getTimeAgo.day") :
+                t("components.commentCardComponentBig.getTimeAgo.days")}`
         }
 
         const months = Math.floor(days / 30);
 
         if (months < 12) {
-            return `${months} ${months === 1 ? "month" : "months"} ago`;
+            return `${months} ${months === 1 ?
+                t("components.commentCardComponentBig.getTimeAgo.month") :
+                t("components.commentCardComponentBig.getTimeAgo.months")}`
         }
 
         const years = Math.floor(months / 12);
 
-        return `${years} ${years === 1 ? "year" : "years"} ago`;
+        return `${years} ${years === 1 ?
+            t("components.commentCardComponentBig.getTimeAgo.year") :
+            t("components.commentCardComponentBig.getTimeAgo.years")}`
     };
 
     return (
@@ -109,17 +116,51 @@ export default function CommentCardComponentBig({ theme, review }) {
             <View
                 style={{
                     flexDirection: "row",
-                    justifyContent: "space-between",
                     alignItems: "center",
+                    justifyContent: "space-between",
+                    width: "100%",
                 }}
             >
-                <Text style={{ color: theme.colors.text + '80' }}>
-                    {review.user?.username ?? t("components.commentCardComponentBig.usernameText")}
+                <Text
+                    numberOfLines={1}
+                    style={{
+                        color: theme.colors.text + "80",
+                        flexShrink: 1,
+                        textAlign: "left",
+                    }}
+                >
+                    {review.user?.username ??
+                        t("components.commentCardComponentBig.usernameText")}
                 </Text>
 
-                <Text style={{ color: theme.colors.text + '80' }}>
-                    {getTimeAgo(review.createdAt)}
-                </Text>
+                <View style={{
+                    display: 'flex',
+                    flexDirection: 'row',
+
+                }}>
+                    <Text
+                        numberOfLines={1}
+                        style={{
+                            color: theme.colors.text + "80",
+                            flexShrink: 0,
+                            marginLeft: 8,
+                            textAlign: "right",
+                        }}
+                    >
+                        {t("components.commentCardComponentBig.getTimeAgo.ago")}
+                    </Text>
+                    <Text
+                        numberOfLines={1}
+                        style={{
+                            color: theme.colors.text + "80",
+                            flexShrink: 0,
+                            marginLeft: 8,
+                            textAlign: "right",
+                        }}
+                    >
+                        {getTimeAgo(review.createdAt)}
+                    </Text>
+                </View>
             </View>
         </View>
     );

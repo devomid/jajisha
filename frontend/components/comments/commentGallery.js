@@ -1,12 +1,11 @@
-import { useEffect, useState } from "react";
-import { View, Image, ScrollView, Pressable, Modal, Dimensions, Text } from "react-native";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useTranslation } from "react-i18next";
-import { useWcDataStore } from "../../store/wcDataStore";
-import StarRating from "react-native-star-rating-widget";
-import ButtonComponent from "../Button/Button";
-import { MessageCircle } from "lucide-react-native";
+
 import { Ellipsis, } from "lucide-react-native";
+import { View, ScrollView, Text } from "react-native";
+
+import { useWcDataStore } from "../../store/wcDataStore";
+
+import ButtonComponent from "../Button/Button";
 import CommentCardComponent from "../cards/commentCardComponentSmall";
 
 
@@ -83,7 +82,7 @@ export default function CommentGallery({ theme, iscommenting, setIscommenting, i
                                         color: theme.colors.secondaryLight,
                                     }}
                                 >
-                                    More reviews
+                                    {t("components.commentGallery.moreReviewsBtn")}
                                 </Text>
                             </View>
                         )}
@@ -100,7 +99,11 @@ export default function CommentGallery({ theme, iscommenting, setIscommenting, i
                         alignItems: 'center'
                     }}
                 >
-                    <Text style={{ color: theme.colors.secondaryDark }}>No Review yet.</Text>
+                    <Text style={{
+                        color: theme.colors.secondaryDark
+                    }}>
+                        {t("components.commentGallery.noReview")}
+                    </Text>
                 </View>
             )
             }

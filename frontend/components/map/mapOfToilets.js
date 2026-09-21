@@ -1,27 +1,27 @@
 import { useState, useEffect, forwardRef, useImperativeHandle, useRef, } from "react";
-import { useWcDataStore } from "../../store/wcDataStore";
-import { useTheme } from "react-native-paper";
-import { useNavigateToToilet } from "../../src/hooks/useNavigateWc";
 import { useTranslation } from "react-i18next";
-import { useSettingsStore } from "../../store/settingsStore";
-// import { useManagingWc } from "../../src/hooks/useManagingWc";
 import { useToast } from "react-native-toast-notifications";
-import logger from "../../src/utils/logger";
+import MapView, { Marker, Polyline, } from "react-native-maps";
 import * as Location from "expo-location";
+
+import { useTheme } from "react-native-paper";
 import { View, Pressable, Text, Image, Platform, } from "react-native";
 import { BlurView } from "expo-blur";
-import MapView, { Marker, Polyline, } from "react-native-maps";
+
+import { useWcDataStore } from "../../store/wcDataStore";
+import { useNavigateToToilet } from "../../src/hooks/useNavigateWc";
+import { useSettingsStore } from "../../store/settingsStore";
+import logger from "../../src/utils/logger";
+import ButtonComponent from "../Button/Button";
 
 
 const MapOfToilets = forwardRef(({ currentLocation, onMarkerPress, isPickingLocation, onAddWcPress, }, ref) => {
-    console
+    const { t } = useTranslation();
+    const theme = useTheme();
     const toast = useToast();
 
     const mapRef = useRef(null);
-    const { t } = useTranslation();
-    const theme = useTheme();
     const { navigateToToilet, calculateToiletDistance } = useNavigateToToilet();
-    // const { getWcReviews } = useManagingWc()
 
     const toilets = useWcDataStore(state => state.toilets);
     const setSelectedToilet = useWcDataStore(state => state.setSelectedToilet);
@@ -34,25 +34,13 @@ const MapOfToilets = forwardRef(({ currentLocation, onMarkerPress, isPickingLoca
     const mapType = useSettingsStore(state => state.mapType);
     const showMyLocation = useSettingsStore(state => state.showMyLocation);
     const showCompass = useSettingsStore(state => state.showCompass);
-    const {
-        target: navigationTarget,
-        route: navigationRoute,
-        status: navigationStatus,
-    } = navigation;
-
 
     const [latitudeDelta, setLatitudeDelta] = useState(0.02);
-    const initialRegion = {
-        latitude: currentLocation.coords.latitude,
-        longitude: currentLocation.coords.longitude,
-        latitudeDelta: 0.02,
-        longitudeDelta: 0.02,
-    };
+    const [navigationLocation, setNavigationLocation] = useState(null);
+    const [region, setRegion] = useState(initialRegion);
 
     const regionRef = useRef(initialRegion);
-    const [region, setRegion] = useState(initialRegion);
     const navigationLocationRef = useRef(null);
-    const [navigationLocation, setNavigationLocation] = useState(null);
     const headingRef = useRef(0);
     const [heading, setHeading] = useState(0);
     const navigationAltitudeRef = useRef(700);
@@ -61,6 +49,20 @@ const MapOfToilets = forwardRef(({ currentLocation, onMarkerPress, isPickingLoca
     const locationSubscriptionRef = useRef(null);
     const headingSubscriptionRef = useRef(null);
     const routeRequestedRef = useRef(null);
+
+    const {
+        target: navigationTarget,
+        route: navigationRoute,
+        status: navigationStatus,
+    } = navigation;
+
+    const initialRegion = {
+        latitude: currentLocation.coords.latitude,
+        longitude: currentLocation.coords.longitude,
+        latitudeDelta: 0.02,
+        longitudeDelta: 0.02,
+    };
+
     const markerSize = Math.max(40, Math.min(85, 60 * Math.pow(0.02 / latitudeDelta, 0.25)));
     const navigationRouteCoordinates = navigationRoute?.coordinates?.map(
         ([longitude, latitude]) => ({
@@ -74,7 +76,6 @@ const MapOfToilets = forwardRef(({ currentLocation, onMarkerPress, isPickingLoca
             latitude: navigationLocation.coords.latitude,
             longitude: navigationLocation.coords.longitude,
         } : null;
-
 
     // camera update
     const updateNavigationCamera = (
@@ -536,24 +537,24 @@ const MapOfToilets = forwardRef(({ currentLocation, onMarkerPress, isPickingLoca
         logger.debug("Toilet selected", {
             toiletId: toilet._id,
         });
-        useWcDataStore.getState().clearToiletRouteInfo();
-        setSelectedToilet(toilet);
-        calculateToiletDistance(toilet);
-        onMarkerPress(toilet);
 
-        // const reviews = await getWcReviews(toilet._id);
+        useWcDataStore.getState().clearToiletRouteInfo();
 
         const currentSelectedToilet =
             useWcDataStore.getState().selectedToilet;
 
-        if (currentSelectedToilet?._id !== toilet._id) {
-            return;
+        if (currentSelectedToilet?._id === toilet._id) {
+            setSelectedToilet({
+                ...toilet,
+                reviews: currentSelectedToilet.reviews ?? [],
+                userReview: currentSelectedToilet.userReview ?? null,
+            });
+        } else {
+            setSelectedToilet(toilet);
         }
 
-        setSelectedToilet({
-            ...toilet,
-            // reviews,
-        });
+        calculateToiletDistance(toilet);
+        onMarkerPress(toilet);
     };
 
     const handleCancelNavigation = () => {
@@ -647,11 +648,11 @@ const MapOfToilets = forwardRef(({ currentLocation, onMarkerPress, isPickingLoca
     };
 
 
-    // map
     return (
 
         <View style={{ flex: 1, }}>
             <MapView
+                userInterfaceStyle={theme.dark ? "dark" : "light"}
                 mapType={mapType}
                 ref={mapRef}
                 style={{ flex: 1, }}
@@ -663,11 +664,7 @@ const MapOfToilets = forwardRef(({ currentLocation, onMarkerPress, isPickingLoca
                 pitchEnabled={navigationStatus !== "navigating"}
                 onRegionChangeComplete={
                     newRegion => {
-
-                        if (navigationStatus === "navigating") {
-                            return;
-                        }
-
+                        if (navigationStatus === "navigating") { return; }
                         regionRef.current = newRegion;
                         setLatitudeDelta(newRegion.latitudeDelta);
                         setRegion(newRegion);
@@ -675,7 +672,6 @@ const MapOfToilets = forwardRef(({ currentLocation, onMarkerPress, isPickingLoca
                     }}>
 
                 {(navigationCoordinate || currentLocation) && showMyLocation && (
-
                     <Marker
                         coordinate={navigationCoordinate || {
                             latitude: currentLocation.coords.latitude,
@@ -685,7 +681,6 @@ const MapOfToilets = forwardRef(({ currentLocation, onMarkerPress, isPickingLoca
                         rotation={navigationStatus === "navigating" ? heading : 0}
                         flat={navigationStatus === "navigating"}
                     >
-
                         <Image
                             source={require("../../assets/locationMarker.png")}
                             style={{
@@ -694,24 +689,20 @@ const MapOfToilets = forwardRef(({ currentLocation, onMarkerPress, isPickingLoca
                                 resizeMode: "contain",
                             }}
                         />
-
                     </Marker>
                 )}
 
-
                 {navigationStatus === "navigating" &&
                     navigationRouteCoordinates.length > 0 && (
-
                         <Polyline
                             coordinates={navigationRouteCoordinates}
-                            strokeWidth={7}
+                            strokeWidth={5}
                             strokeColor={theme.colors.secondaryDarker}
                             fillColor={theme.colors.primary}
                             lineCap="round"
                             lineJoin="round"
                         />
                     )}
-
 
                 {!isPickingLocation &&
                     navigationStatus !== "navigating" &&
@@ -752,7 +743,6 @@ const MapOfToilets = forwardRef(({ currentLocation, onMarkerPress, isPickingLoca
 
                 {navigationStatus === "navigating" &&
                     navigationTarget?.location?.coordinates && (
-
                         <Marker
                             coordinate={{
                                 latitude: navigationTarget.location.coordinates[1],
@@ -760,7 +750,6 @@ const MapOfToilets = forwardRef(({ currentLocation, onMarkerPress, isPickingLoca
                             }}
                             centerOffset={{ x: 3, y: -20, }}
                         >
-
                             <Image
                                 source={require("../../assets/toiletLocation.png")}
                                 style={{
@@ -771,7 +760,6 @@ const MapOfToilets = forwardRef(({ currentLocation, onMarkerPress, isPickingLoca
                             />
                         </Marker>
                     )}
-
             </MapView>
 
             {navigationStatus === "navigating" && (
@@ -783,35 +771,34 @@ const MapOfToilets = forwardRef(({ currentLocation, onMarkerPress, isPickingLoca
                         right: 135,
                         bottom: 35,
                     }}>
+
                     {!isPickingLocation && (
-
                         <Pressable onPress={handleCancelNavigation}>
-
                             {({ pressed }) => (
-
                                 <BlurView
-                                    intensity={20}
+                                    intensity={12}
                                     tint="extraLight"
                                     style={{
-                                        borderRadius: 34,
+                                        borderRadius: 14,
                                         overflow: "hidden",
                                         transform: [{ scale: pressed ? 0.95 : 1 }]
                                     }}
                                 >
-
                                     <View
                                         style={{
+                                            height: 44,
                                             justifyContent: "center",
                                             alignItems: "center",
-                                            paddingVertical: 22,
-                                            borderRadius: 38,
+                                            borderRadius: 14,
                                             borderWidth: 0.5,
-                                            borderColor: theme.colors.error,
-                                            backgroundColor: theme.colors.error + "55",
+                                            borderColor: theme.colors.error + '80',
+                                            backgroundColor: theme.colors.error + "25",
                                         }}
                                     >
-                                        <Text>
-                                            Cancel Navigation
+                                        <Text style={{
+                                            color: theme.colors.error + '99'
+                                        }}>
+                                            {t("components.mapOfToilets.cancelNavBtn")}
                                         </Text>
                                     </View>
                                 </BlurView>
@@ -823,7 +810,6 @@ const MapOfToilets = forwardRef(({ currentLocation, onMarkerPress, isPickingLoca
 
             {isPickingLocation && (
                 <>
-
                     <View
                         pointerEvents="box-none"
                         style={{
@@ -833,81 +819,47 @@ const MapOfToilets = forwardRef(({ currentLocation, onMarkerPress, isPickingLoca
                             bottom: 30,
                         }}
                     >
-
-                        <View style={{ flexDirection: "row", gap: 10, }}>
-                            <Pressable
-                                style={{ flex: 1, }}
-                                onPress={handleAddLocation}
-                            >
-                                {({ pressed }) => (
-                                    <BlurView
-                                        intensity={15}
-                                        tint="extraLight"
-                                        style={{
-                                            borderRadius: 34,
-                                            overflow: "hidden",
-                                            transform: [{ scale: pressed ? 0.95 : 1 }]
-                                        }}>
-                                        <View
-                                            style={{
-                                                justifyContent: "center",
-                                                borderRadius: 38,
-                                                borderWidth: 0.5,
-                                                borderColor: theme.colors.success,
-                                                alignItems: "center",
-                                                paddingVertical: 30,
-                                                backgroundColor: pressed
-                                                    ? theme.colors.success + "70"
-                                                    : theme.colors.success + "45"
-                                            }}>
-                                            <Text>
-                                                {t("AddWcBottomSheet.add")}
-                                            </Text>
-                                        </View>
-                                    </BlurView>
-                                )}
-                            </Pressable>
-
-
-                            <Pressable
-                                style={{ flex: 1, }}
+                        <View
+                            style={{
+                                flexDirection: 'row',
+                                gap: 10,
+                                marginBottom: 20
+                            }}
+                        >
+                            <ButtonComponent
                                 onPress={() => {
                                     onAddWcPress();
                                     stopPickingLocation();
+                                }}
+                                backgroundColor={theme.colors.error + '18'}
+                                borderColor={theme.colors.error + '50'}
+                                style={{
+                                    width: '30%',
+                                }}
+                            >
+                                <Text style={{
+                                    color: theme.colors.error
                                 }}>
-                                {({ pressed }) => (
+                                    {t("components.mapOfToilets.cancelBtn")}
+                                </Text>
+                            </ButtonComponent>
 
-                                    <BlurView
-                                        intensity={15}
-                                        tint="extraLight"
-                                        style={{
-                                            borderRadius: 34,
-                                            overflow: "hidden",
-                                            transform: [{ scale: pressed ? 0.95 : 1, }]
-                                        }}>
-
-                                        <View
-                                            style={{
-                                                justifyContent: "center",
-                                                borderRadius: 38,
-                                                borderWidth: 0.5,
-                                                borderColor: theme.colors.error,
-                                                alignItems: "center",
-                                                paddingVertical: 30,
-                                                backgroundColor: pressed
-                                                    ? theme.colors.error + "70"
-                                                    : theme.colors.error + "45",
-                                            }}>
-                                            <Text>
-                                                {t("AddWcBottomSheet.cancel")}
-                                            </Text>
-                                        </View>
-                                    </BlurView>
-                                )}
-                            </Pressable>
+                            <ButtonComponent
+                                onPress={handleAddLocation}
+                                backgroundColor={theme.colors.success + '18'}
+                                borderColor={theme.colors.success + '50'}
+                                style={{
+                                    width: '70%',
+                                }}
+                            >
+                                <Text style={{
+                                    color: theme.colors.success
+                                }}>{
+                                        t("components.mapOfToilets.addLocationBtn")}
+                                </Text>
+                            </ButtonComponent>
                         </View>
                     </View>
-
 
                     <View
                         pointerEvents="none"
@@ -931,15 +883,11 @@ const MapOfToilets = forwardRef(({ currentLocation, onMarkerPress, isPickingLoca
                                 elevation: 3,
                             }}
                         />
-
                     </View>
-
                 </>
             )}
-
         </View>
     );
-}
-);
+});
 
 export default MapOfToilets;

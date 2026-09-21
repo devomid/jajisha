@@ -1,29 +1,26 @@
-import { View, Image, Pressable } from "react-native";
-import { useWcDataStore } from "../../store/wcDataStore";
-import { useTheme, Text } from "react-native-paper";
-import { MapPin, Road, Route, Star, Timer } from "lucide-react-native";
-import ButtonComponent from "../Button/Button";
-import { useTopSheetStore } from "../../store/menuStore";
+import { useTranslation } from "react-i18next";
 import { router } from "expo-router";
-import { formatDistance } from "../../src/utils/distance";
+
+import { MapPin, Road, Route, Star, Timer } from "lucide-react-native";
+import { useTheme, Text } from "react-native-paper";
+import { View, Image, Pressable } from "react-native";
+
+import { useWcDataStore } from "../../store/wcDataStore";
+import { useTopSheetStore } from "../../store/menuStore";
 import { useSettingsStore } from "../../store/settingsStore";
+import { formatDistance } from "../../src/utils/distance";
+
+import ButtonComponent from "../Button/Button";
+
 
 const ToiletCard = ({ toilet, onPress }) => {
+    const { t } = useTranslation();
     const theme = useTheme();
 
-    const setNavigationTarget = useWcDataStore(
-        state => state.setNavigationTarget
-    );
-
-    const toiletRouteInfo = useWcDataStore(
-        state => state.toiletRouteInfo
-    );
-
+    const setNavigationTarget = useWcDataStore(state => state.setNavigationTarget);
+    const toiletRouteInfo = useWcDataStore(state => state.toiletRouteInfo);
     const { distance, duration } = toiletRouteInfo;
-
-    const distanceUnit = useSettingsStore(
-        state => state.distanceUnit
-    );
+    const distanceUnit = useSettingsStore(state => state.distanceUnit);
 
     if (!toilet) return null;
 
@@ -35,80 +32,52 @@ const ToiletCard = ({ toilet, onPress }) => {
         const minutes = Math.round(duration / 60);
 
         if (minutes < 60) {
-            return `${minutes} min`;
+            return `${minutes} ${t("components.toiletCard.min")}`;
         }
 
         const hours = Math.floor(minutes / 60);
         const remainingMinutes = minutes % 60;
 
-        return `${hours}h ${remainingMinutes}min`;
+        return `${hours}h ${remainingMinutes} ${t("components.toiletCard.min")}`;
     };
-
     return (
         <Pressable
             onPress={onPress}
             style={{
                 width: "94%",
-                height: 150,
+                height: 155,
                 alignSelf: "center",
-
                 marginVertical: 6,
                 padding: 7,
-
                 flexDirection: "row",
-
                 borderWidth: 0.5,
                 borderRadius: 24,
-
-                borderColor:
-                    theme.colors.secondaryLight + "80",
-
-                backgroundColor:
-                    theme.colors.secondary + "10",
-
+                borderColor: theme.colors.secondaryLight + "80",
+                backgroundColor: theme.colors.secondary + "10",
                 overflow: "hidden",
             }}
         >
-
-            {/* IMAGE */}
-
             <Image
                 source={require("../../assets/picPlaceHolder.png")}
                 style={{
                     width: 120,
                     height: "100%",
-
                     borderRadius: 19,
-
                     borderWidth: 0.5,
-                    borderColor:
-                        theme.colors.secondaryLight + "45",
-
-                    resizeMode: "cover",
+                    borderColor: theme.colors.secondaryLight + "45",
+                    resizeMode: "contain",
                 }}
             />
-
-
-            {/* CONTENT */}
-
             <View
                 style={{
                     flex: 1,
                     marginLeft: 11,
-
                     paddingVertical: 2,
                     paddingRight: 3,
-
                     justifyContent: "space-between",
                 }}
             >
-
-                {/* TOP */}
-
                 <View>
-
-                    {/* TITLE */}
-
                     <Text
                         numberOfLines={1}
                         ellipsizeMode="tail"
@@ -120,26 +89,19 @@ const ToiletCard = ({ toilet, onPress }) => {
                     >
                         {toilet.name}
                     </Text>
-
-
-                    {/* ADDRESS */}
-
                     <View
                         style={{
                             flexDirection: "row",
                             alignItems: "center",
-
                             gap: 5,
                             marginTop: 2,
                         }}
                     >
-
                         <MapPin
                             size={13}
                             color={theme.colors.text + "70"}
                             strokeWidth={2}
                         />
-
                         <Text
                             numberOfLines={1}
                             ellipsizeMode="tail"
@@ -151,25 +113,18 @@ const ToiletCard = ({ toilet, onPress }) => {
                         >
                             {toilet.address}
                         </Text>
-
                     </View>
-
                 </View>
-
-
-                {/* META */}
 
                 <View
                     style={{
-                        flexDirection: "row",
-                        alignItems: "center",
-
-                        gap: 10,
+                        flexDirection: "column",
+                        alignItems: "flex-start",
+                        gap: 5,
+                        marginTop: 5,
+                        marginBottom: 5
                     }}
                 >
-
-                    {/* RATING */}
-
                     <View
                         style={{
                             flexDirection: "row",
@@ -177,14 +132,12 @@ const ToiletCard = ({ toilet, onPress }) => {
                             gap: 4,
                         }}
                     >
-
                         <Star
                             size={13}
                             color={theme.colors.secondaryLight}
                             fill={theme.colors.secondaryLight}
                             strokeWidth={1.8}
                         />
-
                         <Text
                             variant="bodySmall"
                             style={{
@@ -192,19 +145,26 @@ const ToiletCard = ({ toilet, onPress }) => {
                                 fontWeight: "600",
                             }}
                         >
-                            {toilet.ratingSummary?.average?.toFixed(1) ?? "0.0"}                        </Text>
+                            {toilet.ratingSummary?.average?.toFixed(1) ?? "0.0"}
+                        </Text>
+                        <Text
+                            variant="bodySmall"
+                            style={{
+                                color: theme.colors.text + "65",
+                                marginLeft: 5
+                            }}
+                        >
+                            ({toilet.ratingSummary?.count ?? 0}
+                        </Text>
                         <Text
                             variant="bodySmall"
                             style={{
                                 color: theme.colors.text + "65",
                             }}
                         >
-                            {toilet.ratingSummary?.count ?? 0}                        </Text>
+                            {t("components.toiletCard.reviewTitle")})
+                        </Text>
                     </View>
-
-
-                    {/* DISTANCE */}
-
                     <View
                         style={{
                             flexDirection: "row",
@@ -212,7 +172,6 @@ const ToiletCard = ({ toilet, onPress }) => {
                             gap: 4,
                         }}
                     >
-
                         <Road
                             size={16}
                             color={
@@ -225,54 +184,41 @@ const ToiletCard = ({ toilet, onPress }) => {
                             variant="bodySmall"
                             style={{
                                 color:
-                                    theme.colors.secondaryDark +
-                                    "99",
+                                    theme.colors.secondaryDark + "99",
                             }}
                         >
-                            {formatDistance(
-                                distance,
-                                distanceUnit
-                            )}
+                            {formatDistance(distance, distanceUnit, t)}
                         </Text>
 
-                    </View>
-
-
-                    {/* TIME */}
-
-                    <View
-                        style={{
-                            flexDirection: "row",
-                            alignItems: "center",
-                            gap: 4,
-                        }}
-                    >
-
-                        <Timer
-                            size={16}
-                            color={
-                                theme.colors.secondaryLight + "90"
-                            }
-                            strokeWidth={2}
-                        />
-
-                        <Text
-                            variant="bodySmall"
+                        <View
                             style={{
-                                color:
-                                    theme.colors.secondaryDark +
-                                    "99",
+                                flexDirection: "row",
+                                alignItems: "center",
+                                gap: 4,
                             }}
                         >
-                            {formatDuration()}
-                        </Text>
 
+                            <Timer
+                                size={16}
+                                strokeWidth={2}
+                                color={
+                                    theme.colors.secondaryLight + "90"
+                                }
+                            />
+
+                            <Text
+                                variant="bodySmall"
+                                style={{
+                                    color:
+                                        theme.colors.secondaryDark + "99",
+                                }}
+                            >
+                                {formatDuration()}
+                            </Text>
+                        </View>
                     </View>
 
                 </View>
-
-
-                {/* ROUTE BUTTON */}
 
                 <ButtonComponent
                     onPress={() => {
@@ -293,20 +239,16 @@ const ToiletCard = ({ toilet, onPress }) => {
                         marginBottom: 12,
                     }}
                 >
-
                     <View
                         style={{
                             flexDirection: "row",
                             alignItems: "center",
                             justifyContent: "center",
-
                             gap: 7,
-
                             width: "100%",
                             height: "100%",
                         }}
                     >
-
                         <Route
                             size={14}
                             color={theme.colors.nav}
@@ -319,15 +261,11 @@ const ToiletCard = ({ toilet, onPress }) => {
                                 color: theme.colors.nav,
                             }}
                         >
-                            Show route
+                            {t("components.toiletCard.showRouteBtn")}
                         </Text>
-
                     </View>
-
                 </ButtonComponent>
-
             </View>
-
         </Pressable>
     );
 };

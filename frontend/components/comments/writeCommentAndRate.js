@@ -1,18 +1,21 @@
-import { View, TextInput } from "react-native";
-import Rating from "../rating/starRating";
-import { useWcDataStore } from "../../store/wcDataStore";
-import { ChevronDown, ChevronUp, Star } from "lucide-react-native";
-import { List } from "react-native-paper";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
+
+import { ChevronDown, ChevronUp, Star } from "lucide-react-native";
+import { List } from "react-native-paper";
+import { View, TextInput } from "react-native";
+import Rating from "../rating/starRating";
+
+import { useWcDataStore } from "../../store/wcDataStore";
 
 
 export default function WriteCommandAndRate({ theme }) {
 
+    const { t } = useTranslation();
+
     const [expandedRatings, setExpandedRatings] = useState(false);
     const wcData = useWcDataStore((state) => state.wcData);
     const setWcData = useWcDataStore((state) => state.setWcData);
-    const { t } = useTranslation();
 
     const handlePressRatings = () => setExpandedRatings(!expandedRatings);
 
@@ -29,7 +32,7 @@ export default function WriteCommandAndRate({ theme }) {
                 multiline
                 numberOfLines={8}
                 maxLength={200}
-                placeholder="Write a comment..."
+                placeholder={t("components.writeCommentAndRate.reviewInputText")}
                 placeholderTextColor={theme.colors.text + "80"}
                 onChangeText={(text) =>
                     setWcData((prev) => ({
@@ -55,7 +58,7 @@ export default function WriteCommandAndRate({ theme }) {
                 width: '100%',
             }}>
                 <List.Accordion
-                    title={t("newToilet.rating")}
+                    title={t("components.writeCommentAndRate.rating")}
                     expanded={expandedRatings}
                     onPress={handlePressRatings}
                     style={{

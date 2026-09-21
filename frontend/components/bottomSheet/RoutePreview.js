@@ -7,6 +7,7 @@ import { Navigation, Road, Timer, MapPin, Toilet } from 'lucide-react-native';
 import { BottomSheetModal, BottomSheetBackdrop, } from "@gorhom/bottom-sheet";
 import MapView, { Polyline, Marker, } from "react-native-maps";
 
+import logger from "../../src/utils/logger";
 import { useWcDataStore } from "../../store/wcDataStore";
 import { useSettingsStore } from "../../store/settingsStore";
 import { formatDistance } from "../../src/utils/distance";
@@ -467,7 +468,7 @@ const RoutePreview = forwardRef(({ curentLocation, toiletInfoBottomSheetRef, onD
                             color: theme.colors.text,
                         }}
                     >
-                        {formatDistance(distance, distanceUnit)}
+                        {formatDistance(distance, distanceUnit, t)}
                     </Text>
                 </View>
 

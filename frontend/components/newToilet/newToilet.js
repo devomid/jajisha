@@ -1,57 +1,40 @@
-import { View, Pressable, } from "react-native";
-import { router } from "expo-router";
-import { TextInput, List, Text } from "react-native-paper";
-import { useState, useMemo, useEffect } from "react";
-import { Checkbox } from 'expo-checkbox';
-import { ChevronDown, ChevronUp, Toilet, MapPin, DollarSign, ShowerHead, Star } from "lucide-react-native";
-import Rating from "../rating/starRating";
+import { useState, useMemo } from "react";
 import { useTranslation } from "react-i18next";
-import { TextInput as RNTextInput } from "react-native";
+
+import { ChevronDown, ChevronUp, Toilet, MapPin, DollarSign, ShowerHead, Star } from "lucide-react-native";
+import { List, Text } from "react-native-paper";
+import { View, } from "react-native";
+import { Checkbox } from 'expo-checkbox';
+import Rating from "../rating/starRating";
+
 import { useWcDataStore } from "../../store/wcDataStore";
 import ButtonComponent from "../Button/Button";
+
 import PhotoGallery from '../photoGallery/photoGallery';
 import FormInput from "../inpuField/formInput";
 
 
 export default function NewToilet({ theme, }) {
 
-    const isPickingLocation =
-        useWcDataStore(state => state.isPickingLocation);
+    const { t } = useTranslation();
 
     const wcData = useWcDataStore((state) => state.wcData);
     const setWcData = useWcDataStore((state) => state.setWcData);
-
-    const startPickingLocation =
-        useWcDataStore(state => state.startPickingLocation);
-
-    const handleChooseOnMap = () => {
-        startPickingLocation();
-    };
-
-
-    const { t } = useTranslation();
+    const startPickingLocation = useWcDataStore(state => state.startPickingLocation);
 
     const [expandedAmenities, setExpandedAmenities] = useState(false);
     const [expandedRatings, setExpandedRatings] = useState(false);
 
-
-    const handlePressAmenities = () => setExpandedAmenities(!expandedAmenities);
-    const handlePressRatings = () => setExpandedRatings(!expandedRatings);
-
     const amenities = useMemo(() => [
-        { key: "western", label: t("newToilet.western") },
-        { key: "iranian", label: t("newToilet.iranian") },
-        { key: "wheelchairAccessible", label: t("newToilet.wheelchairAccess") },
-        { key: "babyChanging", label: t("newToilet.babyChange") },
-        { key: "handDryer", label: t("newToilet.handDryer") },
-        { key: "warmWater", label: t("newToilet.warmWater") },
-        { key: "soap", label: t("newToilet.soap") },
-        { key: "toiletPaper", label: t("newToilet.toiletPaper") },
+        { key: "western", label: t("components.newToilet.western") },
+        { key: "iranian", label: t("components.newToilet.iranian") },
+        { key: "wheelchairAccessible", label: t("components.newToilet.wheelchairAccess") },
+        { key: "babyChanging", label: t("components.newToilet.babyChange") },
+        { key: "handDryer", label: t("components.newToilet.handDryer") },
+        { key: "warmWater", label: t("components.newToilet.warmWater") },
+        { key: "soap", label: t("components.newToilet.soap") },
+        { key: "toiletPaper", label: t("components.newToilet.toiletPaper") },
     ], [t]);
-
-    const ratings = [
-        {}
-    ]
 
     const updateAmenity = (key, value) => {
         setWcData(prev => ({
@@ -62,6 +45,11 @@ export default function NewToilet({ theme, }) {
             },
         }));
     };
+
+    const handlePressAmenities = () => setExpandedAmenities(!expandedAmenities);
+    const handlePressRatings = () => setExpandedRatings(!expandedRatings);
+    const handleChooseOnMap = () => { startPickingLocation() };
+
 
     return (
         <View
@@ -78,11 +66,11 @@ export default function NewToilet({ theme, }) {
                     color: theme.colors.secondaryDarker + '90',
                     marginBottom: 14
                 }}>
-                Add a new toilet
+                {t("components.newToilet.sheetTitle")}
             </Text>
 
             <FormInput
-                label={t("newToilet.toiletName")}
+                label={t("components.newToilet.toiletName")}
                 icon={Toilet}
                 value={wcData.name}
                 onChangeText={(text) =>
@@ -105,12 +93,12 @@ export default function NewToilet({ theme, }) {
                 }}
             >
                 <Text style={{ color: theme.colors.nav + '99' }}>
-                    {t("newToilet.chooseOnMap")}
+                    {t("components.newToilet.chooseOnMap")}
                 </Text>
             </ButtonComponent>
 
             <FormInput
-                label={t("newToilet.address")}
+                label={t("components.newToilet.address")}
                 icon={MapPin}
                 value={wcData.address}
                 onChangeText={(text) =>
@@ -138,11 +126,6 @@ export default function NewToilet({ theme, }) {
                     }}
                 >
                     <Checkbox
-                        style={{
-                            margin: 10,
-                            width: 17,
-                            height: 17,
-                        }}
                         value={wcData.isFree}
                         onValueChange={(value) =>
                             setWcData((prev) => ({
@@ -155,15 +138,20 @@ export default function NewToilet({ theme, }) {
                                 ? theme.colors.primary
                                 : theme.colors.secondaryLight
                         }
+                        style={{
+                            margin: 10,
+                            width: 17,
+                            height: 17,
+                        }}
                     />
 
                     <Text>
-                        {t("newToilet.free")}
+                        {t("components.newToilet.free")}
                     </Text>
                 </View>
 
                 <FormInput
-                    label={t("newToilet.price")}
+                    label={t("components.newToilet.price")}
                     icon={DollarSign}
                     value={wcData.price}
                     onChangeText={(text) =>
@@ -185,7 +173,7 @@ export default function NewToilet({ theme, }) {
 
             <View style={{ marginTop: 15 }}>
                 <List.Accordion
-                    title={t("newToilet.amenities")}
+                    title={t("components.newToilet.amenities")}
                     expanded={expandedAmenities}
                     onPress={handlePressAmenities}
                     style={{
@@ -269,7 +257,7 @@ export default function NewToilet({ theme, }) {
                 width: '100%',
             }}>
                 <List.Accordion
-                    title={t("newToilet.rating")}
+                    title={t("components.newToilet.rating")}
                     expanded={expandedRatings}
                     onPress={handlePressRatings}
                     style={{

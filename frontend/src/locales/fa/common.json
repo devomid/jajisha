@@ -60,11 +60,11 @@
         "ToiletLocationBottomSheet": {
             "toiletInfo": "اطلاعات توالت",
             "reviewTitle": "نظر",
-            "min":"دقیقه",
-            "mile":"مایل",
-            "km":"کیلومتر",
-            "ft":"فوت",
-            "m":"متر",
+            "min": "دقیقه",
+            "mile": "مایل",
+            "km": "کیلومتر",
+            "ft": "فوت",
+            "m": "متر",
             "showRouteBtn": "محاسبه مسیر",
             "amenitiesIcon": {
                 "western": "فرنگی",
@@ -78,29 +78,63 @@
             },
             "moreBtn": "بیشتر",
             "lessBtn": "کمتر",
-            "seeCommentsBtn":"دیدن تمام نظرها",
+            "seeCommentsBtn": "دیدن تمام نظرها",
             "rateAndWriteBtn": "نظر بدید"
         },
-        "commentCardComponentBig":{
-            "getTimeAgo":{
-                "minute":"دقیقه",
-                "minutes":"دقیقه",
-                "hour":"ساعت",
-                "hours":"ساعت",
-                "day":"روز",
-                "days":"روز",
-                "month":"ماه",
-                "months":"ماه",
-                "year":"سال",
-                "years":"سال",
-                "ago":"پیش",
-                "justNow":"کمی قبل"
+        "commentCardComponentBig": {
+            "getTimeAgo": {
+                "minute": "دقیقه",
+                "minutes": "دقیقه",
+                "hour": "ساعت",
+                "hours": "ساعت",
+                "day": "روز",
+                "days": "روز",
+                "month": "ماه",
+                "months": "ماه",
+                "year": "سال",
+                "years": "سال",
+                "ago": "پیش",
+                "justNow": "کمی قبل"
             },
-            "usernameText":"مهمان"
+            "usernameText": "مهمان"
         },
-        "commentCardComponentSmall":{},
-        "toiletCard":{},
+        "commentCardComponentSmall": {
+            "getTimeAgo": {
+                "minute": "دقیقه",
+                "minutes": "دقیقه",
+                "hour": "ساعت",
+                "hours": "ساعت",
+                "day": "روز",
+                "days": "روز",
+                "month": "ماه",
+                "months": "ماه",
+                "year": "سال",
+                "years": "سال",
+                "ago": "پیش",
+                "justNow": "کمی قبل"
+            },
+            "usernameText": "مهمان"
+        },
+        "toiletCard": {
+            "min": "دقیقه",
+            "reviewTitle": "نظر",
+            "showRouteBtn": "محاسبه مسیر"
+        },
+        "commentGallery": {
+            "moreReviewsBtn": "دیدن تمام نظرات",
+            "noReview": "هنوز نظری برای نمایش وجود ندارد"
+        },
+        "writeCommentAndRate": {
+            "reviewInputText": "نظر خود را بنویسید ...",
+            "rating": "امتیازدهی"
+        },
+        "mapOfToilets": {
+            "cancelNavBtn": "پایان مسیریابی",
+            "cancelBtn": "انصراف",
+            "addLocationBtn": "ثبت موقعیت"
+        },
         "newToilet": {
+            "sheetTitle":"توالت جدید",
             "western": "فرنگی",
             "iranian": "ایرانی",
             "wheelchairAccess": "دسترسی ویلچر",
