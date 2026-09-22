@@ -176,11 +176,29 @@ export const useWcDataStore = create((set) => ({
                 latitude: region.latitude,
                 longitude: region.longitude,
             },
-            mapRegion: {
-                latitude: region.latitude,
-                longitude: region.longitude,
-                latitudeDelta: region.latitudeDelta,
-                longitudeDelta: region.longitudeDelta,
+            setMapCenter: (region) => {
+                if (
+                    !region ||
+                    typeof region.latitude !== "number" ||
+                    typeof region.longitude !== "number" ||
+                    typeof region.latitudeDelta !== "number" ||
+                    typeof region.longitudeDelta !== "number"
+                ) {
+                    return;
+                }
+
+                set({
+                    mapCenter: {
+                        latitude: region.latitude,
+                        longitude: region.longitude,
+                    },
+                    mapRegion: {
+                        latitude: region.latitude,
+                        longitude: region.longitude,
+                        latitudeDelta: region.latitudeDelta,
+                        longitudeDelta: region.longitudeDelta,
+                    },
+                });
             },
         }),
 
