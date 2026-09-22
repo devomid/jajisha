@@ -240,6 +240,14 @@
         }
     },
     "toast": {
+        "components":{
+            "rateAndCommentSheet":{
+                "handleSendReview":{
+                    "textLength1":"ثبت نظر انجام نشد",
+                    "textLength2":"متن باید بین ۱۰ تا ۲۰۰ کاراکتر باشد"
+                }
+            }
+        },
         "useAuth": {
             "signup": {
                 "noOkRes1": "ایجاد حساب کاربری انجام نشد",

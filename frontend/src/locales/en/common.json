@@ -240,6 +240,14 @@
         }
     },
     "toast": {
+        "components": {
+            "rateAndCommentSheet": {
+                "handleSendReview": {
+                    "textLength1": "Review submission failed",
+                    "textLength2": "Review text must be more than 10 and less than 200 charachter."
+                }
+            }
+        },
         "useAuth": {
             "signup": {
                 "noOkRes1": "Account creation failed",

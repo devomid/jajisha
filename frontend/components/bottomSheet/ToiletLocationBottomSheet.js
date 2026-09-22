@@ -261,9 +261,9 @@ const ToiletInfo = forwardRef(({ curentLocation, onPresent }, ref) => {
                 coordinates[0] == null ||
                 coordinates[1] == null
             ) {
+                setIsSharing(false);
                 return;
             }
-
             const [longitude, latitude] = coordinates;
             const message = [`${latitude.toFixed(6)}, ${longitude.toFixed(6)}`]
                 .filter(Boolean)
@@ -859,50 +859,50 @@ const ToiletInfo = forwardRef(({ curentLocation, onPresent }, ref) => {
                                         setIscommentsOpen={setIscommentsOpen}
                                     />
 
-                                        {comments?.some(
-                                            (comment) =>
-                                                String(comment.user?._id) === String(user?._id)
-                                        ) ? (
-                                            <ButtonComponent
-                                                onPress={() => {
-                                                    setIscommentsOpen(true);
-                                                }}
-                                                backgroundColor={theme.colors.secondary + "30"}
-                                                borderColor={theme.colors.secondaryLighter + "80"}
+                                    {comments?.some(
+                                        (comment) =>
+                                            String(comment.user?._id) === String(user?._id)
+                                    ) ? (
+                                        <ButtonComponent
+                                            onPress={() => {
+                                                setIscommentsOpen(true);
+                                            }}
+                                            backgroundColor={theme.colors.secondary + "30"}
+                                            borderColor={theme.colors.secondaryLighter + "80"}
+                                            style={{
+                                                width: "100%",
+                                                marginTop: 15,
+                                            }}
+                                        >
+                                            <Text
                                                 style={{
-                                                    width: "100%",
-                                                    marginTop: 15,
+                                                    color: theme.colors.surface,
                                                 }}
                                             >
-                                                <Text
-                                                    style={{
-                                                        color: theme.colors.surface,
-                                                    }}
-                                                >
-                                                    {t("components.ToiletLocationBottomSheet.seeCommentsBtn")}
-                                                </Text>
-                                            </ButtonComponent>
-                                        ) : (
-                                            <ButtonComponent
-                                                onPress={() => {
-                                                    setIscommenting(true);
-                                                }}
-                                                backgroundColor={theme.colors.secondary + "30"}
-                                                borderColor={theme.colors.secondaryLighter + "80"}
+                                                {t("components.ToiletLocationBottomSheet.seeCommentsBtn")}
+                                            </Text>
+                                        </ButtonComponent>
+                                    ) : (
+                                        <ButtonComponent
+                                            onPress={() => {
+                                                setIscommenting(true);
+                                            }}
+                                            backgroundColor={theme.colors.secondary + "30"}
+                                            borderColor={theme.colors.secondaryLighter + "80"}
+                                            style={{
+                                                width: "100%",
+                                                marginTop: 15,
+                                            }}
+                                        >
+                                            <Text
                                                 style={{
-                                                    width: "100%",
-                                                    marginTop: 15,
+                                                    color: theme.colors.surface,
                                                 }}
                                             >
-                                                <Text
-                                                    style={{
-                                                        color: theme.colors.surface,
-                                                    }}
-                                                >
-                                                    {t("components.ToiletLocationBottomSheet.rateAndWriteBtn")}
-                                                </Text>
-                                            </ButtonComponent>
-                                        )}
+                                                {t("components.ToiletLocationBottomSheet.rateAndWriteBtn")}
+                                            </Text>
+                                        </ButtonComponent>
+                                    )}
 
                                 </View>
 

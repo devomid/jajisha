@@ -32,22 +32,23 @@ export default function RateAndCommentSheet({ theme, toilet, iscommenting, iscom
 
     const handleSendReview = async () => {
         const toiletId = toilet?._id;
+        if (wcData.review.trim().length < 10) {
+            if (toast?.show) {
+                toast.show(t("toast.components.rateAndCommentSheet.textLength1"), {
+                    type: "custom",
+                    data: {
+                        type: "error",
+                        text2: t("toast.components.rateAndCommentSheet.textLength2")
+                    },
+                });
+            }
+            return;
+        }
+
         const review = await createRiview({
             reviewText: wcData.review,
             ratings: wcData.ratings,
         });
-        if (wcData.review.trim().length < 10) {
-            if (toast?.show) {
-                toast.show("Could not add review", {
-                    type: "custom",
-                    data: {
-                        type: "error",
-                        text2: "Your text should be more than 10 and less than 200 charachter.",
-                    },
-                })
-            };
-            return;
-        }
         if (review) {
             const current = useWcDataStore.getState().selectedToilet;
 
