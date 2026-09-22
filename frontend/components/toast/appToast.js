@@ -14,7 +14,10 @@ export default function AppToast({
 }) {
     const theme = useTheme();
 
-    const type = data?.type || "success";
+    const type =
+        data?.type === "error" || data?.type === "info"
+            ? data.type
+            : "success";
     const text2 = data?.text2;
 
     const isError = type === "error";

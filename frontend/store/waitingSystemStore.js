@@ -19,11 +19,27 @@ const useWaitingSystemStore = create((set) => ({
         return id;
     },
 
-    hideWaiting: () =>
-        set({ waitingVisible: false }),
+    hideWaiting: (id) =>
+        set((state) => {
+            if (state.waitingId !== id) {
+                return state;
+            }
 
-    showWaiting: () =>
-        set({ waitingVisible: true }),
+            return {
+                waitingVisible: false,
+            };
+        }),
+
+    showWaiting: (id) =>
+        set((state) => {
+            if (state.waitingId !== id) {
+                return state;
+            }
+
+            return {
+                waitingVisible: true,
+            };
+        }),
 
     updateWaiting: (id, text = "") =>
         set((state) => {
