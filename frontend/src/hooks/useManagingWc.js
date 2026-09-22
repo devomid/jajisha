@@ -77,10 +77,34 @@ export const useManagingWc = () => {
             );
 
             const newToilet = await response.json();
+
+            if (
+                !newToilet ||
+                typeof newToilet !== "object" ||
+                Array.isArray(newToilet) ||
+                !newToilet._id
+            ) {
+                logger.error("Add toilet returned invalid data", {
+                    response: newToilet,
+                });
+
+                if (toast?.show) {
+                    toast.show(t("toast.useManagingWc.addWc.catch1"), {
+                        type: "custom",
+                        data: {
+                            type: "error",
+                            text2: t("toast.useManagingWc.addWc.catch2"),
+                        },
+                    });
+                }
+
+                return null;
+            }
+
             addToilet(newToilet);
 
             logger.info("Toilet added successfully", {
-                toiletId: newToilet?._id,
+                toiletId: newToilet._id,
             });
             if (toast?.show) {
                 toast.show(t("toast.useManagingWc.addWc.success1"), {
@@ -145,17 +169,17 @@ export const useManagingWc = () => {
                 return null;
             }
 
-
             const jsonRes = await response.json();
 
-            logger.info("Toilets fetched successfully", {
-                count: jsonRes.toilets?.length ?? 0,
-            });
-            setToilets(currentToilets => {
-                const fetchedToilets = Array.isArray(jsonRes.toilets)
-                    ? jsonRes.toilets
-                    : [];
+            const fetchedToilets = Array.isArray(jsonRes.toilets)
+                ? jsonRes.toilets
+                : [];
 
+            logger.info("Toilets fetched successfully", {
+                count: fetchedToilets.length,
+            });
+
+            setToilets(currentToilets => {
                 const fetchedIds = new Set(
                     fetchedToilets.map(toilet => toilet._id)
                 );
