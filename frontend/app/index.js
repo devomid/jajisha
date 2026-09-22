@@ -12,6 +12,7 @@ import { useTopSheetStore } from '../store/menuStore';
 import { useManagingWc } from '../src/hooks/useManagingWc';
 import useCurrentLocation from '../src/hooks/useCurrentLocation';
 import { useWcDataStore } from '../store/wcDataStore';
+import logger from "../src/utils/logger";
 
 import MapOfToilets from '../components/map/mapOfToilets';
 import ToiletInfo from "../components/bottomSheet/ToiletLocationBottomSheet";
@@ -54,7 +55,11 @@ export default function Home() {
     };
 
     useEffect(() => {
-        getWc();
+        getWc().catch((error) => {
+            logger.error("Initial toilet fetch failed", {
+                error: error.message,
+            });
+        });
     }, []);
 
     useEffect(() => {
