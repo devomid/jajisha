@@ -246,30 +246,30 @@
                 "noOkRes2": "Please try again later",
                 "success": "Account created successfully",
                 "catch1": "Something went wrong while creating your account",
-                "catcht2": "There may be an issue with our servers.\nCheck your connection and try again."
+                "catch2": "There may be an issue with our servers.\nCheck your connection and try again."
             },
             "signin": {
                 "noOkRes1": "Sign-in failed",
                 "noOkRes2": "Please try again later",
                 "success": "Signed in successfully",
                 "catch1": "Something went wrong while signing in",
-                "catcht2": "There may be an issue with our servers.\nCheck your connection and try again."
+                "catch2": "There may be an issue with our servers.\nCheck your connection and try again."
             },
             "restoreUser": {
                 "noOkRes1": "Failed to retrieve your account information",
                 "noOkRes2": "Please check your internet connection",
                 "catch1": "Something went wrong while retrieving your account information",
-                "catcht2": "There may be an issue with our servers.\nCheck your connection and try again."
+                "catch2": "There may be an issue with our servers.\nCheck your connection and try again."
             },
             "logout": {
                 "catch1": "Something went wrong while signing out",
-                "catcht2": "There may be an issue with our servers.\nCheck your connection and try again."
+                "catch2": "There may be an issue with our servers.\nCheck your connection and try again."
             },
             "deleteUser": {
                 "noOkRes1": "Account deletion failed",
                 "noOkRes2": "Please check your internet connection",
                 "catch1": "Something went wrong while deleting your account",
-                "catcht2": "There may be an issue with our servers.\nCheck your connection and try again."
+                "catch2": "There may be an issue with our servers.\nCheck your connection and try again."
             }
         },
         "useCreateReview": {
@@ -280,13 +280,13 @@
             "noOkRes3": "Review submission failed",
             "noOkRes4": "Please check your internet connection",
             "catch1": "Something went wrong while submitting your review",
-            "catcht2": "There may be an issue with our servers.\nCheck your connection and try again."
+            "catch2": "There may be an issue with our servers.\nCheck your connection and try again."
         },
         "useCurrentLocation": {
             "locGrant1": "The app needs access to your location",
             "locGrant2": "Please grant the required permission in Settings",
             "catch1": "Something went wrong while getting your location",
-            "catcht2": "There may be an issue with our servers.\nCheck your connection and try again."
+            "catch2": "There may be an issue with our servers.\nCheck your connection and try again."
         },
         "useManagingWc": {
             "addWc": {
@@ -295,19 +295,19 @@
                 "success1": "New toilet added to the map",
                 "success2": "Thanks for helping expand the app's data",
                 "catch1": "Something went wrong while adding the new toilet",
-                "catcht2": "There may be an issue with our servers.\nCheck your connection and try again."
+                "catch2": "There may be an issue with our servers.\nCheck your connection and try again."
             },
             "getWc": {
                 "noOkRes1": "Failed to retrieve toilet information",
                 "noOkRes2": "Please check your internet connection",
                 "catch1": "Something went wrong while retrieving toilet information",
-                "catcht2": "There may be an issue with our servers.\nCheck your connection and try again."
+                "catch2": "There may be an issue with our servers.\nCheck your connection and try again."
             },
             "getWcReviews": {
                 "noOkRes1": "Failed to retrieve toilet reviews",
                 "noOkRes2": "Please check your internet connection",
                 "catch1": "Something went wrong while retrieving toilet reviews",
-                "catcht2": "There may be an issue with our servers.\nCheck your connection and try again."
+                "catch2": "There may be an issue with our servers.\nCheck your connection and try again."
             },
             "saveWc": {
                 "noToken1": "Failed to save toilet",
@@ -317,7 +317,7 @@
                 "noOkRes1": "Failed to save toilet",
                 "noOkRes2": "Please check your internet connection",
                 "catch1": "Something went wrong while saving the toilet",
-                "catcht2": "There may be an issue with our servers.\nCheck your connection and try again."
+                "catch2": "There may be an issue with our servers.\nCheck your connection and try again."
             },
             "unsaveWc": {
                 "noToken1": "Failed to remove toilet",
@@ -327,7 +327,7 @@
                 "noOkRes1": "Failed to remove toilet",
                 "noOkRes2": "Please check your internet connection",
                 "catch1": "Something went wrong while removing the toilet",
-                "catcht2": "There may be an issue with our servers.\nCheck your connection and try again."
+                "catch2": "There may be an issue with our servers.\nCheck your connection and try again."
             }
         },
         "useNavigateWc": {
@@ -335,7 +335,7 @@
                 "locGrant1": "The app needs access to your location",
                 "locGrant2": "Please grant the required permission in Settings",
                 "catch1": "Something went wrong while getting your location",
-                "catcht2": "Please check your connection and try again.",
+                "catch2": "Please check your connection and try again.",
                 "catch3": "Something went wrong while getting your location",
                 "catcht4": "Route information was not received correctly. Please try again.",
                 "catch5": "Something went wrong while getting your location",
@@ -345,7 +345,7 @@
                 "locGrant1": "The app needs access to your location",
                 "locGrant2": "Please grant the required permission in Settings",
                 "catch1": "Something went wrong while getting your location",
-                "catcht2": "Please check your connection and try again.",
+                "catch2": "Please check your connection and try again.",
                 "catch3": "Something went wrong while getting your location",
                 "catcht4": "Route information was not received correctly. Please try again.",
                 "catch5": "Something went wrong while getting your location",

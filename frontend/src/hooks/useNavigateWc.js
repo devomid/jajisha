@@ -181,7 +181,7 @@ export const useNavigateToToilet = () => {
                     type: "custom",
                     data: {
                         type: "warning",
-                        text2: t("toast.useNavigateWc.navigateToToilet.locGran2")
+                        text2: t("toast.useNavigateWc.navigateToToilet.locGrant2")
                     },
                 });
                 return;

@@ -31,9 +31,9 @@ export default function CommentGallery({ theme, iscommenting, setIscommenting, i
                             paddingRight: 40,
                         }}
                     >
-                        {visibleComments?.map((item) => (
+                        {visibleComments?.map((item, index) => (
                             <CommentCardComponent
-                                key={item._id}
+                                key={item._id ?? `comment-${index}`}
                                 theme={theme}
                                 review={item}
                             />
