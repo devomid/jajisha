@@ -68,13 +68,13 @@ export const useManagingWc = () => {
                     })
                 };
 
-                updateWaiting(
-                    waitingId,
-                    t("waitingSystem.newToiletAdded")
-                );
 
                 return null;
             };
+            updateWaiting(
+                waitingId,
+                t("waitingSystem.newToiletAdded")
+            );
 
             const newToilet = await response.json();
             addToilet(newToilet);
