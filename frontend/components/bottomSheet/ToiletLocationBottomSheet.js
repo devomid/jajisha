@@ -645,7 +645,7 @@ const ToiletInfo = forwardRef(({ curentLocation, onPresent }, ref) => {
                                             <SaveCheck
                                                 size={18}
                                                 color={theme.colors.secondaryLight}
-                                                fill={theme.colors.secondaryLighter + '99'}
+                                                fill={theme.colors.primary + '99'}
                                                 strokeWidth={2}
                                             />
                                         ) : (

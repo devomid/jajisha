@@ -62,6 +62,7 @@ export default function Favorites() {
     <View style={{ flex: 1, }}>
 
       <MapView
+        userInterfaceStyle={theme.dark ? "dark" : "light"}
         mapType={mapType}
         style={StyleSheet.absoluteFillObject}
         showsUserLocation={false}

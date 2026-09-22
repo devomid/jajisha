@@ -46,6 +46,7 @@ export default function About() {
 
             {/* MAP — full screen background */}
             <MapView
+                userInterfaceStyle={theme.dark ? "dark" : "light"}
                 mapType={mapType}
                 style={StyleSheet.absoluteFillObject}
                 showsUserLocation={false}

@@ -336,7 +336,7 @@ export const useManagingWc = () => {
 
     const unsaveWc = async () => {
 
-        const waitingId = startWaiting(t("waitingSystem.unsavingfromFavorites"));
+        const waitingId = startWaiting(t("waitingSystem.unsavingFromFavorites"));
 
         if (!token) {
             logger.warn("Unsave toilet attempted without authentication");

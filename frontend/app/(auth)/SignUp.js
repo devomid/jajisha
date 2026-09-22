@@ -89,6 +89,7 @@ export default function SignUp() {
 
             {region && (
                 <MapView
+                    userInterfaceStyle={theme.dark ? "dark" : "light"}
                     mapType={mapType}
                     style={{
                         position: 'absolute',

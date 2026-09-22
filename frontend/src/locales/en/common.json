@@ -233,8 +233,8 @@
                 "signin": "Sign in",
                 "signout": "Sign out",
                 "settings": "Settings",
-                "en": "English",
-                "fa": "Farsi",
+                "en": "EN",
+                "fa": "FA",
                 "savedToilets": "Saved Places"
             }
         }

@@ -19,7 +19,7 @@ export default function Settings() {
   const { t } = useTranslation();
   const theme = useTheme();
 
-  const pageName = t("components.settings.pageName") 
+  const pageName = t("components.settings.pageName")
   const currentLocation = useCurrentLocation();
 
   const [region, setRegion] = useState(null);
@@ -50,6 +50,7 @@ export default function Settings() {
     <View style={{ flex: 1, }}>
 
       <MapView
+        userInterfaceStyle={theme.dark ? "dark" : "light"}
         mapType={mapType}
         style={{
           position: 'absolute',

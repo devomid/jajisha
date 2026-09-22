@@ -115,6 +115,7 @@ export default function SignIn() {
 
             {region && (
                 <MapView
+                    userInterfaceStyle={theme.dark ? "dark" : "light"}
                     mapType={mapType}
                     style={StyleSheet.absoluteFillObject}
                     showsUserLocation={false}
