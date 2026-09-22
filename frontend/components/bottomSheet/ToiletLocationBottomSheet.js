@@ -859,10 +859,7 @@ const ToiletInfo = forwardRef(({ curentLocation, onPresent }, ref) => {
                                         setIscommentsOpen={setIscommentsOpen}
                                     />
 
-                                    {comments?.some(
-                                        (comment) =>
-                                            String(comment.user?._id) === String(user?._id)
-                                    ) ? (
+                                    {toilet?.userReview ? (
                                         <ButtonComponent
                                             onPress={() => {
                                                 setIscommentsOpen(true);

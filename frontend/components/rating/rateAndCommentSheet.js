@@ -88,6 +88,7 @@ export default function RateAndCommentSheet({ theme, toilet, iscommenting, iscom
 
             setSelectedToilet({
                 ...current,
+                userReview: review,
                 ratingSummary: newRatingSummary,
                 reviews: [
                     {
