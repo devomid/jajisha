@@ -61,7 +61,7 @@ export default function RootLayout() {
                             ),
                         }}
                     >
-                        <AuthBootstrap/>
+                        <AuthBootstrap />
                         <Slot />
                     </ToastProvider>
                     <WaitingOverlay />
