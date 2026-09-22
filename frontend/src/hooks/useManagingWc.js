@@ -152,8 +152,12 @@ export const useManagingWc = () => {
                 count: jsonRes.toilets?.length ?? 0,
             });
             setToilets(currentToilets => {
+                const fetchedToilets = Array.isArray(jsonRes.toilets)
+                    ? jsonRes.toilets
+                    : [];
+
                 const fetchedIds = new Set(
-                    jsonRes.toilets.map(toilet => toilet._id)
+                    fetchedToilets.map(toilet => toilet._id)
                 );
 
                 const addedDuringRequest = currentToilets.filter(
@@ -162,10 +166,10 @@ export const useManagingWc = () => {
                         !fetchedIds.has(toilet._id)
                 );
 
-                return [...jsonRes.toilets, ...addedDuringRequest];
+                return [...fetchedToilets, ...addedDuringRequest];
             });
 
-            return jsonRes.toilets;
+            return fetchedToilets;
 
         } catch (error) {
             logger.error("Fetch toilets request error", {
@@ -223,8 +227,8 @@ export const useManagingWc = () => {
             });
 
             return {
-                reviews: jsonRes.reviews,
-                userReview: jsonRes.userReview,
+                reviews: Array.isArray(jsonRes.reviews) ? jsonRes.reviews : [],
+                userReview: jsonRes.userReview ?? null,
             };
 
 
