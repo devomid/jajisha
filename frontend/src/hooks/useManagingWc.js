@@ -51,11 +51,6 @@ export const useManagingWc = () => {
                 }
             );
 
-            updateWaiting(
-                waitingId,
-                t("waitingSystem.newToiletAdded")
-            );
-
             if (!response.ok) {
                 const errorRes = await response.json();
                 logger.warn("Add toilet request failed", {
@@ -72,6 +67,11 @@ export const useManagingWc = () => {
                         },
                     })
                 };
+
+                updateWaiting(
+                    waitingId,
+                    t("waitingSystem.newToiletAdded")
+                );
 
                 return null;
             };
@@ -276,7 +276,7 @@ export const useManagingWc = () => {
             };
             return null;
         }
-        
+
         const waitingId = startWaiting(t("waitingSystem.savingToFavorites"));
         try {
             const response = await fetch(
@@ -336,7 +336,7 @@ export const useManagingWc = () => {
 
     const unsaveWc = async () => {
 
-        
+
         if (!token) {
             logger.warn("Unsave toilet attempted without authentication");
             if (toast?.show) {
@@ -364,7 +364,7 @@ export const useManagingWc = () => {
             return null;
         }
         const waitingId = startWaiting(t("waitingSystem.unsavingFromFavorites"));
-        
+
         try {
             const response = await fetch(
                 `${API_URL}/api/managment/unSavedToilets/${toilet._id}`,
