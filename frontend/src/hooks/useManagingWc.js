@@ -250,7 +250,6 @@ export const useManagingWc = () => {
 
     const saveWc = async () => {
 
-        const waitingId = startWaiting(t("waitingSystem.savingToFavorites"));
         if (!token) {
             logger.warn("Save toilet attempted without authentication");
             if (toast?.show) {
@@ -277,7 +276,8 @@ export const useManagingWc = () => {
             };
             return null;
         }
-
+        
+        const waitingId = startWaiting(t("waitingSystem.savingToFavorites"));
         try {
             const response = await fetch(
                 `${API_URL}/api/managment/saveToilets/${toilet._id}`,
@@ -336,8 +336,7 @@ export const useManagingWc = () => {
 
     const unsaveWc = async () => {
 
-        const waitingId = startWaiting(t("waitingSystem.unsavingFromFavorites"));
-
+        
         if (!token) {
             logger.warn("Unsave toilet attempted without authentication");
             if (toast?.show) {
@@ -364,7 +363,8 @@ export const useManagingWc = () => {
             };
             return null;
         }
-
+        const waitingId = startWaiting(t("waitingSystem.unsavingFromFavorites"));
+        
         try {
             const response = await fetch(
                 `${API_URL}/api/managment/unSavedToilets/${toilet._id}`,
