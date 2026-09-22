@@ -1,14 +1,17 @@
-import { Pressable, View } from "react-native";
-import { TextInput, List, Text, Divider } from "react-native-paper";
-import { ChevronDown, ChevronUp, RulerDimensionLine, Languages, AtSign, SunMoon, Trash, UserRoundCog, LogOut } from "lucide-react-native";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useState, useMemo, useEffect } from "react";
-import { useSettingsStore } from "../../store/settingsStore";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useUserStore } from "../../store/userStore";
 import { router } from "expo-router";
-import ButtonComponent from '../Button/Button';
+
+import { ChevronDown, ChevronUp, RulerDimensionLine, Languages, AtSign, SunMoon, Trash, UserRoundCog, LogOut } from "lucide-react-native";
+import { List, Text, Divider } from "react-native-paper";
+import { Pressable, View } from "react-native";
+
+import { useSettingsStore } from "../../store/settingsStore";
+import { useUserStore } from "../../store/userStore";
 import { useAuth } from "../../src/hooks/useAuth";
+
+import ButtonComponent from '../Button/Button';
 
 export default function GeneralSettings({ theme }) {
 
@@ -59,14 +62,14 @@ export default function GeneralSettings({ theme }) {
                     marginTop: 5,
                     color: theme.colors.text
                 }}>
-                    General
+                    {t("components.settings.general.title")}
                 </Text>
 
                 <View style={{
                     marginTop: 10,
                 }}>
                     <List.Accordion
-                        title={"System unit"}
+                        title={t("components.settings.general.systemUnit")}
                         expanded={unitExpand}
                         onPress={handlePressUnit}
                         style={{
@@ -112,7 +115,7 @@ export default function GeneralSettings({ theme }) {
                                         transform: [{ translateY: -8 }],
                                     }}
                                 >
-                                    {distanceUnit}
+                                    {t(`components.settings.general.${ distanceUnit.toLowerCase() }`)}
                                 </Text>
 
                                 {unitExpand ? (
@@ -165,7 +168,9 @@ export default function GeneralSettings({ theme }) {
                                             theme.colors.secondaryLight :
                                             theme.colors.primaryDarker
 
-                                    }}>Metric</Text>
+                                    }}>
+                                        {t("components.settings.general.metric")}
+                                    </Text>
                                 )}
                             </Pressable>
 
@@ -188,7 +193,9 @@ export default function GeneralSettings({ theme }) {
                                             theme.colors.secondaryLight :
                                             theme.colors.primaryDarker
 
-                                    }}>Imperial</Text>
+                                    }}>
+                                        {t("components.settings.general.imperial")}
+                                    </Text>
                                 )}
                             </Pressable>
                         </View>
@@ -197,7 +204,7 @@ export default function GeneralSettings({ theme }) {
 
                 <View>
                     <List.Accordion
-                        title={"Language"}
+                        title={t("components.settings.general.language")}
                         expanded={languageExpand}
                         onPress={handlePressLanguage}
                         style={{
@@ -243,7 +250,10 @@ export default function GeneralSettings({ theme }) {
                                         transform: [{ translateY: -8 }],
                                     }}
                                 >
-                                    {i18n.language === 'fa' ? "Farsi" : i18n.language === 'en' ? "English" : "--"}
+                                    {{
+                                        fa: t("components.settings.general.farsi"),
+                                        en: t("components.settings.general.english"),
+                                    }[i18n.language] ?? "--"}
                                 </Text>
 
                                 {languageExpand ? (
@@ -297,7 +307,9 @@ export default function GeneralSettings({ theme }) {
                                             theme.colors.secondaryLight :
                                             theme.colors.primaryDarker
 
-                                    }}>Farsi</Text>
+                                    }}>
+                                        {t("components.settings.general.farsi")}
+                                    </Text>
                                 )}
                             </Pressable>
 
@@ -320,7 +332,9 @@ export default function GeneralSettings({ theme }) {
                                             theme.colors.secondaryLight :
                                             theme.colors.primaryDarker
 
-                                    }}>English</Text>
+                                    }}>
+                                        {t("components.settings.general.english")}
+                                    </Text>
                                 )}
                             </Pressable>
                         </View>
@@ -329,7 +343,7 @@ export default function GeneralSettings({ theme }) {
 
                 <View>
                     <List.Accordion
-                        title={"Theme"}
+                        title={t("components.settings.general.theme")}
                         expanded={themeExpand}
                         onPress={handlePressTheme}
                         style={{
@@ -375,7 +389,7 @@ export default function GeneralSettings({ theme }) {
                                         transform: [{ translateY: -8 }],
                                     }}
                                 >
-                                    {themeSetting}
+                                    {t(`components.settings.general.${themeSetting.toLowerCase()}`)}
                                 </Text>
 
                                 {unitExpand ? (
@@ -429,7 +443,9 @@ export default function GeneralSettings({ theme }) {
                                             theme.colors.secondaryLight :
                                             theme.colors.primaryDarker
 
-                                    }}>Light</Text>
+                                    }}>
+                                        {t("components.settings.general.light")}
+                                    </Text>
                                 )}
                             </Pressable>
 
@@ -452,7 +468,9 @@ export default function GeneralSettings({ theme }) {
                                             theme.colors.secondaryLight :
                                             theme.colors.primaryDarker
 
-                                    }}>System</Text>
+                                    }}>
+                                        {t("components.settings.general.system")}
+                                    </Text>
                                 )}
                             </Pressable>
 
@@ -475,7 +493,9 @@ export default function GeneralSettings({ theme }) {
                                             theme.colors.secondaryLight :
                                             theme.colors.primaryDarker
 
-                                    }}>Dark</Text>
+                                    }}>
+                                        {t("components.settings.general.dark")}
+                                    </Text>
                                 )}
                             </Pressable>
                         </View>
@@ -484,7 +504,7 @@ export default function GeneralSettings({ theme }) {
 
                 <View>
                     <List.Accordion
-                        title={"Account"}
+                        title={t("components.settings.general.account")}
                         expanded={accountExpand}
                         onPress={handlePressAccount}
                         style={{
@@ -530,7 +550,7 @@ export default function GeneralSettings({ theme }) {
                                         transform: [{ translateY: -8 }],
                                     }}
                                 >
-                                    {user ? user.username : 'Guest'}
+                                    {user ? user.username : t("components.settings.general.guest")}
                                 </Text>
 
                                 {accountExpand ? (
@@ -576,13 +596,13 @@ export default function GeneralSettings({ theme }) {
                                     }}>
                                         <AtSign
                                             size={16}
-                                            color={theme.colors.secondaryLight +'99'}
+                                            color={theme.colors.secondaryLight + '99'}
                                             strokeWidth={2}
                                         />
                                         <Text
                                             variant="bodyMedium"
                                             style={{ color: theme.colors.secondaryDark }}>
-                                            User name:
+                                            {t("components.settings.general.username")} :
                                         </Text>
                                         <Text style={{
                                             color: theme.colors.text
@@ -631,7 +651,7 @@ export default function GeneralSettings({ theme }) {
                                                 marginLeft: 15
                                             }}
                                         >
-                                            Sign Out
+                                            {t("components.settings.general.signout")}
                                         </Text>
 
                                     </View>
@@ -669,7 +689,7 @@ export default function GeneralSettings({ theme }) {
                                                 color: theme.colors.error,
                                                 marginLeft: 15
                                             }}>
-                                            Delete account
+                                            {t("components.settings.general.deleteAccount")}
                                         </Text>
                                     </View>
                                 </ButtonComponent>
@@ -697,7 +717,7 @@ export default function GeneralSettings({ theme }) {
                                         color: theme.colors.error,
                                         textAlign: 'center'
                                     }}>
-                                    Nothing to show to you!
+                                    {t("components.settings.general.nothingToShow")}
                                 </Text>
                                 <Pressable onPress={() => router.push("/SignIn")}>
                                     <Text
@@ -707,7 +727,7 @@ export default function GeneralSettings({ theme }) {
                                             textAlign: 'center'
                                         }}
                                     >
-                                        Sign in
+                                        {t("components.settings.general.signin")}
                                     </Text>
                                 </Pressable>
                                 <Text style={{ textAlign: 'center' }}>
@@ -721,11 +741,11 @@ export default function GeneralSettings({ theme }) {
                                             textAlign: 'center'
                                         }}
                                     >
-                                        Create account
+                                        {t("components.settings.general.createAccount")}
                                     </Text>
                                 </Pressable>
                                 <Text style={{ textAlign: 'center' }}>
-                                    to see what's here.
+                                    {t("components.settings.general.toSee")}
                                 </Text>
                             </View>
                         )}

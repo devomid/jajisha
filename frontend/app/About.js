@@ -7,11 +7,16 @@ import PageHeader from "../components/topNav/topNav";
 import useCurrentLocation from "../src/hooks/useCurrentLocation";
 import { useEffect, useState } from "react";
 import { useSettingsStore } from "../store/settingsStore";
+import { useTranslation } from "react-i18next";
+
 
 export default function About() {
-    const pageName = "Privacy Policy";
+    const { t } = useTranslation();
     const theme = useTheme();
+
+    const pageName = t("app.about.pageName")
     const currentLocation = useCurrentLocation();
+
     const [region, setRegion] = useState(null);
     const mapType = useSettingsStore(state => state.mapType);
 

@@ -1,16 +1,15 @@
+import { useMemo } from "react";
+import { useTranslation } from "react-i18next";
+
 import { View } from "react-native";
 import { Text } from "react-native-paper";
-import { useMemo } from "react";
 import StarRating from "react-native-star-rating-widget";
-import { useTranslation } from "react-i18next";
 
 export default function Rating({ myTheme, setWcData, ratings }) {
 
     const { t } = useTranslation();
-
     const starColor = myTheme.secondaryLight;
     const emptyStarColor = starColor + "70";
-
     const averageRating = useMemo(() => {
         const values = Object.values(ratings);
 
@@ -35,7 +34,7 @@ export default function Rating({ myTheme, setWcData, ratings }) {
                 flexDirection: "row",
                 alignItems: "center",
                 width: "100%",
-                marginLeft:19
+                marginLeft: 19
             }}
         >
             <Text
@@ -71,7 +70,7 @@ export default function Rating({ myTheme, setWcData, ratings }) {
             {/* Overall */}
             <View
                 style={{
-                    marginTop:10,
+                    marginTop: 10,
                     flexDirection: "row",
                     alignItems: "center",
                     width: "100%",
@@ -87,13 +86,13 @@ export default function Rating({ myTheme, setWcData, ratings }) {
                         marginBottom: 5,
                     }}
                 >
-                    {t("starRating.overall")}
+                    {t("components.starRating.overall")}
                 </Text>
 
                 <StarRating
                     starSize={23}
                     rating={averageRating}
-                    onChange={() => {}}
+                    onChange={() => { }}
                     enableSwiping={false}
                     step="quarter"
                     color={starColor}
@@ -111,32 +110,32 @@ export default function Rating({ myTheme, setWcData, ratings }) {
             </View>
 
             <RatingRow
-                label="starRating.cleanliness"
+                label="components.starRating.cleanliness"
                 field="cleanliness"
             />
 
             <RatingRow
-                label="starRating.odor"
+                label="components.starRating.odor"
                 field="odor"
             />
 
             <RatingRow
-                label="starRating.amenitiesHealth"
+                label="components.starRating.amenitiesHealth"
                 field="amenitiesHealth"
             />
 
             <RatingRow
-                label="starRating.light"
+                label="components.starRating.light"
                 field="light"
             />
 
             <RatingRow
-                label="starRating.privacy"
+                label="components.starRating.privacy"
                 field="privacy"
             />
 
             <RatingRow
-                label="starRating.crowd"
+                label="components.starRating.crowd"
                 field="crowd"
             />
         </View>

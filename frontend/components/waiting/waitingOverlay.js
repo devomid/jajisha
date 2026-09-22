@@ -7,16 +7,9 @@ import { Matrix, snakeFrames } from "react-native-dotgrid";
 export default function WaitingOverlay() {
     const theme = useTheme();
 
-    const waiting = useWaitingSystemStore(
-        state => state.waiting
-    );
-
-    const waitingText = useWaitingSystemStore(
-        state => state.waitingText
-    );
-    const waitingVisible = useWaitingSystemStore(
-        state => state.waitingVisible
-    );
+    const waiting = useWaitingSystemStore(state => state.waiting);
+    const waitingText = useWaitingSystemStore(state => state.waitingText);
+    const waitingVisible = useWaitingSystemStore(state => state.waitingVisible);
 
     if (!waiting || !waitingVisible) {
         return null;

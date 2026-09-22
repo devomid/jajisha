@@ -1,15 +1,16 @@
-import * as Location from "expo-location";
 import { useEffect, useState } from "react";
-import useWaitingSystemStore from "../../store/waitingSystemStore";
+import { useTranslation } from "react-i18next";
+import * as Location from "expo-location";
 import { useToast } from "react-native-toast-notifications";
+
 import logger from "../utils/logger";
+
 
 export default function useCurrentLocation() {
 
+    const { t } = useTranslation();
     const toast = useToast();
 
-    const setGetCurrentLocationWaiting = useWaitingSystemStore(state => state.setGetCurrentLocationWaiting);
-    const setGetCurrentLocationEndWaiting = useWaitingSystemStore(state => state.setGetCurrentLocationEndWaiting);
     const [location, setLocation] = useState(null);
 
 
@@ -22,11 +23,11 @@ export default function useCurrentLocation() {
                 if (status !== "granted") {
                     logger.warn("Location permission denied");
                     if (toast?.show) {
-                        toast.show("Location Permission must be granted!", {
+                        toast.show(t("toast.useCurrentLocation.locGrant"), {
                             type: "custom",
                             data: {
                                 type: "warning",
-                                text2: "Please allow location access in Settings.",
+                                text2: t("toast.useCurrentLocation.locGrant2")
                             },
                         });
                     }
@@ -53,11 +54,11 @@ export default function useCurrentLocation() {
                     error: error.message,
                 });
                 if (toast?.show) {
-                    toast.show("Could not get your location", {
+                    toast.show(t("toast.useCurrentLocation.catch1"), {
                         type: "custom",
                         data: {
                             type: "error",
-                            text2: "Please check your location services and try again.",
+                            text2: t("toast.useCurrentLocation.catch2")
                         },
                     });
                 }

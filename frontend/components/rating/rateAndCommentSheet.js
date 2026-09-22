@@ -1,32 +1,41 @@
-import { View } from "react-native";
+import { useTranslation } from "react-i18next";
+
 import { Text } from "react-native-paper";
+import { View } from "react-native";
+import { MessageCircle } from "lucide-react-native";
 import StarRating from "react-native-star-rating-widget";
 import { BottomSheetScrollView, } from "@gorhom/bottom-sheet";
 import * as Progress from 'react-native-progress';
-import CommentWriteAndRate from "../comments/writeCommentAndRate";
-import ButtonComponent from "../Button/Button";
-import { useTranslation } from "react-i18next";
+import { useToast } from "react-native-toast-notifications";
+
 import { useWcDataStore } from "../../store/wcDataStore";
 import { useCreateReview } from "../../src/hooks/useCreateReview";
-import CommentCardComponentBig from "../cards/commentCardComponentBig";
-import WriteCommandAndRate from "../comments/writeCommentAndRate";
-import { MessageCircle } from "lucide-react-native";
-import { useToast } from "react-native-toast-notifications";
 import { useUserStore } from "../../store/userStore";
 
+import CommentCardComponentBig from "../cards/commentCardComponentBig";
+import ButtonComponent from "../Button/Button";
+import WriteCommandAndRate from "../comments/writeCommentAndRate";
+
 export default function RateAndCommentSheet({ theme, toilet, iscommenting, iscommentsOpen, setIscommenting, setIscommentsOpen }) {
+    const { t } = useTranslation();
     const toast = useToast();
 
     const setWcData = useWcDataStore((state) => state.setWcData);
-    const ratings = toilet.ratingSummary;
-    const { t } = useTranslation();
     const wcData = useWcDataStore((state) => state.wcData);
-    const createRiview = useCreateReview();
-    const comments = toilet.reviews;
     const setSelectedToilet = useWcDataStore((state) => state.setSelectedToilet);
+
     const user = useUserStore((state) => state.user);
 
+    const ratings = toilet.ratingSummary;
+    const createRiview = useCreateReview();
+    const comments = toilet.reviews;
+
     const handleSendReview = async () => {
+        const toiletId = toilet?._id;
+        const review = await createRiview({
+            reviewText: wcData.review,
+            ratings: wcData.ratings,
+        });
         if (wcData.review.trim().length < 10) {
             if (toast?.show) {
                 toast.show("Could not add review", {
@@ -39,12 +48,6 @@ export default function RateAndCommentSheet({ theme, toilet, iscommenting, iscom
             };
             return;
         }
-        const toiletId = toilet?._id;
-        const review = await createRiview({
-            reviewText: wcData.review,
-            ratings: wcData.ratings,
-        });
-
         if (review) {
             const current = useWcDataStore.getState().selectedToilet;
 
@@ -59,7 +62,6 @@ export default function RateAndCommentSheet({ theme, toilet, iscommenting, iscom
                 ...current.ratingSummary,
                 count: newCount,
             };
-
             const fields = [
                 "cleanliness",
                 "odor",
@@ -120,10 +122,12 @@ export default function RateAndCommentSheet({ theme, toilet, iscommenting, iscom
 
     return (
         <View style={{ flex: 1 }}>
-            <BottomSheetScrollView contentContainerStyle={{
-                paddingBottom: 100,
-                // flex: 1
-            }} showsVerticalScrollIndicator={false}>
+            <BottomSheetScrollView
+                showsVerticalScrollIndicator={false}
+                contentContainerStyle={{
+                    paddingBottom: 100,
+                }}
+            >
                 <View
                     style={{
                         flexDirection: "row",
@@ -162,7 +166,7 @@ export default function RateAndCommentSheet({ theme, toilet, iscommenting, iscom
                             color: theme.colors.text + '99',
                             marginTop: 15
                         }}>
-                            ({ratings.count} vote)
+                            ({ratings.count} {t("components.rateAndCommentSheet.vote")})
                         </Text>
                     </View>
 
@@ -196,7 +200,7 @@ export default function RateAndCommentSheet({ theme, toilet, iscommenting, iscom
                                             fontSize: 8,
                                         }}
                                     >
-                                        {key}
+                                        {t(`components.rateAndCommentSheet.${key}`)}
                                     </Text>
 
                                     {/* BAR CONTAINER */}
@@ -259,7 +263,9 @@ export default function RateAndCommentSheet({ theme, toilet, iscommenting, iscom
                                     alignItems: 'center'
                                 }}
                             >
-                                <Text>No Review yet</Text>
+                                <Text>
+                                    {t("components.rateAndCommentSheet.noReview")}
+                                </Text>
 
                                 <ButtonComponent
                                     onPress={() => {
@@ -291,7 +297,7 @@ export default function RateAndCommentSheet({ theme, toilet, iscommenting, iscom
                                         <Text
                                             style={{ color: theme.colors.secondaryDark + "99" }}
                                         >
-                                            Add the first review.
+                                            {t("components.rateAndCommentSheet.reviewInputText")}
                                         </Text>
                                     </View>
 
@@ -329,7 +335,9 @@ export default function RateAndCommentSheet({ theme, toilet, iscommenting, iscom
                                 width: '30%',
                             }}
                         >
-                            <Text style={{ color: theme.colors.error }}>{t("AddWcBottomSheet.cancel")}</Text>
+                            <Text style={{ color: theme.colors.error }}>
+                                {t("components.rateAndCommentSheet.cancelReviewBtn")}
+                            </Text>
                         </ButtonComponent>
 
                         <ButtonComponent
@@ -340,7 +348,9 @@ export default function RateAndCommentSheet({ theme, toilet, iscommenting, iscom
                                 width: '70%',
                             }}
                         >
-                            <Text style={{ color: theme.colors.secondary }}>{t("AddWcBottomSheet.add")}</Text>
+                            <Text style={{ color: theme.colors.secondary }}>
+                                {t("components.rateAndCommentSheet.addReviewBtn")}
+                            </Text>
                         </ButtonComponent>
 
                     </View>

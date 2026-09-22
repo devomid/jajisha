@@ -1,8 +1,17 @@
 import { forwardRef, useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { router } from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+
+import { LogOut, Settings, Save, LogIn } from "lucide-react-native";
+import { Text, useTheme } from "react-native-paper";
+import { Pressable, StyleSheet, View } from "react-native";
+import Animated, { runOnJS, useAnimatedStyle, useSharedValue, withTiming, interpolateColor, } from "react-native-reanimated";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
-import { useTranslation } from "react-i18next";
+import { BlurView } from "expo-blur";
+import CountryFlag from "react-native-country-flag";
+import { SafeAreaView } from "react-native-safe-area-context";
+
 import { useAuth } from "../../src/hooks/useAuth";
 import { useTopSheetStore } from "../../store/menuStore";
 import { useUserStore } from "../../store/userStore";
@@ -10,41 +19,23 @@ import { useUserStore } from "../../store/userStore";
 import ButtonComponent from '../Button/Button';
 import GlassBackground from "../../components/blur/blurView";
 
-import { Pressable, StyleSheet, View } from "react-native";
-import { Text, useTheme } from "react-native-paper";
-import { LogOut, Settings, Save, LogIn } from "lucide-react-native";
-import { BlurView } from "expo-blur";
-import Animated, { runOnJS, useAnimatedStyle, useSharedValue, withTiming, interpolateColor, } from "react-native-reanimated";
-import CountryFlag from "react-native-country-flag";
-import { SafeAreaView } from "react-native-safe-area-context";
-
-
 const TopSheet = forwardRef((props, ref) => {
 
-    const { i18n } = useTranslation();
+    const { i18n, t } = useTranslation();
     const language = i18n.language;
     const theme = useTheme();
     const backdropOpacity = useSharedValue(0);
     const translateY = useSharedValue(-1000);
     const { logout } = useAuth();
+
     const [sheetHeight, setSheetHeight] = useState(0);
+
     const close = useTopSheetStore((state) => state.close);
     const user = useUserStore((state) => state.user);
     const isOpen = useTopSheetStore((state) => state.isOpen);
     const sheetMargin = 12;
-
     const SHEET_HEIGHT = user ? "39%" : "33%"
-
     const languageProgress = useSharedValue(language === "fa" ? 1 : 0);
-
-    useEffect(() => {
-        languageProgress.value = withTiming(
-            language === "fa" ? 1 : 0,
-            {
-                duration: 300,
-            }
-        );
-    }, [language]);
 
     const animatedSelectorStyle = useAnimatedStyle(() => {
         return {
@@ -142,6 +133,15 @@ const TopSheet = forwardRef((props, ref) => {
         }
     };
 
+    useEffect(() => {
+        languageProgress.value = withTiming(
+            language === "fa" ? 1 : 0,
+            {
+                duration: 300,
+            }
+        );
+    }, [language]);
+
     return (
 
         <View
@@ -218,14 +218,14 @@ const TopSheet = forwardRef((props, ref) => {
                             variant="headlineSmall"
                             style={{ color: theme.colors.secondaryDarker + '99', }}
                         >
-                            Hello,{" "}
+                            {t("components.topSheet.menuTopSheet.hello")},
                         </Text>
 
                         <Text
                             variant="titleSmall"
                             style={{ color: theme.colors.secondaryDarker + '85', }}
                         >
-                            welcome back dear {user ? (user.firstName) : ('Guest')}
+                            {t("components.topSheet.menuTopSheet.wellcomeBack")} {user ? (user.firstName) : t("components.topSheet.menuTopSheet.guest")}
                         </Text>
 
                     </View>
@@ -252,7 +252,7 @@ const TopSheet = forwardRef((props, ref) => {
                                         fontWeight: "500",
                                     }}
                                 >
-                                    Sign In
+                                    {t("components.topSheet.menuTopSheet.signin")}
                                 </Text>
                                 <LogIn
                                     size={18}
@@ -290,7 +290,7 @@ const TopSheet = forwardRef((props, ref) => {
                                         fontWeight: "500",
                                     }}
                                 >
-                                    Sign Out
+                                        {t("components.topSheet.menuTopSheet.signout")}
                                 </Text>
 
                                 <LogOut
@@ -347,7 +347,7 @@ const TopSheet = forwardRef((props, ref) => {
                                         fontWeight: "500",
                                     }}
                                 >
-                                    Settings
+                                    {t("components.topSheet.menuTopSheet.settings")}
                                 </Text>
                             </View>
                         </ButtonComponent>
@@ -427,7 +427,7 @@ const TopSheet = forwardRef((props, ref) => {
                                                         fontSize: 13,
                                                     }}
                                                 >
-                                                    EN
+                                                    {t("components.topSheet.menuTopSheet.en")}
                                                 </Text>
                                             </View>
                                         )}
@@ -458,7 +458,7 @@ const TopSheet = forwardRef((props, ref) => {
                                                         fontSize: 13,
                                                     }}
                                                 >
-                                                    FA
+                                                    {t("components.topSheet.menuTopSheet.fa")}
                                                 </Text>
                                                 <CountryFlag isoCode="ir" size={10} />
                                             </View>
@@ -494,7 +494,7 @@ const TopSheet = forwardRef((props, ref) => {
                                         fontWeight: "500",
                                     }}
                                 >
-                                    Saved Toilets
+                                    {t("components.topSheet.menuTopSheet.savedToilets")}
                                 </Text>
                                 <Save
                                     size={18}

@@ -1,12 +1,16 @@
+import * as SecureStore from "expo-secure-store";
+import { useTranslation } from "react-i18next";
+import { useToast } from "react-native-toast-notifications";
+
 import { useUserStore } from "../../store/userStore";
 import { API_URL } from "../config/api";
-import * as SecureStore from "expo-secure-store";
 import useWaitingSystemStore from '../../store/waitingSystemStore';
-import { useToast } from "react-native-toast-notifications";
 import logger from "../utils/logger";
 
-export const useAuth = () => {
 
+export const useAuth = () => {
+    
+    const { t } = useTranslation();
     const toast = useToast();
 
     const startWaiting = useWaitingSystemStore(state => state.startWaiting);
@@ -42,11 +46,11 @@ export const useAuth = () => {
                 });
 
                 if (toast?.show) {
-                    toast.show("Could not sign you up", {
+                    toast.show(t("toast.useAuth.signup.noOkRes1"), {
                         type: "custom",
                         data: {
                             type: "error",
-                            text2: "Try again a few moments later.",
+                            text2: t("toast.useAuth.signup.noOkRes1")
                         },
                     })
                 };
@@ -63,7 +67,7 @@ export const useAuth = () => {
             logger.info("Sign up successful");
 
             if (toast?.show) {
-                toast.show("Account created successfully.", {
+                toast.show(t("toast.useAuth.signup.success"), {
                     type: "custom",
                     data: {
                         type: "success",
@@ -78,11 +82,11 @@ export const useAuth = () => {
                 error: error.message,
             });
             if (toast?.show) {
-                toast.show("Something went wrong signing up!", {
+                toast.show(t("toast.useAuth.signup.catch1"), {
                     type: "custom",
                     data: {
                         type: "error",
-                        text2: "It can be our servers or your connection. \nCheck and try again.",
+                        text2: t("toast.useAuth.signup.catch2")
                     },
                 })
             };
@@ -113,11 +117,11 @@ export const useAuth = () => {
                 });
 
                 if (toast?.show) {
-                    toast.show("Could not sign you in", {
+                    toast.show(t("toast.useAuth.signin.noOkRes1"), {
                         type: "custom",
                         data: {
                             type: "error",
-                            text2: "Try again a few moments later.",
+                            text2: t("toast.useAuth.signin.noOkRes2")
                         },
                     })
                 };
@@ -135,7 +139,7 @@ export const useAuth = () => {
             });
             logger.info("Sign in successful");
             if (toast?.show) {
-                toast.show("Signed you in successfully.", {
+                toast.show(t("toast.useAuth.signin.success"), {
                     type: "custom",
                     data: {
                         type: "success",
@@ -149,11 +153,11 @@ export const useAuth = () => {
                 error: error.message,
             });
             if (toast?.show) {
-                toast.show("Something went wrong signing in!", {
+                toast.show(t("toast.useAuth.signin.catch1"), {
                     type: "custom",
                     data: {
                         type: "error",
-                        text2: "It can be our servers or your connection. \nCheck and try again.",
+                        text2: t("toast.useAuth.signin.catch2")
                     },
                 })
             };
@@ -197,11 +201,11 @@ export const useAuth = () => {
                 });
 
                 if (toast?.show) {
-                    toast.show("Could not get your data", {
+                    toast.show(t("toast.useAuth.restoreUser.noOkRes1"), {
                         type: "custom",
                         data: {
                             type: "error",
-                            text2: "Please check your connection!.",
+                            text2: t("toast.useAuth.restoreUser.noOkRes2")
                         },
                     })
                 };
@@ -225,11 +229,11 @@ export const useAuth = () => {
                 error: error.message,
             });
             if (toast?.show) {
-                toast.show("Something went wrong signing in!", {
+                toast.show(t("toast.useAuth.restoreUser.catch1"), {
                     type: "custom",
                     data: {
                         type: "error",
-                        text2: "It can be our servers or your connection. \nCheck and try again.",
+                        text2: t("toast.useAuth.restoreUser.catch2")
                     },
                 })
             };
@@ -253,11 +257,11 @@ export const useAuth = () => {
                 error: error.message,
             });
             if (toast?.show) {
-                toast.show("Something went wrong logging out!", {
+                toast.show(t("toast.useAuth.logout.catch1"), {
                     type: "custom",
                     data: {
                         type: "error",
-                        text2: "It can be our servers or your connection. \nCheck and try again.",
+                        text2: t("toast.useAuth.logout.catch2")
                     },
                 })
             };
@@ -286,11 +290,11 @@ export const useAuth = () => {
                     deleteError: errorRes
                 });
                 if (toast?.show) {
-                    toast.show("Could not delete account", {
+                    toast.show(t("toast.useAuth.signin.noOkRes1"), {
                         type: "custom",
                         data: {
                             type: "error",
-                            text2: "Try again a few moments later.",
+                            text2: t("toast.useAuth.signin.noOkRes2")
                         },
                     })
                 };
@@ -304,11 +308,11 @@ export const useAuth = () => {
                 error: error.message,
             });
             if (toast?.show) {
-                toast.show("Something went wrong deleting user account!", {
+                toast.show(t("toast.useAuth.signin.catch1"), {
                     type: "custom",
                     data: {
                         type: "error",
-                        text2: "It can be our servers or your connection. \nCheck and try again.",
+                        text2: t("toast.useAuth.signin.catch2")
                     },
                 })
             };

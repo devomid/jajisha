@@ -19,8 +19,8 @@ import ToiletCard from "../components/cards/ToiletCards";
 import PageHeader from "../components/topNav/topNav";
 
 export default function Favorites() {
-  const pageName = "Saved Toilets"
   const { t } = useTranslation();
+  const pageName = t("app.favorites.pageName")
   const theme = useTheme();
   const currentLocation = useCurrentLocation();
 

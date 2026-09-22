@@ -1,23 +1,23 @@
-import { View, Pressable } from "react-native";
-import { TextInput, List, Text, Divider } from "react-native-paper";
-import { ChevronDown, ChevronUp, Navigation2, Compass, MapPinPen } from "lucide-react-native";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useState, useMemo, useEffect } from "react";
-import { useSettingsStore } from "../../store/settingsStore";
 
+import { ChevronDown, ChevronUp, Navigation2, Compass, MapPinPen } from "lucide-react-native";
+import { View, Pressable } from "react-native";
+import { List, Text, Divider } from "react-native-paper";
+
+import { useSettingsStore } from "../../store/settingsStore";
 
 export default function MapSettings({ theme }) {
     const { t } = useTranslation();
+
     const [mapTypeExpand, setMapTypeExpand] = useState(false);
     const [myLocExpand, setMyLocExpand] = useState(false);
     const [compassExpand, setCompassExpand] = useState(false);
 
     const mapType = useSettingsStore(state => state.mapType);
     const setMapType = useSettingsStore(state => state.setMapType);
-
     const showMyLocation = useSettingsStore(state => state.showMyLocation);
     const setShowMyLocation = useSettingsStore(state => state.setShowMyLocation);
-
     const showCompass = useSettingsStore(state => state.showCompass);
     const setShowCompass = useSettingsStore(state => state.setShowCompass);
 
@@ -43,14 +43,14 @@ export default function MapSettings({ theme }) {
                     marginTop: 5,
                     color: theme.colors.text
                 }}>
-                    Map and Navigation
+                    {t("components.settings.map.title")}
                 </Text>
 
                 <View style={{
                     marginTop: 10,
                 }}>
                     <List.Accordion
-                        title={"Map type"}
+                        title={t("components.settings.map.mapType")}
                         expanded={mapTypeExpand}
                         onPress={handlePressMapType}
                         style={{
@@ -96,7 +96,7 @@ export default function MapSettings({ theme }) {
                                         transform: [{ translateY: -8 }],
                                     }}
                                 >
-                                    {mapType}
+                                    {t(`components.settings.map.${mapType}`)}
                                 </Text>
 
                                 {mapTypeExpand ? (
@@ -148,7 +148,8 @@ export default function MapSettings({ theme }) {
                                             theme.colors.secondaryLight :
                                             theme.colors.primaryDarker
 
-                                    }}>Standard</Text>
+                                    }}>{t("components.settings.map.standard")}
+                                    </Text>
                                 )}
                             </Pressable>
 
@@ -171,7 +172,9 @@ export default function MapSettings({ theme }) {
                                             theme.colors.secondaryLight :
                                             theme.colors.primaryDarker
 
-                                    }}>Satellite</Text>
+                                    }}>
+                                        {t("components.settings.map.satellite")}
+                                    </Text>
                                 )}
                             </Pressable>
 
@@ -195,7 +198,9 @@ export default function MapSettings({ theme }) {
                                             theme.colors.secondaryLight :
                                             theme.colors.primaryDarker
 
-                                    }}>Hybrid</Text>
+                                    }}>
+                                        {t("components.settings.map.hybrid")}
+                                    </Text>
                                 )}
                             </Pressable>
 
@@ -205,7 +210,7 @@ export default function MapSettings({ theme }) {
 
                 <View>
                     <List.Accordion
-                        title={"Show my location"}
+                        title={t("components.settings.map.showMyLocation")}
                         expanded={myLocExpand}
                         onPress={handlePressShowMyLoc}
                         style={{
@@ -251,7 +256,9 @@ export default function MapSettings({ theme }) {
                                         transform: [{ translateY: -8 }],
                                     }}
                                 >
-                                    {showMyLocation ? "Do" : "Don't"}
+                                    {showMyLocation ?
+                                        t("components.settings.map.do") :
+                                        t("components.settings.map.doNot")}
                                 </Text>
 
                                 {myLocExpand ? (
@@ -303,7 +310,9 @@ export default function MapSettings({ theme }) {
                                             theme.colors.secondaryLight :
                                             theme.colors.primaryDarker
 
-                                    }}>Show my location</Text>
+                                    }}>
+                                        {t("components.settings.map.doShowMyLocation")}
+                                    </Text>
                                 )}
                             </Pressable>
 
@@ -326,7 +335,9 @@ export default function MapSettings({ theme }) {
                                             theme.colors.secondaryLight :
                                             theme.colors.primaryDarker
 
-                                    }}>Don't show my location</Text>
+                                    }}>
+                                        {t("components.settings.map.doNotShowMyLocation")}
+                                    </Text>
                                 )}
                             </Pressable>
 
@@ -336,7 +347,7 @@ export default function MapSettings({ theme }) {
 
                 <View>
                     <List.Accordion
-                        title={"Show Compass"}
+                        title={t("components.settings.map.showCompass")}
                         expanded={compassExpand}
                         onPress={handlePressShowCompass}
                         style={{
@@ -382,7 +393,9 @@ export default function MapSettings({ theme }) {
                                         transform: [{ translateY: -8 }],
                                     }}
                                 >
-                                    {showCompass ? "Do" : "Don't"}
+                                    {showCompass ?
+                                        t("components.settings.map.do") :
+                                        t("components.settings.map.doNot")}
                                 </Text>
 
                                 {compassExpand ? (
@@ -434,7 +447,9 @@ export default function MapSettings({ theme }) {
                                             theme.colors.secondaryLight :
                                             theme.colors.primaryDarker
 
-                                    }}>Show compass</Text>
+                                    }}>
+                                        {t("components.settings.map.doShowCompass")}
+                                    </Text>
                                 )}
                             </Pressable>
 
@@ -457,7 +472,9 @@ export default function MapSettings({ theme }) {
                                             theme.colors.secondaryLight :
                                             theme.colors.primaryDarker
 
-                                    }}>Don't show Compass</Text>
+                                    }}>
+                                        {t("components.settings.map.doNotShowCompass")}
+                                    </Text>
                                 )}
                             </Pressable>
                         </View>

@@ -4,8 +4,12 @@ import { API_URL } from "../config/api";
 import useWaitingSystemStore from '../../store/waitingSystemStore';
 import { useToast } from "react-native-toast-notifications";
 import logger from "../utils/logger";
+import { useTranslation } from "react-i18next";
+
 
 export const useManagingWc = () => {
+    const { t } = useTranslation();
+
     const toast = useToast();
     const wcData = useWcDataStore((state) => state.wcData);
     const addToilet = useWcDataStore((state) => state.addToilet);

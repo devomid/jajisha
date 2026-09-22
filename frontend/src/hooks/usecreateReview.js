@@ -1,11 +1,16 @@
+import { useTranslation } from "react-i18next";
+import { useToast } from "react-native-toast-notifications";
+
 import { API_URL } from "../config/api";
 import { useWcDataStore } from "../../store/wcDataStore";
 import { useUserStore } from "../../store/userStore";
 import useWaitingSystemStore from "../../store/waitingSystemStore";
-import { useToast } from "react-native-toast-notifications";
 import logger from "../utils/logger";
 
+
 export const useCreateReview = () => {
+
+    const { t } = useTranslation();
 
     const toast = useToast();
 
@@ -25,7 +30,7 @@ export const useCreateReview = () => {
             if (!user?.token) {
                 logger.warn("Create review attempted without authentication");
                 if (toast?.show) {
-                    toast.show("User not found!", {
+                    toast.show(t("toast.useCreateReview.userNotFound"), {
                         type: "custom",
                         data: {
                             type: "error",
@@ -39,7 +44,7 @@ export const useCreateReview = () => {
             if (!toiletId) {
                 logger.warn("Create review attempted without selected toilet");
                 if (toast?.show) {
-                    toast.show("Toilet not found!", {
+                    toast.show(t("toast.useCreateReview.toiletNotFound"), {
                         type: "custom",
                         data: {
                             type: "error",
@@ -80,22 +85,22 @@ export const useCreateReview = () => {
                     });
 
                     if (toast?.show) {
-                        toast.show("Could not add review", {
+                        toast.show(t("toast.useCreateReview.noOkRes1"), {
                             type: "custom",
                             data: {
                                 type: "error",
-                                text2: "You can not review a toilet more than one time.",
+                                text2: t("toast.useCreateReview.noOkRes2"),
                             },
                         })
                     };
                 } else {
 
                     if (toast?.show) {
-                        toast.show("Could not add review", {
+                        toast.show(t("toast.useCreateReview.noOkRes3"), {
                             type: "custom",
                             data: {
                                 type: "error",
-                                text2: "Try again a few moments later.",
+                                text2: t("toast.useCreateReview.noOkRes4")
                             },
                         })
                     };
@@ -118,11 +123,11 @@ export const useCreateReview = () => {
                 toiletId,
             });
             if (toast?.show) {
-                toast.show("Something went wrong adding review!", {
+                toast.show(t("toast.useCreateReview.catch1"), {
                     type: "custom",
                     data: {
                         type: "error",
-                        text2: "It can be our servers or your connection. \nCheck and try again.",
+                        text2: t("toast.useCreateReview.catch2")
                     },
                 })
             };

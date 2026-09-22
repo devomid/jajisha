@@ -1,18 +1,19 @@
-import { Linking, View, Pressable } from "react-native";
-import { TextInput, List, Text } from "react-native-paper";
-import { ChevronDown, ChevronUp, Info, Scale, SunMoon, UserRoundCog, Cat, ExternalLink } from "lucide-react-native";
+import { useState, } from "react";
 import { useTranslation } from "react-i18next";
-import { useState, useMemo, useEffect } from "react";
 import Constants from 'expo-constants';
-import ButtonComponent from '../Button/Button';
 import { router } from "expo-router";
+
+import { ChevronDown, ChevronUp, Info, Scale, Cat, ExternalLink } from "lucide-react-native";
+import { Linking, View, Pressable } from "react-native";
+import { List, Text } from "react-native-paper";
+
+import ButtonComponent from '../Button/Button';
 
 
 export default function AboutSettings({ theme }) {
     const { t } = useTranslation();
-    const [aboutExpand, setAboutExpand] = useState(false);
-    const [privacyPolicyExpand, setPrivacyPolicyExpand] = useState(false);
     const appVersion = Constants.expoConfig?.version;
+    const [aboutExpand, setAboutExpand] = useState(false);
 
     const handlePressAbouts = () => setAboutExpand(!aboutExpand);
     const handlePressPrivacyPolicy = () => router.push("/About");
@@ -35,14 +36,14 @@ export default function AboutSettings({ theme }) {
                     marginTop: 5,
                     color: theme.colors.text
                 }}>
-                    About
+                    {t("components.settings.about.title")}
                 </Text>
 
                 <View style={{
                     marginTop: 10,
                 }}>
                     <List.Accordion
-                        title={"About Jajisha"}
+                        title={t("components.settings.about.titleAbout")}
                         expanded={aboutExpand}
                         onPress={handlePressAbouts}
                         style={{
@@ -140,7 +141,7 @@ export default function AboutSettings({ theme }) {
                                             fontWeight: '600',
                                         }}
                                     >
-                                        Jajisha
+                                        {t("components.settings.about.jajisha")}
                                     </Text>
 
                                     <Text
@@ -149,8 +150,8 @@ export default function AboutSettings({ theme }) {
                                             fontSize: 11,
                                             marginTop: 1,
                                         }}
-                                    >
-                                        Find public toilets around you
+                                        >
+                                        {t("components.settings.about.subtitle")}
                                     </Text>
                                 </View>
 
@@ -270,19 +271,19 @@ export default function AboutSettings({ theme }) {
                     >
                         <View style={{
                             width: '100%',
-                            height:'100%',
+                            height: '100%',
                             flexDirection: 'row',
                             alignItems: 'center',
                             overflow: 'hidden',
                             paddingLeft: 10,
-                            gap:18
+                            gap: 18
                         }}>
                             <Scale
                                 size={18}
                                 color={theme.colors.secondary + '95'}
                             />
                             <Text style={{ color: theme.colors.secondary + '99' }}>
-                                Privacy Policy
+                                {t("components.settings.about.privacyPolicy")}
                             </Text>
                         </View>
                     </ButtonComponent>

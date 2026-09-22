@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import { Text, useTheme } from "react-native-paper";
-import { View, StyleSheet, ScrollView } from "react-native";
+import { View, ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import MapView from "react-native-maps";
 import { BlurView } from "expo-blur";
@@ -15,8 +16,10 @@ import MapSettings from "../components/setting/map";
 import AboutSettings from "../components/setting/about";
 
 export default function Settings() {
-  const pageName = "Settings"
+  const { t } = useTranslation();
   const theme = useTheme();
+
+  const pageName = t("components.settings.pageName") 
   const currentLocation = useCurrentLocation();
 
   const [region, setRegion] = useState(null);
