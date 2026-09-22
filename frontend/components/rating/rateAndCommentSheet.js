@@ -53,6 +53,20 @@ export default function RateAndCommentSheet({ theme, toilet, iscommenting, iscom
             const current = useWcDataStore.getState().selectedToilet;
 
             if (!current || current._id !== toiletId) {
+                setWcData((prev) => ({
+                    ...prev,
+                    review: "",
+                    ratings: {
+                        cleanliness: 0,
+                        odor: 0,
+                        amenitiesHealth: 0,
+                        light: 0,
+                        privacy: 0,
+                        crowd: 0,
+                    },
+                }));
+
+                setIscommenting(false);
                 return;
             }
 

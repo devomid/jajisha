@@ -12,6 +12,7 @@ import MapView from "react-native-maps";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { BlurView } from "expo-blur";
 import { Checkbox } from 'expo-checkbox';
+import { useToast } from "react-native-toast-notifications";
 
 import { signInSchema } from "../../src/validation/userInfoSchema";
 import { useAuth } from "../../src/hooks/useAuth";
@@ -25,7 +26,9 @@ import FormInput from "../../components/inpuField/formInput";
 
 export default function SignIn() {
     const { t } = useTranslation();
+    const toast = useToast();
     const theme = useTheme();
+
     const currentLocation = useCurrentLocation();
     const { signIn } = useAuth();
 

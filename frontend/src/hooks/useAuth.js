@@ -105,7 +105,6 @@ export const useAuth = () => {
                 headers: { "Content-Type": 'application/json' },
                 body: JSON.stringify({ email, password })
             });
-            updateWaiting(waitingId, t("waitingSystem.puttingYourStuffBack"));
 
             if (!response.ok) {
                 const errorRes = await response.json();
@@ -127,6 +126,10 @@ export const useAuth = () => {
                 return null;
             };
 
+            updateWaiting(
+                waitingId,
+                t("waitingSystem.puttingYourStuffBack")
+            );
 
             const jsonRes = await response.json();
             await SecureStore.setItemAsync("authToken", jsonRes.token);

@@ -26,6 +26,20 @@ export const useNavigateToToilet = () => {
     const clearNavigation = useWcDataStore(state => state.clearNavigation);
 
     const navigateToToilet = async (toilet) => {
+
+        if (
+            !toilet?._id ||
+            !Array.isArray(toilet?.location?.coordinates) ||
+            toilet.location.coordinates.length < 2 ||
+            typeof toilet.location.coordinates[0] !== "number" ||
+            typeof toilet.location.coordinates[1] !== "number"
+        ) {
+            logger.warn("Navigation attempted with invalid toilet data", {
+                toiletId: toilet?._id,
+            });
+            return;
+        }
+
         const waitingId = startWaiting(t("waitingSystem.locating"));
         const requestId = ++navigationRequestRef.current;
 

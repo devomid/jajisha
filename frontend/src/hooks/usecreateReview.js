@@ -1,3 +1,4 @@
+import { useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { useToast } from "react-native-toast-notifications";
 
@@ -19,8 +20,16 @@ export const useCreateReview = () => {
     const startWaiting = useWaitingSystemStore(state => state.startWaiting);
     const endWaiting = useWaitingSystemStore(state => state.endWaiting);
 
+    const submittingRef = useRef(false);
 
     const createReview = async ({ reviewText, ratings }) => {
+
+        if (submittingRef.current) {
+            logger.warn("Create review already in progress");
+            return null;
+        }
+
+        submittingRef.current = true;
 
         const waitingId = startWaiting(t("waitingSystem.creatingReview"));
 
@@ -131,8 +140,9 @@ export const useCreateReview = () => {
                 })
             };
             return null;
-            
+
         } finally {
+            submittingRef.current = false;
             endWaiting(waitingId);
         }
     };
