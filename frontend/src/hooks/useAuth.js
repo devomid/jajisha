@@ -9,7 +9,7 @@ import logger from "../utils/logger";
 
 
 export const useAuth = () => {
-    
+
     const { t } = useTranslation();
     const toast = useToast();
 
@@ -33,10 +33,6 @@ export const useAuth = () => {
                     password
                 })
             });
-            updateWaiting(
-                waitingId,
-                t("waitingSystem.makingAccount")
-            )
 
             if (!response.ok) {
                 const errorRes = await response.json();
@@ -56,6 +52,8 @@ export const useAuth = () => {
                 };
                 return null;
             };
+
+            updateWaiting(waitingId, t("waitingSystem.makingAccount"))
 
             const jsonRes = await response.json();
             await SecureStore.setItemAsync("authToken", jsonRes.token);

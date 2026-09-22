@@ -242,6 +242,7 @@ export const useManagingWc = () => {
                     },
                 })
             };
+            return null;
 
         } finally {
             endWaiting(waitingId);

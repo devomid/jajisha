@@ -10,7 +10,7 @@ import logger from "../utils/logger";
 
 
 export const useNavigateToToilet = () => {
-    
+
     const { t } = useTranslation();
 
     const toast = useToast();
@@ -35,7 +35,7 @@ export const useNavigateToToilet = () => {
                 return;
             };
 
-            
+
             if (status !== "granted") {
                 logger.warn("Navigation location permission denied");
                 if (toast?.show) {
@@ -177,13 +177,15 @@ export const useNavigateToToilet = () => {
             }
             if (status !== "granted") {
                 logger.warn("Distance calculation location permission denied");
-                toast.show(t("toast.useNavigateWc.navigateToToilet.locGrant1"), {
-                    type: "custom",
-                    data: {
-                        type: "warning",
-                        text2: t("toast.useNavigateWc.navigateToToilet.locGrant2")
-                    },
-                });
+                if (toast?.show) {
+                    toast.show(t("toast.useNavigateWc.navigateToToilet.locGrant1"), {
+                        type: "custom",
+                        data: {
+                            type: "warning",
+                            text2: t("toast.useNavigateWc.navigateToToilet.locGrant2")
+                        },
+                    })
+                };
                 return;
             }
 
@@ -226,13 +228,16 @@ export const useNavigateToToilet = () => {
                 logger.warn("Distance calculation route request failed", {
                     code: data.code,
                 });
-                toast.show(t("toast.useNavigateWc.navigateToToilet.catch1"), {
-                    type: "custom",
-                    data: {
-                        type: "error",
-                        text2: t("toast.useNavigateWc.navigateToToilet.catch2")
-                    },
-                });
+
+                if (toast?.show) {
+                    toast.show(t("toast.useNavigateWc.navigateToToilet.catch1"), {
+                        type: "custom",
+                        data: {
+                            type: "error",
+                            text2: t("toast.useNavigateWc.navigateToToilet.catch2")
+                        },
+                    })
+                };
 
                 return;
             }
