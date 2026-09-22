@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import logger from "../src/utils/logger";
 
 export const useSettingsStore = create(
     persist(
@@ -26,6 +27,15 @@ export const useSettingsStore = create(
         {
             name: "jajisha-settings",
             storage: createJSONStorage(() => AsyncStorage),
+            onRehydrateStorage: () => {
+                return (state, error) => {
+                    if (error) {
+                        logger.error("Failed to restore settings", {
+                            error: error.message,
+                        });
+                    }
+                };
+            },
         }
     )
 );

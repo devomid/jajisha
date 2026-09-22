@@ -12,6 +12,7 @@ import { useSettingsStore } from "../store/settingsStore";
 import { getPaperTheme } from "../src/constants/paperTheme";
 import { initI18n } from "../src/i18n";
 import WaitingOverlay from "../components/waiting/waitingOverlay";
+import logger from "../src/utils/logger";
 
 import { ToastProvider } from "react-native-toast-notifications";
 import AppToast from "../components/toast/appToast";
@@ -32,8 +33,16 @@ export default function RootLayout() {
 
     useEffect(() => {
         const load = async () => {
-            await initI18n();
-            setReady(true);
+            try {
+                await initI18n();
+                setReady(true);
+            } catch (error) {
+                logger.error("Failed to initialize i18n", {
+                    error: error.message,
+                });
+
+                setReady(true);
+            }
         };
 
         load();

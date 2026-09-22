@@ -7,8 +7,13 @@ import fa from "../locales/fa/common.json";
 
 const initI18n = async () => {
 
-    const savedLanguage =
-        await AsyncStorage.getItem("language");
+    let savedLanguage;
+
+    try {
+        savedLanguage = await AsyncStorage.getItem("language");
+    } catch {
+        savedLanguage = null;
+    }
 
     await i18n
         .use(initReactI18next)
