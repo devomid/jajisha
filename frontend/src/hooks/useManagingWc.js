@@ -292,7 +292,7 @@ export const useManagingWc = () => {
 
             if (!response.ok) {
                 const errorRes = await response.json();
-                logger.warn(t("toast.useManagingWc.saveWc.noOkRes1"), {
+                logger.warn("Saving toilet rejected", {
                     status: response.status,
                     saveToietError: errorRes
                 });
@@ -301,7 +301,7 @@ export const useManagingWc = () => {
                         type: "custom",
                         data: {
                             type: "error",
-                            text2: "Try again a few moments later.",
+                            text2: t("toast.useManagingWc.saveWc.noOkRes1")
                         },
                     })
                 };
