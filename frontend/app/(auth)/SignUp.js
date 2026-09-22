@@ -14,6 +14,7 @@ import { signUpSchema, } from "../../src/validation/userInfoSchema";
 import { useSettingsStore } from "../../store/settingsStore";
 import { useAuth } from "../../src/hooks/useAuth"
 import useCurrentLocation from "../../src/hooks/useCurrentLocation";
+import logger from "../../src/utils/logger";
 
 import ButtonComponent from "../../components/Button/Button";
 import FormInput from "../../components/inpuField/formInput";
@@ -60,8 +61,14 @@ export default function SignUp() {
             if (!isSignedUp) {
                 return
             }
-            router.push('/');
-            resetForm();
+            try {
+                router.push('/');
+                resetForm();
+            } catch (error) {
+                logger.error("Sign up navigation error", {
+                    error: error.message,
+                });
+            }
         },
     });
 
