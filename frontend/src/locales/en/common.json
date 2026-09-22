@@ -243,7 +243,9 @@
         "app": {
             "signin": {
                 "loadSavedLogin1": "Couldn’t restore your saved login information.",
-                "loadSavedLogin2": "There may be an issue with our servers.\nCheck your connection and try again."
+                "loadSavedLogin2": "There may be an issue with our servers.\nCheck your connection and try again.",
+                "saveLoginPreference1": "Save login preferences failed",
+                "saveLoginPreference2": "There may be an issue with our servers.\nCheck your connection and try again."
             }
         },
         "components": {

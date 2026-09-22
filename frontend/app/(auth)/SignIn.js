@@ -56,15 +56,31 @@ export default function SignIn() {
             const isSignedIn = await signIn(values.email, values.password);
             if (!isSignedIn) { return; }
 
-            if (rememberMe) {
-                await AsyncStorage.setItem("savedEmail", values.email);
-                await SecureStore.setItemAsync(
-                    "savedPassword",
-                    values.password
-                );
-            } else {
-                await AsyncStorage.removeItem("savedEmail");
-                await SecureStore.deleteItemAsync("savedPassword");
+            try {
+                if (rememberMe) {
+                    await AsyncStorage.setItem("savedEmail", values.email);
+                    await SecureStore.setItemAsync(
+                        "savedPassword",
+                        values.password
+                    );
+                } else {
+                    await AsyncStorage.removeItem("savedEmail");
+                    await SecureStore.deleteItemAsync("savedPassword");
+                }
+            } catch (error) {
+                logger.error("Failed to save login preference", {
+                    error: error.message,
+                });
+
+                if (toast?.show) {
+                    toast.show(t("toast.app.signin.saveLoginPreference1"), {
+                        type: "custom",
+                        data: {
+                            type: "error",
+                            text2: t("toast.app.signin.saveLoginPreference2"),
+                        },
+                    });
+                }
             }
 
             resetForm();
