@@ -18,6 +18,7 @@ import { useAuth } from "../../src/hooks/useAuth";
 import useCurrentLocation from "../../src/hooks/useCurrentLocation";
 import { useSettingsStore } from "../../store/settingsStore";
 import { useTopSheetStore } from "../../store/menuStore";
+import logger from "../../src/utils/logger";
 
 import ButtonComponent from "../../components/Button/Button";
 import FormInput from "../../components/inpuField/formInput";
@@ -92,18 +93,34 @@ export default function SignIn() {
 
     useEffect(() => {
         const loadSavedLogin = async () => {
-            const savedEmail = await AsyncStorage.getItem("savedEmail");
-            const savedPassword = await SecureStore.getItemAsync(
-                "savedPassword"
-            );
+            try {
+                const savedEmail = await AsyncStorage.getItem("savedEmail");
+                const savedPassword = await SecureStore.getItemAsync(
+                    "savedPassword"
+                );
 
-            if (savedEmail && savedPassword) {
-                setValues({
-                    email: savedEmail,
-                    password: savedPassword,
+                if (savedEmail && savedPassword) {
+                    setValues({
+                        email: savedEmail,
+                        password: savedPassword,
+                    });
+
+                    setRememberMe(true);
+                }
+            } catch (error) {
+                logger.error("Failed to load saved login", {
+                    error: error.message,
                 });
 
-                setRememberMe(true);
+                if (toast?.show) {
+                    toast.show(t("toast.app.signin.loadSavedLogin1"), {
+                        type: "custom",
+                        data: {
+                            type: "error",
+                            text2: t("toast.app.signin.loadSavedLogin2")
+                        },
+                    });
+                }
             }
         };
 

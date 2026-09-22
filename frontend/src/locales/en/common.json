@@ -240,6 +240,12 @@
         }
     },
     "toast": {
+        "app": {
+            "signin": {
+                "loadSavedLogin1": "Couldn’t restore your saved login information.",
+                "loadSavedLogin2": "There may be an issue with our servers.\nCheck your connection and try again."
+            }
+        },
         "components": {
             "rateAndCommentSheet": {
                 "handleSendReview": {

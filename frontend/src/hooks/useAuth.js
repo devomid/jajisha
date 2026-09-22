@@ -288,11 +288,11 @@ export const useAuth = () => {
                     deleteError: errorRes
                 });
                 if (toast?.show) {
-                    toast.show(t("toast.useAuth.signin.noOkRes1"), {
+                    toast.show(t("toast.useAuth.deleteUser.noOkRes1"), {
                         type: "custom",
                         data: {
                             type: "error",
-                            text2: t("toast.useAuth.signin.noOkRes2")
+                            text2: t("toast.useAuth.deleteUser.noOkRes2")
                         },
                     })
                 };
@@ -306,11 +306,11 @@ export const useAuth = () => {
                 error: error.message,
             });
             if (toast?.show) {
-                toast.show(t("toast.useAuth.signin.catch1"), {
+                toast.show(t("toast.useAuth.deleteUser.catch1"), {
                     type: "custom",
                     data: {
                         type: "error",
-                        text2: t("toast.useAuth.signin.catch2")
+                        text2: t("toast.useAuth.deleteUser.catch2")
                     },
                 })
             };

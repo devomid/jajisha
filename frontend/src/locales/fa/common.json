@@ -240,11 +240,17 @@
         }
     },
     "toast": {
-        "components":{
-            "rateAndCommentSheet":{
-                "handleSendReview":{
-                    "textLength1":"ثبت نظر انجام نشد",
-                    "textLength2":"متن باید بین ۱۰ تا ۲۰۰ کاراکتر باشد"
+        "app": {
+            "signin": {
+                "loadSavedLogin1": "دریافت اطلاعات کاربری انجام نشد",
+                "loadSavedLogin2": "ممکن است مشکلی در سرورهای ما وجود داشته باشد.\nاتصال اینترنت را بررسی کنید و دوباره تلاش کنید."
+            }
+        },
+        "components": {
+            "rateAndCommentSheet": {
+                "handleSendReview": {
+                    "textLength1": "ثبت نظر انجام نشد",
+                    "textLength2": "متن باید بین ۱۰ تا ۲۰۰ کاراکتر باشد"
                 }
             }
         },
