@@ -17,13 +17,12 @@ export const useCreateReview = () => {
     const toiletId = useWcDataStore((state) => state.selectedToilet?._id);
     const user = useUserStore((state) => state.user);
     const startWaiting = useWaitingSystemStore(state => state.startWaiting);
-    const updateWaiting = useWaitingSystemStore(state => state.updateWaiting);
     const endWaiting = useWaitingSystemStore(state => state.endWaiting);
 
 
     const createReview = async ({ reviewText, ratings }) => {
 
-        const waitingId = startWaiting("You really reviewd a Toilet? Just wait...");
+        const waitingId = startWaiting(t("waitingSystem.creatingReview"));
 
         try {
 

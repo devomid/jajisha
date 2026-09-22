@@ -28,7 +28,7 @@ export const useManagingWc = () => {
             return null;
         }
 
-        const waitingId = startWaiting("Checking if the toilet is real...");
+        const waitingId = startWaiting(t("waitingSystem.checkingToilet"));
 
         try {
             const response = await fetch(
@@ -53,7 +53,7 @@ export const useManagingWc = () => {
 
             updateWaiting(
                 waitingId,
-                "Map is having a new WC..."
+                t("waitingSystem.newToiletAdded")
             );
 
             if (!response.ok) {
@@ -64,11 +64,11 @@ export const useManagingWc = () => {
                 });
 
                 if (toast?.show) {
-                    toast.show("Could not add toilet", {
+                    toast.show(t("toast.useManagingWc.addWc.noOkRes1"), {
                         type: "custom",
                         data: {
                             type: "error",
-                            text2: "Try again a few moments later.",
+                            text2: t("toast.useManagingWc.addWc.noOkRes2")
                         },
                     })
                 };
@@ -83,11 +83,11 @@ export const useManagingWc = () => {
                 toiletId: newToilet?._id,
             });
             if (toast?.show) {
-                toast.show("Toilet added to map", {
+                toast.show(t("toast.useManagingWc.addWc.success1"), {
                     type: "custom",
                     data: {
                         type: "success",
-                        text2: "Thanks for expanding our data.",
+                        text2: t("toast.useManagingWc.addWc.success2")
                     },
                 })
             };
@@ -98,11 +98,11 @@ export const useManagingWc = () => {
                 error: error.message,
             });
             if (toast?.show) {
-                toast.show("Something went wrong adding WC!", {
+                toast.show(t("toast.useManagingWc.addWc.catch1"), {
                     type: "custom",
                     data: {
                         type: "error",
-                        text2: "It can be our servers or your connection. \nCheck and try again.",
+                        text2: t("toast.useManagingWc.addWc.catch2"),
                     },
                 })
             };
@@ -114,7 +114,7 @@ export const useManagingWc = () => {
     };
 
     const getWc = async () => {
-        const waitingId = startWaiting("Finding toilets near you...");
+        const waitingId = startWaiting(t("waitingSystem.findingNearbyToilets"));
 
         const requestStartedWith = new Set(
             useWcDataStore.getState().toilets.map(toilet => toilet._id)
@@ -133,11 +133,11 @@ export const useManagingWc = () => {
                     getToietError: errorRes
                 });
                 if (toast?.show) {
-                    toast.show("Could not get toilets", {
+                    toast.show(t("toast.useManagingWc.getWc.noOkRes1"), {
                         type: "custom",
                         data: {
                             type: "error",
-                            text2: "Try again a few moments later or check connection.",
+                            text2: t("toast.useManagingWc.getWc.noOkRes2")
                         },
                     });
                 }
@@ -172,11 +172,11 @@ export const useManagingWc = () => {
                 error: error.message,
             });
             if (toast?.show) {
-                toast.show("Something went wrong getting WC!", {
+                toast.show(t("toast.useManagingWc.getWc.catch1"), {
                     type: "custom",
                     data: {
                         type: "error",
-                        text2: "It can be our servers or your connection. \nCheck and try again.",
+                        text2: t("toast.useManagingWc.getWc.catch2")
                     },
                 });
             }
@@ -189,7 +189,7 @@ export const useManagingWc = () => {
 
     const getWcReviews = async (toiletId) => {
 
-        const waitingId = startWaiting("Loading things...");
+        const waitingId = startWaiting(t("waitingSystem.loadingThings"));
 
         try {
 
@@ -205,11 +205,11 @@ export const useManagingWc = () => {
                     getToietReviewsError: errorRes
                 });
                 if (toast?.show) {
-                    toast.show("Could not get toilets", {
+                    toast.show(t("toast.useManagingWc.getWcReviews.noOkRes1"), {
                         type: "custom",
                         data: {
                             type: "error",
-                            text2: "Try again a few moments later or check connection.",
+                            text2: t("toast.useManagingWc.getWcReviews.noOkRes2")
                         },
                     })
                 };
@@ -234,11 +234,11 @@ export const useManagingWc = () => {
                 toiletId,
             });
             if (toast?.show) {
-                toast.show("Something went wrong getting WC!", {
+                toast.show(t("toast.useManagingWc.getWcReviews.catch1"), {
                     type: "custom",
                     data: {
                         type: "error",
-                        text2: "It can be our servers or your connection. \nCheck and try again.",
+                        text2: t("toast.useManagingWc.getWcReviews.catch2")
                     },
                 })
             };
@@ -250,14 +250,15 @@ export const useManagingWc = () => {
 
     const saveWc = async () => {
 
+        const waitingId = startWaiting(t("waitingSystem.savingToFavorites"));
         if (!token) {
             logger.warn("Save toilet attempted without authentication");
             if (toast?.show) {
-                toast.show("You can not save places!", {
+                toast.show(t("toast.useManagingWc.saveWc.noToken1"), {
                     type: "custom",
                     data: {
                         type: "warning",
-                        text2: "Sign in or create an account.",
+                        text2: t("toast.useManagingWc.saveWc.noToken2")
                     },
                 })
             };
@@ -266,17 +267,16 @@ export const useManagingWc = () => {
         if (!toilet?._id) {
             logger.warn("Save toilet attempted without selected toilet");
             if (toast?.show) {
-                toast.show("This toilet can not be saved!", {
+                toast.show(t("toast.useManagingWc.saveWc.noToilet1"), {
                     type: "custom",
                     data: {
                         type: "warning",
-                        text2: "Something's wrong that you can't do anything about it.",
+                        text2: t("toast.useManagingWc.saveWc.noTilet2")
                     },
                 })
             };
             return null;
         }
-        const waitingId = startWaiting("Saving to favorites");
 
         try {
             const response = await fetch(
@@ -292,12 +292,12 @@ export const useManagingWc = () => {
 
             if (!response.ok) {
                 const errorRes = await response.json();
-                logger.warn("Save toilet request failed", {
+                logger.warn(t("toast.useManagingWc.saveWc.noOkRes1"), {
                     status: response.status,
                     saveToietError: errorRes
                 });
                 if (toast?.show) {
-                    toast.show("Could not save toilet", {
+                    toast.show(t("toast.useManagingWc.saveWc.noOkRes2"), {
                         type: "custom",
                         data: {
                             type: "error",
@@ -320,11 +320,11 @@ export const useManagingWc = () => {
                 toiletId: toilet._id,
             });
             if (toast?.show) {
-                toast.show("Something went wrong saving WC!", {
+                toast.show(t("toast.useManagingWc.saveWc.catch1"), {
                     type: "custom",
                     data: {
                         type: "error",
-                        text2: "It can be our servers or your connection. \nCheck and try again.",
+                        text2: t("toast.useManagingWc.saveWc.catch2")
                     },
                 })
             };
@@ -336,14 +336,16 @@ export const useManagingWc = () => {
 
     const unsaveWc = async () => {
 
+        const waitingId = startWaiting(t("waitingSystem.unsavingfromFavorites"));
+
         if (!token) {
             logger.warn("Unsave toilet attempted without authentication");
             if (toast?.show) {
-                toast.show("You can not save places!", {
+                toast.show(t("toast.useManagingWc.unsaveWc.noToken1"), {
                     type: "custom",
                     data: {
                         type: "warning",
-                        text2: "Sign in or create an account.",
+                        text2: t("toast.useManagingWc.unsaveWc.noToken2")
                     },
                 })
             };
@@ -352,17 +354,16 @@ export const useManagingWc = () => {
         if (!toilet?._id) {
             logger.warn("Unsave toilet attempted without selected toilet");
             if (toast?.show) {
-                toast.show("This toilet can not be saved!", {
+                toast.show(t("toast.useManagingWc.unsaveWc.Toilet1"), {
                     type: "custom",
                     data: {
                         type: "warning",
-                        text2: "Something's wrong that you can't do anything about it.",
+                        text2: t("toast.useManagingWc.unsaveWc.noToilet2")
                     },
                 })
             };
             return null;
         }
-        const waitingId = startWaiting("Removing from favorites...");
 
         try {
             const response = await fetch(
@@ -383,11 +384,11 @@ export const useManagingWc = () => {
                     unsaveToietError: errorRes
                 });
                 if (toast?.show) {
-                    toast.show("Could not unsave toilet", {
+                    toast.show(t("toast.useManagingWc.unsaveWc.noOkRes1"), {
                         type: "custom",
                         data: {
                             type: "error",
-                            text2: "Try again a few moments later.",
+                            text2: t("toast.useManagingWc.unsaveWc.noOkRes2")
                         },
                     })
                 };
@@ -404,11 +405,11 @@ export const useManagingWc = () => {
                 toiletId: toilet._id,
             });
             if (toast?.show) {
-                toast.show("Something went wrong unsaving WC!", {
+                toast.show(t("toast.useManagingWc.unsaveWc.catch1"), {
                     type: "custom",
                     data: {
                         type: "error",
-                        text2: "It can be our servers or your connection. \nCheck and try again.",
+                        text2: t("toast.useManagingWc.unsaveWc.catch2")
                     },
                 })
             };

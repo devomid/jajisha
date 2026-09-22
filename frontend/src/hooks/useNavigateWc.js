@@ -1,11 +1,17 @@
 import { useRef } from "react";
-import { useWcDataStore } from "../../store/wcDataStore";
 import * as Location from "expo-location";
-import useWaitingSystemStore from "../../store/waitingSystemStore";
+import { useTranslation } from "react-i18next";
+
 import { useToast } from "react-native-toast-notifications";
+import { useWcDataStore } from "../../store/wcDataStore";
+
+import useWaitingSystemStore from "../../store/waitingSystemStore";
 import logger from "../utils/logger";
 
+
 export const useNavigateToToilet = () => {
+    
+    const { t } = useTranslation();
 
     const toast = useToast();
     const distanceRequestRef = useRef(0);
@@ -16,12 +22,11 @@ export const useNavigateToToilet = () => {
     const setNavigationDuration = useWcDataStore(state => state.setNavigationDuration);
     const setNavigationStatus = useWcDataStore(state => state.setNavigationStatus);
     const startWaiting = useWaitingSystemStore(state => state.startWaiting);
-    const updateWaiting = useWaitingSystemStore(state => state.updateWaiting);
     const endWaiting = useWaitingSystemStore(state => state.endWaiting);
     const clearNavigation = useWcDataStore(state => state.clearNavigation);
 
     const navigateToToilet = async (toilet) => {
-        const waitingId = startWaiting("Locating...");
+        const waitingId = startWaiting(t("waitingSystem.locating"));
         const requestId = ++navigationRequestRef.current;
 
         try {
@@ -30,18 +35,15 @@ export const useNavigateToToilet = () => {
                 return;
             };
 
-            updateWaiting(
-                waitingId,
-                "Finding you..."
-            )
+            
             if (status !== "granted") {
                 logger.warn("Navigation location permission denied");
                 if (toast?.show) {
-                    toast.show("Location Permission must be granted!", {
+                    toast.show(t("toast.useNavigateWc.navigateToToilet.locGrant1"), {
                         type: "custom",
                         data: {
                             type: "warning",
-                            text2: "Please allow location access in Settings.",
+                            text2: t("toast.useNavigateWc.navigateToToilet.locGrant2")
                         },
                     })
                 };
@@ -93,11 +95,11 @@ export const useNavigateToToilet = () => {
                 };
 
                 if (toast?.show) {
-                    toast.show("Could not get map and location", {
+                    toast.show(t("toast.useNavigateWc.navigateToToilet.catch1"), {
                         type: "custom",
                         data: {
                             type: "error",
-                            text2: "Try again a few moments later.",
+                            text2: t("toast.useNavigateWc.navigateToToilet.catch2")
                         },
                     })
                 };
@@ -106,11 +108,11 @@ export const useNavigateToToilet = () => {
             };
             if (!data.routes?.length || !data.routes[0]?.geometry) {
                 if (toast?.show) {
-                    toast.show("Could not get map and location", {
+                    toast.show(t("toast.useNavigateWc.navigateToToilet.catch3"), {
                         type: "custom",
                         data: {
                             type: "error",
-                            text2: "No usable route was returned. Try again.",
+                            text2: t("toast.useNavigateWc.navigateToToilet.catch4")
                         },
                     });
                 }
@@ -142,11 +144,11 @@ export const useNavigateToToilet = () => {
                 return;
             }
             if (toast?.show) {
-                toast.show("Something went wrong getting map features!", {
+                toast.show(t("toast.useNavigateWc.navigateToToilet.catch5"), {
                     type: "custom",
                     data: {
                         type: "error",
-                        text2: "It can be our servers or your connection. \nCheck and try again.",
+                        text2: t("toast.useNavigateWc.navigateToToilet.catch6")
                     },
                 })
             };
@@ -175,11 +177,11 @@ export const useNavigateToToilet = () => {
             }
             if (status !== "granted") {
                 logger.warn("Distance calculation location permission denied");
-                toast.show("Location Permission must be granted!", {
+                toast.show(t("toast.useNavigateWc.navigateToToilet.locGrant1"), {
                     type: "custom",
                     data: {
                         type: "warning",
-                        text2: "Please allow location access in Settings.",
+                        text2: t("toast.useNavigateWc.navigateToToilet.locGran2")
                     },
                 });
                 return;
@@ -224,11 +226,11 @@ export const useNavigateToToilet = () => {
                 logger.warn("Distance calculation route request failed", {
                     code: data.code,
                 });
-                toast.show("Could not get map and location", {
+                toast.show(t("toast.useNavigateWc.navigateToToilet.catch1"), {
                     type: "custom",
                     data: {
                         type: "error",
-                        text2: "Try again a few moments later.",
+                        text2: t("toast.useNavigateWc.navigateToToilet.catch2")
                     },
                 });
 
@@ -236,11 +238,11 @@ export const useNavigateToToilet = () => {
             }
             if (!data.routes?.length) {
                 if (toast?.show) {
-                    toast.show("Could not get map and location", {
+                    toast.show(t("toast.useNavigateWc.navigateToToilet.catch3"), {
                         type: "custom",
                         data: {
                             type: "error",
-                            text2: "No usable route was returned. Try again.",
+                            text2: t("toast.useNavigateWc.navigateToToilet.catch4")
                         },
                     });
                 }
@@ -269,11 +271,11 @@ export const useNavigateToToilet = () => {
                 return;
             }
             if (toast?.show) {
-                toast.show("Something went wrong getting map features!", {
+                toast.show(t("toast.useNavigateWc.navigateToToilet.catch5"), {
                     type: "custom",
                     data: {
                         type: "error",
-                        text2: "It can be our servers or your connection. \nCheck and try again.",
+                        text2: t("toast.useNavigateWc.navigateToToilet.catch6")
                     },
                 })
             };

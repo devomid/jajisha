@@ -2,86 +2,371 @@
     "app": {
         "auth": {
             "signin": {
-                "signinTitle": "Sign In",
-                "signinSubTitle": "To have access to best locations",
-                "emailInput": "Email",
+                "signinTitle": "Sign in to your account",
+                "signinSubTitle": "To access the best places.",
+                "emailInput": "Email address",
                 "passwordInput": "Password",
-                "rememberMe": "remember me",
-                "signinBtn": "Sign In",
+                "rememberMe": "Remember me",
+                "signinBtn": "Sign in",
                 "cancelBtn": "Cancel",
-                "signinBottomText": "No account yet?",
-                "signupLink": "Sign Up",
-                "emailError": "وارد کردن ایمیل الزامی است.",
-                "PasswordError": "برای ورود پسورد را وارد کنید."
+                "signinBottomText": "Don't have an account yet?",
+                "signupLink": "Create an account",
+                "invalidEmailError": "Please enter a valid email address",
+                "requiredEmailError": "Email is required",
+                "passwordMinError": "Password is too short",
+                "passwordRequiredError": "Password is required"
             },
             "signup": {
-                "signupTitle": "حساب کاربری بسازید",
-                "signupSubTitle": "تا بتوانید مکان ها را ذخیره کنید",
-                "emailInput": "آدرس ایمیل",
-                "passwordInput": "رمز عبور",
-                "confirmPasswordInput": "تکرار رمز عبور",
-                "firstnameInput": "نام",
-                "lastnameInput": "نام خانوادگی",
-                "usernameInput": "نام کاربری اختصاصی",
-                "signupBtn": "ایجاد حساب",
-                "cancelBtn": "انصراف",
-                "signupBottomText": "حساب کاربری دارید؟",
-                "signinLink": "ورودد به حساب کاربری",
-                "emailError": "وارد کردن ایمیل الزامی است.",
-                "PasswordError": "وارد کردن رمز عبر الزامی است",
-                "confirmPasswordError": "رمز عبور همخوانی ندارد",
-                "firstnameError": "نام خود را وارد کنید",
-                "lastnameError": "نام خانوادگی خود را وارد کنید",
-                "usernameError": "نام کاربری خاص انتخاب کنبد"
+                "signupTitle": "Create an account",
+                "signupSubTitle": "To save places you like",
+                "emailInput": "Email address",
+                "passwordInput": "Password",
+                "confirmPasswordInput": "Confirm password",
+                "firstnameInput": "First name",
+                "lastnameInput": "Last name",
+                "usernameInput": "Unique username",
+                "signupBtn": "Create account",
+                "cancelBtn": "Cancel",
+                "signupBottomText": "Already have an account?",
+                "signinLink": "Sign in to your account",
+                "invalidEmailError": "Please enter a valid email address",
+                "requiredEmailError": "Email is required",
+                "passwordMinError": "Password is too short",
+                "passwordRequiredError": "Password is required",
+                "passwordsMustMatchError": "Passwords do not match",
+                "confirmPasswordRequiredError": "Please confirm your password",
+                "firstNameRequiredError": "Please enter your first name",
+                "lastNameRequiredError": "Please enter your last name",
+                "usernameRequiredError": "Please choose a unique username"
             }
         },
-        "about": "",
-        "favorites": "",
-        "index": "",
-        "settings": ""
+        "about": {
+            "pageName": "Privacy Policy"
+        },
+        "favorites": {
+            "noFavoritesText": "You haven't saved any places yet",
+            "pageName": "Saved Places"
+        }
     },
-    "AddWcBottomSheet": {
-        "add": "Add",
-        "cancel": "Cancel"
+    "components": {
+        "addWcBottomSheet": {
+            "addWcBtn": "Add Toilet",
+            "cancelAddWcBtn": "Cancel"
+        },
+        "routePreview": {
+            "routePreviewTitle": "Route",
+            "distanceTitle": "Distance to destination",
+            "etaTitle": "Estimated arrival",
+            "navigateBtn": "Start navigation",
+            "cancelNavigateBtn": "Cancel"
+        },
+        "ToiletLocationBottomSheet": {
+            "toiletInfo": "Toilet Information",
+            "reviewTitle": "Review",
+            "min": "min",
+            "mile": "mi",
+            "km": "km",
+            "ft": "ft",
+            "m": "m",
+            "showRouteBtn": "Calculate Route",
+            "amenitiesIcon": {
+                "western": "Western",
+                "iranian": "Squat",
+                "babyChanging": "Baby changing",
+                "wheelchairAccessible": "Wheelchair accessible",
+                "handDryer": "Hand dryer",
+                "soap": "Soap",
+                "toiletPaper": "Toilet paper",
+                "warmWater": "Warm water"
+            },
+            "moreBtn": "More",
+            "lessBtn": "Less",
+            "seeCommentsBtn": "See all reviews",
+            "rateAndWriteBtn": "Write a review"
+        },
+        "commentCardComponentBig": {
+            "getTimeAgo": {
+                "minute": "minute",
+                "minutes": "minutes",
+                "hour": "hour",
+                "hours": "hours",
+                "day": "day",
+                "days": "days",
+                "month": "month",
+                "months": "months",
+                "year": "year",
+                "years": "years",
+                "ago": "ago",
+                "justNow": "Just now"
+            },
+            "usernameText": "Guest"
+        },
+        "commentCardComponentSmall": {
+            "getTimeAgo": {
+                "minute": "minute",
+                "minutes": "minutes",
+                "hour": "hour",
+                "hours": "hours",
+                "day": "day",
+                "days": "days",
+                "month": "month",
+                "months": "months",
+                "year": "year",
+                "years": "years",
+                "ago": "ago",
+                "justNow": "Just now"
+            },
+            "usernameText": "Guest"
+        },
+        "toiletCard": {
+            "min": "min",
+            "reviewTitle": "Review",
+            "showRouteBtn": "Calculate Route"
+        },
+        "commentGallery": {
+            "moreReviewsBtn": "See all reviews",
+            "noReview": "No reviews to display yet"
+        },
+        "writeCommentAndRate": {
+            "reviewInputText": "Write your review ...",
+            "rating": "Rating"
+        },
+        "mapOfToilets": {
+            "cancelNavBtn": "End navigation",
+            "cancelBtn": "Cancel",
+            "addLocationBtn": "Add location"
+        },
+        "newToilet": {
+            "sheetTitle": "New Toilet",
+            "western": "Western",
+            "iranian": "Squat",
+            "wheelchairAccess": "Wheelchair accessible",
+            "handDryer": "Hand dryer",
+            "babyChange": "Baby changing",
+            "warmWater": "Warm water",
+            "soap": "Soap",
+            "toiletPaper": "Toilet paper",
+            "toiletName": "Toilet name",
+            "chooseOnMap": "Choose on map",
+            "location": "Location",
+            "address": "Address",
+            "free": "Free",
+            "price": "Price",
+            "amenities": "Amenities",
+            "rating": "Rating",
+            "description": "Additional details"
+        },
+        "rateAndCommentSheet": {
+            "vote": "Review",
+            "noReview": "No reviews to display yet",
+            "reviewInputText": "Write your review ...",
+            "cancelReviewBtn": "Cancel",
+            "addReviewBtn": "Submit review",
+            "cleanliness": "Cleanliness",
+            "odor": "Odor",
+            "amenitiesHealth": "Condition of amenities",
+            "light": "Lighting",
+            "privacy": "Privacy & safety",
+            "crowd": "Crowdedness"
+        },
+        "starRating": {
+            "cleanliness": "Cleanliness",
+            "odor": "Odor",
+            "amenitiesHealth": "Condition of amenities",
+            "light": "Lighting",
+            "privacy": "Privacy & safety",
+            "crowd": "Crowdedness",
+            "overall": "Overall rating"
+        },
+        "settings": {
+            "pageName": "Settings",
+            "about": {
+                "title": "App Information",
+                "titleAbout": "About Jajisha",
+                "jajisha": "Jajisha",
+                "subtitle": "Find nearby toilets",
+                "privacyPolicy": "Privacy Policy"
+            },
+            "general": {
+                "title": "General Settings",
+                "systemUnit": "Measurement unit",
+                "metric": "Metric",
+                "imperial": "Imperial",
+                "language": "App language",
+                "farsi": "Farsi",
+                "english": "English",
+                "theme": "Theme",
+                "dark": "Dark",
+                "light": "Light",
+                "system": "System",
+                "account": "Account",
+                "guest": "Guest",
+                "username": "Username",
+                "signout": "Sign out",
+                "deleteAccount": "Delete account",
+                "nothingToShow": "Nothing to show",
+                "signin": "Sign in",
+                "createAccount": "Create an account",
+                "toSee": " to see what's here!"
+            },
+            "map": {
+                "title": "Map Settings",
+                "mapType": "Map type",
+                "satellite": "Satellite",
+                "hybrid": "Hybrid",
+                "standard": "Standard",
+                "showMyLocation": "My location",
+                "doShowMyLocation": "Show my location",
+                "doNotShowMyLocation": "Don't show my location",
+                "do": "Show",
+                "doNot": "Don't show",
+                "showCompass": "Compass",
+                "doShowCompass": "Show compass",
+                "doNotShowCompass": "Don't show compass"
+            }
+        },
+        "topSheet": {
+            "menuTopSheet": {
+                "hello": "Hello",
+                "wellcomeBack": "Welcome back",
+                "guest": "Guest",
+                "signin": "Sign in",
+                "signout": "Sign out",
+                "settings": "Settings",
+                "en": "English",
+                "fa": "Farsi",
+                "savedToilets": "Saved Places"
+            }
+        }
     },
-    "ToiletLocationBottomSheet": {
-        "toiletInfo": "Toilet Info"
+    "toast": {
+        "useAuth": {
+            "signup": {
+                "noOkRes1": "Account creation failed",
+                "noOkRes2": "Please try again later",
+                "success": "Account created successfully",
+                "catch1": "Something went wrong while creating your account",
+                "catcht2": "There may be an issue with our servers.\nCheck your connection and try again."
+            },
+            "signin": {
+                "noOkRes1": "Sign-in failed",
+                "noOkRes2": "Please try again later",
+                "success": "Signed in successfully",
+                "catch1": "Something went wrong while signing in",
+                "catcht2": "There may be an issue with our servers.\nCheck your connection and try again."
+            },
+            "restoreUser": {
+                "noOkRes1": "Failed to retrieve your account information",
+                "noOkRes2": "Please check your internet connection",
+                "catch1": "Something went wrong while retrieving your account information",
+                "catcht2": "There may be an issue with our servers.\nCheck your connection and try again."
+            },
+            "logout": {
+                "catch1": "Something went wrong while signing out",
+                "catcht2": "There may be an issue with our servers.\nCheck your connection and try again."
+            },
+            "deleteUser": {
+                "noOkRes1": "Account deletion failed",
+                "noOkRes2": "Please check your internet connection",
+                "catch1": "Something went wrong while deleting your account",
+                "catcht2": "There may be an issue with our servers.\nCheck your connection and try again."
+            }
+        },
+        "useCreateReview": {
+            "userNotFound": "User not found",
+            "toiletNotFound": "Toilet not found",
+            "noOkRes1": "Review submission failed",
+            "noOkRes2": "You can submit only one review per toilet",
+            "noOkRes3": "Review submission failed",
+            "noOkRes4": "Please check your internet connection",
+            "catch1": "Something went wrong while submitting your review",
+            "catcht2": "There may be an issue with our servers.\nCheck your connection and try again."
+        },
+        "useCurrentLocation": {
+            "locGrant1": "The app needs access to your location",
+            "locGrant2": "Please grant the required permission in Settings",
+            "catch1": "Something went wrong while getting your location",
+            "catcht2": "There may be an issue with our servers.\nCheck your connection and try again."
+        },
+        "useManagingWc": {
+            "addWc": {
+                "noOkRes1": "Failed to add the new toilet",
+                "noOkRes2": "Please check your internet connection",
+                "success1": "New toilet added to the map",
+                "success2": "Thanks for helping expand the app's data",
+                "catch1": "Something went wrong while adding the new toilet",
+                "catcht2": "There may be an issue with our servers.\nCheck your connection and try again."
+            },
+            "getWc": {
+                "noOkRes1": "Failed to retrieve toilet information",
+                "noOkRes2": "Please check your internet connection",
+                "catch1": "Something went wrong while retrieving toilet information",
+                "catcht2": "There may be an issue with our servers.\nCheck your connection and try again."
+            },
+            "getWcReviews": {
+                "noOkRes1": "Failed to retrieve toilet reviews",
+                "noOkRes2": "Please check your internet connection",
+                "catch1": "Something went wrong while retrieving toilet reviews",
+                "catcht2": "There may be an issue with our servers.\nCheck your connection and try again."
+            },
+            "saveWc": {
+                "noToken1": "Failed to save toilet",
+                "noToken2": "You must sign in to save a toilet",
+                "noToilet1": "Failed to save toilet",
+                "noToilet2": "Please try again later",
+                "noOkRes1": "Failed to save toilet",
+                "noOkRes2": "Please check your internet connection",
+                "catch1": "Something went wrong while saving the toilet",
+                "catcht2": "There may be an issue with our servers.\nCheck your connection and try again."
+            },
+            "unsaveWc": {
+                "noToken1": "Failed to remove toilet",
+                "noToken2": "You must sign in to remove a saved toilet",
+                "noToilet1": "Failed to remove toilet",
+                "noToilet2": "Please try again later",
+                "noOkRes1": "Failed to remove toilet",
+                "noOkRes2": "Please check your internet connection",
+                "catch1": "Something went wrong while removing the toilet",
+                "catcht2": "There may be an issue with our servers.\nCheck your connection and try again."
+            }
+        },
+        "useNavigateWc": {
+            "navigateToToilet": {
+                "locGrant1": "The app needs access to your location",
+                "locGrant2": "Please grant the required permission in Settings",
+                "catch1": "Something went wrong while getting your location",
+                "catcht2": "Please check your connection and try again.",
+                "catch3": "Something went wrong while getting your location",
+                "catcht4": "Route information was not received correctly. Please try again.",
+                "catch5": "Something went wrong while getting your location",
+                "catcht6": "There may be an issue with our servers.\nCheck your connection and try again."
+            },
+            "calculateToiletDistance": {
+                "locGrant1": "The app needs access to your location",
+                "locGrant2": "Please grant the required permission in Settings",
+                "catch1": "Something went wrong while getting your location",
+                "catcht2": "Please check your connection and try again.",
+                "catch3": "Something went wrong while getting your location",
+                "catcht4": "Route information was not received correctly. Please try again.",
+                "catch5": "Something went wrong while getting your location",
+                "catcht6": "There may be an issue with our servers.\nCheck your connection and try again."
+            }
+        }
     },
-    "drawer": {
-        "hello": "Hello",
-        "welcome": "Welcome back,",
-        "account": "Account",
-        "settings": "Settings",
-        "favorites": "Saved Toilets",
-        "help": "Help",
-        "about": "About"
-    },
-    "newToilet": {
-        "western": "Western",
-        "iranian": "Iranian",
-        "wheelchairAccess": "Wheelchair Access",
-        "handDryer": "Hand Dryer",
-        "babyChange": "Baby Change",
-        "warmWater": "Warm Water",
-        "soap": "Soap",
-        "toiletPaper":"Toilet Paper",
-        "toiletName": "Toilet Name",
-        "chooseOnMap": "Choose on Map",
-        "location": "Location",
-        "address": "Address",
-        "free": "Free",
-        "price": "Price",
-        "amenities": "Amenities",
-        "rating": "Rating",
-        "description": "Description"
-    },
-    "starRating": {
-        "cleanliness": "Cleanliness",
-        "odor": "Odor",
-        "amenitiesHealth": "Amenities Health",
-        "light": "Lights",
-        "privacy": "Privacy",
-        "crowd": "Crowd",
-        "overall":"Overal"
+    "waitingSystem": {
+        "checkingInfo": "Checking your information...",
+        "makingAccount": "Creating your account...",
+        "puttingYourStuffBack": "Restoring your information...",
+        "rememberingYou": "Restoring your data...",
+        "loggingOut": "Signing out...",
+        "throwingYourStuffToToilet": "Throwing your stuff in the toilet",
+        "creatingReview": "Submitting your review...",
+        "checkingToilet": "Checking toilet...",
+        "newToiletAdded": "New toilet added to the map",
+        "findingNearbyToilets": "Finding nearby toilets...",
+        "loadingThings": "Loading...",
+        "savingToFavorites": "Saving...",
+        "unsavingFromFavorites": "Removing...",
+        "locating": "Locating..."
     }
 }

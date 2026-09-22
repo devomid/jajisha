@@ -19,7 +19,7 @@ export const useAuth = () => {
 
     const signUp = async (username, firstName, lastName, email, password) => {
 
-        const waitingId = startWaiting("Checking your info...");
+        const waitingId = startWaiting(t("waitingSystem.checkingInfo"));
 
         try {
             const response = await fetch(`${API_URL}/api/user/su`, {
@@ -35,7 +35,7 @@ export const useAuth = () => {
             });
             updateWaiting(
                 waitingId,
-                "Making account..."
+                t("waitingSystem.makingAccount")
             )
 
             if (!response.ok) {
@@ -99,7 +99,7 @@ export const useAuth = () => {
 
     const signIn = async (email, password) => {
 
-        const waitingId = startWaiting("Checking account info...");
+        const waitingId = startWaiting(t("waitingSystem.checkingInfo"));
 
         try {
             const response = await fetch(`${API_URL}/api/user/si`, {
@@ -107,7 +107,7 @@ export const useAuth = () => {
                 headers: { "Content-Type": 'application/json' },
                 body: JSON.stringify({ email, password })
             });
-            updateWaiting(waitingId, "Putting your stuff back...");
+            updateWaiting(waitingId, t("waitingSystem.puttingYourStuffBack"));
 
             if (!response.ok) {
                 const errorRes = await response.json();
@@ -170,7 +170,7 @@ export const useAuth = () => {
 
     const restoreUser = async () => {
 
-        const waitingId = startWaiting("Remembering you");
+        const waitingId = startWaiting(t("waitingSystem.rememberingYou"));
 
         try {
             const token = await SecureStore.getItemAsync("authToken");
@@ -245,7 +245,7 @@ export const useAuth = () => {
 
     const logout = async () => {
 
-        const waitingId = startWaiting("Logging out...");
+        const waitingId = startWaiting(t("waitingSystem.loggingOut"));
 
         try {
             await SecureStore.deleteItemAsync("authToken");
@@ -273,7 +273,7 @@ export const useAuth = () => {
 
     const deleteUser = async () => {
 
-        const waitingId = startWaiting("Throwing your stuff to toilet...");
+        const waitingId = startWaiting(t("waitingSystem.throwingYourStuffToToilet"));
 
         try {
             const token = await SecureStore.getItemAsync("authToken");
