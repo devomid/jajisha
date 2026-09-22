@@ -45,6 +45,7 @@ export const useWcDataStore = create((set) => ({
 
     pickedCoordinate: null,
     mapCenter: null,
+    mapRegion: null,
     toilets: [],
     selectedToilet: null,
     isPickingLocation: false,
@@ -174,6 +175,12 @@ export const useWcDataStore = create((set) => ({
             mapCenter: {
                 latitude: region.latitude,
                 longitude: region.longitude,
+            },
+            mapRegion: {
+                latitude: region.latitude,
+                longitude: region.longitude,
+                latitudeDelta: region.latitudeDelta,
+                longitudeDelta: region.longitudeDelta,
             },
         }),
 

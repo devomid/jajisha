@@ -27,6 +27,7 @@ const MapOfToilets = forwardRef(({ currentLocation, onMarkerPress, isPickingLoca
     const setSelectedToilet = useWcDataStore(state => state.setSelectedToilet);
     const clearNavigation = useWcDataStore(state => state.clearNavigation);
     const mapCenter = useWcDataStore(state => state.mapCenter);
+    const mapRegion = useWcDataStore(state => state.mapRegion);
     const setMapCenter = useWcDataStore(state => state.setMapCenter);
     const stopPickingLocation = useWcDataStore(state => state.stopPickingLocation);
     const setPickedLocation = useWcDataStore(state => state.setPickedLocation);
@@ -34,10 +35,6 @@ const MapOfToilets = forwardRef(({ currentLocation, onMarkerPress, isPickingLoca
     const mapType = useSettingsStore(state => state.mapType);
     const showMyLocation = useSettingsStore(state => state.showMyLocation);
     const showCompass = useSettingsStore(state => state.showCompass);
-
-    const [latitudeDelta, setLatitudeDelta] = useState(0.02);
-    const [navigationLocation, setNavigationLocation] = useState(null);
-    const [region, setRegion] = useState(initialRegion);
 
     const regionRef = useRef(initialRegion);
     const navigationLocationRef = useRef(null);
@@ -57,11 +54,15 @@ const MapOfToilets = forwardRef(({ currentLocation, onMarkerPress, isPickingLoca
     } = navigation;
 
     const initialRegion = {
-        latitude: currentLocation.coords.latitude,
-        longitude: currentLocation.coords.longitude,
-        latitudeDelta: 0.02,
-        longitudeDelta: 0.02,
+        latitude: mapRegion?.latitude ?? currentLocation.coords.latitude,
+        longitude: mapRegion?.longitude ?? currentLocation.coords.longitude,
+        latitudeDelta: mapRegion?.latitudeDelta ?? 0.02,
+        longitudeDelta: mapRegion?.longitudeDelta ?? 0.02,
     };
+
+    const [latitudeDelta, setLatitudeDelta] = useState(initialRegion.latitudeDelta);
+    const [navigationLocation, setNavigationLocation] = useState(null);
+    const [region, setRegion] = useState(initialRegion);
 
     const markerSize = Math.max(40, Math.min(85, 60 * Math.pow(0.02 / latitudeDelta, 0.25)));
     const navigationRouteCoordinates = navigationRoute?.coordinates?.map(
@@ -179,9 +180,9 @@ const MapOfToilets = forwardRef(({ currentLocation, onMarkerPress, isPickingLoca
                 };
 
                 regionRef.current = newRegion;
-
                 setLatitudeDelta(newRegion.latitudeDelta);
                 setRegion(newRegion);
+                setMapCenter(newRegion);
 
                 mapRef.current.animateToRegion(
                     newRegion,
@@ -257,13 +258,14 @@ const MapOfToilets = forwardRef(({ currentLocation, onMarkerPress, isPickingLoca
                 };
 
                 regionRef.current = newRegion;
+                setMapCenter(newRegion);
 
-                setLatitudeDelta(newRegion.latitudeDelta);
+                setLatitudeDelta(0.02);
                 setRegion(newRegion);
 
                 mapRef.current.animateToRegion(
                     newRegion,
-                    300
+                    500
                 );
             },
 
