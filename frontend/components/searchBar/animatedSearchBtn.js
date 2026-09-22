@@ -845,7 +845,7 @@ export default function SearchButton({
                         backgroundColor:
                             theme.colors
                                 .secondaryLighter +
-                            "40",
+                            "25",
 
                         shadowColor: "#000",
                     },

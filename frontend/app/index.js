@@ -120,7 +120,7 @@ export default function Home() {
                     intensity={8}
                     tint="dark"
                     style={{
-                        backgroundColor: theme.colors.secondaryLighter + "40",
+                        backgroundColor: theme.colors.secondaryLighter + "25",
                         width: 40,
                         height: 45,
                         borderRadius: 17,
@@ -212,7 +212,7 @@ export default function Home() {
                             style={{
                                 height: 45,
                                 width: 65,
-                                backgroundColor: theme.colors.secondaryLighter + '40',
+                                backgroundColor: theme.colors.secondaryLighter + '25',
                                 borderRadius: 99,
                                 alignItems: 'center',
                                 justifyContent: 'center',
@@ -259,7 +259,7 @@ export default function Home() {
                             style={{
                                 height: 50,
                                 width: 50,
-                                backgroundColor: theme.colors.primaryLighter + '40',
+                                backgroundColor: theme.colors.primaryLighter + '65',
                                 borderRadius: 99,
                                 alignItems: 'center',
                                 justifyContent: 'center',
@@ -308,7 +308,7 @@ export default function Home() {
                             style={{
                                 height: 45,
                                 width: 65,
-                                backgroundColor: theme.colors.secondaryLighter + '40',
+                                backgroundColor: theme.colors.secondaryLighter + '25',
                                 borderRadius: 99,
                                 alignItems: 'center',
                                 justifyContent: 'center',
