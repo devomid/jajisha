@@ -79,7 +79,7 @@ beforeEach(() => {
 
 describe("useCreateReview", () => {
     test("rejects when review creation is already in progress", async () => {
-        const { result } = renderHook(() => useCreateReview());
+        const { result } = await renderHook(() => useCreateReview());
 
         const firstRequest = new Promise(() => { });
 
@@ -109,7 +109,7 @@ describe("useCreateReview", () => {
     test("returns null when the user is not authenticated", async () => {
         mockUser = null;
 
-        const { result } = renderHook(() => useCreateReview());
+        const { result } = await renderHook(() => useCreateReview());
 
         const response = await result.current({
             reviewText: "This is a valid review.",
@@ -137,7 +137,7 @@ describe("useCreateReview", () => {
     test("returns null when there is no selected toilet", async () => {
         mockToiletId = null;
 
-        const { result } = renderHook(() => useCreateReview());
+        const { result } = await renderHook(() => useCreateReview());
 
         const response = await result.current({
             reviewText: "This is a valid review.",
@@ -178,7 +178,7 @@ describe("useCreateReview", () => {
             }),
         });
 
-        const { result } = renderHook(() => useCreateReview());
+        const { result } = await renderHook(() => useCreateReview());
 
         const response = await result.current({
             reviewText: "This is a valid review.",
@@ -218,7 +218,7 @@ describe("useCreateReview", () => {
             }),
         });
 
-        const { result } = renderHook(() => useCreateReview());
+        const { result } = await renderHook(() => useCreateReview());
 
         const response = await result.current({
             reviewText: "This is a valid review.",
@@ -252,7 +252,7 @@ describe("useCreateReview", () => {
             }),
         });
 
-        const { result } = renderHook(() => useCreateReview());
+        const { result } = await renderHook(() => useCreateReview());
 
         const response = await result.current({
             reviewText: "This is a valid review.",
@@ -280,7 +280,7 @@ describe("useCreateReview", () => {
     test("handles review request errors", async () => {
         global.fetch.mockRejectedValue(new Error("Network error"));
 
-        const { result } = renderHook(() => useCreateReview());
+        const { result } = await renderHook(() => useCreateReview());
 
         const response = await result.current({
             reviewText: "This is a valid review.",

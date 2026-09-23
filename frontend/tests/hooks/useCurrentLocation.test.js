@@ -53,7 +53,7 @@ beforeEach(() => {
 
 describe("useCurrentLocation", () => {
     test("gets and stores the current location successfully", async () => {
-        const { result } = renderHook(() => useCurrentLocation());
+        const { result } = await renderHook(() => useCurrentLocation());
 
         await waitFor(() => {
             expect(result.current).not.toBeNull();
@@ -76,7 +76,7 @@ describe("useCurrentLocation", () => {
             status: "denied",
         });
 
-        const { result } = renderHook(() => useCurrentLocation());
+        const { result } = await renderHook(() => useCurrentLocation());
 
         await waitFor(() => {
             expect(mockRequestForegroundPermissionsAsync).toHaveBeenCalled();
@@ -103,7 +103,7 @@ describe("useCurrentLocation", () => {
             new Error("Location error")
         );
 
-        const { result } = renderHook(() => useCurrentLocation());
+        const { result } = await renderHook(() => useCurrentLocation());
 
         await waitFor(() => {
             expect(mockToastShow).toHaveBeenCalled();
