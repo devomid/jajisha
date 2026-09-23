@@ -1,7 +1,8 @@
-import { View, Text } from "react-native";
-import StarRating from "react-native-star-rating-widget";
-import { Divider } from 'react-native-paper';
 import { useTranslation } from "react-i18next";
+
+import { View, Text } from "react-native";
+import { Divider } from 'react-native-paper';
+import StarRating from "react-native-star-rating-widget";
 
 export default function CommentCardComponentBig({ theme, review }) {
     const { t } = useTranslation();

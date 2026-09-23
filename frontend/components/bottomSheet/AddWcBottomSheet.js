@@ -1,14 +1,17 @@
 import React, { forwardRef, useMemo, useCallback, useEffect } from "react";
-import { BottomSheetModal, BottomSheetBackdrop } from "@gorhom/bottom-sheet";
-import GlassBackground from "../../components/blur/blurView";
-import NewToilet from "../newToilet/newToilet";
+import { useTranslation } from "react-i18next";
+
+import { View, Text } from "react-native";
 import { useTheme } from "react-native-paper";
 import { BottomSheetScrollView } from '@gorhom/bottom-sheet';
-import { View, Text } from "react-native";
-import { useTranslation } from "react-i18next";
-import { useWcDataStore } from "../../store/wcDataStore";
-import ButtonComponent from "../Button/Button";
+import { BottomSheetModal, BottomSheetBackdrop } from "@gorhom/bottom-sheet";
+
+import { useWcDataStore } from "../../src/store/wcDataStore";
 import { useManagingWc } from "../../src/hooks/useManagingWc";
+
+import ButtonComponent from "../Button/Button";
+import NewToilet from "../newToilet/newToilet";
+import GlassBackground from "../../components/blur/blurView";
 
 const AddWc = forwardRef((props, ref) => {
     const { t } = useTranslation();

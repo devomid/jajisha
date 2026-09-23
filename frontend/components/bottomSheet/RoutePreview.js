@@ -1,15 +1,15 @@
 import React, { forwardRef, useMemo, useCallback, useEffect, useRef, useState, } from "react";
 import { useTranslation } from "react-i18next";
 
-import { View, StyleSheet, Image } from "react-native";
+import { View, Image } from "react-native";
 import { useTheme, Text } from "react-native-paper";
 import { Navigation, Road, Timer, MapPin, Toilet } from 'lucide-react-native';
 import { BottomSheetModal, BottomSheetBackdrop, } from "@gorhom/bottom-sheet";
 import MapView, { Polyline, Marker, } from "react-native-maps";
 
 import logger from "../../src/utils/logger";
-import { useWcDataStore } from "../../store/wcDataStore";
-import { useSettingsStore } from "../../store/settingsStore";
+import { useWcDataStore } from "../../src/store/wcDataStore";
+import { useSettingsStore } from "../../src/store/settingsStore";
 import { formatDistance } from "../../src/utils/distance";
 
 import GlassBackground from "../blur/blurView";

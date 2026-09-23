@@ -1,13 +1,16 @@
+import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
+
 import { View, StyleSheet, ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Text, useTheme } from "react-native-paper";
 import MapView from "react-native-maps";
 import { BlurView } from "expo-blur";
-import PageHeader from "../components/topNav/topNav";
+
 import useCurrentLocation from "../src/hooks/useCurrentLocation";
-import { useEffect, useState } from "react";
-import { useSettingsStore } from "../store/settingsStore";
-import { useTranslation } from "react-i18next";
+import { useSettingsStore } from "../src/store/settingsStore";
+
+import PageHeader from "../components/topNav/topNav";
 
 
 export default function About() {

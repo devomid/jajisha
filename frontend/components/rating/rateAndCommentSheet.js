@@ -8,9 +8,9 @@ import { BottomSheetScrollView, } from "@gorhom/bottom-sheet";
 import * as Progress from 'react-native-progress';
 import { useToast } from "react-native-toast-notifications";
 
-import { useWcDataStore } from "../../store/wcDataStore";
+import { useWcDataStore } from "../../src/store/wcDataStore";
 import { useCreateReview } from "../../src/hooks/useCreateReview";
-import { useUserStore } from "../../store/userStore";
+import { useUserStore } from "../../src/store/userStore";
 
 import CommentCardComponentBig from "../cards/commentCardComponentBig";
 import ButtonComponent from "../Button/Button";

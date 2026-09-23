@@ -13,8 +13,8 @@ import CountryFlag from "react-native-country-flag";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { useAuth } from "../../src/hooks/useAuth";
-import { useTopSheetStore } from "../../store/menuStore";
-import { useUserStore } from "../../store/userStore";
+import { useTopSheetStore } from "../../src/store/menuStore";
+import { useUserStore } from "../../src/store/userStore";
 
 import ButtonComponent from '../Button/Button';
 import GlassBackground from "../../components/blur/blurView";

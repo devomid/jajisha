@@ -1,7 +1,7 @@
-import { useWcDataStore } from "../../store/wcDataStore";
-import { useUserStore } from "../../store/userStore";
+import { useWcDataStore } from "../../src/store/wcDataStore";
+import { useUserStore } from "../../src/store/userStore";
 import { API_URL } from "../config/api";
-import useWaitingSystemStore from '../../store/waitingSystemStore';
+import useWaitingSystemStore from '../../src/store/waitingSystemStore';
 import { useToast } from "react-native-toast-notifications";
 import logger from "../utils/logger";
 import { useTranslation } from "react-i18next";

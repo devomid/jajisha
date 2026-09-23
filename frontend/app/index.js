@@ -11,7 +11,7 @@ import { BlurView } from "expo-blur";
 import { useTopSheetStore } from '../store/menuStore';
 import { useManagingWc } from '../src/hooks/useManagingWc';
 import useCurrentLocation from '../src/hooks/useCurrentLocation';
-import { useWcDataStore } from '../store/wcDataStore';
+import { useWcDataStore } from '../src/store/wcDataStore';
 import logger from "../src/utils/logger";
 
 import MapOfToilets from '../components/map/mapOfToilets';

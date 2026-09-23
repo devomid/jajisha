@@ -8,7 +8,7 @@ import MapView from "react-native-maps";
 import { BlurView } from "expo-blur";
 
 import useCurrentLocation from "../src/hooks/useCurrentLocation";
-import { useSettingsStore } from "../store/settingsStore";
+import { useSettingsStore } from "../src/store/settingsStore";
 
 import PageHeader from "../components/topNav/topNav";
 import GeneralSettings from "../components/setting/general";

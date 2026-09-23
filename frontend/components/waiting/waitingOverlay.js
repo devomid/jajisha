@@ -1,6 +1,6 @@
 import { Modal, View } from "react-native";
 import { Text, useTheme } from "react-native-paper";
-import useWaitingSystemStore from "../../store/waitingSystemStore";
+import useWaitingSystemStore from "../../src/store/waitingSystemStore";
 import { BlurView } from "expo-blur";
 import { Matrix, snakeFrames } from "react-native-dotgrid";
 

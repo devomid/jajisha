@@ -17,8 +17,8 @@ import { useToast } from "react-native-toast-notifications";
 import { signInSchema } from "../../src/validation/userInfoSchema";
 import { useAuth } from "../../src/hooks/useAuth";
 import useCurrentLocation from "../../src/hooks/useCurrentLocation";
-import { useSettingsStore } from "../../store/settingsStore";
-import { useTopSheetStore } from "../../store/menuStore";
+import { useSettingsStore } from "../../src/store/settingsStore";
+import { useTopSheetStore } from "../../src/store/menuStore";
 import logger from "../../src/utils/logger";
 
 import ButtonComponent from "../../components/Button/Button";

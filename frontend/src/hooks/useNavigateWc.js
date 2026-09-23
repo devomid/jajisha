@@ -3,9 +3,9 @@ import * as Location from "expo-location";
 import { useTranslation } from "react-i18next";
 
 import { useToast } from "react-native-toast-notifications";
-import { useWcDataStore } from "../../store/wcDataStore";
+import { useWcDataStore } from "../../src/store/wcDataStore";
 
-import useWaitingSystemStore from "../../store/waitingSystemStore";
+import useWaitingSystemStore from "../../src/store/waitingSystemStore";
 import logger from "../utils/logger";
 
 

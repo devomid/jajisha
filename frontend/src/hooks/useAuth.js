@@ -2,9 +2,9 @@ import * as SecureStore from "expo-secure-store";
 import { useTranslation } from "react-i18next";
 import { useToast } from "react-native-toast-notifications";
 
-import { useUserStore } from "../../store/userStore";
+import { useUserStore } from "../../src/store/userStore";
+import useWaitingSystemStore from '../../src/store/waitingSystemStore';
 import { API_URL } from "../config/api";
-import useWaitingSystemStore from '../../store/waitingSystemStore';
 import logger from "../utils/logger";
 
 

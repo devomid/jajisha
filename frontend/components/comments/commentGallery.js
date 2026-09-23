@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import { Ellipsis, } from "lucide-react-native";
 import { View, ScrollView, Text } from "react-native";
 
-import { useWcDataStore } from "../../store/wcDataStore";
+import { useWcDataStore } from "../../src/store/wcDataStore";
 
 import ButtonComponent from "../Button/Button";
 import CommentCardComponent from "../cards/commentCardComponentSmall";

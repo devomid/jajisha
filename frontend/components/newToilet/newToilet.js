@@ -7,7 +7,7 @@ import { View, } from "react-native";
 import { Checkbox } from 'expo-checkbox';
 import Rating from "../rating/starRating";
 
-import { useWcDataStore } from "../../store/wcDataStore";
+import { useWcDataStore } from "../../src/store/wcDataStore";
 import ButtonComponent from "../Button/Button";
 
 import PhotoGallery from '../photoGallery/photoGallery';

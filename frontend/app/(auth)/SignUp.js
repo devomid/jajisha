@@ -4,14 +4,14 @@ import { useFormik } from "formik";
 import { router } from "expo-router";
 
 import { Mail, KeyRound, ShieldCheck, UserRound, AtSign } from 'lucide-react-native';
-import { View, StyleSheet, Pressable } from "react-native";
+import { View, Pressable } from "react-native";
 import { Text, useTheme } from "react-native-paper";
 import MapView from "react-native-maps";
 import { BlurView } from "expo-blur";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { signUpSchema, } from "../../src/validation/userInfoSchema";
-import { useSettingsStore } from "../../store/settingsStore";
+import { useSettingsStore } from "../../src/store/settingsStore";
 import { useAuth } from "../../src/hooks/useAuth"
 import useCurrentLocation from "../../src/hooks/useCurrentLocation";
 import logger from "../../src/utils/logger";

@@ -8,10 +8,11 @@ import { useTheme } from "react-native-paper";
 import { View, Pressable, Text, Image, Platform, } from "react-native";
 import { BlurView } from "expo-blur";
 
-import { useWcDataStore } from "../../store/wcDataStore";
-import { useNavigateToToilet } from "../../src/hooks/useNavigateWc";
-import { useSettingsStore } from "../../store/settingsStore";
 import logger from "../../src/utils/logger";
+import { useWcDataStore } from "../../src/store/wcDataStore";
+import { useNavigateToToilet } from "../../src/hooks/useNavigateWc";
+import { useSettingsStore } from "../../src/store/settingsStore";
+
 import ButtonComponent from "../Button/Button";
 
 

@@ -5,7 +5,7 @@ import { ChevronDown, ChevronUp, Navigation2, Compass, MapPinPen } from "lucide-
 import { View, Pressable } from "react-native";
 import { List, Text, Divider } from "react-native-paper";
 
-import { useSettingsStore } from "../../store/settingsStore";
+import { useSettingsStore } from "../../src/store/settingsStore";
 
 export default function MapSettings({ theme }) {
     const { t } = useTranslation();

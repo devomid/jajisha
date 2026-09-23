@@ -7,8 +7,8 @@ import { ChevronDown, ChevronUp, RulerDimensionLine, Languages, AtSign, SunMoon,
 import { List, Text, Divider } from "react-native-paper";
 import { Pressable, View } from "react-native";
 
-import { useSettingsStore } from "../../store/settingsStore";
-import { useUserStore } from "../../store/userStore";
+import { useSettingsStore } from "../../src/store/settingsStore";
+import { useUserStore } from "../../src/store/userStore";
 import { useAuth } from "../../src/hooks/useAuth";
 
 import ButtonComponent from '../Button/Button';

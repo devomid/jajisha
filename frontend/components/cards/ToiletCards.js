@@ -5,9 +5,9 @@ import { MapPin, Road, Route, Star, Timer } from "lucide-react-native";
 import { useTheme, Text } from "react-native-paper";
 import { View, Image, Pressable } from "react-native";
 
-import { useWcDataStore } from "../../store/wcDataStore";
-import { useTopSheetStore } from "../../store/menuStore";
-import { useSettingsStore } from "../../store/settingsStore";
+import { useWcDataStore } from "../../src/store/wcDataStore";
+import { useTopSheetStore } from "../../src/store/menuStore";
+import { useSettingsStore } from "../../src/store/settingsStore";
 import { formatDistance } from "../../src/utils/distance";
 
 import ButtonComponent from "../Button/Button";

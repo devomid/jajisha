@@ -6,7 +6,7 @@ import { List } from "react-native-paper";
 import { View, TextInput } from "react-native";
 import Rating from "../rating/starRating";
 
-import { useWcDataStore } from "../../store/wcDataStore";
+import { useWcDataStore } from "../../src/store/wcDataStore";
 
 
 export default function WriteCommandAndRate({ theme }) {

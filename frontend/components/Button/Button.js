@@ -1,5 +1,4 @@
 import { BlurView } from "expo-blur";
-import React from "react";
 import { Pressable, View } from "react-native";
 
 const ButtonComponent = ({

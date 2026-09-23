@@ -9,13 +9,13 @@ import { Text, useTheme } from "react-native-paper";
 import { BlurView } from "expo-blur";
 import { BottomSheetModal, BottomSheetBackdrop, BottomSheetScrollView, } from "@gorhom/bottom-sheet";
 
-import { useWcDataStore } from "../../store/wcDataStore";
-import { useUserStore } from "../../store/userStore";
-import { useAuth } from "../../src/hooks/useAuth";
+import { useWcDataStore } from "../../src/store/wcDataStore";
+import { useUserStore } from "../../src/store/userStore";
+import { useSettingsStore } from "../../src/store/settingsStore";
+import useWaitingSystemStore from "../../src/store/waitingSystemStore";
 import { formatDistance } from "../../src/utils/distance";
 import { useManagingWc } from '../../src/hooks/useManagingWc';
-import { useSettingsStore } from "../../store/settingsStore";
-import useWaitingSystemStore from "../../store/waitingSystemStore";
+import { useAuth } from "../../src/hooks/useAuth";
 
 import GlassBackground from "../../components/blur/blurView";
 import PhotoGallery from "../photoGallery/photoGallery";

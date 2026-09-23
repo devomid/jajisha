@@ -5,7 +5,7 @@ import { ChevronLeft, X } from "lucide-react-native";
 import { useTheme, Text } from "react-native-paper";
 import { View, Pressable } from "react-native";
 
-import { useTopSheetStore } from "../../store/menuStore";
+import { useTopSheetStore } from "../../src/store/menuStore";
 
 
 export default function PageHeader({ pageName }) {
