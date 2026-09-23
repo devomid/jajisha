@@ -1,7 +1,8 @@
 import { MD3LightTheme, MD3DarkTheme, configureFonts, } from "react-native-paper";
 import Colors from "../constants/colors";
 
-export function getPaperTheme(isDark) {
+export function getPaperTheme(isDark, isFarsi) {
+    
     const c = isDark ? Colors.dark : Colors.light;
 
     const baseTheme = isDark ? MD3DarkTheme : MD3LightTheme;
@@ -13,6 +14,7 @@ export function getPaperTheme(isDark) {
         fonts: configureFonts({
             config: {
                 fontFamily: "Vazirmatn",
+                textAlign: isFarsi ? "right" : "left",
             },
         }),
         

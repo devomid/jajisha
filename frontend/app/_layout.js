@@ -5,6 +5,7 @@ import { Vazirmatn_500Medium } from "@expo-google-fonts/vazirmatn/500Medium";
 import { Vazirmatn_700Bold } from "@expo-google-fonts/vazirmatn/700Bold";
 import { useEffect, useState } from "react";
 import { I18nManager, useColorScheme } from "react-native";
+import { useTranslation } from "react-i18next";
 
 import { PaperProvider } from "react-native-paper";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
@@ -22,6 +23,7 @@ import AppToast from "../components/toast/appToast";
 import AuthBootstrap from "../components/auth/authBootStrap";
 
 export default function RootLayout() {
+    const { i18n } = useTranslation();
     const scheme = useColorScheme();
     const themeSetting = useSettingsStore(state => state.theme);
 
@@ -30,7 +32,10 @@ export default function RootLayout() {
             ? scheme === "dark"
             : themeSetting === "Dark";
 
-    const theme = getPaperTheme(isDark);
+    const theme = getPaperTheme(
+        isDark,
+        i18n.language === "fa"
+    );
 
     const [ready, setReady] = useState(false);
 
