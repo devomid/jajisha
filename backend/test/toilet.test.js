@@ -12,168 +12,6 @@ describe('GET /api/toilets', () => {
         expect(response.body).toHaveProperty('toilets');
         expect(Array.isArray(response.body.toilets)).toBe(true);
     });
-
-    it("should return 400 when ratings are missing", async () => {
-        const { ratings, ...wcDataWithoutRatings } =
-            validToilet.wcData;
-
-        const response = await request(app)
-            .post("/api/toilets")
-            .set("Authorization", `Bearer ${token}`)
-            .send({
-                wcData: wcDataWithoutRatings,
-            });
-
-        expect(response.statusCode).toBe(400);
-
-        expect(response.body).toEqual({
-            message: "Ratings are required",
-        });
-    });
-
-    it("should return 400 when ratings are an array", async () => {
-        const response = await request(app)
-            .post("/api/toilets")
-            .set("Authorization", `Bearer ${token}`)
-            .send({
-                wcData: {
-                    ...validToilet.wcData,
-                    ratings: [],
-                },
-            });
-
-        expect(response.statusCode).toBe(400);
-
-        expect(response.body).toEqual({
-            message: "Ratings are required",
-        });
-    });
-
-    it("should return 400 when a rating field is missing", async () => {
-        const ratings = {
-            ...validToilet.wcData.ratings,
-        };
-
-        delete ratings.odor;
-
-        const response = await request(app)
-            .post("/api/toilets")
-            .set("Authorization", `Bearer ${token}`)
-            .send({
-                wcData: {
-                    ...validToilet.wcData,
-                    ratings,
-                },
-            });
-
-        expect(response.statusCode).toBe(400);
-
-        expect(response.body).toEqual({
-            message: "Invalid rating: odor",
-        });
-    });
-
-    it("should return 400 when a rating is not a number", async () => {
-        const response = await request(app)
-            .post("/api/toilets")
-            .set("Authorization", `Bearer ${token}`)
-            .send({
-                wcData: {
-                    ...validToilet.wcData,
-                    ratings: {
-                        ...validToilet.wcData.ratings,
-                        cleanliness: "4",
-                    },
-                },
-            });
-
-        expect(response.statusCode).toBe(400);
-
-        expect(response.body).toEqual({
-            message: "Invalid rating: cleanliness",
-        });
-    });
-
-    it("should return 400 when a rating is below zero", async () => {
-        const response = await request(app)
-            .post("/api/toilets")
-            .set("Authorization", `Bearer ${token}`)
-            .send({
-                wcData: {
-                    ...validToilet.wcData,
-                    ratings: {
-                        ...validToilet.wcData.ratings,
-                        cleanliness: -1,
-                    },
-                },
-            });
-
-        expect(response.statusCode).toBe(400);
-
-        expect(response.body).toEqual({
-            message: "Invalid rating: cleanliness",
-        });
-    });
-
-    it("should return 400 when amenities are missing", async () => {
-        const { amenities, ...wcDataWithoutAmenities } =
-            validToilet.wcData;
-
-        const response = await request(app)
-            .post("/api/toilets")
-            .set("Authorization", `Bearer ${token}`)
-            .send({
-                wcData: wcDataWithoutAmenities,
-            });
-
-        expect(response.statusCode).toBe(400);
-
-        expect(response.body).toEqual({
-            message: "Amenities are required",
-        });
-    });
-
-    it("should return 400 when amenities are an array", async () => {
-        const response = await request(app)
-            .post("/api/toilets")
-            .set("Authorization", `Bearer ${token}`)
-            .send({
-                wcData: {
-                    ...validToilet.wcData,
-                    amenities: [],
-                },
-            });
-
-        expect(response.statusCode).toBe(400);
-
-        expect(response.body).toEqual({
-            message: "Amenities are required",
-        });
-    });
-
-    it("should return 400 when an amenity field is missing", async () => {
-        const amenities = {
-            ...validToilet.wcData.amenities,
-        };
-
-        delete amenities.soap;
-
-        const response = await request(app)
-            .post("/api/toilets")
-            .set("Authorization", `Bearer ${token}`)
-            .send({
-                wcData: {
-                    ...validToilet.wcData,
-                    amenities,
-                },
-            });
-
-        expect(response.statusCode).toBe(400);
-
-        expect(response.body).toEqual({
-            message: "Invalid amenity: soap",
-        });
-    });
 });
 
 describe('GET /api/toilets/reviews/:toiletId', () => {
@@ -210,6 +48,7 @@ describe('GET /api/toilets/reviews/:toiletId', () => {
             email: 'reviewtoilet@example.com',
             password: 'password123'
         });
+
         const toilet = await Toilet.create({
             name: 'Test Review Toilet',
             description: 'A toilet for review testing.',
@@ -309,7 +148,7 @@ describe('POST /api/toilets', () => {
     it('should create a toilet successfully', async () => {
         const response = await request(app)
             .post('/api/toilets')
-            .set('Authorization', `Bearer ${token}`)
+            .set('Authorization', `Bearer ${token} `)
             .send(validToilet);
 
         expect(response.statusCode).toBe(201);
@@ -336,7 +175,7 @@ describe('POST /api/toilets', () => {
     it('should return 400 when toilet data is missing', async () => {
         const response = await request(app)
             .post('/api/toilets')
-            .set('Authorization', `Bearer ${token}`)
+            .set('Authorization', `Bearer ${token} `)
             .send({});
 
         expect(response.statusCode).toBe(400);
@@ -348,7 +187,7 @@ describe('POST /api/toilets', () => {
     it('should return 400 when toilet name is missing', async () => {
         const response = await request(app)
             .post('/api/toilets')
-            .set('Authorization', `Bearer ${token}`)
+            .set('Authorization', `Bearer ${token} `)
             .send({
                 wcData: {
                     ...validToilet.wcData,
@@ -365,7 +204,7 @@ describe('POST /api/toilets', () => {
     it('should return 400 when latitude is invalid', async () => {
         const response = await request(app)
             .post('/api/toilets')
-            .set('Authorization', `Bearer ${token}`)
+            .set('Authorization', `Bearer ${token} `)
             .send({
                 wcData: {
                     ...validToilet.wcData,
@@ -385,7 +224,7 @@ describe('POST /api/toilets', () => {
     it('should return 400 when longitude is invalid', async () => {
         const response = await request(app)
             .post('/api/toilets')
-            .set('Authorization', `Bearer ${token}`)
+            .set('Authorization', `Bearer ${token} `)
             .send({
                 wcData: {
                     ...validToilet.wcData,
@@ -402,10 +241,112 @@ describe('POST /api/toilets', () => {
         });
     });
 
+    it("should return 400 when ratings are missing", async () => {
+        const { ratings, ...wcDataWithoutRatings } =
+            validToilet.wcData;
+
+        const response = await request(app)
+            .post("/api/toilets")
+            .set("Authorization", `Bearer ${token} `)
+            .send({
+                wcData: wcDataWithoutRatings,
+            });
+
+        expect(response.statusCode).toBe(400);
+
+        expect(response.body).toEqual({
+            message: "Ratings are required",
+        });
+    });
+
+    it("should return 400 when ratings are an array", async () => {
+        const response = await request(app)
+            .post("/api/toilets")
+            .set("Authorization", `Bearer ${token} `)
+            .send({
+                wcData: {
+                    ...validToilet.wcData,
+                    ratings: [],
+                },
+            });
+
+        expect(response.statusCode).toBe(400);
+
+        expect(response.body).toEqual({
+            message: "Ratings are required",
+        });
+    });
+
+    it("should return 400 when a rating field is missing", async () => {
+        const ratings = {
+            ...validToilet.wcData.ratings,
+        };
+
+        delete ratings.odor;
+
+        const response = await request(app)
+            .post("/api/toilets")
+            .set("Authorization", `Bearer ${token} `)
+            .send({
+                wcData: {
+                    ...validToilet.wcData,
+                    ratings,
+                },
+            });
+
+        expect(response.statusCode).toBe(400);
+
+        expect(response.body).toEqual({
+            message: "Invalid rating: odor",
+        });
+    });
+
+    it("should return 400 when a rating is not a number", async () => {
+        const response = await request(app)
+            .post("/api/toilets")
+            .set("Authorization", `Bearer ${token} `)
+            .send({
+                wcData: {
+                    ...validToilet.wcData,
+                    ratings: {
+                        ...validToilet.wcData.ratings,
+                        cleanliness: "4",
+                    },
+                },
+            });
+
+        expect(response.statusCode).toBe(400);
+
+        expect(response.body).toEqual({
+            message: "Invalid rating: cleanliness",
+        });
+    });
+
+    it("should return 400 when a rating is below zero", async () => {
+        const response = await request(app)
+            .post("/api/toilets")
+            .set("Authorization", `Bearer ${token} `)
+            .send({
+                wcData: {
+                    ...validToilet.wcData,
+                    ratings: {
+                        ...validToilet.wcData.ratings,
+                        cleanliness: -1,
+                    },
+                },
+            });
+
+        expect(response.statusCode).toBe(400);
+
+        expect(response.body).toEqual({
+            message: "Invalid rating: cleanliness",
+        });
+    });
+
     it('should return 400 when a rating is outside the 0-5 range', async () => {
         const response = await request(app)
             .post('/api/toilets')
-            .set('Authorization', `Bearer ${token}`)
+            .set('Authorization', `Bearer ${token} `)
             .send({
                 wcData: {
                     ...validToilet.wcData,
@@ -422,10 +363,70 @@ describe('POST /api/toilets', () => {
         });
     });
 
+    it("should return 400 when amenities are missing", async () => {
+        const { amenities, ...wcDataWithoutAmenities } =
+            validToilet.wcData;
+
+        const response = await request(app)
+            .post("/api/toilets")
+            .set("Authorization", `Bearer ${token} `)
+            .send({
+                wcData: wcDataWithoutAmenities,
+            });
+
+        expect(response.statusCode).toBe(400);
+
+        expect(response.body).toEqual({
+            message: "Amenities are required",
+        });
+    });
+
+    it("should return 400 when amenities are an array", async () => {
+        const response = await request(app)
+            .post("/api/toilets")
+            .set("Authorization", `Bearer ${token} `)
+            .send({
+                wcData: {
+                    ...validToilet.wcData,
+                    amenities: [],
+                },
+            });
+
+        expect(response.statusCode).toBe(400);
+
+        expect(response.body).toEqual({
+            message: "Amenities are required",
+        });
+    });
+
+    it("should return 400 when an amenity field is missing", async () => {
+        const amenities = {
+            ...validToilet.wcData.amenities,
+        };
+
+        delete amenities.soap;
+
+        const response = await request(app)
+            .post("/api/toilets")
+            .set("Authorization", `Bearer ${token} `)
+            .send({
+                wcData: {
+                    ...validToilet.wcData,
+                    amenities,
+                },
+            });
+
+        expect(response.statusCode).toBe(400);
+
+        expect(response.body).toEqual({
+            message: "Invalid amenity: soap",
+        });
+    });
+
     it('should return 400 when an amenity is not a boolean', async () => {
         const response = await request(app)
             .post('/api/toilets')
-            .set('Authorization', `Bearer ${token}`)
+            .set('Authorization', `Bearer ${token} `)
             .send({
                 wcData: {
                     ...validToilet.wcData,
@@ -445,7 +446,7 @@ describe('POST /api/toilets', () => {
     it('should return 400 when isFree is not a boolean', async () => {
         const response = await request(app)
             .post('/api/toilets')
-            .set('Authorization', `Bearer ${token}`)
+            .set('Authorization', `Bearer ${token} `)
             .send({
                 wcData: {
                     ...validToilet.wcData,

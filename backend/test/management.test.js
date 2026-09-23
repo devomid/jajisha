@@ -77,122 +77,6 @@ describe('Toilet management', () => {
             });
         });
 
-        it("should return 400 when ratings are missing", async () => {
-            const response = await request(app)
-                .post(`/api/managment/toiletManagement/${toiletId}`)
-                .set("Authorization", `Bearer ${token}`)
-                .send({
-                    reviewText:
-                        "This is a clean and useful public toilet.",
-                });
-
-            expect(response.statusCode).toBe(400);
-
-            expect(response.body).toEqual({
-                message: "Ratings are required",
-            });
-        });
-
-        it("should return 400 when ratings are an array", async () => {
-            const response = await request(app)
-                .post(`/api/managment/toiletManagement/${toiletId}`)
-                .set("Authorization", `Bearer ${token}`)
-                .send({
-                    reviewText:
-                        "This is a clean and useful public toilet.",
-                    ratings: [],
-                });
-
-            expect(response.statusCode).toBe(400);
-
-            expect(response.body).toEqual({
-                message: "Ratings are required",
-            });
-        });
-
-        it("should return 400 when a rating field is missing", async () => {
-            const ratings = {
-                ...validRatings,
-            };
-
-            delete ratings.odor;
-
-            const response = await request(app)
-                .post(`/api/managment/toiletManagement/${toiletId}`)
-                .set("Authorization", `Bearer ${token}`)
-                .send({
-                    reviewText:
-                        "This is a clean and useful public toilet.",
-                    ratings,
-                });
-
-            expect(response.statusCode).toBe(400);
-
-            expect(response.body).toEqual({
-                message: "Invalid rating: odor",
-            });
-        });
-
-        it("should return 400 when a rating is not a number", async () => {
-            const response = await request(app)
-                .post(`/api/managment/toiletManagement/${toiletId}`)
-                .set("Authorization", `Bearer ${token}`)
-                .send({
-                    reviewText:
-                        "This is a clean and useful public toilet.",
-                    ratings: {
-                        ...validRatings,
-                        cleanliness: "4",
-                    },
-                });
-
-            expect(response.statusCode).toBe(400);
-
-            expect(response.body).toEqual({
-                message: "Invalid rating: cleanliness",
-            });
-        });
-
-        it("should return 400 when a rating is below zero", async () => {
-            const response = await request(app)
-                .post(`/api/managment/toiletManagement/${toiletId}`)
-                .set("Authorization", `Bearer ${token}`)
-                .send({
-                    reviewText:
-                        "This is a clean and useful public toilet.",
-                    ratings: {
-                        ...validRatings,
-                        cleanliness: -1,
-                    },
-                });
-
-            expect(response.statusCode).toBe(400);
-
-            expect(response.body).toEqual({
-                message: "Invalid rating: cleanliness",
-            });
-        });
-
-        it("should return 400 when a rating is above five", async () => {
-            const response = await request(app)
-                .post(`/api/managment/toiletManagement/${toiletId}`)
-                .set("Authorization", `Bearer ${token}`)
-                .send({
-                    reviewText:
-                        "This is a clean and useful public toilet.",
-                    ratings: {
-                        ...validRatings,
-                        cleanliness: 6,
-                    },
-                });
-
-            expect(response.statusCode).toBe(400);
-
-            expect(response.body).toEqual({
-                message: "Invalid rating: cleanliness",
-            });
-        });
-
         it('should not duplicate a saved toilet', async () => {
             const firstResponse = await request(app)
                 .patch(`/api/managment/saveToilets/${toiletId}`)
@@ -429,6 +313,116 @@ describe('POST /api/managment/toiletManagement/:toiletId', () => {
         expect(response.statusCode).toBe(404);
         expect(response.body).toEqual({
             message: 'Toilet not found'
+        });
+    });
+
+    it('should return 400 when ratings are missing', async () => {
+        const response = await request(app)
+            .post(`/api/managment/toiletManagement/${toiletId}`)
+            .set('Authorization', `Bearer ${token}`)
+            .send({
+                reviewText: 'This is a clean and useful public toilet.'
+            });
+
+        expect(response.statusCode).toBe(400);
+
+        expect(response.body).toEqual({
+            message: 'Ratings are required'
+        });
+    });
+
+    it('should return 400 when ratings are an array', async () => {
+        const response = await request(app)
+            .post(`/api/managment/toiletManagement/${toiletId}`)
+            .set('Authorization', `Bearer ${token}`)
+            .send({
+                reviewText: 'This is a clean and useful public toilet.',
+                ratings: []
+            });
+
+        expect(response.statusCode).toBe(400);
+
+        expect(response.body).toEqual({
+            message: 'Ratings are required'
+        });
+    });
+
+    it('should return 400 when a rating field is missing', async () => {
+        const ratings = {
+            ...validRatings
+        };
+
+        delete ratings.odor;
+
+        const response = await request(app)
+            .post(`/api/managment/toiletManagement/${toiletId}`)
+            .set('Authorization', `Bearer ${token}`)
+            .send({
+                reviewText: 'This is a clean and useful public toilet.',
+                ratings
+            });
+
+        expect(response.statusCode).toBe(400);
+
+        expect(response.body).toEqual({
+            message: 'Invalid rating: odor'
+        });
+    });
+
+    it('should return 400 when a rating is not a number', async () => {
+        const response = await request(app)
+            .post(`/api/managment/toiletManagement/${toiletId}`)
+            .set('Authorization', `Bearer ${token}`)
+            .send({
+                reviewText: 'This is a clean and useful public toilet.',
+                ratings: {
+                    ...validRatings,
+                    cleanliness: '4'
+                }
+            });
+
+        expect(response.statusCode).toBe(400);
+
+        expect(response.body).toEqual({
+            message: 'Invalid rating: cleanliness'
+        });
+    });
+
+    it('should return 400 when a rating is below zero', async () => {
+        const response = await request(app)
+            .post(`/api/managment/toiletManagement/${toiletId}`)
+            .set('Authorization', `Bearer ${token}`)
+            .send({
+                reviewText: 'This is a clean and useful public toilet.',
+                ratings: {
+                    ...validRatings,
+                    cleanliness: -1
+                }
+            });
+
+        expect(response.statusCode).toBe(400);
+
+        expect(response.body).toEqual({
+            message: 'Invalid rating: cleanliness'
+        });
+    });
+
+    it('should return 400 when a rating is above five', async () => {
+        const response = await request(app)
+            .post(`/api/managment/toiletManagement/${toiletId}`)
+            .set('Authorization', `Bearer ${token}`)
+            .send({
+                reviewText: 'This is a clean and useful public toilet.',
+                ratings: {
+                    ...validRatings,
+                    cleanliness: 6
+                }
+            });
+
+        expect(response.statusCode).toBe(400);
+
+        expect(response.body).toEqual({
+            message: 'Invalid rating: cleanliness'
         });
     });
 
