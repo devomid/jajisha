@@ -170,7 +170,7 @@ const RoutePreview = forwardRef(({ curentLocation, toiletInfoBottomSheetRef, onD
                     style={{ backgroundColor: theme.colors.primaryLighter + '60' }}
 
                 />)
-        }, []);
+        }, [theme]);
 
     const distanceUnit = useSettingsStore(
         state => state.distanceUnit
