@@ -1,17 +1,14 @@
 import { renderHook, waitFor } from "@testing-library/react-native";
+import * as Location from "expo-location";
 
 import useCurrentLocation from "../../src/hooks/useCurrentLocation";
 
 const mockToastShow = jest.fn();
 
-const mockRequestForegroundPermissionsAsync = jest.fn();
-const mockGetCurrentPositionAsync = jest.fn();
-
 jest.mock("expo-location", () => ({
-    requestForegroundPermissionsAsync:
-        mockRequestForegroundPermissionsAsync,
-    getCurrentPositionAsync:
-        mockGetCurrentPositionAsync,
+    __esModule: true,
+    requestForegroundPermissionsAsync: jest.fn(),
+    getCurrentPositionAsync: jest.fn(),
 }));
 
 jest.mock("react-native-toast-notifications", () => ({
@@ -39,11 +36,11 @@ jest.mock("../../src/utils/logger", () => ({
 beforeEach(() => {
     jest.clearAllMocks();
 
-    mockRequestForegroundPermissionsAsync.mockResolvedValue({
+    Location.requestForegroundPermissionsAsync.mockResolvedValue({
         status: "granted",
     });
 
-    mockGetCurrentPositionAsync.mockResolvedValue({
+    Location.getCurrentPositionAsync.mockResolvedValue({
         coords: {
             latitude: 35.7001,
             longitude: 51.4001,
@@ -56,6 +53,12 @@ describe("useCurrentLocation", () => {
         const { result } = await renderHook(() => useCurrentLocation());
 
         await waitFor(() => {
+            expect(
+                Location.requestForegroundPermissionsAsync
+            ).toHaveBeenCalled();
+        });
+
+        await waitFor(() => {
             expect(result.current).not.toBeNull();
         });
 
@@ -66,25 +69,31 @@ describe("useCurrentLocation", () => {
             },
         });
 
-        expect(mockRequestForegroundPermissionsAsync).toHaveBeenCalled();
-        expect(mockGetCurrentPositionAsync).toHaveBeenCalledWith({});
+        expect(
+            Location.getCurrentPositionAsync
+        ).toHaveBeenCalledWith({});
+
         expect(mockToastShow).not.toHaveBeenCalled();
     });
 
     test("does not set location when permission is denied", async () => {
-        mockRequestForegroundPermissionsAsync.mockResolvedValue({
+        Location.requestForegroundPermissionsAsync.mockResolvedValue({
             status: "denied",
         });
 
         const { result } = await renderHook(() => useCurrentLocation());
 
         await waitFor(() => {
-            expect(mockRequestForegroundPermissionsAsync).toHaveBeenCalled();
+            expect(
+                Location.requestForegroundPermissionsAsync
+            ).toHaveBeenCalled();
         });
 
         expect(result.current).toBeNull();
 
-        expect(mockGetCurrentPositionAsync).not.toHaveBeenCalled();
+        expect(
+            Location.getCurrentPositionAsync
+        ).not.toHaveBeenCalled();
 
         expect(mockToastShow).toHaveBeenCalledWith(
             "toast.useCurrentLocation.locGrant",
@@ -99,7 +108,7 @@ describe("useCurrentLocation", () => {
     });
 
     test("handles location request errors", async () => {
-        mockGetCurrentPositionAsync.mockRejectedValue(
+        Location.getCurrentPositionAsync.mockRejectedValue(
             new Error("Location error")
         );
 
