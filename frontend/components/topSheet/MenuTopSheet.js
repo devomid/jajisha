@@ -23,6 +23,7 @@ const TopSheet = forwardRef((props, ref) => {
 
     const { i18n, t } = useTranslation();
     const language = i18n.language;
+    const isFarsi = language === "fa";
     const theme = useTheme();
     const backdropOpacity = useSharedValue(0);
     const translateY = useSharedValue(-1000);
@@ -260,7 +261,7 @@ const TopSheet = forwardRef((props, ref) => {
                                     strokeWidth={2}
                                     style={{
                                         position: "absolute",
-                                        left: 90,
+                                        [isFarsi ? "right" : "left"]: 90,
                                     }}
                                 />
                             </View>
@@ -297,10 +298,10 @@ const TopSheet = forwardRef((props, ref) => {
                                     size={18}
                                     color={theme.colors.error}
                                     strokeWidth={2}
-                                    style={{
-                                        position: "absolute",
-                                        left: 90,
-                                    }}
+                                        style={{
+                                            position: "absolute",
+                                            [isFarsi ? "right" : "left"]: 75,
+                                        }}
                                 />
                             </View>
                         </ButtonComponent>
@@ -339,6 +340,10 @@ const TopSheet = forwardRef((props, ref) => {
                                     size={18}
                                     color={theme.colors.secondaryLight}
                                     strokeWidth={2}
+                                    style={{
+                                        position: "absolute",
+                                        [isFarsi ? "left" : "right"]: 70,
+                                    }}
                                 />
                                 <Text
                                     style={{
@@ -502,7 +507,7 @@ const TopSheet = forwardRef((props, ref) => {
                                     strokeWidth={2}
                                     style={{
                                         position: "absolute",
-                                        left: 90,
+                                        [isFarsi ? "right" : "left"]: 75,
                                     }}
                                 />
                             </View>

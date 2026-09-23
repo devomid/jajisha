@@ -2,16 +2,12 @@ import React from "react";
 import { View, StyleSheet } from "react-native";
 import { BlurView } from "expo-blur";
 import { useTheme, Text } from "react-native-paper";
-import {
-    CircleCheck,
-    TriangleAlert,
-    Info,
-} from "lucide-react-native";
+import { CircleCheck, TriangleAlert, Info, } from "lucide-react-native";
+import { useTranslation } from "react-i18next";
 
-export default function AppToast({
-    message,
-    data,
-}) {
+export default function AppToast({ message, data, }) {
+    const { i18n } = useTranslation();
+    const isFarsi = i18n.language === "fa";
     const theme = useTheme();
 
     const type =
@@ -57,6 +53,7 @@ export default function AppToast({
                     styles.content,
                     {
                         borderColor: theme.colors.surface + '80',
+                        flexDirection: isFarsi ? "row-reverse" : "row",
                     },
                 ]}
             >
@@ -66,13 +63,21 @@ export default function AppToast({
                     strokeWidth={2}
                 />
 
-                <View style={styles.textContainer}>
+                <View
+                    style={[
+                        styles.textContainer,
+                        {
+                            marginLeft: isFarsi ? 0 : 18,
+                            marginRight: isFarsi ? 18 : 0,
+                        },
+                    ]}
+                >
 
                     <Text
                         variant="titleSmall"
                         style={{
                             color: accentColor,
-                            marginTop:2
+                            marginTop: 2
                         }}
                     >
                         {message}
@@ -118,7 +123,8 @@ const styles = StyleSheet.create({
 
     textContainer: {
         flex: 1,
-        marginLeft: 18,
+        marginLeft: 0,
+        marginRight: 0,
     },
 
 });

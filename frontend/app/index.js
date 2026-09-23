@@ -18,7 +18,8 @@ import MapOfToilets from '../components/map/mapOfToilets';
 import ToiletInfo from "../components/bottomSheet/ToiletLocationBottomSheet";
 import AddWc from "../components/bottomSheet/AddWcBottomSheet";
 import RoutePreview from '../components/bottomSheet/RoutePreview';
-import SearchButton from '../components/searchBar/animatedSearchBtn';
+// import SearchButton from '../components/searchBar/animatedSearchBtn';
+// later updates should put search back
 import MenuTopSheet from '../components/topSheet/MenuTopSheet';
 
 
@@ -163,7 +164,10 @@ export default function Home() {
                 </BlurView>
             </SafeAreaView>
 
-            <SearchButton />
+            {/* search bar and its button become commented out so later it would be an updated featurewhen data become searchable */}
+
+            {/* <SearchButton /> */}
+
 
             <View
                 pointerEvents="box-none"

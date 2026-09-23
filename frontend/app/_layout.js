@@ -1,8 +1,9 @@
 import "react-native-gesture-handler";
-import { useFonts } from "@expo-google-fonts/vazirmatn/useFonts";
-import { Vazirmatn_400Regular } from "@expo-google-fonts/vazirmatn/400Regular";
-import { Vazirmatn_500Medium } from "@expo-google-fonts/vazirmatn/500Medium";
-import { Vazirmatn_700Bold } from "@expo-google-fonts/vazirmatn/700Bold";
+// import { useFonts } from "@expo-google-fonts/vazirmatn/useFonts";
+// import { Vazirmatn_400Regular } from "@expo-google-fonts/vazirmatn/400Regular";
+// import { Vazirmatn_500Medium } from "@expo-google-fonts/vazirmatn/500Medium";
+// import { Vazirmatn_700Bold } from "@expo-google-fonts/vazirmatn/700Bold";
+import * as Font from "expo-font";
 import { useEffect, useState } from "react";
 import { I18nManager, useColorScheme } from "react-native";
 import { useTranslation } from "react-i18next";
@@ -39,11 +40,19 @@ export default function RootLayout() {
 
     const [ready, setReady] = useState(false);
 
-    const [fontsLoaded] = useFonts({
-        Vazirmatn_400Regular,
-        Vazirmatn_500Medium,
-        Vazirmatn_700Bold,
+    const [fontsLoaded] = Font.useFonts({
+        Shabnam: require("../assets/fonts/Shabnam.ttf"),
+        ShabnamMedium: require("../assets/fonts/Shabnam-Medium.ttf"),
+        ShabnamBold: require("../assets/fonts/Shabnam-Bold.ttf"),
     });
+
+    // const [fontsLoaded] = useFonts({
+    //     Vazirmatn_400Regular,
+    //     Vazirmatn_500Medium,
+    //     Vazirmatn_700Bold,
+    // });
+
+
 
     useEffect(() => {
         const load = async () => {

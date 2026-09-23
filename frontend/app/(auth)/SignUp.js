@@ -161,7 +161,7 @@ export default function SignUp() {
                         <View style={{
                             width: "100%",
                             paddingHorizontal: 25,
-                            marginTop: 70,
+                            marginTop: 60,
                             marginBottom: 30,
                         }}>
                             <Text

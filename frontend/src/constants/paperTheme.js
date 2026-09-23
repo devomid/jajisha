@@ -13,7 +13,8 @@ export function getPaperTheme(isDark, isFarsi) {
         
         fonts: configureFonts({
             config: {
-                fontFamily: "Vazirmatn",
+                // fontFamily: "Vazirmatn",
+                fontFamily: "Shabnam",
                 textAlign: isFarsi ? "right" : "left",
             },
         }),
