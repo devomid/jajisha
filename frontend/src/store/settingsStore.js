@@ -42,7 +42,9 @@ export const useSettingsStore = create(
                 set({ distanceUnit }),
 
             setTheme: (theme) =>
-                set({ theme }),
+                set((state) => ({
+                    theme: state.mapType === "satellite" ? "Dark" : theme,
+                })),
         }),
         {
             name: "jajisha-settings",
