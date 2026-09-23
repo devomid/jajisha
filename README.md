@@ -85,7 +85,7 @@ The goal is to make the complete process of finding a usable toilet as simple as
 >
 > **Recommended:** use clean screenshots from the same device size and avoid screenshots containing development/debug information.
 
-### Main Map
+Main Map
 
 <p align="center">
   <img src="image/README/screenshots/map.png" alt="Jajisha main map" width="280">
@@ -113,12 +113,6 @@ The goal is to make the complete process of finding a usable toilet as simple as
 
 <p align="center">
   <img src="image/README/screenshots/reviews.png" alt="Jajisha ratings and reviews" width="280">
-</p>
-
-### Search
-
-<p align="center">
-  <img src="image/README/screenshots/search.png" alt="Jajisha search interface" width="280">
 </p>
 
 ### Settings
