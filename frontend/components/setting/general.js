@@ -43,6 +43,9 @@ export default function GeneralSettings({ theme }) {
 
         await i18n.changeLanguage(lan);
         await AsyncStorage.setItem("language", lan);
+
+        I18nManager.allowRTL(true);
+        I18nManager.forceRTL(lan === "fa");
     };
 
     return (

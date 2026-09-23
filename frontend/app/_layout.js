@@ -2,7 +2,7 @@ import "react-native-gesture-handler";
 import { useFonts } from "@expo-google-fonts/vazirmatn";
 
 import { useEffect, useState } from "react";
-import { useColorScheme } from "react-native";
+import { I18nManager, useColorScheme } from "react-native";
 
 import { PaperProvider } from "react-native-paper";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
@@ -11,7 +11,7 @@ import { Slot } from "expo-router";
 
 import { useSettingsStore } from "../src/store/settingsStore";
 import { getPaperTheme } from "../src/constants/paperTheme";
-import { initI18n } from "../src/i18n";
+import i18n, { initI18n } from "../src/i18n";
 import WaitingOverlay from "../components/waiting/waitingOverlay";
 import logger from "../src/utils/logger";
 
@@ -42,6 +42,10 @@ export default function RootLayout() {
         const load = async () => {
             try {
                 await initI18n();
+
+                I18nManager.allowRTL(true);
+                I18nManager.forceRTL(i18n.language === "fa");
+
                 setReady(true);
             } catch (error) {
                 logger.error("Failed to initialize i18n", {
