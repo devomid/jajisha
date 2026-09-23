@@ -1,6 +1,8 @@
 import "react-native-gesture-handler";
-import { useFonts } from "@expo-google-fonts/vazirmatn";
-
+import { useFonts } from "@expo-google-fonts/vazirmatn/useFonts";
+import { Vazirmatn_400Regular } from "@expo-google-fonts/vazirmatn/400Regular";
+import { Vazirmatn_500Medium } from "@expo-google-fonts/vazirmatn/500Medium";
+import { Vazirmatn_700Bold } from "@expo-google-fonts/vazirmatn/700Bold";
 import { useEffect, useState } from "react";
 import { useColorScheme } from "react-native";
 
@@ -11,7 +13,7 @@ import { Slot } from "expo-router";
 
 import { useSettingsStore } from "../src/store/settingsStore";
 import { getPaperTheme } from "../src/constants/paperTheme";
-import i18n, { initI18n } from "../src/i18n";
+import { initI18n } from "../src/i18n";
 import WaitingOverlay from "../components/waiting/waitingOverlay";
 import logger from "../src/utils/logger";
 
@@ -33,9 +35,9 @@ export default function RootLayout() {
     const [ready, setReady] = useState(false);
 
     const [fontsLoaded] = useFonts({
-        Vazirmatn: require("@expo-google-fonts/vazirmatn/400Regular"),
-        VazirmatnMedium: require("@expo-google-fonts/vazirmatn/500Medium"),
-        VazirmatnBold: require("@expo-google-fonts/vazirmatn/700Bold"),
+        Vazirmatn_400Regular,
+        Vazirmatn_500Medium,
+        Vazirmatn_700Bold,
     });
 
     useEffect(() => {
