@@ -4,7 +4,7 @@ import { Vazirmatn_400Regular } from "@expo-google-fonts/vazirmatn/400Regular";
 import { Vazirmatn_500Medium } from "@expo-google-fonts/vazirmatn/500Medium";
 import { Vazirmatn_700Bold } from "@expo-google-fonts/vazirmatn/700Bold";
 import { useEffect, useState } from "react";
-import { useColorScheme } from "react-native";
+import { I18nManager, useColorScheme } from "react-native";
 
 import { PaperProvider } from "react-native-paper";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
@@ -44,6 +44,9 @@ export default function RootLayout() {
         const load = async () => {
             try {
                 await initI18n();
+
+                I18nManager.allowRTL(false);
+                I18nManager.forceRTL(false);
 
                 setReady(true);
             } catch (error) {
