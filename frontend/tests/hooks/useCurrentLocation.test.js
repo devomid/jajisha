@@ -1,11 +1,6 @@
-import { renderHook } from "@testing-library/react-native";
+import { renderHook, waitFor } from "@testing-library/react-native";
 
-import { useCurrentLocation } from "../../src/hooks/useCurrentLocation";
-
-const mockStartWaiting = jest.fn();
-const mockEndWaiting = jest.fn();
-
-const mockSetCurrentLocation = jest.fn();
+import useCurrentLocation from "../../src/hooks/useCurrentLocation";
 
 const mockToastShow = jest.fn();
 
@@ -13,28 +8,10 @@ const mockRequestForegroundPermissionsAsync = jest.fn();
 const mockGetCurrentPositionAsync = jest.fn();
 
 jest.mock("expo-location", () => ({
-    Accuracy: {
-        High: "high",
-    },
     requestForegroundPermissionsAsync:
         mockRequestForegroundPermissionsAsync,
-    getCurrentPositionAsync: mockGetCurrentPositionAsync,
-}));
-
-jest.mock("../../src/store/wcDataStore", () => ({
-    useWcDataStore: (selector) =>
-        selector({
-            setCurrentLocation: mockSetCurrentLocation,
-        }),
-}));
-
-jest.mock("../../src/store/waitingSystemStore", () => ({
-    __esModule: true,
-    default: (selector) =>
-        selector({
-            startWaiting: mockStartWaiting,
-            endWaiting: mockEndWaiting,
-        }),
+    getCurrentPositionAsync:
+        mockGetCurrentPositionAsync,
 }));
 
 jest.mock("react-native-toast-notifications", () => ({
@@ -62,8 +39,6 @@ jest.mock("../../src/utils/logger", () => ({
 beforeEach(() => {
     jest.clearAllMocks();
 
-    mockStartWaiting.mockReturnValue(123);
-
     mockRequestForegroundPermissionsAsync.mockResolvedValue({
         status: "granted",
     });
@@ -78,40 +53,49 @@ beforeEach(() => {
 
 describe("useCurrentLocation", () => {
     test("gets and stores the current location successfully", async () => {
-        const { result } = await renderHook(() => useCurrentLocation());
+        const { result } = renderHook(() => useCurrentLocation());
 
-        const response = await result.current.getCurrentLocation();
-
-        expect(response).toEqual({
-            latitude: 35.7001,
-            longitude: 51.4001,
+        await waitFor(() => {
+            expect(result.current).not.toBeNull();
         });
 
-        expect(mockSetCurrentLocation).toHaveBeenCalledWith({
-            latitude: 35.7001,
-            longitude: 51.4001,
+        expect(result.current).toEqual({
+            coords: {
+                latitude: 35.7001,
+                longitude: 51.4001,
+            },
         });
 
-        expect(mockEndWaiting).toHaveBeenCalledWith(123);
+        expect(mockRequestForegroundPermissionsAsync).toHaveBeenCalled();
+        expect(mockGetCurrentPositionAsync).toHaveBeenCalledWith({});
+        expect(mockToastShow).not.toHaveBeenCalled();
     });
 
-    test("handles denied location permission", async () => {
+    test("does not set location when permission is denied", async () => {
         mockRequestForegroundPermissionsAsync.mockResolvedValue({
             status: "denied",
         });
 
-        const { result } = await renderHook(() => useCurrentLocation());
+        const { result } = renderHook(() => useCurrentLocation());
 
-        const response = await result.current.getCurrentLocation();
+        await waitFor(() => {
+            expect(mockRequestForegroundPermissionsAsync).toHaveBeenCalled();
+        });
 
-        expect(response).toBeNull();
+        expect(result.current).toBeNull();
 
         expect(mockGetCurrentPositionAsync).not.toHaveBeenCalled();
-        expect(mockSetCurrentLocation).not.toHaveBeenCalled();
 
-        expect(mockToastShow).toHaveBeenCalled();
-
-        expect(mockEndWaiting).toHaveBeenCalledWith(123);
+        expect(mockToastShow).toHaveBeenCalledWith(
+            "toast.useCurrentLocation.locGrant",
+            {
+                type: "custom",
+                data: {
+                    type: "warning",
+                    text2: "toast.useCurrentLocation.locGrant2",
+                },
+            }
+        );
     });
 
     test("handles location request errors", async () => {
@@ -119,16 +103,23 @@ describe("useCurrentLocation", () => {
             new Error("Location error")
         );
 
-        const { result } = await renderHook(() => useCurrentLocation());
+        const { result } = renderHook(() => useCurrentLocation());
 
-        const response = await result.current.getCurrentLocation();
+        await waitFor(() => {
+            expect(mockToastShow).toHaveBeenCalled();
+        });
 
-        expect(response).toBeNull();
+        expect(result.current).toBeNull();
 
-        expect(mockSetCurrentLocation).not.toHaveBeenCalled();
-
-        expect(mockToastShow).toHaveBeenCalled();
-
-        expect(mockEndWaiting).toHaveBeenCalledWith(123);
+        expect(mockToastShow).toHaveBeenCalledWith(
+            "toast.useCurrentLocation.catch1",
+            {
+                type: "custom",
+                data: {
+                    type: "error",
+                    text2: "toast.useCurrentLocation.catch2",
+                },
+            }
+        );
     });
 });

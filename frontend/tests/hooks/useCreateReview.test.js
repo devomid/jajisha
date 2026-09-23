@@ -6,15 +6,11 @@ const mockStartWaiting = jest.fn();
 const mockEndWaiting = jest.fn();
 const mockToastShow = jest.fn();
 
-const mockSetSelectedToilet = jest.fn();
-
 let mockUser = {
     token: "test-token",
 };
 
-let mockSelectedToilet = {
-    _id: "toilet-1",
-};
+let mockToiletId = "toilet-1";
 
 jest.mock("../../src/store/userStore", () => ({
     useUserStore: (selector) =>
@@ -26,8 +22,9 @@ jest.mock("../../src/store/userStore", () => ({
 jest.mock("../../src/store/wcDataStore", () => ({
     useWcDataStore: (selector) =>
         selector({
-            selectedToilet: mockSelectedToilet,
-            setSelectedToilet: mockSetSelectedToilet,
+            selectedToilet: {
+                _id: mockToiletId,
+            },
         }),
 }));
 
@@ -75,115 +72,236 @@ beforeEach(() => {
         token: "test-token",
     };
 
-    mockSelectedToilet = {
-        _id: "toilet-1",
-    };
+    mockToiletId = "toilet-1";
 
     mockStartWaiting.mockReturnValue(123);
 });
 
 describe("useCreateReview", () => {
-    test("rejects a review shorter than 10 characters", async () => {
-        const { result } = await renderHook(() => useCreateReview());
+    test("rejects when review creation is already in progress", async () => {
+        const { result } = renderHook(() => useCreateReview());
 
-        const response = await result.current.createReview(
-            "toilet-1",
-            5,
-            "too short"
-        );
+        const firstRequest = new Promise(() => { });
 
-        expect(response).toBeNull();
+        global.fetch.mockReturnValue(firstRequest);
 
-        expect(global.fetch).not.toHaveBeenCalled();
-        expect(mockStartWaiting).not.toHaveBeenCalled();
+        const firstCall = result.current({
+            reviewText: "This is a valid review.",
+            ratings: {
+                cleanliness: 5,
+            },
+        });
+
+        const secondResponse = await result.current({
+            reviewText: "Another valid review.",
+            ratings: {
+                cleanliness: 4,
+            },
+        });
+
+        expect(secondResponse).toBeNull();
+        expect(global.fetch).toHaveBeenCalledTimes(1);
+
+        // Prevent the intentionally pending promise from affecting the test.
+        void firstCall;
     });
 
     test("returns null when the user is not authenticated", async () => {
         mockUser = null;
 
-        const { result } = await renderHook(() => useCreateReview());
+        const { result } = renderHook(() => useCreateReview());
 
-        const response = await result.current.createReview(
-            "toilet-1",
-            5,
-            "This is a valid review text."
-        );
+        const response = await result.current({
+            reviewText: "This is a valid review.",
+            ratings: {
+                cleanliness: 5,
+            },
+        });
 
         expect(response).toBeNull();
-
         expect(global.fetch).not.toHaveBeenCalled();
+
+        expect(mockToastShow).toHaveBeenCalledWith(
+            "toast.useCreateReview.userNotFound",
+            {
+                type: "custom",
+                data: {
+                    type: "error",
+                },
+            }
+        );
+
+        expect(mockEndWaiting).toHaveBeenCalledWith(123);
+    });
+
+    test("returns null when there is no selected toilet", async () => {
+        mockToiletId = null;
+
+        const { result } = renderHook(() => useCreateReview());
+
+        const response = await result.current({
+            reviewText: "This is a valid review.",
+            ratings: {
+                cleanliness: 5,
+            },
+        });
+
+        expect(response).toBeNull();
+        expect(global.fetch).not.toHaveBeenCalled();
+
+        expect(mockToastShow).toHaveBeenCalledWith(
+            "toast.useCreateReview.toiletNotFound",
+            {
+                type: "custom",
+                data: {
+                    type: "error",
+                },
+            }
+        );
+
+        expect(mockEndWaiting).toHaveBeenCalledWith(123);
     });
 
     test("creates a review successfully", async () => {
+        const review = {
+            _id: "review-1",
+            reviewText: "This is a valid review.",
+            ratings: {
+                cleanliness: 5,
+            },
+        };
+
         global.fetch.mockResolvedValue({
             ok: true,
             json: jest.fn().mockResolvedValue({
-                review: {
-                    _id: "review-1",
-                    text: "This is a valid review text.",
-                    rating: 5,
-                },
-                ratingSummary: {
-                    average: 5,
-                    count: 1,
-                },
+                review,
             }),
         });
 
-        const { result } = await renderHook(() => useCreateReview());
+        const { result } = renderHook(() => useCreateReview());
 
-        const response = await result.current.createReview(
-            "toilet-1",
-            5,
-            "This is a valid review text."
+        const response = await result.current({
+            reviewText: "This is a valid review.",
+            ratings: {
+                cleanliness: 5,
+            },
+        });
+
+        expect(response).toEqual(review);
+
+        expect(global.fetch).toHaveBeenCalledWith(
+            "http://test-api/api/managment/toiletManagement/toilet-1",
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: "Bearer test-token",
+                },
+                body: JSON.stringify({
+                    reviewText: "This is a valid review.",
+                    ratings: {
+                        cleanliness: 5,
+                    },
+                }),
+            }
         );
-
-        expect(response).not.toBeNull();
-
-        expect(global.fetch).toHaveBeenCalled();
-
-        expect(mockSetSelectedToilet).toHaveBeenCalled();
 
         expect(mockEndWaiting).toHaveBeenCalledWith(123);
     });
 
-    test("handles a rejected review response", async () => {
+    test("handles a 409 response", async () => {
         global.fetch.mockResolvedValue({
             ok: false,
-            status: 400,
+            status: 409,
             json: jest.fn().mockResolvedValue({
-                error: "Invalid review",
+                error: "Already reviewed",
             }),
         });
 
-        const { result } = await renderHook(() => useCreateReview());
+        const { result } = renderHook(() => useCreateReview());
 
-        const response = await result.current.createReview(
-            "toilet-1",
-            5,
-            "This is a valid review text."
-        );
+        const response = await result.current({
+            reviewText: "This is a valid review.",
+            ratings: {
+                cleanliness: 5,
+            },
+        });
 
         expect(response).toBeNull();
 
-        expect(mockSetSelectedToilet).not.toHaveBeenCalled();
+        expect(mockToastShow).toHaveBeenCalledWith(
+            "toast.useCreateReview.noOkRes1",
+            {
+                type: "custom",
+                data: {
+                    type: "error",
+                    text2: "toast.useCreateReview.noOkRes2",
+                },
+            }
+        );
+
         expect(mockEndWaiting).toHaveBeenCalledWith(123);
     });
 
-    test("handles a review request error", async () => {
-        global.fetch.mockRejectedValue(new Error("Network error"));
+    test("handles other rejected responses", async () => {
+        global.fetch.mockResolvedValue({
+            ok: false,
+            status: 500,
+            json: jest.fn().mockResolvedValue({
+                error: "Server error",
+            }),
+        });
 
-        const { result } = await renderHook(() => useCreateReview());
+        const { result } = renderHook(() => useCreateReview());
 
-        const response = await result.current.createReview(
-            "toilet-1",
-            5,
-            "This is a valid review text."
-        );
+        const response = await result.current({
+            reviewText: "This is a valid review.",
+            ratings: {
+                cleanliness: 5,
+            },
+        });
 
         expect(response).toBeNull();
 
-        expect(mockSetSelectedToilet).not.toHaveBeenCalled();
+        expect(mockToastShow).toHaveBeenCalledWith(
+            "toast.useCreateReview.noOkRes3",
+            {
+                type: "custom",
+                data: {
+                    type: "error",
+                    text2: "toast.useCreateReview.noOkRes4",
+                },
+            }
+        );
+
+        expect(mockEndWaiting).toHaveBeenCalledWith(123);
+    });
+
+    test("handles review request errors", async () => {
+        global.fetch.mockRejectedValue(new Error("Network error"));
+
+        const { result } = renderHook(() => useCreateReview());
+
+        const response = await result.current({
+            reviewText: "This is a valid review.",
+            ratings: {
+                cleanliness: 5,
+            },
+        });
+
+        expect(response).toBeNull();
+
+        expect(mockToastShow).toHaveBeenCalledWith(
+            "toast.useCreateReview.catch1",
+            {
+                type: "custom",
+                data: {
+                    type: "error",
+                    text2: "toast.useCreateReview.catch2",
+                },
+            }
+        );
+
         expect(mockEndWaiting).toHaveBeenCalledWith(123);
     });
 });

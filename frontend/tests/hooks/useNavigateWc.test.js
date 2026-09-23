@@ -82,7 +82,9 @@ jest.mock("../../src/utils/logger", () => ({
     default: {
         info: jest.fn(),
         warn: jest.fn(),
-        error: jest.fn(),
+        error: (...args) => {
+            console.log("LOGGER ERROR:", ...args);
+        },
         debug: jest.fn(),
     },
 }));
