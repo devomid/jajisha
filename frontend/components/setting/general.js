@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { router } from "expo-router";
 
-import { ChevronDown, ChevronUp, RulerDimensionLine, Languages, AtSign, SunMoon, Trash, UserRoundCog, LogOut } from "lucide-react-native";
+import { ChevronDown, ChevronUp, RulerDimensionLine, Languages, AtSign, SunMoon, Trash, UserRoundCog, LogOut, Check } from "lucide-react-native";
 import { List, Text, Divider } from "react-native-paper";
 import { Pressable, View } from "react-native";
 
@@ -45,8 +45,6 @@ export default function GeneralSettings({ theme }) {
         await i18n.changeLanguage(lan);
         await AsyncStorage.setItem("language", lan);
 
-        // I18nManager.allowRTL(true);
-        // I18nManager.forceRTL(lan === "fa");
     };
 
     return (
@@ -231,14 +229,30 @@ export default function GeneralSettings({ theme }) {
                                 }}
                             >
                                 {({ pressed }) => (
-                                    <Text style={{
-                                        color: pressed ?
-                                            theme.colors.secondaryLight :
-                                            theme.colors.primaryDarker
+                                    <View
+                                        style={{
+                                            flexDirection: 'row',
+                                            justifyContent: 'space-between'
+                                        }}
+                                    >
 
-                                    }}>
-                                        {t("components.settings.general.metric")}
-                                    </Text>
+                                        <Text style={{
+                                            color: pressed ?
+                                                theme.colors.secondaryLight :
+                                                theme.colors.primaryDarker
+
+                                        }}>
+                                            {t("components.settings.general.metric")}
+                                        </Text>
+                                        {distanceUnit === "Metric" &&
+                                            <Check
+                                                size={17}
+                                                color={theme.colors.primary}
+                                                strokeWidth={1.8}
+                                            />
+                                        }
+
+                                    </View>
                                 )}
                             </Pressable>
 
@@ -256,14 +270,29 @@ export default function GeneralSettings({ theme }) {
                                     marginLeft: -20,
                                 }}>
                                 {({ pressed }) => (
-                                    <Text style={{
-                                        color: pressed ?
-                                            theme.colors.secondaryLight :
-                                            theme.colors.primaryDarker
+                                    <View
+                                        style={{
+                                            flexDirection: 'row',
+                                            justifyContent: 'space-between'
+                                        }}
+                                    >
+                                        <Text style={{
+                                            color: pressed ?
+                                                theme.colors.secondaryLight :
+                                                theme.colors.primaryDarker
 
-                                    }}>
-                                        {t("components.settings.general.imperial")}
-                                    </Text>
+                                        }}>
+                                            {t("components.settings.general.imperial")}
+                                        </Text>
+
+                                        {distanceUnit === "Imperial" &&
+                                            <Check
+                                                size={17}
+                                                color={theme.colors.primary}
+                                                strokeWidth={1.8}
+                                            />
+                                        }
+                                    </View>
                                 )}
                             </Pressable>
                         </View>
@@ -436,14 +465,30 @@ export default function GeneralSettings({ theme }) {
                                 }}
                             >
                                 {({ pressed }) => (
-                                    <Text style={{
-                                        color: pressed ?
-                                            theme.colors.secondaryLight :
-                                            theme.colors.primaryDarker
+                                    <View
+                                        style={{
+                                            flexDirection: 'row',
+                                            justifyContent: 'space-between'
+                                        }}
+                                    >
+                                        <Text style={{
+                                            color: pressed ?
+                                                theme.colors.secondaryLight :
+                                                theme.colors.primaryDarker
 
-                                    }}>
-                                        {t("components.settings.general.farsi")}
-                                    </Text>
+                                        }}>
+                                            {t("components.settings.general.farsi")}
+                                        </Text>
+
+                                        {isFarsi &&
+                                            <Check
+                                                size={17}
+                                                color={theme.colors.primary}
+                                                strokeWidth={1.8}
+                                            />
+                                        }
+                                    </View>
+
                                 )}
                             </Pressable>
 
@@ -461,14 +506,31 @@ export default function GeneralSettings({ theme }) {
                                     marginLeft: -20,
                                 }}>
                                 {({ pressed }) => (
-                                    <Text style={{
-                                        color: pressed ?
-                                            theme.colors.secondaryLight :
-                                            theme.colors.primaryDarker
 
-                                    }}>
-                                        {t("components.settings.general.english")}
-                                    </Text>
+                                    <View
+                                        style={{
+                                            flexDirection: 'row',
+                                            justifyContent: 'space-between'
+                                        }}
+                                    >
+                                        <Text style={{
+                                            color: pressed ?
+                                                theme.colors.secondaryLight :
+                                                theme.colors.primaryDarker
+
+                                        }}>
+                                            {t("components.settings.general.english")}
+                                        </Text>
+
+                                        {!isFarsi &&
+                                            <Check
+                                                size={17}
+                                                color={theme.colors.primary}
+                                                strokeWidth={1.8}
+                                            />
+                                        }
+                                    </View>
+
                                 )}
                             </Pressable>
                         </View>
@@ -635,14 +697,30 @@ export default function GeneralSettings({ theme }) {
                                 }}
                             >
                                 {({ pressed }) => (
-                                    <Text style={{
-                                        color: pressed ?
-                                            theme.colors.secondaryLight :
-                                            theme.colors.primaryDarker
+                                    <View
+                                        style={{
+                                            flexDirection: 'row',
+                                            justifyContent: 'space-between'
+                                        }}
+                                    >
+                                        <Text style={{
+                                            color: pressed ?
+                                                theme.colors.secondaryLight :
+                                                theme.colors.primaryDarker
 
-                                    }}>
-                                        {t("components.settings.general.light")}
-                                    </Text>
+                                        }}>
+                                            {t("components.settings.general.light")}
+                                        </Text>
+
+                                        {themeSetting === "Light" &&
+                                            <Check
+                                                size={17}
+                                                color={theme.colors.primary}
+                                                strokeWidth={1.8}
+                                            />
+                                        }
+                                    </View>
+
                                 )}
                             </Pressable>
 
@@ -660,14 +738,30 @@ export default function GeneralSettings({ theme }) {
                                     marginLeft: -20,
                                 }}>
                                 {({ pressed }) => (
-                                    <Text style={{
-                                        color: pressed ?
-                                            theme.colors.secondaryLight :
-                                            theme.colors.primaryDarker
+                                    <View
+                                        style={{
+                                            flexDirection: 'row',
+                                            justifyContent: 'space-between'
+                                        }}
+                                    >
+                                        <Text style={{
+                                            color: pressed ?
+                                                theme.colors.secondaryLight :
+                                                theme.colors.primaryDarker
 
-                                    }}>
-                                        {t("components.settings.general.system")}
-                                    </Text>
+                                        }}>
+                                            {t("components.settings.general.system")}
+                                        </Text>
+
+                                        {themeSetting === "System" &&
+                                            <Check
+                                                size={17}
+                                                color={theme.colors.primary}
+                                                strokeWidth={1.8}
+                                            />
+                                        }
+                                    </View>
+
                                 )}
                             </Pressable>
 
@@ -685,14 +779,30 @@ export default function GeneralSettings({ theme }) {
                                     marginLeft: -20,
                                 }}>
                                 {({ pressed }) => (
-                                    <Text style={{
-                                        color: pressed ?
-                                            theme.colors.secondaryLight :
-                                            theme.colors.primaryDarker
+                                    <View
+                                        style={{
+                                            flexDirection: 'row',
+                                            justifyContent: 'space-between'
+                                        }}
+                                    >
+                                        <Text style={{
+                                            color: pressed ?
+                                                theme.colors.secondaryLight :
+                                                theme.colors.primaryDarker
 
-                                    }}>
-                                        {t("components.settings.general.dark")}
-                                    </Text>
+                                        }}>
+                                            {t("components.settings.general.dark")}
+                                        </Text>
+
+                                        {themeSetting === "Dark" &&
+                                            <Check
+                                                size={17}
+                                                color={theme.colors.primary}
+                                                strokeWidth={1.8}
+                                            />
+                                        }
+                                    </View>
+
                                 )}
                             </Pressable>
                         </View>

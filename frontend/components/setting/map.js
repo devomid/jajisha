@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
-import { ChevronDown, ChevronUp, Navigation2, Compass, MapPinPen } from "lucide-react-native";
+import { ChevronDown, ChevronUp, Navigation2, Compass, MapPinPen, Check } from "lucide-react-native";
 import { View, Pressable } from "react-native";
 import { List, Text, Divider } from "react-native-paper";
 
@@ -209,15 +209,32 @@ export default function MapSettings({ theme }) {
                                 }}
                             >
                                 {({ pressed }) => (
-                                    <Text style={{
-                                        color: pressed ?
-                                            theme.colors.secondaryLight :
-                                            theme.colors.primaryDarker
+                                    <View
+                                        style={{
+                                            flexDirection: 'row',
+                                            justifyContent: 'space-between'
+                                        }}
+                                    >
+                                        <Text style={{
+                                            color: pressed ?
+                                                theme.colors.secondaryLight :
+                                                theme.colors.primaryDarker
 
-                                    }}>{t("components.settings.map.standard")}
-                                    </Text>
-                                )}
+                                        }}>{t("components.settings.map.standard")}
+                                        </Text>
+
+                                        {mapType === "standard" &&
+                                            <Check
+                                                size={17}
+                                                color={theme.colors.primary}
+                                                strokeWidth={1.8}
+                                            />
+                                        }
+                                    </View>
+
+)}
                             </Pressable>
+
 
                             <Divider horizontalInset style={{ marginLeft: -20 }} />
 
@@ -233,14 +250,30 @@ export default function MapSettings({ theme }) {
                                     marginLeft: -20,
                                 }}>
                                 {({ pressed }) => (
-                                    <Text style={{
-                                        color: pressed ?
-                                            theme.colors.secondaryLight :
-                                            theme.colors.primaryDarker
+                                    <View
+                                        style={{
+                                            flexDirection: 'row',
+                                            justifyContent: 'space-between'
+                                        }}
+                                    >
+                                        <Text style={{
+                                            color: pressed ?
+                                                theme.colors.secondaryLight :
+                                                theme.colors.primaryDarker
 
-                                    }}>
-                                        {t("components.settings.map.satellite")}
-                                    </Text>
+                                        }}>
+                                            {t("components.settings.map.satellite")}
+                                        </Text>
+
+                                        {mapType === "satellite" &&
+                                            <Check
+                                                size={17}
+                                                color={theme.colors.primary}
+                                                strokeWidth={1.8}
+                                            />
+                                        }
+                                    </View>
+                                    
                                 )}
                             </Pressable>
 
@@ -259,14 +292,29 @@ export default function MapSettings({ theme }) {
                                 }}
                             >
                                 {({ pressed }) => (
-                                    <Text style={{
-                                        color: pressed ?
-                                            theme.colors.secondaryLight :
-                                            theme.colors.primaryDarker
+                                    <View
+                                        style={{
+                                            flexDirection: 'row',
+                                            justifyContent: 'space-between'
+                                        }}
+                                    >
+                                        <Text style={{
+                                            color: pressed ?
+                                                theme.colors.secondaryLight :
+                                                theme.colors.primaryDarker
 
-                                    }}>
-                                        {t("components.settings.map.hybrid")}
-                                    </Text>
+                                        }}>
+                                            {t("components.settings.map.hybrid")}
+                                        </Text>
+                                        {mapType === "hybrid" &&
+                                            <Check
+                                                size={17}
+                                                color={theme.colors.primary}
+                                                strokeWidth={1.8}
+                                            />
+                                        }
+                                    </View>
+                                    
                                 )}
                             </Pressable>
 
@@ -436,14 +484,29 @@ export default function MapSettings({ theme }) {
                                 }}
                             >
                                 {({ pressed }) => (
-                                    <Text style={{
-                                        color: pressed ?
-                                            theme.colors.secondaryLight :
-                                            theme.colors.primaryDarker
+                                    <View
+                                        style={{
+                                            flexDirection: 'row',
+                                            justifyContent: 'space-between'
+                                        }}
+                                    >
+                                        <Text style={{
+                                            color: pressed ?
+                                                theme.colors.secondaryLight :
+                                                theme.colors.primaryDarker
 
-                                    }}>
-                                        {t("components.settings.map.doShowMyLocation")}
-                                    </Text>
+                                        }}>
+                                            {t("components.settings.map.doShowMyLocation")}
+                                        </Text>
+                                        {showMyLocation &&
+                                            <Check
+                                                size={17}
+                                                color={theme.colors.primary}
+                                                strokeWidth={1.8}
+                                            />
+                                        }
+                                    </View>
+                                    
                                 )}
                             </Pressable>
 
@@ -461,14 +524,29 @@ export default function MapSettings({ theme }) {
                                     marginLeft: -20,
                                 }}>
                                 {({ pressed }) => (
-                                    <Text style={{
-                                        color: pressed ?
-                                            theme.colors.secondaryLight :
-                                            theme.colors.primaryDarker
+                                    <View
+                                        style={{
+                                            flexDirection: 'row',
+                                            justifyContent: 'space-between'
+                                        }}
+                                    >
+                                        <Text style={{
+                                            color: pressed ?
+                                                theme.colors.secondaryLight :
+                                                theme.colors.primaryDarker
 
-                                    }}>
-                                        {t("components.settings.map.doNotShowMyLocation")}
-                                    </Text>
+                                        }}>
+                                            {t("components.settings.map.doNotShowMyLocation")}
+                                        </Text>
+                                        {!showMyLocation &&
+                                            <Check
+                                                size={17}
+                                                color={theme.colors.primary}
+                                                strokeWidth={1.8}
+                                            />
+                                        }
+                                    </View>
+                                    
                                 )}
                             </Pressable>
 
@@ -638,14 +716,30 @@ export default function MapSettings({ theme }) {
                                 }}
                             >
                                 {({ pressed }) => (
-                                    <Text style={{
-                                        color: pressed ?
-                                            theme.colors.secondaryLight :
-                                            theme.colors.primaryDarker
+                                    <View
+                                        style={{
+                                            flexDirection: 'row',
+                                            justifyContent: 'space-between'
+                                        }}
+                                    >
+                                        <Text style={{
+                                            color: pressed ?
+                                                theme.colors.secondaryLight :
+                                                theme.colors.primaryDarker
 
-                                    }}>
-                                        {t("components.settings.map.doShowCompass")}
-                                    </Text>
+                                        }}>
+                                            {t("components.settings.map.doShowCompass")}
+                                        </Text>
+
+                                        {showCompass &&
+                                            <Check
+                                                size={17}
+                                                color={theme.colors.primary}
+                                                strokeWidth={1.8}
+                                            />
+                                        }
+                                    </View>
+                                    
                                 )}
                             </Pressable>
 
@@ -663,14 +757,30 @@ export default function MapSettings({ theme }) {
                                     marginLeft: -20,
                                 }}>
                                 {({ pressed }) => (
-                                    <Text style={{
-                                        color: pressed ?
-                                            theme.colors.secondaryLight :
-                                            theme.colors.primaryDarker
+                                    <View
+                                        style={{
+                                            flexDirection: 'row',
+                                            justifyContent: 'space-between'
+                                        }}
+                                    >
+                                        <Text style={{
+                                            color: pressed ?
+                                                theme.colors.secondaryLight :
+                                                theme.colors.primaryDarker
 
-                                    }}>
-                                        {t("components.settings.map.doNotShowCompass")}
-                                    </Text>
+                                        }}>
+                                            {t("components.settings.map.doNotShowCompass")}
+                                        </Text>
+
+                                        {!showCompass &&
+                                            <Check
+                                                size={17}
+                                                color={theme.colors.primary}
+                                                strokeWidth={1.8}
+                                            />
+                                        }
+                                    </View>
+                                    
                                 )}
                             </Pressable>
                         </View>
