@@ -67,4 +67,130 @@ describe("wcDataStore navigation", () => {
             status: "idle",
         });
     });
+
+    test("sets and clears selected toilet", () => {
+        const toilet = {
+            _id: "toilet-1",
+            name: "Test Toilet",
+        };
+
+        useWcDataStore.getState().setSelectedToilet(toilet);
+
+        expect(
+            useWcDataStore.getState().selectedToilet
+        ).toEqual(toilet);
+
+        useWcDataStore.getState().clearSelectedToilet();
+
+        expect(
+            useWcDataStore.getState().selectedToilet
+        ).toBeNull();
+    });
+
+    test("adds a toilet", () => {
+        const toilet = {
+            _id: "toilet-1",
+            name: "Test Toilet",
+        };
+
+        useWcDataStore.getState().addToilet(toilet);
+
+        expect(
+            useWcDataStore.getState().toilets
+        ).toContainEqual(toilet);
+    });
+
+    test("sets toilets directly", () => {
+        const toilets = [
+            { _id: "1", name: "One" },
+            { _id: "2", name: "Two" },
+        ];
+
+        useWcDataStore.getState().setToilets(toilets);
+
+        expect(
+            useWcDataStore.getState().toilets
+        ).toEqual(toilets);
+    });
+
+    test("sets and clears toilet route info", () => {
+        useWcDataStore
+            .getState()
+            .setToiletRouteInfo("1.2 km", "15 min");
+
+        expect(
+            useWcDataStore.getState().toiletRouteInfo
+        ).toEqual({
+            distance: "1.2 km",
+            duration: "15 min",
+        });
+
+        useWcDataStore.getState().clearToiletRouteInfo();
+
+        expect(
+            useWcDataStore.getState().toiletRouteInfo
+        ).toEqual({
+            distance: null,
+            duration: null,
+        });
+    });
+
+    test("sets and clears open toilet info", () => {
+        useWcDataStore
+            .getState()
+            .requestOpenToiletInfo();
+
+        expect(
+            useWcDataStore.getState().openToiletInfo
+        ).toBe(true);
+
+        useWcDataStore
+            .getState()
+            .clearOpenToiletInfo();
+
+        expect(
+            useWcDataStore.getState().openToiletInfo
+        ).toBe(false);
+    });
+
+    test("sets picked location", () => {
+        useWcDataStore.getState().setPickedLocation({
+            latitude: 35.7,
+            longitude: 51.4,
+            address: "Test Street",
+        });
+
+        const state = useWcDataStore.getState();
+
+        expect(state.isPickingLocation).toBe(false);
+
+        expect(state.wcData.location).toEqual({
+            type: "Point",
+            coordinates: [51.4, 35.7],
+        });
+
+        expect(state.wcData.address).toBe("Test Street");
+    });
+
+    test("resets toilet data", () => {
+        useWcDataStore.getState().setWcData({
+            name: "Temporary Toilet",
+        });
+
+        useWcDataStore.getState().startPickingLocation();
+        useWcDataStore.getState().setPickedCoordinate({
+            latitude: 35.7,
+            longitude: 51.4,
+        });
+
+        useWcDataStore.getState().resetWcData();
+
+        const state = useWcDataStore.getState();
+
+        expect(state.isPickingLocation).toBe(false);
+        expect(state.pickedCoordinate).toBeNull();
+        expect(state.wcData.name).toBe("");
+        expect(state.wcData.description).toBe("");
+        expect(state.wcData.photos).toEqual([]);
+    });
 });

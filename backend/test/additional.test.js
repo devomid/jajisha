@@ -280,5 +280,39 @@ describe('Additional API coverage', () => {
             expect(review.user).toBeDefined();
             expect(review.user.username).toBe(user.username);
         });
+
+        it("should return the authenticated user's review as userReview", async () => {
+            const ratings = {
+                cleanliness: 4,
+                odor: 5,
+                amenitiesHealth: 3,
+                light: 4,
+                privacy: 5,
+                crowd: 2,
+            };
+
+            const reviewText =
+                "This is a clean and useful public toilet.";
+
+            const createResponse = await request(app)
+                .post(`/api/managment/toiletManagement/${toiletId}`)
+                .set("Authorization", `Bearer ${token}`)
+                .send({
+                    reviewText,
+                    ratings,
+                });
+
+            expect(createResponse.statusCode).toBe(201);
+
+            const response = await request(app)
+                .get(`/api/toilets/reviews/${toiletId}`)
+                .set("Authorization", `Bearer ${token}`);
+
+            expect(response.statusCode).toBe(200);
+
+            expect(response.body.userReview).toBeDefined();
+            expect(response.body.userReview.text).toBe(reviewText);
+            expect(response.body.userReview.ratings).toEqual(ratings);
+        });
     });
 });
