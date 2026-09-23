@@ -1,10 +1,10 @@
-
+<img width="1206" height="2622" alt="landing home" src="https://github.com/user-attachments/assets/54ffc33d-fe6b-44b9-8846-ffedd6193f7a" />
 # 🚻 Jajisha
 
 ### Find a toilet. Add a toilet. Get there.
 
 <p align="center">
-  <img src="image/README/1790204105556.png" alt="Jajisha — Public Toilet Discovery App" width="900">
+  <img src="[image/README/1790204105556.png](https://github.com/user-attachments/assets/9759a15f-5d10-4cc6-b86b-7f8ae9a67b4f)" alt="Jajisha — Public Toilet Discovery App" width="900">
 </p>
 
 
@@ -90,13 +90,13 @@ The goal is to make the complete process of finding a usable toilet as simple as
 ### Main Map
 
 <p align="center">
-  <img src="image/README/screenshots/map.png" alt="Jajisha main map" width="280">
+  <img src="[image/README/screenshots/map.png](https://github.com/user-attachments/assets/d0dd29b4-7af1-4268-97c0-346e6fff5d6e)" alt="Jajisha main map" width="280">
 </p>
 
 ### Toilet Information
 
 <p align="center">
-  <img src="image/README/screenshots/toilet-info.png" alt="Jajisha toilet information" width="280">
+  <img src="[image/README/screenshots/toilet-info.png](https://github.com/user-attachments/assets/ed2acd6d-f2e7-476c-903f-3b91e70277a4)" alt="Jajisha toilet information" width="280">
 </p>
 
 ### Navigation
@@ -108,13 +108,13 @@ The goal is to make the complete process of finding a usable toilet as simple as
 ### Add a Toilet
 
 <p align="center">
-  <img src="image/README/screenshots/add-toilet.png" alt="Jajisha add toilet screen" width="280">
+  <img src="[image/README/screenshots/add-toilet.png](https://github.com/user-attachments/assets/5d3f1cee-ab6c-423f-b9d2-04c196f943b5)" alt="Jajisha add toilet screen" width="280">
 </p>
 
 ### Ratings & Reviews
 
 <p align="center">
-  <img src="image/README/screenshots/reviews.png" alt="Jajisha ratings and reviews" width="280">
+  <img src="[image/README/screenshots/reviews.png](https://github.com/user-attachments/assets/87c9f040-0d21-4597-89f0-32539c69d1a7)" alt="Jajisha ratings and reviews" width="280">
 </p>
 
 ### Search
@@ -126,7 +126,7 @@ The goal is to make the complete process of finding a usable toilet as simple as
 ### Settings
 
 <p align="center">
-  <img src="image/README/screenshots/settings.png" alt="Jajisha settings" width="280">
+  <img src="[image/README/screenshots/settings.png](https://github.com/user-attachments/assets/cf8aa056-f002-4374-bc33-69ddbd84f8e6)" alt="Jajisha settings" width="280">
 </p>
 
 ### Persian / RTL Interface
