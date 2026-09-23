@@ -4,10 +4,9 @@
 ### Find a toilet. Add a toilet. Get there.
 
 <p align="center">
-  <img src="image/README/jajisha-banner.png" alt="Jajisha — Public Toilet Discovery App" width="900">
+  <img src="image/README/1790204105556.png" alt="Jajisha — Public Toilet Discovery App" width="900">
 </p>
 
-![1790204105556](image/README/1790204105556.png)
 
 <p align="center">
   <strong>A community-powered mobile application for discovering, reviewing, and navigating to public toilets.</strong>
