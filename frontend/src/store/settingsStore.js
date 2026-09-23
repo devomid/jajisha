@@ -49,6 +49,13 @@ export const useSettingsStore = create(
         {
             name: "jajisha-settings",
             storage: createJSONStorage(() => AsyncStorage),
+            partialize: (state) => ({
+                distanceUnit: state.distanceUnit,
+                theme: state.theme,
+                mapType: state.mapType,
+                showMyLocation: state.showMyLocation,
+                showCompass: state.showCompass,
+            }),
             onRehydrateStorage: () => {
                 return (state, error) => {
                     if (error) {
