@@ -164,15 +164,34 @@ export default function SignUp() {
                             marginTop: 70,
                             marginBottom: 30,
                         }}>
-                            <Text style={{ color: theme.colors.secondaryDarker + '99' }} variant="displayLarge">
+                            <Text
+                                style={{
+                                    color: theme.colors.secondaryDarker + '99',
+                                    fontSize: 42,
+                                    lineHeight: 50,
+                                    fontWeight: "700",
+                                }}
+                            >
                                 {t("app.auth.signup.signupTitle")}
                             </Text>
 
-                            <Text style={{
-                                color: theme.colors.secondaryDarker + '99',
-                                marginLeft: 2
-                            }} variant="bodyMedium">
+                            <Text
+                                variant="headlineMedium"
+                                style={{
+                                    color: theme.colors.secondaryDarker + '99',
+                                    marginLeft: 2
+                                }}
+                            >
                                 {t("app.auth.signup.signupSubTitle")}
+                            </Text>
+                            <Text
+                                variant="bodyMedium"
+                                style={{
+                                    color: theme.colors.secondaryDarker + '99',
+                                    marginLeft: 2
+                                }}
+                            >
+                                {t("app.auth.signup.signupSubTitle1")}
                             </Text>
                         </View>
 

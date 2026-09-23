@@ -2,8 +2,9 @@
     "app": {
         "auth": {
             "signin": {
-                "signinTitle": "وارد حساب کاربری‌تان شوید",
-                "signinSubTitle": "تا به بهترین مکان‌ها دسترسی داشته باشید.",
+                "signinTitle": "وارد حساب",
+                "signinSubTitle": "کاربری‌تان شوید.",
+                "signinSubTitle1": "تا به بهترین مکان‌ها دسترسی داشته باشید.",
                 "emailInput": "آدرس ایمیل",
                 "passwordInput": "رمز عبور",
                 "rememberMe": "مرا به خاطر بسپار",
@@ -17,8 +18,9 @@
                 "passwordRequiredError": "وارد کردن رمز عبور الزامی است"
             },
             "signup": {
-                "signupTitle": "حساب کاربری بسازید",
-                "signupSubTitle": "تا بتوانید مکان‌های موردعلاقه‌تان را ذخیره کنید",
+                "signupTitle": "حساب کاربری",
+                "signupSubTitle": "جدید بسازید",
+                "signupSubTitle1": "تا بتوانید مکان‌های موردعلاقه‌تان را ذخیره کنید",
                 "emailInput": "آدرس ایمیل",
                 "passwordInput": "رمز عبور",
                 "confirmPasswordInput": "تکرار رمز عبور",

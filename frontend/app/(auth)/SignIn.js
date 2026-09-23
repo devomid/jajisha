@@ -209,13 +209,27 @@ export default function SignIn() {
                             marginTop: 70,
                             marginBottom: 50,
                         }}>
-                            <Text style={{ color: theme.colors.secondaryDarker + '99' }}
-                                variant="displayLarge">
+                            <Text
+                                style={{
+                                    color: theme.colors.secondaryDarker + '99',
+                                    fontSize: 42,
+                                    lineHeight: 50,
+                                    fontWeight: "700",
+                                }}
+                            >
                                 {t("app.auth.signin.signinTitle")}
+                            </Text>
+                            <Text
+                                variant="headlineMedium"
+                                style={{
+                                    color: theme.colors.secondaryDarker + '99', marginLeft: 2
+                                }}
+                            >
+                                {t("app.auth.signin.signinSubTitle")}
                             </Text>
                             <Text style={{ color: theme.colors.secondaryDarker + '99', marginLeft: 2 }}
                                 variant="bodyMedium">
-                                {t("app.auth.signin.signinSubTitle")}
+                                {t("app.auth.signin.signinSubTitle1")}
                             </Text>
                         </View>
 

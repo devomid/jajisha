@@ -8,7 +8,7 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { Slot } from "expo-router";
 
-import { useSettingsStore } from "../store/settingsStore";
+import { useSettingsStore } from "../src/store/settingsStore";
 import { getPaperTheme } from "../src/constants/paperTheme";
 import { initI18n } from "../src/i18n";
 import WaitingOverlay from "../components/waiting/waitingOverlay";

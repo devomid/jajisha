@@ -8,7 +8,7 @@ import { View, Pressable, Image } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { BlurView } from "expo-blur";
 
-import { useTopSheetStore } from '../store/menuStore';
+import { useTopSheetStore } from '../src/store/menuStore';
 import { useManagingWc } from '../src/hooks/useManagingWc';
 import useCurrentLocation from '../src/hooks/useCurrentLocation';
 import { useWcDataStore } from '../src/store/wcDataStore';

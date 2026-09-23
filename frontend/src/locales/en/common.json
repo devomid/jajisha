@@ -2,8 +2,9 @@
     "app": {
         "auth": {
             "signin": {
-                "signinTitle": "Sign in to your account",
-                "signinSubTitle": "To access the best places.",
+                "signinTitle": "Sign in ",
+                "signinSubTitle": "to your account",
+                "signinSubTitle1": "To access the best places.",
                 "emailInput": "Email address",
                 "passwordInput": "Password",
                 "rememberMe": "Remember me",
@@ -17,8 +18,9 @@
                 "passwordRequiredError": "Password is required"
             },
             "signup": {
-                "signupTitle": "Create an account",
-                "signupSubTitle": "To save places you like",
+                "signupTitle": "Create ",
+                "signupSubTitle": "a new account",
+                "signupSubTitle1": "To save places you like",
                 "emailInput": "Email address",
                 "passwordInput": "Password",
                 "confirmPasswordInput": "Confirm password",
