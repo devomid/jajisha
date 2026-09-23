@@ -1,0 +1,14 @@
+{
+    "name": "jajisha-security-tests",
+    "private": true,
+    "scripts": {
+        "test": "jest --runInBand --setupFilesAfterEnv=./setup.js"
+    },
+    "devDependencies": {
+        "jest": "^30.5.2",
+        "supertest": "^7.3.0"
+    },
+    "dependencies": {
+        "jsonwebtoken": "^9.0.3"
+    }
+}

@@ -114,8 +114,6 @@ describe("signUpSchema", () => {
         ["firstName", "app.auth.signup.firstNameRequiredError"],
         ["lastName", "app.auth.signup.lastNameRequiredError"],
         ["email", "app.auth.signup.requiredEmailError"],
-        ["password", "app.auth.signup.passwordRequiredError"],
-        ["confirmPassword", "app.auth.signup.confirmPasswordRequiredError"],
     ])("rejects missing %s", async (field, message) => {
         const data = { ...validData };
         delete data[field];
@@ -123,6 +121,28 @@ describe("signUpSchema", () => {
         await expect(
             schema.validate(data)
         ).rejects.toThrow(message);
+    });
+
+    test("rejects missing password", async () => {
+        const data = { ...validData };
+        delete data.password;
+
+        await expect(
+            schema.validateAt("password", data)
+        ).rejects.toThrow(
+            "app.auth.signup.passwordRequiredError"
+        );
+    });
+
+    test("rejects missing confirmPassword", async () => {
+        const data = { ...validData };
+        delete data.confirmPassword;
+
+        await expect(
+            schema.validate(data)
+        ).rejects.toThrow(
+            "app.auth.signup.confirmPasswordRequiredError"
+        );
     });
 
     test("rejects invalid email", async () => {

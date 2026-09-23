@@ -15,8 +15,13 @@ function TestComponent() {
 
     return (
         <>
-            <Text testID="theme">{theme}</Text>
-            <Text testID="primary">{colors.primary}</Text>
+            <Text testID="theme">
+                {theme}
+            </Text>
+
+            <Text testID="primary">
+                {colors.primary}
+            </Text>
 
             <Pressable
                 testID="toggle"
@@ -29,48 +34,63 @@ function TestComponent() {
 }
 
 describe("ThemeContext", () => {
-    test("starts with dark theme", () => {
-        const { getByTestId } = render(
+    test("starts with dark theme", async () => {
+        const rendered = await render(
             <ThemeProvider>
                 <TestComponent />
             </ThemeProvider>
         );
 
-        expect(getByTestId("theme").props.children).toBe("dark");
+        expect(
+            rendered.getByTestId("theme").props.children
+        ).toBe("dark");
     });
 
-    test("provides colors for the current theme", () => {
-        const { getByTestId } = render(
+    test("provides colors for the current theme", async () => {
+        const rendered = await render(
             <ThemeProvider>
                 <TestComponent />
             </ThemeProvider>
         );
 
-        expect(getByTestId("primary").props.children).toBeTruthy();
+        expect(
+            rendered.getByTestId("primary").props.children
+        ).toBeTruthy();
     });
 
-    test("toggles from dark to light", () => {
-        const { getByTestId } = render(
+    test("toggles from dark to light", async () => {
+        const rendered = await render(
             <ThemeProvider>
                 <TestComponent />
             </ThemeProvider>
         );
 
-        fireEvent.press(getByTestId("toggle"));
+        await fireEvent.press(
+            rendered.getByTestId("toggle")
+        );
 
-        expect(getByTestId("theme").props.children).toBe("light");
+        expect(
+            rendered.getByTestId("theme").props.children
+        ).toBe("light");
     });
 
-    test("toggles from light back to dark", () => {
-        const { getByTestId } = render(
+    test("toggles from light back to dark", async () => {
+        const rendered = await render(
             <ThemeProvider>
                 <TestComponent />
             </ThemeProvider>
         );
 
-        fireEvent.press(getByTestId("toggle"));
-        fireEvent.press(getByTestId("toggle"));
+        await fireEvent.press(
+            rendered.getByTestId("toggle")
+        );
 
-        expect(getByTestId("theme").props.children).toBe("dark");
+        await fireEvent.press(
+            rendered.getByTestId("toggle")
+        );
+
+        expect(
+            rendered.getByTestId("theme").props.children
+        ).toBe("dark");
     });
 });

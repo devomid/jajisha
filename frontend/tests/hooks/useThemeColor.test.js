@@ -1,49 +1,55 @@
 import { renderHook } from "@testing-library/react-native";
-import { Platform, useColorScheme } from "react-native";
+import * as ReactNative from "react-native";
 
 import useThemeColor from "../../src/hooks/useThemeColor";
 import Colors from "../../src/constants/colors";
 
-jest.mock("react-native", () => {
-    const actual = jest.requireActual("react-native");
-
-    return {
-        ...actual,
-        useColorScheme: jest.fn(),
-    };
-});
-
 describe("useThemeColor", () => {
-    const originalOS = Platform.OS;
+    const originalOS = ReactNative.Platform.OS;
 
     afterEach(() => {
-        Platform.OS = originalOS;
-        jest.clearAllMocks();
+        ReactNative.Platform.OS = originalOS;
+        jest.restoreAllMocks();
     });
 
-    test("returns dark colors for dark native scheme", () => {
-        Platform.OS = "ios";
-        useColorScheme.mockReturnValue("dark");
+    test("returns dark colors for dark native scheme", async () => {
+        ReactNative.Platform.OS = "ios";
 
-        const { result } = renderHook(() => useThemeColor());
+        jest
+            .spyOn(ReactNative, "useColorScheme")
+            .mockReturnValue("dark");
+
+        const { result } = await renderHook(
+            () => useThemeColor()
+        );
 
         expect(result.current).toEqual(Colors.dark);
     });
 
-    test("returns light colors for light native scheme", () => {
-        Platform.OS = "ios";
-        useColorScheme.mockReturnValue("light");
+    test("returns light colors for light native scheme", async () => {
+        ReactNative.Platform.OS = "ios";
 
-        const { result } = renderHook(() => useThemeColor());
+        jest
+            .spyOn(ReactNative, "useColorScheme")
+            .mockReturnValue("light");
+
+        const { result } = await renderHook(
+            () => useThemeColor()
+        );
 
         expect(result.current).toEqual(Colors.light);
     });
 
-    test("returns dark colors on web regardless of system scheme", () => {
-        Platform.OS = "web";
-        useColorScheme.mockReturnValue("light");
+    test("returns dark colors on web regardless of system scheme", async () => {
+        ReactNative.Platform.OS = "web";
 
-        const { result } = renderHook(() => useThemeColor());
+        jest
+            .spyOn(ReactNative, "useColorScheme")
+            .mockReturnValue("light");
+
+        const { result } = await renderHook(
+            () => useThemeColor()
+        );
 
         expect(result.current).toEqual(Colors.dark);
     });
