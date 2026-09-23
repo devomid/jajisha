@@ -2,7 +2,7 @@ import "react-native-gesture-handler";
 import { useFonts } from "@expo-google-fonts/vazirmatn";
 
 import { useEffect, useState } from "react";
-import { I18nManager, useColorScheme } from "react-native";
+import { useColorScheme } from "react-native";
 
 import { PaperProvider } from "react-native-paper";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
@@ -42,9 +42,6 @@ export default function RootLayout() {
         const load = async () => {
             try {
                 await initI18n();
-
-                I18nManager.allowRTL(true);
-                I18nManager.forceRTL(i18n.language === "fa");
 
                 setReady(true);
             } catch (error) {
