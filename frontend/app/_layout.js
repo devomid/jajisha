@@ -1,4 +1,5 @@
 import "react-native-gesture-handler";
+import { useFonts } from "@expo-google-fonts/vazirmatn";
 
 import { useEffect, useState } from "react";
 import { useColorScheme } from "react-native";
@@ -31,6 +32,12 @@ export default function RootLayout() {
 
     const [ready, setReady] = useState(false);
 
+    const [fontsLoaded] = useFonts({
+        Vazirmatn: require("@expo-google-fonts/vazirmatn/400Regular"),
+        VazirmatnMedium: require("@expo-google-fonts/vazirmatn/500Medium"),
+        VazirmatnBold: require("@expo-google-fonts/vazirmatn/700Bold"),
+    });
+
     useEffect(() => {
         const load = async () => {
             try {
@@ -48,7 +55,7 @@ export default function RootLayout() {
         load();
     }, []);
 
-    if (!ready)
+    if (!ready || !fontsLoaded)
         return null;
 
     return (
