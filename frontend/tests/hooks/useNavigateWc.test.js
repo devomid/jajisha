@@ -1,4 +1,5 @@
 import { renderHook } from "@testing-library/react-native";
+import * as Location from "expo-location";
 
 import { useNavigateToToilet } from "../../src/hooks/useNavigateWc";
 
@@ -38,14 +39,6 @@ const mockWcStoreState = () => ({
     setToiletRouteInfo: mockSetToiletRouteInfo,
 });
 
-jest.mock("expo-location", () => ({
-    Accuracy: {
-        High: "high",
-    },
-    requestForegroundPermissionsAsync:
-        mockRequestForegroundPermissionsAsync,
-    getCurrentPositionAsync: mockGetCurrentPositionAsync,
-}));
 
 jest.mock("../../src/store/wcDataStore", () => ({
     useWcDataStore: Object.assign(
@@ -91,6 +84,8 @@ jest.mock("../../src/utils/logger", () => ({
 
 beforeEach(() => {
     jest.clearAllMocks();
+    jest.spyOn(Location, "requestForegroundPermissionsAsync");
+    jest.spyOn(Location, "getCurrentPositionAsync");
 
     global.fetch = jest.fn();
 
@@ -106,11 +101,11 @@ beforeEach(() => {
 
     mockStartWaiting.mockReturnValue(123);
 
-    mockRequestForegroundPermissionsAsync.mockResolvedValue({
+    Location.requestForegroundPermissionsAsync.mockResolvedValue({
         status: "granted",
     });
 
-    mockGetCurrentPositionAsync.mockResolvedValue({
+    Location.getCurrentPositionAsync.mockResolvedValue({
         coords: {
             latitude: 35.7001,
             longitude: 51.4001,
@@ -138,7 +133,7 @@ describe("useNavigateToToilet - navigateToToilet", () => {
     });
 
     test("clears navigation when location permission is denied", async () => {
-        mockRequestForegroundPermissionsAsync.mockResolvedValue({
+        Location.requestForegroundPermissionsAsync.mockResolvedValue({
             status: "denied",
         });
 
@@ -290,7 +285,7 @@ describe("useNavigateToToilet - calculateToiletDistance", () => {
             _id: "toilet-1",
         });
 
-        expect(mockRequestForegroundPermissionsAsync).not.toHaveBeenCalled();
+        expect(Location.requestForegroundPermissionsAsync).not.toHaveBeenCalled();
         expect(global.fetch).not.toHaveBeenCalled();
     });
 
