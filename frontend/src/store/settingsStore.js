@@ -8,10 +8,10 @@ export const useSettingsStore = create(
         (set) => ({
             distanceUnit: "Metric",
             theme: "System",
+            themePreference: "System",
             mapType: 'standard',
             showMyLocation: true,
             showCompass: true,
-            themeBeforeSatellite: null,
 
             setShowCompass: (showCompass) => set({ showCompass }),
 
@@ -19,23 +19,17 @@ export const useSettingsStore = create(
 
             setMapType: (mapType) =>
                 set((state) => {
-                    if (mapType === "satellite" && state.mapType !== "satellite") {
+                    if (mapType === "satellite") {
                         return {
                             mapType,
-                            themeBeforeSatellite: state.theme,
                             theme: "Dark",
                         };
                     }
 
-                    if (mapType !== "satellite" && state.mapType === "satellite") {
-                        return {
-                            mapType,
-                            theme: state.themeBeforeSatellite ?? state.theme,
-                            themeBeforeSatellite: null,
-                        };
-                    }
-
-                    return { mapType };
+                    return {
+                        mapType,
+                        theme: state.themePreference,
+                    };
                 }),
 
             setDistanceUnit: (distanceUnit) =>
@@ -43,6 +37,7 @@ export const useSettingsStore = create(
 
             setTheme: (theme) =>
                 set((state) => ({
+                    themePreference: theme,
                     theme: state.mapType === "satellite" ? "Dark" : theme,
                 })),
         }),
@@ -52,6 +47,7 @@ export const useSettingsStore = create(
             partialize: (state) => ({
                 distanceUnit: state.distanceUnit,
                 theme: state.theme,
+                themePreference: state.themePreference,
                 mapType: state.mapType,
                 showMyLocation: state.showMyLocation,
                 showCompass: state.showCompass,
