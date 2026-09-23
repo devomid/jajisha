@@ -11,12 +11,32 @@ export const useSettingsStore = create(
             mapType: 'standard',
             showMyLocation: true,
             showCompass: true,
+            themeBeforeSatellite: null,
 
             setShowCompass: (showCompass) => set({ showCompass }),
 
             setShowMyLocation: (showMyLocation) => set({ showMyLocation }),
 
-            setMapType: (mapType) => set({ mapType }),
+            setMapType: (mapType) =>
+                set((state) => {
+                    if (mapType === "satellite" && state.mapType !== "satellite") {
+                        return {
+                            mapType,
+                            themeBeforeSatellite: state.theme,
+                            theme: "Dark",
+                        };
+                    }
+
+                    if (mapType !== "satellite" && state.mapType === "satellite") {
+                        return {
+                            mapType,
+                            theme: state.themeBeforeSatellite ?? state.theme,
+                            themeBeforeSatellite: null,
+                        };
+                    }
+
+                    return { mapType };
+                }),
 
             setDistanceUnit: (distanceUnit) =>
                 set({ distanceUnit }),

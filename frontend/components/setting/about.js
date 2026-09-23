@@ -11,7 +11,9 @@ import ButtonComponent from '../Button/Button';
 
 
 export default function AboutSettings({ theme }) {
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
+    const isFarsi = i18n.language === "fa";
+
     const appVersion = Constants.expoConfig?.version;
     const [aboutExpand, setAboutExpand] = useState(false);
 
@@ -43,7 +45,7 @@ export default function AboutSettings({ theme }) {
                     marginTop: 10,
                 }}>
                     <List.Accordion
-                        title={t("components.settings.about.titleAbout")}
+                        title={isFarsi ? "" : t("components.settings.about.titleAbout")}
                         expanded={aboutExpand}
                         onPress={handlePressAbouts}
                         style={{
@@ -70,41 +72,105 @@ export default function AboutSettings({ theme }) {
                             },
                         }}
                         titleStyle={{ color: theme.colors.secondary + '99', transform: [{ translateY: -8 }], fontSize: 14 }}
-                        left={() => (<Info
-                            size={18}
-                            color={theme.colors.secondary + '95'}
-                        />)} // remove default arrow
-                        right={() => (
-                            <View
-                                style={{
-                                    flexDirection: "row",
-                                    alignItems: "center",
-                                    gap: 8,
-                                }}
-                            >
-                                <Text
+                        left={() => (
+                            isFarsi ? (
+                                <View
                                     style={{
-                                        color: theme.colors.text + '85',
-                                        fontSize: 13,
-                                        transform: [{ translateY: -8 }],
+                                        flexDirection: "row",
+                                        alignItems: "center",
+                                        gap: 8,
                                     }}
                                 >
-                                    {appVersion}
-                                </Text>
-                                {aboutExpand ? (
-                                    <ChevronUp
-                                        size={20}
-                                        color={theme.colors.secondary}
+                                    {aboutExpand ? (
+                                        <ChevronUp
+                                            size={20}
+                                            color={theme.colors.secondary}
+                                            style={{ transform: [{ translateY: -4 }] }}
+                                        />
+                                    ) : (
+                                        <ChevronDown
+                                            size={20}
+                                            color={theme.colors.secondary}
+                                            style={{ transform: [{ translateY: -4 }] }}
+                                        />
+                                    )}
+
+                                    <Text
+                                        style={{
+                                            color: theme.colors.text + '85',
+                                            fontSize: 13,
+                                            transform: [{ translateY: -8 }],
+                                        }}
+                                    >
+                                        {appVersion}
+                                    </Text>
+                                </View>
+                            ) : (
+                                <Info
+                                    size={18}
+                                    color={theme.colors.secondary + '95'}
+                                />
+                            )
+                        )}
+
+                        right={() => (
+                            isFarsi ? (
+                                <View
+                                    style={{
+                                        flexDirection: "row",
+                                        alignItems: "center",
+                                        gap: 8,
+                                    }}
+                                >
+                                    <Text
+                                        style={{
+                                            color: theme.colors.secondary + '99',
+                                            fontSize: 14,
+                                            transform: [{ translateY: -8 }],
+                                        }}
+                                    >
+                                        {t("components.settings.about.titleAbout")}
+                                    </Text>
+
+                                    <Info
+                                        size={18}
+                                        color={theme.colors.secondary + '95'}
                                         style={{ transform: [{ translateY: -4 }] }}
                                     />
-                                ) : (
-                                    <ChevronDown
-                                        size={20}
-                                        color={theme.colors.secondary}
-                                        style={{ transform: [{ translateY: -4 }] }}
-                                    />
-                                )}
-                            </View>
+                                </View>
+                            ) : (
+                                <View
+                                    style={{
+                                        flexDirection: "row",
+                                        alignItems: "center",
+                                        gap: 8,
+                                    }}
+                                >
+                                    <Text
+                                        style={{
+                                            color: theme.colors.text + '85',
+                                            fontSize: 13,
+                                            transform: [{ translateY: -8 }],
+                                        }}
+                                    >
+                                        {appVersion}
+                                    </Text>
+
+                                    {aboutExpand ? (
+                                        <ChevronUp
+                                            size={20}
+                                            color={theme.colors.secondary}
+                                            style={{ transform: [{ translateY: -4 }] }}
+                                        />
+                                    ) : (
+                                        <ChevronDown
+                                            size={20}
+                                            color={theme.colors.secondary}
+                                            style={{ transform: [{ translateY: -4 }] }}
+                                        />
+                                    )}
+                                </View>
+                            )
                         )}
                     >
                         <View
@@ -272,10 +338,11 @@ export default function AboutSettings({ theme }) {
                         <View style={{
                             width: '100%',
                             height: '100%',
-                            flexDirection: 'row',
+                            flexDirection: isFarsi ? 'row-reverse' : 'row',
                             alignItems: 'center',
                             overflow: 'hidden',
-                            paddingLeft: 10,
+                            paddingLeft: isFarsi ? 0 : 10,
+                            paddingRight: isFarsi ? 10 : 0,
                             gap: 18
                         }}>
                             <Scale

@@ -188,7 +188,7 @@ const TopSheet = forwardRef((props, ref) => {
                     },
                     sheetAnimatedStyle,
                 ]}
-                >
+            >
 
                 <GlassBackground
                     theme={theme}
@@ -219,14 +219,15 @@ const TopSheet = forwardRef((props, ref) => {
                             variant="headlineSmall"
                             style={{ color: theme.colors.secondaryDarker + '99', }}
                         >
-                            {t("components.topSheet.menuTopSheet.hello")},
+                            {t("components.topSheet.menuTopSheet.hello")}
                         </Text>
 
                         <Text
                             variant="titleSmall"
                             style={{ color: theme.colors.secondaryDarker + '85', }}
                         >
-                            {t("components.topSheet.menuTopSheet.wellcomeBack")} {user ? (user.firstName) : t("components.topSheet.menuTopSheet.guest")}
+                            {t("components.topSheet.menuTopSheet.wellcomeBack")}
+                            {user ? (user.firstName) : t("components.topSheet.menuTopSheet.guest")}
                         </Text>
 
                     </View>
@@ -291,17 +292,17 @@ const TopSheet = forwardRef((props, ref) => {
                                         fontWeight: "500",
                                     }}
                                 >
-                                        {t("components.topSheet.menuTopSheet.signout")}
+                                    {t("components.topSheet.menuTopSheet.signout")}
                                 </Text>
 
                                 <LogOut
                                     size={18}
                                     color={theme.colors.error}
                                     strokeWidth={2}
-                                        style={{
-                                            position: "absolute",
-                                            [isFarsi ? "right" : "left"]: 75,
-                                        }}
+                                    style={{
+                                        position: "absolute",
+                                        [isFarsi ? "right" : "left"]: 75,
+                                    }}
                                 />
                             </View>
                         </ButtonComponent>

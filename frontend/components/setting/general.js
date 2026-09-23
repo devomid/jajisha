@@ -17,6 +17,7 @@ export default function GeneralSettings({ theme }) {
 
     const { t } = useTranslation();
     const { i18n } = useTranslation();
+    const isFarsi = i18n.language === "fa";
     const { logout } = useAuth();
     const { deleteUser } = useAuth();
 
@@ -72,7 +73,7 @@ export default function GeneralSettings({ theme }) {
                     marginTop: 10,
                 }}>
                     <List.Accordion
-                        title={t("components.settings.general.systemUnit")}
+                        title={isFarsi ? "" : t("components.settings.general.systemUnit")}
                         expanded={unitExpand}
                         onPress={handlePressUnit}
                         style={{
@@ -99,42 +100,106 @@ export default function GeneralSettings({ theme }) {
                             },
                         }}
                         titleStyle={{ color: theme.colors.secondary + '99', transform: [{ translateY: -8 }], fontSize: 14 }}
-                        left={() => (<RulerDimensionLine
-                            size={18}
-                            color={theme.colors.secondary + '95'}
-                        />)} // remove default arrow
-                        right={() => (
-                            <View
-                                style={{
-                                    flexDirection: "row",
-                                    alignItems: "center",
-                                    gap: 8,
-                                }}
-                            >
-                                <Text
+
+                        left={() => (
+                            isFarsi ? (
+                                <View
                                     style={{
-                                        color: theme.colors.text + '85',
-                                        fontSize: 13,
-                                        transform: [{ translateY: -8 }],
+                                        flexDirection: "row",
+                                        alignItems: "center",
+                                        gap: 8,
                                     }}
                                 >
-                                    {t(`components.settings.general.${ distanceUnit.toLowerCase() }`)}
-                                </Text>
+                                    {unitExpand ? (
+                                        <ChevronUp
+                                            size={20}
+                                            color={theme.colors.secondary}
+                                            style={{ transform: [{ translateY: -4 }] }}
+                                        />
+                                    ) : (
+                                        <ChevronDown
+                                            size={20}
+                                            color={theme.colors.secondary}
+                                            style={{ transform: [{ translateY: -4 }] }}
+                                        />
+                                    )}
 
-                                {unitExpand ? (
-                                    <ChevronUp
-                                        size={20}
-                                        color={theme.colors.secondary}
-                                        style={{ transform: [{ translateY: -4 }] }}
+                                    <Text
+                                        style={{
+                                            color: theme.colors.text + '85',
+                                            fontSize: 13,
+                                            transform: [{ translateY: -8 }],
+                                        }}
+                                    >
+                                        {t(`components.settings.general.${distanceUnit.toLowerCase()}`)}
+                                    </Text>
+                                </View>
+                            ) : (
+                                <RulerDimensionLine
+                                    size={18}
+                                    color={theme.colors.secondary + '95'}
+                                />
+                            )
+                        )}
+
+                        right={() => (
+                            isFarsi ? (
+                                <View
+                                    style={{
+                                        flexDirection: "row",
+                                        alignItems: "center",
+                                        gap: 8,
+                                    }}
+                                >
+                                    <Text
+                                        style={{
+                                            color: theme.colors.secondary + '99',
+                                            fontSize: 14,
+                                            transform: [{ translateY: -8 }],
+                                        }}
+                                    >
+                                        {t("components.settings.general.systemUnit")}
+                                    </Text>
+
+                                    <RulerDimensionLine
+                                        size={18}
+                                        color={theme.colors.secondary + '95'}
+                                        style={{ transform: [{ translateY: -5 }] }}
                                     />
-                                ) : (
-                                    <ChevronDown
-                                        size={20}
-                                        color={theme.colors.secondary}
-                                        style={{ transform: [{ translateY: -4 }] }}
-                                    />
-                                )}
-                            </View>
+                                </View>
+                            ) : (
+                                <View
+                                    style={{
+                                        flexDirection: "row",
+                                        alignItems: "center",
+                                        gap: 8,
+                                    }}
+                                >
+                                    <Text
+                                        style={{
+                                            color: theme.colors.text + '85',
+                                            fontSize: 13,
+                                            transform: [{ translateY: -8 }],
+                                        }}
+                                    >
+                                        {t(`components.settings.general.${distanceUnit.toLowerCase()}`)}
+                                    </Text>
+
+                                    {unitExpand ? (
+                                        <ChevronUp
+                                            size={20}
+                                            color={theme.colors.secondary}
+                                            style={{ transform: [{ translateY: -4 }] }}
+                                        />
+                                    ) : (
+                                        <ChevronDown
+                                            size={20}
+                                            color={theme.colors.secondary}
+                                            style={{ transform: [{ translateY: -4 }] }}
+                                        />
+                                    )}
+                                </View>
+                            )
                         )}
                     >
                         <View
@@ -207,7 +272,7 @@ export default function GeneralSettings({ theme }) {
 
                 <View>
                     <List.Accordion
-                        title={t("components.settings.general.language")}
+                        title={isFarsi ? "" : t("components.settings.general.language")}
                         expanded={languageExpand}
                         onPress={handlePressLanguage}
                         style={{
@@ -234,45 +299,111 @@ export default function GeneralSettings({ theme }) {
                             },
                         }}
                         titleStyle={{ color: theme.colors.secondary + '99', transform: [{ translateY: -8 }], fontSize: 14 }}
-                        left={() => (<Languages
-                            size={18}
-                            color={theme.colors.secondary + '95'}
-                        />)} // remove default arrow
-                        right={() => (
-                            <View
-                                style={{
-                                    flexDirection: "row",
-                                    alignItems: "center",
-                                    gap: 8,
-                                }}
-                            >
-                                <Text
+                        left={() => (
+                            isFarsi ? (
+                                <View
                                     style={{
-                                        color: theme.colors.text + '85',
-                                        fontSize: 13,
-                                        transform: [{ translateY: -8 }],
+                                        flexDirection: "row",
+                                        alignItems: "center",
+                                        gap: 8,
                                     }}
                                 >
-                                    {{
-                                        fa: t("components.settings.general.farsi"),
-                                        en: t("components.settings.general.english"),
-                                    }[i18n.language] ?? "--"}
-                                </Text>
+                                    {languageExpand ? (
+                                        <ChevronUp
+                                            size={20}
+                                            color={theme.colors.secondary}
+                                            style={{ transform: [{ translateY: -4 }] }}
+                                        />
+                                    ) : (
+                                        <ChevronDown
+                                            size={20}
+                                            color={theme.colors.secondary}
+                                            style={{ transform: [{ translateY: -4 }] }}
+                                        />
+                                    )}
 
-                                {languageExpand ? (
-                                    <ChevronUp
-                                        size={20}
-                                        color={theme.colors.secondary}
-                                        style={{ transform: [{ translateY: -4 }] }}
+                                    <Text
+                                        style={{
+                                            color: theme.colors.text + '85',
+                                            fontSize: 13,
+                                            transform: [{ translateY: -8 }],
+                                        }}
+                                    >
+                                        {{
+                                            fa: t("components.settings.general.farsi"),
+                                            en: t("components.settings.general.english"),
+                                        }[i18n.language] ?? "--"}
+                                    </Text>
+                                </View>
+                            ) : (
+                                <Languages
+                                    size={18}
+                                    color={theme.colors.secondary + '95'}
+                                />
+                            )
+                        )}
+
+                        right={() => (
+                            isFarsi ? (
+                                <View
+                                    style={{
+                                        flexDirection: "row",
+                                        alignItems: "center",
+                                        gap: 8,
+                                    }}
+                                >
+                                    <Text
+                                        style={{
+                                            color: theme.colors.secondary + '99',
+                                            fontSize: 14,
+                                            transform: [{ translateY: -8 }],
+                                        }}
+                                    >
+                                        {t("components.settings.general.language")}
+                                    </Text>
+
+                                    <Languages
+                                        size={18}
+                                        color={theme.colors.secondary + '95'}
+                                        style={{ transform: [{ translateY: -3 }] }}
                                     />
-                                ) : (
-                                    <ChevronDown
-                                        size={20}
-                                        color={theme.colors.secondary}
-                                        style={{ transform: [{ translateY: -4 }] }}
-                                    />
-                                )}
-                            </View>
+                                </View>
+                            ) : (
+                                <View
+                                    style={{
+                                        flexDirection: "row",
+                                        alignItems: "center",
+                                        gap: 8,
+                                    }}
+                                >
+                                    <Text
+                                        style={{
+                                            color: theme.colors.text + '85',
+                                            fontSize: 13,
+                                            transform: [{ translateY: -8 }],
+                                        }}
+                                    >
+                                        {{
+                                            fa: t("components.settings.general.farsi"),
+                                            en: t("components.settings.general.english"),
+                                        }[i18n.language] ?? "--"}
+                                    </Text>
+
+                                    {languageExpand ? (
+                                        <ChevronUp
+                                            size={20}
+                                            color={theme.colors.secondary}
+                                            style={{ transform: [{ translateY: -4 }] }}
+                                        />
+                                    ) : (
+                                        <ChevronDown
+                                            size={20}
+                                            color={theme.colors.secondary}
+                                            style={{ transform: [{ translateY: -4 }] }}
+                                        />
+                                    )}
+                                </View>
+                            )
                         )}
                     >
 
@@ -346,7 +477,7 @@ export default function GeneralSettings({ theme }) {
 
                 <View>
                     <List.Accordion
-                        title={t("components.settings.general.theme")}
+                        title={isFarsi ? "" : t("components.settings.general.theme")}
                         expanded={themeExpand}
                         onPress={handlePressTheme}
                         style={{
@@ -373,42 +504,105 @@ export default function GeneralSettings({ theme }) {
                             },
                         }}
                         titleStyle={{ color: theme.colors.secondary + '99', transform: [{ translateY: -8 }], fontSize: 14 }}
-                        left={() => (<SunMoon
-                            size={18}
-                            color={theme.colors.secondary + '95'}
-                        />)} // remove default arrow
-                        right={() => (
-                            <View
-                                style={{
-                                    flexDirection: "row",
-                                    alignItems: "center",
-                                    gap: 8,
-                                }}
-                            >
-                                <Text
+                        left={() => (
+                            isFarsi ? (
+                                <View
                                     style={{
-                                        color: theme.colors.text + '85',
-                                        fontSize: 13,
-                                        transform: [{ translateY: -8 }],
+                                        flexDirection: "row",
+                                        alignItems: "center",
+                                        gap: 8,
                                     }}
                                 >
-                                    {t(`components.settings.general.${themeSetting.toLowerCase()}`)}
-                                </Text>
+                                    {themeExpand ? (
+                                        <ChevronUp
+                                            size={20}
+                                            color={theme.colors.secondary}
+                                            style={{ transform: [{ translateY: -4 }] }}
+                                        />
+                                    ) : (
+                                        <ChevronDown
+                                            size={20}
+                                            color={theme.colors.secondary}
+                                            style={{ transform: [{ translateY: -4 }] }}
+                                        />
+                                    )}
 
-                                {unitExpand ? (
-                                    <ChevronUp
-                                        size={20}
-                                        color={theme.colors.secondary}
-                                        style={{ transform: [{ translateY: -4 }] }}
+                                    <Text
+                                        style={{
+                                            color: theme.colors.text + '85',
+                                            fontSize: 13,
+                                            transform: [{ translateY: -8 }],
+                                        }}
+                                    >
+                                        {t(`components.settings.general.${themeSetting.toLowerCase()}`)}
+                                    </Text>
+                                </View>
+                            ) : (
+                                <SunMoon
+                                    size={18}
+                                    color={theme.colors.secondary + '95'}
+                                />
+                            )
+                        )}
+
+                        right={() => (
+                            isFarsi ? (
+                                <View
+                                    style={{
+                                        flexDirection: "row",
+                                        alignItems: "center",
+                                        gap: 8,
+                                    }}
+                                >
+                                    <Text
+                                        style={{
+                                            color: theme.colors.secondary + '99',
+                                            fontSize: 14,
+                                            transform: [{ translateY: -8 }],
+                                        }}
+                                    >
+                                        {t("components.settings.general.theme")}
+                                    </Text>
+
+                                    <SunMoon
+                                        size={18}
+                                        color={theme.colors.secondary + '95'}
+                                        style={{ transform: [{ translateY: -5 }] }}
                                     />
-                                ) : (
-                                    <ChevronDown
-                                        size={20}
-                                        color={theme.colors.secondary}
-                                        style={{ transform: [{ translateY: -4 }] }}
-                                    />
-                                )}
-                            </View>
+                                </View>
+                            ) : (
+                                <View
+                                    style={{
+                                        flexDirection: "row",
+                                        alignItems: "center",
+                                        gap: 8,
+                                    }}
+                                >
+                                    <Text
+                                        style={{
+                                            color: theme.colors.text + '85',
+                                            fontSize: 13,
+                                            transform: [{ translateY: -8 }],
+                                        }}
+                                    >
+                                        {t(`components.settings.general.${themeSetting.toLowerCase()}`)}
+                                    </Text>
+
+                                    {themeExpand ? (
+                                        <ChevronUp
+                                            size={20}
+                                            color={theme.colors.secondary}
+                                            style={{ transform: [{ translateY: -4 }] }}
+                                        />
+                                    ) : (
+                                        <ChevronDown
+                                            size={20}
+                                            color={theme.colors.secondary}
+                                            style={{ transform: [{ translateY: -4 }] }}
+                                        />
+                                    )}
+                                </View>
+                            )
                         )}
                     >
 
@@ -507,7 +701,7 @@ export default function GeneralSettings({ theme }) {
 
                 <View>
                     <List.Accordion
-                        title={t("components.settings.general.account")}
+                        title={isFarsi ? "" : t("components.settings.general.account")}
                         expanded={accountExpand}
                         onPress={handlePressAccount}
                         style={{
@@ -534,42 +728,105 @@ export default function GeneralSettings({ theme }) {
                             },
                         }}
                         titleStyle={{ color: theme.colors.secondary + '99', transform: [{ translateY: -8 }], fontSize: 14 }}
-                        left={() => (<UserRoundCog
-                            size={18}
-                            color={theme.colors.secondary + '95'}
-                        />)} // remove default arrow
-                        right={() => (
-                            <View
-                                style={{
-                                    flexDirection: "row",
-                                    alignItems: "center",
-                                    gap: 8,
-                                }}
-                            >
-                                <Text
+                        left={() => (
+                            isFarsi ? (
+                                <View
                                     style={{
-                                        color: theme.colors.text + '85',
-                                        fontSize: 13,
-                                        transform: [{ translateY: -8 }],
+                                        flexDirection: "row",
+                                        alignItems: "center",
+                                        gap: 8,
                                     }}
                                 >
-                                    {user ? user.username : t("components.settings.general.guest")}
-                                </Text>
+                                    {accountExpand ? (
+                                        <ChevronUp
+                                            size={20}
+                                            color={theme.colors.secondary}
+                                            style={{ transform: [{ translateY: -4 }] }}
+                                        />
+                                    ) : (
+                                        <ChevronDown
+                                            size={20}
+                                            color={theme.colors.secondary}
+                                            style={{ transform: [{ translateY: -4 }] }}
+                                        />
+                                    )}
 
-                                {accountExpand ? (
-                                    <ChevronUp
-                                        size={20}
-                                        color={theme.colors.secondary}
-                                        style={{ transform: [{ translateY: -4 }] }}
+                                    <Text
+                                        style={{
+                                            color: theme.colors.text + '85',
+                                            fontSize: 13,
+                                            transform: [{ translateY: -8 }],
+                                        }}
+                                    >
+                                        {user ? user.username : t("components.settings.general.guest")}
+                                    </Text>
+                                </View>
+                            ) : (
+                                <UserRoundCog
+                                    size={18}
+                                    color={theme.colors.secondary + '95'}
+                                />
+                            )
+                        )}
+
+                        right={() => (
+                            isFarsi ? (
+                                <View
+                                    style={{
+                                        flexDirection: "row",
+                                        alignItems: "center",
+                                        gap: 8,
+                                    }}
+                                >
+                                    <Text
+                                        style={{
+                                            color: theme.colors.secondary + '99',
+                                            fontSize: 14,
+                                            transform: [{ translateY: -8 }],
+                                        }}
+                                    >
+                                        {t("components.settings.general.account")}
+                                    </Text>
+
+                                    <UserRoundCog
+                                        size={18}
+                                        color={theme.colors.secondary + '95'}
+                                        style={{ transform: [{ translateY: -3 }] }}
                                     />
-                                ) : (
-                                    <ChevronDown
-                                        size={20}
-                                        color={theme.colors.secondary}
-                                        style={{ transform: [{ translateY: -4 }] }}
-                                    />
-                                )}
-                            </View>
+                                </View>
+                            ) : (
+                                <View
+                                    style={{
+                                        flexDirection: "row",
+                                        alignItems: "center",
+                                        gap: 8,
+                                    }}
+                                >
+                                    <Text
+                                        style={{
+                                            color: theme.colors.text + '85',
+                                            fontSize: 13,
+                                            transform: [{ translateY: -8 }],
+                                        }}
+                                    >
+                                        {user ? user.username : t("components.settings.general.guest")}
+                                    </Text>
+
+                                    {accountExpand ? (
+                                        <ChevronUp
+                                            size={20}
+                                            color={theme.colors.secondary}
+                                            style={{ transform: [{ translateY: -4 }] }}
+                                        />
+                                    ) : (
+                                        <ChevronDown
+                                            size={20}
+                                            color={theme.colors.secondary}
+                                            style={{ transform: [{ translateY: -4 }] }}
+                                        />
+                                    )}
+                                </View>
+                            )
                         )}
                     >
                         {user ? (

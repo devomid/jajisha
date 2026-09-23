@@ -8,7 +8,8 @@ import { List, Text, Divider } from "react-native-paper";
 import { useSettingsStore } from "../../src/store/settingsStore";
 
 export default function MapSettings({ theme }) {
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
+    const isFarsi = i18n.language === "fa";
 
     const [mapTypeExpand, setMapTypeExpand] = useState(false);
     const [myLocExpand, setMyLocExpand] = useState(false);
@@ -20,6 +21,8 @@ export default function MapSettings({ theme }) {
     const setShowMyLocation = useSettingsStore(state => state.setShowMyLocation);
     const showCompass = useSettingsStore(state => state.showCompass);
     const setShowCompass = useSettingsStore(state => state.setShowCompass);
+    const setTheme = useSettingsStore(state => state.setTheme);
+
 
     const handlePressMapType = () => setMapTypeExpand(!mapTypeExpand);
     const handlePressShowMyLoc = () => setMyLocExpand(!myLocExpand);
@@ -50,7 +53,7 @@ export default function MapSettings({ theme }) {
                     marginTop: 10,
                 }}>
                     <List.Accordion
-                        title={t("components.settings.map.mapType")}
+                        title={isFarsi ? "" : t("components.settings.map.mapType")}
                         expanded={mapTypeExpand}
                         onPress={handlePressMapType}
                         style={{
@@ -77,42 +80,105 @@ export default function MapSettings({ theme }) {
                             },
                         }}
                         titleStyle={{ color: theme.colors.secondary + '99', transform: [{ translateY: -8 }], fontSize: 14 }}
-                        left={() => (<MapPinPen
-                            size={18}
-                            color={theme.colors.secondary + '95'}
-                        />)} // remove default arrow
-                        right={() => (
-                            <View
-                                style={{
-                                    flexDirection: "row",
-                                    alignItems: "center",
-                                    gap: 8,
-                                }}
-                            >
-                                <Text
+                        left={() => (
+                            isFarsi ? (
+                                <View
                                     style={{
-                                        color: theme.colors.text + '85',
-                                        fontSize: 13,
-                                        transform: [{ translateY: -8 }],
+                                        flexDirection: "row",
+                                        alignItems: "center",
+                                        gap: 8,
                                     }}
                                 >
-                                    {t(`components.settings.map.${mapType}`)}
-                                </Text>
+                                    {mapTypeExpand ? (
+                                        <ChevronUp
+                                            size={20}
+                                            color={theme.colors.secondary}
+                                            style={{ transform: [{ translateY: -4 }] }}
+                                        />
+                                    ) : (
+                                        <ChevronDown
+                                            size={20}
+                                            color={theme.colors.secondary}
+                                            style={{ transform: [{ translateY: -4 }] }}
+                                        />
+                                    )}
 
-                                {mapTypeExpand ? (
-                                    <ChevronUp
-                                        size={20}
-                                        color={theme.colors.secondary}
+                                    <Text
+                                        style={{
+                                            color: theme.colors.text + '85',
+                                            fontSize: 13,
+                                            transform: [{ translateY: -8 }],
+                                        }}
+                                    >
+                                        {t(`components.settings.map.${mapType}`)}
+                                    </Text>
+                                </View>
+                            ) : (
+                                <MapPinPen
+                                    size={18}
+                                    color={theme.colors.secondary + '95'}
+                                />
+                            )
+                        )}
+
+                        right={() => (
+                            isFarsi ? (
+                                <View
+                                    style={{
+                                        flexDirection: "row",
+                                        alignItems: "center",
+                                        gap: 8,
+                                    }}
+                                >
+                                    <Text
+                                        style={{
+                                            color: theme.colors.secondary + '99',
+                                            fontSize: 14,
+                                            transform: [{ translateY: -8 }],
+                                        }}
+                                    >
+                                        {t("components.settings.map.mapType")}
+                                    </Text>
+
+                                    <MapPinPen
+                                        size={18}
+                                        color={theme.colors.secondary + '95'}
                                         style={{ transform: [{ translateY: -4 }] }}
                                     />
-                                ) : (
-                                    <ChevronDown
-                                        size={20}
-                                        color={theme.colors.secondary}
-                                        style={{ transform: [{ translateY: -4 }] }}
-                                    />
-                                )}
-                            </View>
+                                </View>
+                            ) : (
+                                <View
+                                    style={{
+                                        flexDirection: "row",
+                                        alignItems: "center",
+                                        gap: 8,
+                                    }}
+                                >
+                                    <Text
+                                        style={{
+                                            color: theme.colors.text + '85',
+                                            fontSize: 13,
+                                            transform: [{ translateY: -8 }],
+                                        }}
+                                    >
+                                        {t(`components.settings.map.${mapType}`)}
+                                    </Text>
+
+                                    {mapTypeExpand ? (
+                                        <ChevronUp
+                                            size={20}
+                                            color={theme.colors.secondary}
+                                            style={{ transform: [{ translateY: -4 }] }}
+                                        />
+                                    ) : (
+                                        <ChevronDown
+                                            size={20}
+                                            color={theme.colors.secondary}
+                                            style={{ transform: [{ translateY: -4 }] }}
+                                        />
+                                    )}
+                                </View>
+                            )
                         )}
                     >
                         <View style={{
@@ -210,7 +276,7 @@ export default function MapSettings({ theme }) {
 
                 <View>
                     <List.Accordion
-                        title={t("components.settings.map.showMyLocation")}
+                        title={isFarsi ? "" : t("components.settings.map.showMyLocation")}
                         expanded={myLocExpand}
                         onPress={handlePressShowMyLoc}
                         style={{
@@ -237,44 +303,109 @@ export default function MapSettings({ theme }) {
                             },
                         }}
                         titleStyle={{ color: theme.colors.secondary + '99', transform: [{ translateY: -8 }], fontSize: 14 }}
-                        left={() => (<Navigation2
-                            size={18}
-                            color={theme.colors.secondary + '95'}
-                        />)} // remove default arrow
-                        right={() => (
-                            <View
-                                style={{
-                                    flexDirection: "row",
-                                    alignItems: "center",
-                                    gap: 8,
-                                }}
-                            >
-                                <Text
+                        left={() => (
+                            isFarsi ? (
+                                <View
                                     style={{
-                                        color: theme.colors.text + '85',
-                                        fontSize: 13,
-                                        transform: [{ translateY: -8 }],
+                                        flexDirection: "row",
+                                        alignItems: "center",
+                                        gap: 8,
                                     }}
                                 >
-                                    {showMyLocation ?
-                                        t("components.settings.map.do") :
-                                        t("components.settings.map.doNot")}
-                                </Text>
+                                    {myLocExpand ? (
+                                        <ChevronUp
+                                            size={20}
+                                            color={theme.colors.secondary}
+                                            style={{ transform: [{ translateY: -4 }] }}
+                                        />
+                                    ) : (
+                                        <ChevronDown
+                                            size={20}
+                                            color={theme.colors.secondary}
+                                            style={{ transform: [{ translateY: -4 }] }}
+                                        />
+                                    )}
 
-                                {myLocExpand ? (
-                                    <ChevronUp
-                                        size={20}
-                                        color={theme.colors.secondary}
+                                    <Text
+                                        style={{
+                                            color: theme.colors.text + '85',
+                                            fontSize: 13,
+                                            transform: [{ translateY: -8 }],
+                                        }}
+                                    >
+                                        {showMyLocation
+                                            ? t("components.settings.map.do")
+                                            : t("components.settings.map.doNot")}
+                                    </Text>
+                                </View>
+                            ) : (
+                                <Navigation2
+                                    size={18}
+                                    color={theme.colors.secondary + '95'}
+                                />
+                            )
+                        )}
+
+                        right={() => (
+                            isFarsi ? (
+                                <View
+                                    style={{
+                                        flexDirection: "row",
+                                        alignItems: "center",
+                                        gap: 8,
+                                    }}
+                                >
+                                    <Text
+                                        style={{
+                                            color: theme.colors.secondary + '99',
+                                            fontSize: 14,
+                                            transform: [{ translateY: -8 }],
+                                        }}
+                                    >
+                                        {t("components.settings.map.showMyLocation")}
+                                    </Text>
+
+                                    <Navigation2
+                                        size={18}
+                                        color={theme.colors.secondary + '95'}
                                         style={{ transform: [{ translateY: -4 }] }}
                                     />
-                                ) : (
-                                    <ChevronDown
-                                        size={20}
-                                        color={theme.colors.secondary}
-                                        style={{ transform: [{ translateY: -4 }] }}
-                                    />
-                                )}
-                            </View>
+                                </View>
+                            ) : (
+                                <View
+                                    style={{
+                                        flexDirection: "row",
+                                        alignItems: "center",
+                                        gap: 8,
+                                    }}
+                                >
+                                    <Text
+                                        style={{
+                                            color: theme.colors.text + '85',
+                                            fontSize: 13,
+                                            transform: [{ translateY: -8 }],
+                                        }}
+                                    >
+                                        {showMyLocation
+                                            ? t("components.settings.map.do")
+                                            : t("components.settings.map.doNot")}
+                                    </Text>
+
+                                    {myLocExpand ? (
+                                        <ChevronUp
+                                            size={20}
+                                            color={theme.colors.secondary}
+                                            style={{ transform: [{ translateY: -4 }] }}
+                                        />
+                                    ) : (
+                                        <ChevronDown
+                                            size={20}
+                                            color={theme.colors.secondary}
+                                            style={{ transform: [{ translateY: -4 }] }}
+                                        />
+                                    )}
+                                </View>
+                            )
                         )}
                     >
                         <View style={{
@@ -347,7 +478,7 @@ export default function MapSettings({ theme }) {
 
                 <View>
                     <List.Accordion
-                        title={t("components.settings.map.showCompass")}
+                        title={isFarsi ? "" : t("components.settings.map.showCompass")}
                         expanded={compassExpand}
                         onPress={handlePressShowCompass}
                         style={{
@@ -374,44 +505,109 @@ export default function MapSettings({ theme }) {
                             },
                         }}
                         titleStyle={{ color: theme.colors.secondary + '99', transform: [{ translateY: -8 }], fontSize: 14 }}
-                        left={() => (<Compass
-                            size={18}
-                            color={theme.colors.secondary + '95'}
-                        />)} // remove default arrow
-                        right={() => (
-                            <View
-                                style={{
-                                    flexDirection: "row",
-                                    alignItems: "center",
-                                    gap: 8,
-                                }}
-                            >
-                                <Text
+                        left={() => (
+                            isFarsi ? (
+                                <View
                                     style={{
-                                        color: theme.colors.text + '85',
-                                        fontSize: 13,
-                                        transform: [{ translateY: -8 }],
+                                        flexDirection: "row",
+                                        alignItems: "center",
+                                        gap: 8,
                                     }}
                                 >
-                                    {showCompass ?
-                                        t("components.settings.map.do") :
-                                        t("components.settings.map.doNot")}
-                                </Text>
+                                    {compassExpand ? (
+                                        <ChevronUp
+                                            size={20}
+                                            color={theme.colors.secondary}
+                                            style={{ transform: [{ translateY: -4 }] }}
+                                        />
+                                    ) : (
+                                        <ChevronDown
+                                            size={20}
+                                            color={theme.colors.secondary}
+                                            style={{ transform: [{ translateY: -4 }] }}
+                                        />
+                                    )}
 
-                                {compassExpand ? (
-                                    <ChevronUp
-                                        size={20}
-                                        color={theme.colors.secondary}
-                                        style={{ transform: [{ translateY: -4 }] }}
+                                    <Text
+                                        style={{
+                                            color: theme.colors.text + '85',
+                                            fontSize: 13,
+                                            transform: [{ translateY: -8 }],
+                                        }}
+                                    >
+                                        {showCompass
+                                            ? t("components.settings.map.do")
+                                            : t("components.settings.map.doNot")}
+                                    </Text>
+                                </View>
+                            ) : (
+                                <Compass
+                                    size={18}
+                                    color={theme.colors.secondary + '95'}
+                                />
+                            )
+                        )}
+
+                        right={() => (
+                            isFarsi ? (
+                                <View
+                                    style={{
+                                        flexDirection: "row",
+                                        alignItems: "center",
+                                        gap: 8,
+                                    }}
+                                >
+                                    <Text
+                                        style={{
+                                            color: theme.colors.secondary + '99',
+                                            fontSize: 14,
+                                            transform: [{ translateY: -8 }],
+                                        }}
+                                    >
+                                        {t("components.settings.map.showCompass")}
+                                    </Text>
+
+                                    <Compass
+                                        size={18}
+                                        color={theme.colors.secondary + '95'}
+                                        style={{ transform: [{ translateY: -5 }] }}
                                     />
-                                ) : (
-                                    <ChevronDown
-                                        size={20}
-                                        color={theme.colors.secondary}
-                                        style={{ transform: [{ translateY: -4 }] }}
-                                    />
-                                )}
-                            </View>
+                                </View>
+                            ) : (
+                                <View
+                                    style={{
+                                        flexDirection: "row",
+                                        alignItems: "center",
+                                        gap: 8,
+                                    }}
+                                >
+                                    <Text
+                                        style={{
+                                            color: theme.colors.text + '85',
+                                            fontSize: 13,
+                                            transform: [{ translateY: -8 }],
+                                        }}
+                                    >
+                                        {showCompass
+                                            ? t("components.settings.map.do")
+                                            : t("components.settings.map.doNot")}
+                                    </Text>
+
+                                    {compassExpand ? (
+                                        <ChevronUp
+                                            size={20}
+                                            color={theme.colors.secondary}
+                                            style={{ transform: [{ translateY: -4 }] }}
+                                        />
+                                    ) : (
+                                        <ChevronDown
+                                            size={20}
+                                            color={theme.colors.secondary}
+                                            style={{ transform: [{ translateY: -4 }] }}
+                                        />
+                                    )}
+                                </View>
+                            )
                         )}
                     >
                         <View style={{
