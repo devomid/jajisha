@@ -359,14 +359,14 @@ export default function SignUp() {
                             <View>
                                 <ButtonComponent
                                     onPress={handleSubmit}
-                                    backgroundColor={theme.colors.success + '20'}
+                                    backgroundColor={theme.colors.success + '15'}
                                     borderColor={theme.colors.success + '50'}
                                     style={{
                                         width: '100%',
                                     }}
                                 >
                                     <Text style={{
-                                        color: theme.colors.secondary
+                                        color: theme.colors.success
                                     }}>
                                         {t("app.auth.signup.signupBtn")}
                                     </Text>
@@ -374,7 +374,7 @@ export default function SignUp() {
 
                                 <ButtonComponent
                                     onPress={handleCancel}
-                                    backgroundColor={theme.colors.error + '20'}
+                                    backgroundColor={theme.colors.error + '15'}
                                     borderColor={theme.colors.error + '50'}
                                     style={{
                                         width: '100%',
@@ -382,7 +382,7 @@ export default function SignUp() {
                                     }}
                                 >
                                     <Text style={{
-                                        color: theme.colors.secondary
+                                        color: theme.colors.error + '99'
                                     }}>
                                         {t("app.auth.signup.cancelBtn")}
                                     </Text>

@@ -864,8 +864,8 @@ const ToiletInfo = forwardRef(({ curentLocation, onPresent }, ref) => {
                                             onPress={() => {
                                                 setIscommentsOpen(true);
                                             }}
-                                            backgroundColor={theme.colors.secondary + "30"}
-                                            borderColor={theme.colors.secondaryLighter + "80"}
+                                            backgroundColor={theme.colors.secondary + "15"}
+                                            borderColor={theme.colors.secondaryLighter + "50"}
                                             style={{
                                                 width: "100%",
                                                 marginTop: 15,
@@ -873,7 +873,7 @@ const ToiletInfo = forwardRef(({ curentLocation, onPresent }, ref) => {
                                         >
                                             <Text
                                                 style={{
-                                                    color: theme.colors.surface,
+                                                    color: theme.colors.secondary,
                                                 }}
                                             >
                                                 {t("components.ToiletLocationBottomSheet.seeCommentsBtn")}
@@ -884,8 +884,8 @@ const ToiletInfo = forwardRef(({ curentLocation, onPresent }, ref) => {
                                             onPress={() => {
                                                 setIscommenting(true);
                                             }}
-                                            backgroundColor={theme.colors.secondary + "30"}
-                                            borderColor={theme.colors.secondaryLighter + "80"}
+                                            backgroundColor={theme.colors.secondary + "15"}
+                                            borderColor={theme.colors.secondaryLighter + "50"}
                                             style={{
                                                 width: "100%",
                                                 marginTop: 15,
@@ -893,7 +893,7 @@ const ToiletInfo = forwardRef(({ curentLocation, onPresent }, ref) => {
                                         >
                                             <Text
                                                 style={{
-                                                    color: theme.colors.surface,
+                                                    color: theme.colors.secondary,
                                                 }}
                                             >
                                                 {t("components.ToiletLocationBottomSheet.rateAndWriteBtn")}

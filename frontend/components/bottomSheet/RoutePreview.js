@@ -532,14 +532,14 @@ const RoutePreview = forwardRef(({ curentLocation, toiletInfoBottomSheetRef, onD
                     >
                         <ButtonComponent
                             onPress={handleCancel}
-                            backgroundColor={theme.colors.error + '18'}
+                            backgroundColor={theme.colors.error + '15'}
                             borderColor={theme.colors.error + '50'}
                             style={{
                                 width: '30%',
                             }}
                         >
                             <Text style={{
-                                color: theme.colors.error
+                                color: theme.colors.error +'99'
                             }}>
                                 {t("components.routePreview.cancelNavigateBtn")}
                             </Text>
@@ -547,14 +547,14 @@ const RoutePreview = forwardRef(({ curentLocation, toiletInfoBottomSheetRef, onD
 
                         <ButtonComponent
                             onPress={handleStartNavigation}
-                            backgroundColor={theme.colors.success + '18'}
-                            borderColor={theme.colors.secondaryLight + '50'}
+                            backgroundColor={theme.colors.nav + '15'}
+                            borderColor={theme.colors.nav + '50'}
                             style={{
                                 width: '70%',
                             }}
                             >
                             <Text style={{
-                                color: theme.colors.secondaryLight
+                                color: theme.colors.nav
                             }}>
                                 {t("components.routePreview.navigateBtn")}
                             </Text>

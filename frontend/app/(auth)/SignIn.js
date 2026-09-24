@@ -314,7 +314,7 @@ export default function SignIn() {
                             <View>
                                 <ButtonComponent
                                     onPress={handleSubmit}
-                                    backgroundColor={theme.colors.success + '20'}
+                                    backgroundColor={theme.colors.success + '15'}
                                     borderColor={theme.colors.success + '50'}
                                     style={{
                                         width: '100%',
@@ -322,7 +322,7 @@ export default function SignIn() {
                                     }}
                                 >
                                     <Text style={{
-                                        color: theme.colors.secondary
+                                        color: theme.colors.success
                                     }}>
                                         {t("app.auth.signin.signinBtn")}
                                     </Text>
@@ -330,7 +330,7 @@ export default function SignIn() {
 
                                 <ButtonComponent
                                     onPress={handleCancel}
-                                    backgroundColor={theme.colors.error + '20'}
+                                    backgroundColor={theme.colors.error + '15'}
                                     borderColor={theme.colors.error + '50'}
                                     style={{
                                         width: '100%',
@@ -338,7 +338,7 @@ export default function SignIn() {
                                     }}
                                 >
                                     <Text style={{
-                                        color: theme.colors.secondary
+                                        color: theme.colors.error + '99'
                                     }}>
                                         {t("app.auth.signin.cancelBtn")}
                                     </Text>
