@@ -31,7 +31,7 @@ export default function WaitingOverlay() {
                 }
                 style={{
                     position: "absolute",
-                    backgroundColor: theme.colors.secondaryLighter + "15",
+                    backgroundColor: theme.colors.secondaryLighter + "10",
                     zIndex: 9999999999,
                     elevation: 9999,
                     bottom: 0,
@@ -63,39 +63,8 @@ export default function WaitingOverlay() {
                         rows={4}
                         cols={5}
                         frames={snakeFrames}
-                        size={28}
-                        gap={28}
-                        fps={3}
-                        loop
-                        palette={{
-                            on: theme.colors.primary,
-                            off: "transparent",
-                        }}
-                        style={{
-                            transform: [{ rotate: "90deg" }],
-                        }}
-                    />
-
-                    <Matrix
-                        rows={2}
-                        cols={5}
-                        frames={snakeFrames}
-                        size={28}
-                        gap={28}
-                        fps={10}
-                        loop
-                        palette={{
-                            on: theme.colors.primary,
-                            off: "transparent",
-                        }}
-                    />
-
-                    <Matrix
-                        rows={4}
-                        cols={5}
-                        frames={snakeFrames}
-                        size={28}
-                        gap={28}
+                        size={20}
+                        gap={50}
                         fps={9}
                         loop
                         palette={{
@@ -111,8 +80,39 @@ export default function WaitingOverlay() {
                         rows={2}
                         cols={5}
                         frames={snakeFrames}
-                        size={28}
-                        gap={28}
+                        size={20}
+                        gap={50}
+                        fps={10}
+                        loop
+                        palette={{
+                            on: theme.colors.primary,
+                            off: "transparent",
+                        }}
+                    />
+
+                    <Matrix
+                        rows={4}
+                        cols={5}
+                        frames={snakeFrames}
+                        size={20}
+                        gap={50}
+                        fps={9}
+                        loop
+                        palette={{
+                            on: theme.colors.primary,
+                            off: "transparent",
+                        }}
+                        style={{
+                            transform: [{ rotate: "90deg" }],
+                        }}
+                    />
+
+                    <Matrix
+                        rows={2}
+                        cols={5}
+                        frames={snakeFrames}
+                        size={20}
+                        gap={50}
                         fps={15}
                         loop
                         palette={{
