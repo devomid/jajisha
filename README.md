@@ -1,5 +1,51 @@
 <div align="center">
 
+# Jajisha
+
+### Find. Explore. Navigate. Share.
+
+A location-based mobile application for discovering, evaluating, saving, and navigating to public toilets.
+
+Built with React Native and Expo on the frontend, and Node.js, Express, and MongoDB on the backend.
+
+<br />
+
+<img src="docs/readme/rounded/landing%20home.png" width="260" alt="Jajisha home screen" />
+
+<br /><br />
+
+[![React Native](https://img.shields.io/badge/React%20Native-0.81-61DAFB?logo=react\&logoColor=white)](https://reactnative.dev/)
+[![Expo](https://img.shields.io/badge/Expo-54-000020?logo=expo\&logoColor=white)](https://expo.dev/)
+[![Expo Router](https://img.shields.io/badge/Expo%20Router-6-000020?logo=expo\&logoColor=white)](https://docs.expo.dev/router/)
+[![React](https://img.shields.io/badge/React-19-61DAFB?logo=react\&logoColor=white)](https://react.dev/)
+[![JavaScript](https://img.shields.io/badge/JavaScript-ES2023-F7DF1E?logo=javascript\&logoColor=black)](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
+[![Node.js](https://img.shields.io/badge/Node.js-Express-339933?logo=node.js\&logoColor=white)](https://nodejs.org/)
+[![Express](https://img.shields.io/badge/Express-5-000000?logo=express\&logoColor=white)](https://expressjs.com/)
+[![MongoDB](https://img.shields.io/badge/MongoDB-9-47A248?logo=mongodb\&logoColor=white)](https://www.mongodb.com/)
+[![Mongoose](https://img.shields.io/badge/Mongoose-9-880000?logo=mongoose\&logoColor=white)](https://mongoosejs.com/)
+[![Zustand](https://img.shields.io/badge/Zustand-5-433E38?logo=react\&logoColor=white)](https://zustand.docs.pmnd.rs/)
+[![React Native Paper](https://img.shields.io/badge/React%20Native%20Paper-5-6200EE?logo=react\&logoColor=white)](https://reactnativepaper.com/)
+[![React Native Maps](https://img.shields.io/badge/React%20Native%20Maps-1.20-61DAFB?logo=react\&logoColor=white)](https://github.com/react-native-maps/react-native-maps)
+[![Reanimated](https://img.shields.io/badge/Reanimated-4-61DAFB?logo=react\&logoColor=white)](https://docs.swmansion.com/react-native-reanimated/)
+[![Gesture Handler](https://img.shields.io/badge/Gesture%20Handler-2-000000?logo=react\&logoColor=white)](https://docs.swmansion.com/react-native-gesture-handler/)
+[![Bottom Sheet](https://img.shields.io/badge/Bottom%20Sheet-5-000000?logo=react\&logoColor=white)](https://gorhom.dev/react-native-bottom-sheet/)
+[![i18next](https://img.shields.io/badge/i18next-25-26A69A?logo=i18next\&logoColor=white)](https://www.i18next.com/)
+[![SecureStore](https://img.shields.io/badge/Expo%20SecureStore-Secure%20Storage-000020?logo=expo\&logoColor=white)](https://docs.expo.dev/versions/latest/sdk/securestore/)
+[![Expo Location](https://img.shields.io/badge/Expo%20Location-19-000020?logo=expo\&logoColor=white)](https://docs.expo.dev/versions/latest/sdk/location/)
+[![JWT](https://img.shields.io/badge/JWT-Authentication-000000?logo=jsonwebtokens\&logoColor=white)](https://jwt.io/)
+[![bcryptjs](https://img.shields.io/badge/bcryptjs-Password%20Hashing-3178C6?logo=javascript\&logoColor=white)](https://www.npmjs.com/package/bcryptjs)
+[![Helmet](https://img.shields.io/badge/Helmet-Security-000000?logo=node.js\&logoColor=white)](https://helmetjs.github.io/)
+[![Rate Limiting](https://img.shields.io/badge/Rate%20Limiting-API%20Security-DC2626?logo=node.js\&logoColor=white)](https://www.npmjs.com/package/express-rate-limit)
+[![Pino](https://img.shields.io/badge/Pino-Logging-6874E8?logo=node.js\&logoColor=white)](https://getpino.io/)
+[![Jest](https://img.shields.io/badge/Jest-30-C21325?logo=jest\&logoColor=white)](https://jestjs.io/)
+[![Supertest](https://img.shields.io/badge/Supertest-API%20Testing-000000?logo=github\&logoColor=white)](https://github.com/ladjs/supertest)
+[![Formik](https://img.shields.io/badge/Formik-Forms-2563EB?logo=react\&logoColor=white)](https://formik.org/)
+[![Yup](https://img.shields.io/badge/Yup-Validation-FF4154?logo=yup\&logoColor=white)](https://github.com/jquense/yup)
+[![Lucide](https://img.shields.io/badge/Lucide-Icons-F56565?logo=lucide\&logoColor=white)](https://lucide.dev/)
+[![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
+</div>
+
 ---
 
 ## Overview
@@ -53,6 +99,11 @@ Nearby toilets can be explored directly from the map while maintaining the surro
 
 <div align="center">
 
+<img src="docs/readme/rounded/landing%20home.png" width="260" alt="Jajisha home map" />
+<img src="docs/readme/rounded/topSheet%20menu.png" width="260" alt="Jajisha navigation menu" />
+
+</div>
+
 The map and surrounding interface work together to keep discovery quick while still providing access to the application's other areas.
 
 ---
@@ -66,6 +117,11 @@ Users can interact with the map, inspect toilet locations, view their own positi
 The application supports different map presentation options, including a satellite view.
 
 <div align="center">
+
+<img src="docs/readme/rounded/satelliteMapType.png" width="260" alt="Jajisha satellite map type" />
+<img src="docs/readme/rounded/settings.png" width="260" alt="Jajisha settings" />
+
+</div>
 
 ### Map and distance preferences
 
@@ -90,6 +146,11 @@ Jajisha uses a bottom-sheet based interface so users can progressively inspect a
 
 <div align="center">
 
+<img src="docs/readme/rounded/toiletInfo%20first%20snap.png" width="260" alt="Jajisha toilet information collapsed" />
+<img src="docs/readme/rounded/toiletInfo%20second%20snap.png" width="260" alt="Jajisha toilet information expanded" />
+
+</div>
+
 The information interface can expose details such as:
 
 * Toilet name and location
@@ -106,6 +167,10 @@ A dark-mode version of the same experience is also supported.
 
 <div align="center">
 
+<img src="docs/readme/rounded/toiletInfoDark.png" width="260" alt="Jajisha toilet information in dark mode" />
+
+</div>
+
 ---
 
 # Ratings & Reviews
@@ -115,6 +180,10 @@ Community-generated information adds context that a map marker alone cannot prov
 Authenticated users can rate toilets and leave written reviews.
 
 <div align="center">
+
+<img src="docs/readme/rounded/write%20comment%20and%20rate.png" width="260" alt="Jajisha rating and review interface" />
+
+</div>
 
 Reviews are associated with users and toilets through the backend API, with authorization rules protecting user-specific operations.
 
@@ -129,6 +198,11 @@ Finding a toilet is only part of the experience.
 Once a user selects a location, Jajisha can transition from discovery into route planning and active navigation.
 
 <div align="center">
+
+<img src="docs/readme/rounded/routePreview.png" width="260" alt="Jajisha route preview" />
+<img src="docs/readme/rounded/navigation.png" width="260" alt="Jajisha navigation" />
+
+</div>
 
 The navigation flow separates:
 
@@ -147,6 +221,11 @@ Jajisha is designed to allow the community to contribute new locations.
 Users can add a toilet and specify its geographic position and relevant information.
 
 <div align="center">
+
+<img src="docs/readme/rounded/addWc.png" width="260" alt="Jajisha add toilet form" />
+<img src="docs/readme/rounded/addWcLocation.png" width="260" alt="Jajisha toilet location selection" />
+
+</div>
 
 The workflow allows users to:
 
@@ -167,6 +246,10 @@ Users can save toilets that they may want to access again.
 
 <div align="center">
 
+<img src="docs/readme/rounded/saved%20toilets.png" width="260" alt="Jajisha saved toilets" />
+
+</div>
+
 Saved locations are associated with the authenticated user, creating a personal layer on top of the public toilet database.
 
 ---
@@ -184,6 +267,11 @@ Jajisha supports three appearance modes:
 The system option follows the device's current appearance preference.
 
 <div align="center">
+
+<img src="docs/readme/rounded/settings.png" width="260" alt="Jajisha light appearance settings" />
+<img src="docs/readme/rounded/settingsDark.png" width="260" alt="Jajisha dark appearance settings" />
+
+</div>
 
 Theme handling is integrated throughout the application rather than implemented as isolated styling on individual screens.
 
@@ -214,9 +302,19 @@ Persian support goes beyond translating strings. The interface also accounts for
 
 <div align="center">
 
+<img src="docs/readme/rounded/farsi/signin.png" width="260" alt="Jajisha Persian sign in" />
+<img src="docs/readme/rounded/farsi/signup.png" width="260" alt="Jajisha Persian sign up" />
+
+</div>
+
 The Persian interface includes right-to-left layouts across relevant screens, including forms, navigation, settings, and information interfaces.
 
 <div align="center">
+
+<img src="docs/readme/rounded/farsi/settings.png" width="260" alt="Jajisha Persian settings" />
+<img src="docs/readme/rounded/farsi/toiletInfo.png" width="260" alt="Jajisha Persian toilet information" />
+
+</div>
 
 Localization is implemented with `i18next` and `react-i18next`, while application state controls the active language.
 
@@ -229,6 +327,11 @@ Jajisha includes its own authentication system rather than treating identity as 
 Users can create accounts and sign in to access functionality that requires an authenticated identity.
 
 <div align="center">
+
+<img src="docs/readme/rounded/sign%20up.png" width="260" alt="Jajisha sign up" />
+<img src="docs/readme/rounded/sign%20in.png" width="260" alt="Jajisha sign in" />
+
+</div>
 
 The backend includes:
 
@@ -266,6 +369,10 @@ Each stage has a clear purpose instead of placing every action into a single scr
 Network and asynchronous operations use centralized feedback systems.
 
 <div align="center">
+
+<img src="docs/readme/rounded/waiting.png" width="260" alt="Jajisha waiting state" />
+
+</div>
 
 Jajisha uses centralized waiting and toast systems so loading and action feedback remain consistent throughout the application.
 
@@ -693,3 +800,11 @@ See the [LICENSE](LICENSE) file for details.
 ---
 
 <div align="center">
+
+### Built by Omid
+
+**React Native · Node.js · Express · MongoDB**
+
+[GitHub](https://github.com/devomid)
+
+</div>
