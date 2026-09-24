@@ -1,7 +1,7 @@
 # Jajisha
 
 <p align="center">
-  <img src="docs/readme/landing%20home.png" alt="Jajisha" width="320">
+  <img src="docs/readme/landing%20home.png" alt="Jajisha" width="300" style="border-radius: 32px;">
 </p>
 
 <p align="center">
@@ -9,7 +9,26 @@
 </p>
 
 <p align="center">
-  A mobile app for finding, reviewing, saving, and navigating to public toilets.
+  A full-stack mobile application for finding, reviewing, saving, and navigating to public toilets.
+</p>
+
+<p align="center">
+  <a href="https://github.com/devomid/jajisha/blob/main/LICENSE">
+    <img src="https://img.shields.io/badge/license-MIT-111111.svg" alt="MIT License">
+  </a>
+  <img src="https://img.shields.io/badge/React%20Native-0.81-61DAFB.svg?logo=react&logoColor=white" alt="React Native">
+  <img src="https://img.shields.io/badge/Expo-54-000020.svg?logo=expo&logoColor=white" alt="Expo">
+  <img src="https://img.shields.io/badge/Node.js-runtime-339933.svg?logo=node.js&logoColor=white" alt="Node.js">
+  <img src="https://img.shields.io/badge/Express-5-000000.svg?logo=express&logoColor=white" alt="Express">
+  <img src="https://img.shields.io/badge/MongoDB-database-47A248.svg?logo=mongodb&logoColor=white" alt="MongoDB">
+</p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/Zustand-state%20management-443E38.svg" alt="Zustand">
+  <img src="https://img.shields.io/badge/i18n-English%20%2B%20Persian-7C3AED.svg" alt="Internationalization">
+  <img src="https://img.shields.io/badge/RTL-supported-F4B400.svg" alt="RTL Support">
+  <img src="https://img.shields.io/badge/tests-frontend%20%2B%20backend-0057FA.svg" alt="Tests">
+  <img src="https://img.shields.io/badge/security%20tests-included-111111.svg" alt="Security Tests">
 </p>
 
 ---
@@ -18,9 +37,27 @@
 
 Jajisha started with a simple idea: finding a public toilet should be easier.
 
-The app combines an interactive map, location-based search, detailed toilet information, ratings and reviews, favorites, and turn-by-turn navigation into one mobile experience.
+The app combines an interactive map, location-based search, detailed toilet information, ratings and reviews, favorites, and navigation into one mobile experience.
 
 It was built as a full-stack project, with a React Native / Expo frontend and an Express / MongoDB backend.
+
+---
+
+## Highlights
+
+* Interactive map with location-based toilet discovery
+* Detailed toilet profiles with amenities, pricing, ratings, and reviews
+* Multi-category toilet ratings
+* Exact-location toilet submission
+* Route preview and in-app navigation
+* Favorites and user-specific data
+* JWT authentication and protected API routes
+* Persian localization with RTL support
+* Light, dark, and system appearance modes
+* Frontend and backend test suites
+* Dedicated security test suite
+* Structured backend and frontend logging
+* MongoDB geospatial queries using GeoJSON and `2dsphere`
 
 ---
 
@@ -49,36 +86,36 @@ It was built as a full-stack project, with a React Native / Expo frontend and an
 ### Map, toilet information, and navigation
 
 <p align="center">
-  <img src="docs/readme/landing%20home.png" alt="Jajisha home map" width="250">
-  <img src="docs/readme/toiletInfo%20first%20snap.png" alt="Toilet information" width="250">
-  <img src="docs/readme/navigation.png" alt="Navigation" width="250">
+  <img src="docs/readme/landing%20home.png" alt="Jajisha home map" width="230" style="border-radius: 28px;">
+  <img src="docs/readme/toiletInfo%20first%20snap.png" alt="Toilet information" width="230" style="border-radius: 28px;">
+  <img src="docs/readme/navigation.png" alt="Navigation" width="230" style="border-radius: 28px;">
 </p>
 
 <p align="center">
-  <img src="docs/readme/toiletInfo%20second%20snap.png" alt="Toilet information details" width="250">
-  <img src="docs/readme/routePreview.png" alt="Route preview" width="250">
+  <img src="docs/readme/toiletInfo%20second%20snap.png" alt="Toilet information details" width="230" style="border-radius: 28px;">
+  <img src="docs/readme/routePreview.png" alt="Route preview" width="230" style="border-radius: 28px;">
 </p>
 
 ### Adding and reviewing a toilet
 
 <p align="center">
-  <img src="docs/readme/addWc.png" alt="Add a toilet" width="250">
-  <img src="docs/readme/addWcLocation.png" alt="Select toilet location" width="250">
-  <img src="docs/readme/write%20comment%20and%20rate.png" alt="Write a review and rate" width="250">
+  <img src="docs/readme/addWc.png" alt="Add a toilet" width="230" style="border-radius: 28px;">
+  <img src="docs/readme/addWcLocation.png" alt="Select toilet location" width="230" style="border-radius: 28px;">
+  <img src="docs/readme/write%20comment%20and%20rate.png" alt="Write a review and rate" width="230" style="border-radius: 28px;">
 </p>
 
 ### Account and saved toilets
 
 <p align="center">
-  <img src="docs/readme/sign%20in.png" alt="Sign in" width="250">
-  <img src="docs/readme/sign%20up.png" alt="Sign up" width="250">
-  <img src="docs/readme/saved%20toilets.png" alt="Saved toilets" width="250">
+  <img src="docs/readme/sign%20in.png" alt="Sign in" width="230" style="border-radius: 28px;">
+  <img src="docs/readme/sign%20up.png" alt="Sign up" width="230" style="border-radius: 28px;">
+  <img src="docs/readme/saved%20toilets.png" alt="Saved toilets" width="230" style="border-radius: 28px;">
 </p>
 
 <p align="center">
-  <img src="docs/readme/settings.png" alt="Settings" width="250">
-  <img src="docs/readme/topSheet%20menu.png" alt="Application menu" width="250">
-  <img src="docs/readme/waiting.png" alt="Waiting state" width="250">
+  <img src="docs/readme/settings.png" alt="Settings" width="230" style="border-radius: 28px;">
+  <img src="docs/readme/topSheet%20menu.png" alt="Application menu" width="230" style="border-radius: 28px;">
+  <img src="docs/readme/waiting.png" alt="Waiting state" width="230" style="border-radius: 28px;">
 </p>
 
 ---
@@ -90,21 +127,21 @@ Jajisha also includes a Persian localization with a right-to-left interface.
 The layout is adapted for Persian rather than simply translating the text, including navigation, forms, settings, ratings, and application feedback states.
 
 <p align="center">
-  <img src="docs/readme/farsi/topSheet.png" alt="Persian menu" width="250">
-  <img src="docs/readme/farsi/toiletInfo.png" alt="Persian toilet information" width="250">
-  <img src="docs/readme/farsi/routePreview.png" alt="Persian route preview" width="250">
+  <img src="docs/readme/farsi/topSheet.png" alt="Persian menu" width="230" style="border-radius: 28px;">
+  <img src="docs/readme/farsi/toiletInfo.png" alt="Persian toilet information" width="230" style="border-radius: 28px;">
+  <img src="docs/readme/farsi/routePreview.png" alt="Persian route preview" width="230" style="border-radius: 28px;">
 </p>
 
 <p align="center">
-  <img src="docs/readme/farsi/addWc.png" alt="Persian add toilet" width="250">
-  <img src="docs/readme/farsi/addWc1.png" alt="Persian add toilet details" width="250">
-  <img src="docs/readme/farsi/settings.png" alt="Persian settings" width="250">
+  <img src="docs/readme/farsi/addWc.png" alt="Persian add toilet" width="230" style="border-radius: 28px;">
+  <img src="docs/readme/farsi/addWc1.png" alt="Persian add toilet details" width="230" style="border-radius: 28px;">
+  <img src="docs/readme/farsi/settings.png" alt="Persian settings" width="230" style="border-radius: 28px;">
 </p>
 
 <p align="center">
-  <img src="docs/readme/farsi/signin.png" alt="Persian sign in" width="250">
-  <img src="docs/readme/farsi/signup.png" alt="Persian sign up" width="250">
-  <img src="docs/readme/farsi/waiting.png" alt="Persian waiting state" width="250">
+  <img src="docs/readme/farsi/signin.png" alt="Persian sign in" width="230" style="border-radius: 28px;">
+  <img src="docs/readme/farsi/signup.png" alt="Persian sign up" width="230" style="border-radius: 28px;">
+  <img src="docs/readme/farsi/waiting.png" alt="Persian waiting state" width="230" style="border-radius: 28px;">
 </p>
 
 ---
@@ -146,7 +183,7 @@ The location is stored as GeoJSON and indexed for geographic queries.
 
 ## Navigation
 
-Jajisha uses the device's location and heading information to provide a navigation experience inside the app.
+Jajisha uses the device's location and heading information to provide an in-app navigation experience.
 
 The navigation flow includes:
 
@@ -209,8 +246,8 @@ Persian support includes RTL-aware layouts and Persian typography using the Shab
 │       Express Backend        │
 │                              │
 │  Routes • Controllers        │
-│  Authentication             │
-│  Authorization              │
+│  Authentication              │
+│  Authorization               │
 │  Validation • Rate Limiting  │
 │  Structured Logging          │
 └──────────────┬───────────────┘
@@ -221,7 +258,7 @@ Persian support includes RTL-aware layouts and Persian typography using the Shab
 │                              │
 │  Users • Toilets             │
 │  Reviews • Ratings           │
-│  GeoJSON / 2dsphere index   │
+│  GeoJSON / 2dsphere index    │
 └──────────────────────────────┘
 ```
 
