@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # 🚻 Jajisha
 
 ### Find a toilet. Add a toilet. Get there.
@@ -811,3 +812,6 @@ Open app
 ![1790204014922](image/README/1790204014922.png)![1790204042218](image/README/1790204042218.png)
 
 ![1790204683150](image/README/1790204683150.png)
+=======
+
+>>>>>>> 4bc568c6ab10914545972d448a7d51ebc188480c
