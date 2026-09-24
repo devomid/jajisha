@@ -368,7 +368,7 @@ export default function Home() {
                             }}
                         >
                             {({ pressed }) => (
-                                <Image source={require("../../assets/selected-tab-splash.png")}
+                                <Image source={require("../assets/selected-tab-splash.png")}
                                     style={{
                                         width: 100,
                                         height: 100,

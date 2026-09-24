@@ -41,9 +41,9 @@ export default function RootLayout() {
     const [ready, setReady] = useState(false);
 
     const [fontsLoaded] = Font.useFonts({
-        Shabnam: require("../../assets/fonts/Shabnam.ttf"),
-        ShabnamMedium: require("../../assets/fonts/Shabnam-Medium.ttf"),
-        ShabnamBold: require("../../assets/fonts/Shabnam-Bold.ttf"),
+        Shabnam: require("../assets/fonts/Shabnam.ttf"),
+        ShabnamMedium: require("../assets/fonts/Shabnam-Medium.ttf"),
+        ShabnamBold: require("../assets/fonts/Shabnam-Bold.ttf"),
     });
 
     // const [fontsLoaded] = useFonts({
