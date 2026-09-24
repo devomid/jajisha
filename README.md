@@ -1,817 +1,414 @@
-<<<<<<< HEAD
-# 🚻 Jajisha
-
-### Find a toilet. Add a toilet. Get there.
+# Jajisha
 
 <p align="center">
-  <img src="image/README/jajisha-banner.png" alt="Jajisha — Public Toilet Discovery App" width="900">
+  <img src="docs/readme/landing%20home.png" alt="Jajisha" width="320">
 </p>
 
 <p align="center">
-  <strong>A community-powered mobile application for discovering, reviewing, and navigating to public toilets.</strong>
+  <strong>Find a toilet. Add a toilet. Get there.</strong>
 </p>
 
 <p align="center">
-  <a href="https://github.com/devomid/jajisha">
-    <img src="https://img.shields.io/badge/GitHub-devomid%2Fjajisha-181717?style=for-the-badge&logo=github" alt="GitHub">
-  </a>
-  <img src="https://img.shields.io/badge/React%20Native-0.81.5-61DAFB?style=for-the-badge&logo=react&logoColor=white" alt="React Native">
-  <img src="https://img.shields.io/badge/Expo-54-000020?style=for-the-badge&logo=expo" alt="Expo">
-  <img src="https://img.shields.io/badge/Node.js-Backend-339933?style=for-the-badge&logo=node.js&logoColor=white" alt="Node.js">
-  <img src="https://img.shields.io/badge/MongoDB-Database-47A248?style=for-the-badge&logo=mongodb&logoColor=white" alt="MongoDB">
-  <img src="https://img.shields.io/badge/Tests-Passing-2EA44F?style=for-the-badge&logo=jest&logoColor=white" alt="Tests passing">
-  <img src="https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge" alt="MIT License">
-</p>
-
-<p align="center">
-  <a href="#overview">Overview</a> •
-  <a href="#features">Features</a> •
-  <a href="#engineering">Engineering</a> •
-  <a href="#architecture">Architecture</a> •
-  <a href="#testing">Testing</a> •
-  <a href="#security">Security</a> •
-  <a href="#setup">Setup</a>
+  A mobile app for finding, reviewing, saving, and navigating to public toilets.
 </p>
 
 ---
 
-## Overview
+## About
 
-**Jajisha** is a full-stack, cross-platform mobile application designed around a simple problem:
+Jajisha started with a simple idea: finding a public toilet should be easier.
 
-> **Finding a public toilet should not be difficult.**
+The app combines an interactive map, location-based search, detailed toilet information, ratings and reviews, favorites, and turn-by-turn navigation into one mobile experience.
 
-Jajisha lets users discover public toilets on an interactive map, inspect their information, contribute new locations, rate and review existing locations, save favorites, and navigate to selected toilets.
-
-The application was built as an end-to-end product rather than a collection of isolated screens. It includes:
-
-* Cross-platform mobile UI
-* Geolocation and interactive maps
-* User authentication
-* User-generated content
-* Ratings and reviews
-* Favorites
-* Navigation
-* REST API communication
-* MongoDB persistence
-* Localization and Persian RTL text support
-* Global asynchronous state handling
-* Error handling and runtime diagnostics
-* Automated frontend and backend testing
-* API security controls
+It was built as a full-stack project, with a React Native / Expo frontend and an Express / MongoDB backend.
 
 ---
 
-## Product
+## What you can do
 
-### The core experience
-
-```text
-        DISCOVER
-           ↓
-        SELECT
-           ↓
-        REVIEW
-           ↓
-       NAVIGATE
-```
-
-The goal is to make the complete process of finding a usable toilet as simple as possible.
+* Find nearby public toilets on an interactive map
+* View toilet details, amenities, price, ratings, and reviews
+* Get a route preview and navigate to a selected toilet
+* Add new toilets with an exact location
+* Mark toilets as free or paid
+* Add amenities and other useful information
+* Rate toilets across multiple categories
+* Write and read reviews
+* Save toilets to favorites
+* Create an account and securely authenticate
+* Manage account and application settings
+* Switch between light, dark, and system appearance
+* Use the application in English or Persian
+* Use a fully right-to-left Persian interface
+* Receive application feedback through custom toast and waiting states
 
 ---
 
-## 📱 Screenshots
+## Screens
 
-> Replace the placeholders below with carefully selected screenshots from the final application.
->
-> **Recommended:** use clean screenshots from the same device size and avoid screenshots containing development/debug information.
-
-Main Map
+### Map, toilet information, and navigation
 
 <p align="center">
-  <img src="image/README/screenshots/map.png" alt="Jajisha main map" width="280">
+  <img src="docs/readme/landing%20home.png" alt="Jajisha home map" width="250">
+  <img src="docs/readme/toiletInfo%20first%20snap.png" alt="Toilet information" width="250">
+  <img src="docs/readme/navigation.png" alt="Navigation" width="250">
 </p>
 
-### Toilet Information
-
 <p align="center">
-  <img src="image/README/screenshots/toilet-info.png" alt="Jajisha toilet information" width="280">
+  <img src="docs/readme/toiletInfo%20second%20snap.png" alt="Toilet information details" width="250">
+  <img src="docs/readme/routePreview.png" alt="Route preview" width="250">
 </p>
 
-### Navigation
+### Adding and reviewing a toilet
 
 <p align="center">
-  <img src="image/README/screenshots/navigation.png" alt="Jajisha navigation" width="280">
+  <img src="docs/readme/addWc.png" alt="Add a toilet" width="250">
+  <img src="docs/readme/addWcLocation.png" alt="Select toilet location" width="250">
+  <img src="docs/readme/write%20comment%20and%20rate.png" alt="Write a review and rate" width="250">
 </p>
 
-### Add a Toilet
+### Account and saved toilets
 
 <p align="center">
-  <img src="image/README/screenshots/add-toilet.png" alt="Jajisha add toilet screen" width="280">
+  <img src="docs/readme/sign%20in.png" alt="Sign in" width="250">
+  <img src="docs/readme/sign%20up.png" alt="Sign up" width="250">
+  <img src="docs/readme/saved%20toilets.png" alt="Saved toilets" width="250">
 </p>
 
-### Ratings & Reviews
-
 <p align="center">
-  <img src="image/README/screenshots/reviews.png" alt="Jajisha ratings and reviews" width="280">
-</p>
-
-### Settings
-
-<p align="center">
-  <img src="image/README/screenshots/settings.png" alt="Jajisha settings" width="280">
-</p>
-
-### Persian / RTL Interface
-
-<p align="center">
-  <img src="image/README/screenshots/persian.png" alt="Jajisha Persian interface" width="280">
+  <img src="docs/readme/settings.png" alt="Settings" width="250">
+  <img src="docs/readme/topSheet%20menu.png" alt="Application menu" width="250">
+  <img src="docs/readme/waiting.png" alt="Waiting state" width="250">
 </p>
 
 ---
 
-# ✨ Features
+## Persian / RTL interface
 
-## 🗺️ Interactive Map
+Jajisha also includes a Persian localization with a right-to-left interface.
 
-The map is the primary discovery interface.
+The layout is adapted for Persian rather than simply translating the text, including navigation, forms, settings, ratings, and application feedback states.
+
+<p align="center">
+  <img src="docs/readme/farsi/topSheet.png" alt="Persian menu" width="250">
+  <img src="docs/readme/farsi/toiletInfo.png" alt="Persian toilet information" width="250">
+  <img src="docs/readme/farsi/routePreview.png" alt="Persian route preview" width="250">
+</p>
+
+<p align="center">
+  <img src="docs/readme/farsi/addWc.png" alt="Persian add toilet" width="250">
+  <img src="docs/readme/farsi/addWc1.png" alt="Persian add toilet details" width="250">
+  <img src="docs/readme/farsi/settings.png" alt="Persian settings" width="250">
+</p>
+
+<p align="center">
+  <img src="docs/readme/farsi/signin.png" alt="Persian sign in" width="250">
+  <img src="docs/readme/farsi/signup.png" alt="Persian sign up" width="250">
+  <img src="docs/readme/farsi/waiting.png" alt="Persian waiting state" width="250">
+</p>
+
+---
+
+## Ratings and reviews
+
+Toilet ratings are divided into multiple categories instead of relying on a single overall score.
+
+Users can rate aspects such as:
+
+* Cleanliness
+* Odor
+* Amenities
+* Health
+* Lighting
+* Privacy
+* Crowd level
+
+Reviews are tied to authenticated users and a specific toilet. The backend validates review content and rating values before storing them.
+
+---
+
+## Adding a toilet
+
+Adding a toilet is a multi-step flow rather than a single form.
 
 Users can:
 
-* View available public toilets
-* Inspect toilet markers
-* Select individual locations
-* View toilet information
-* Search for locations
-* Use their current location
-* Switch map presentation modes
+1. Select the exact location on the map
+2. Enter the toilet information
+3. Set whether it is free or paid
+4. Add amenities
+5. Add supporting information
+6. Submit the toilet to the backend
+
+The location is stored as GeoJSON and indexed for geographic queries.
 
 ---
 
-## 📍 Location-Based Discovery
+## Navigation
 
-Jajisha uses device location services to help users find nearby toilets.
+Jajisha uses the device's location and heading information to provide a navigation experience inside the app.
 
-The application handles:
+The navigation flow includes:
 
-* Current location acquisition
-* Distance calculations
-* Location-dependent discovery
-* Navigation targets
-* Map positioning
-
----
-
-## ➕ Community Contributions
-
-Users can add public toilets to the map.
-
-A contribution can include information used to help other users understand the location and its facilities.
-
-The underlying architecture treats toilet locations as user-generated domain data rather than static application content.
+* Route preview
+* Distance and direction information
+* Current location tracking
+* Heading updates
+* Camera movement following the route
+* Navigation-specific map presentation
 
 ---
 
-## ⭐ Ratings
+## Authentication and account management
 
-Toilets can be evaluated across multiple characteristics rather than relying only on a single overall score.
+The backend provides authentication using JSON Web Tokens.
 
-The rating system includes dimensions such as:
+Passwords are hashed with `bcryptjs`, while authenticated requests are protected through authorization middleware.
 
-* Cleanliness
-* Amenities
-* Privacy
-* Lighting
-* Odor
-* Crowd level
+Users can:
+
+* Create an account
+* Sign in
+* Stay authenticated between sessions
+* Access user-specific data
+* Manage saved toilets
+* Delete their account
+
+Authentication data stored on the device uses Expo SecureStore.
 
 ---
 
-## 💬 Reviews
+## Localization
 
-Authenticated users can submit reviews for toilet locations.
+Jajisha currently supports:
 
-The review lifecycle includes:
+* English
+* Persian
+
+The localization system is built with `i18next` and `react-i18next`.
+
+Persian support includes RTL-aware layouts and Persian typography using the Shabnam font family.
+
+---
+
+## Architecture
 
 ```text
-User input
-    ↓
-Validation
-    ↓
-API request
-    ↓
-Server validation
-    ↓
-Database persistence
-    ↓
-Updated application state
+┌──────────────────────────────┐
+│       React Native App       │
+│          Expo Router         │
+│                              │
+│  Map • Navigation • UI       │
+│  Auth • Reviews • Favorites  │
+│  i18n • Zustand • Settings   │
+└──────────────┬───────────────┘
+               │
+               │ HTTP / REST
+               ▼
+┌──────────────────────────────┐
+│       Express Backend        │
+│                              │
+│  Routes • Controllers        │
+│  Authentication             │
+│  Authorization              │
+│  Validation • Rate Limiting  │
+│  Structured Logging          │
+└──────────────┬───────────────┘
+               │
+               ▼
+┌──────────────────────────────┐
+│          MongoDB             │
+│                              │
+│  Users • Toilets             │
+│  Reviews • Ratings           │
+│  GeoJSON / 2dsphere index   │
+└──────────────────────────────┘
 ```
 
 ---
 
-## 📷 Photos
+## Tech stack
 
-Jajisha supports toilet-related images and photo galleries so users can get additional visual information about a location.
-
----
-
-## ❤️ Favorites
-
-Users can save useful toilet locations for easier access later.
-
----
-
-## 🧭 Navigation
-
-After selecting a toilet, users can start navigation toward it.
-
-The navigation experience combines:
-
-* Current location
-* Destination coordinates
-* Distance calculation
-* Heading information
-* Map camera control
-* Navigation state management
-
----
-
-## 🔎 Search
-
-Users can search for locations beyond their immediate surroundings.
-
----
-
-## 🌍 Localization
-
-Jajisha currently supports:
-
-| Language     | Status |
-| ------------ | ------ |
-| 🇬🇧 English | ✅     |
-| 🇮🇷 Persian | ✅     |
-
-The localization architecture is designed so additional languages can be introduced without restructuring the application.
-
-Persian text also receives dedicated RTL text alignment while the overall application layout remains intentionally controlled rather than globally mirrored.
-
----
-
-# 🧠 Engineering
-
-Jajisha was built as a full-stack application with particular attention to application state, asynchronous operations, failure handling, security, and maintainability.
-
-## Frontend
-
-The mobile application is built with:
+### Frontend
 
 * React Native
 * Expo
 * Expo Router
-* React Native Maps
-* Expo Location
 * React Native Paper
 * Zustand
-* Formik
-* Yup
-* i18next
-* React Native Reanimated
-* React Native Gesture Handler
-* `@gorhom/bottom-sheet`
+* React Native Maps
+* Reanimated
 * React Native Skia
+* Gesture Handler
+* Gorhom Bottom Sheet
+* Expo Location
+* Expo SecureStore
+* i18next / react-i18next
+* Formik / Yup
 * Lucide React Native
-* Expo Secure Store
-* AsyncStorage
 
----
-
-## Backend
-
-The backend is built with:
+### Backend
 
 * Node.js
 * Express
 * MongoDB
 * Mongoose
-* JWT
+* JSON Web Token
 * bcryptjs
 * Helmet
 * CORS
 * express-rate-limit
 * Pino
-* pino-http
-* dotenv
+* Pino HTTP
 
----
+### Testing
 
-# 🏗️ Architecture
+The repository includes frontend tests, backend tests, and a separate security test suite covering areas such as:
 
-Jajisha follows a client/server architecture.
-
-```text
-┌─────────────────────────────────────────────┐
-│                  MOBILE APP                 │
-│                                             │
-│              React Native / Expo            │
-│                                             │
-│  ┌──────────┐  ┌────────────┐  ┌─────────┐ │
-│  │   Map    │  │ Components │  │ Screens │ │
-│  └────┬─────┘  └─────┬──────┘  └────┬────┘ │
-│       │              │              │       │
-│       └──────────────┼──────────────┘       │
-│                      │                      │
-│              ┌───────▼────────┐             │
-│              │ Zustand Stores │             │
-│              │     Hooks      │             │
-│              │   API Layer    │             │
-│              └───────┬────────┘             │
-└──────────────────────┼──────────────────────┘
-                       │
-                       │ REST API
-                       ▼
-┌─────────────────────────────────────────────┐
-│                 BACKEND API                 │
-│                                             │
-│                    Express                  │
-│                      │                      │
-│                ┌─────▼─────┐                │
-│                │   Routes  │                │
-│                └─────┬─────┘                │
-│                      │                      │
-│                ┌─────▼────────┐             │
-│                │ Controllers  │             │
-│                └─────┬────────┘             │
-│                      │                      │
-│                ┌─────▼─────┐                │
-│                │  Models   │                │
-│                └─────┬─────┘                │
-└──────────────────────┼──────────────────────┘
-                       │
-                       ▼
-                ┌──────────────┐
-                │   MongoDB    │
-                └──────────────┘
-```
-
----
-
-# 🔄 Application State
-
-Global application state is managed with **Zustand**.
-
-State is separated into focused stores for application concerns such as:
-
-* User state
-* Map/toilet data
-* Settings
-* Menu state
-* Waiting state
-
-This keeps transient UI state and application-level state separate from individual component state.
-
----
-
-# ⚡ Asynchronous Lifecycle Handling
-
-A major part of the frontend architecture is handling asynchronous operations consistently.
-
-Jajisha contains centralized mechanisms for:
-
-* Loading/waiting states
-* Toast notifications
-* API failures
-* Request lifecycle handling
-* Stale request protection
-* Authentication restoration
-* Error logging
-* User-facing error feedback
-
-This prevents individual screens from having to independently implement every loading and failure state.
-
----
-
-# 🛡️ Defensive API Boundaries
-
-Frontend API interactions validate response outcomes rather than assuming every request succeeds.
-
-The application distinguishes between:
-
-```text
-Request started
-      ↓
-Response received
-      ↓
-HTTP success?
-   ↙       ↘
- YES       NO
-  ↓         ↓
-Process   Handle error
-data      + feedback
-```
-
-This is particularly important for user-generated operations such as:
-
-* Creating toilets
-* Saving toilets
-* Creating reviews
 * Authentication
-* Loading reviews
-* Location-dependent requests
-
----
-
-# 🔐 Security
-
-Security was treated as part of the application architecture rather than an afterthought.
-
-The backend includes:
-
-### Authentication
-
-* JWT-based authentication
-* Password hashing with bcryptjs
-* Protected authenticated operations
-* Authentication lifecycle handling
-
-### HTTP security
-
-* Helmet
-* CORS configuration
+* JWT handling
+* Authorization
+* Validation
+* Data exposure
+* HTTP security headers
+* Injection
 * Rate limiting
 
-### Input validation
-
-* Request validation
-* Domain validation
-* Rating validation
-* Review validation
-* Defensive handling of malformed input
-
-### Secrets
-
-Sensitive configuration is supplied through environment variables.
-
-No database credentials or authentication secrets should be committed to the repository.
-
 ---
 
-# 🧪 Testing
+## State management
 
-Testing covers the frontend, backend, and security surface.
+Application state is separated into focused Zustand stores.
 
-## Frontend
+Examples include:
 
-The frontend test suite covers:
+* User state
+* Toilet/map data
+* Application settings
+* Menu state
+* Waiting/loading state
 
-* Zustand stores
-* Utility functions
-* Hooks
-* Authentication logic
-* Navigation logic
-* Review logic
-* Location logic
-* Theme behavior
-* API/theme boundaries
-* Validation
+This keeps transient UI state separate from application data and user preferences.
+
+---
 
 ## Backend
 
-The backend suite covers:
-
-* Controllers
-* Routes
-* Authentication
-* Validation
-* Database interactions
-* API behavior
-
-## Security
-
-Dedicated security tests cover areas including:
-
-* Authentication
-* JWT behavior
-* Authorization
-* Injection handling
-* Validation
-* Rate limiting
-* Security headers
-* Data exposure
-
-### Current automated test status
+The backend follows a controller / route / model structure.
 
 ```text
-Frontend
-115 / 115 tests passing
-
-Backend
-103 / 103 tests passing
-
-Security
-32 / 32 tests passing
+backend/
+├── controllers/
+├── logger/
+├── middlewares/
+├── models/
+├── routes/
+├── test/
+├── app.js
+└── server.js
 ```
 
-**Total automated tests: 250**
+The API handles authentication, toilet management, reviews, ratings, favorites, and user management.
+
+Toilets use a MongoDB `2dsphere` index for location-based queries.
 
 ---
 
-# 📊 Test Structure
-
-The repository keeps frontend and backend testing separated from application source code.
+## Frontend
 
 ```text
-jajisha/
-│
-├── frontend/
-│   ├── src/
-│   ├── tests/
-│   │   ├── utils/
-│   │   ├── store/
-│   │   ├── hooks/
-│   │   └── ...
-│   └── jest.config.js
-│
-├── backend/
-│   ├── controllers/
-│   ├── models/
-│   ├── routes/
-│   └── test/
-│
-└── secTests/
-    ├── auth/
-    ├── authorization/
-    ├── injection/
-    ├── validation/
-    ├── rateLimit/
-    ├── headers/
-    └── dataExposure/
-```
-
----
-
-# 📁 Project Structure
-
-```text
-jajisha/
-│
-├── backend/
-│   ├── controllers/
-│   ├── middlewares/
-│   ├── models/
-│   ├── routes/
-│   ├── test/
-│   ├── .env.example
-│   ├── server.js
-│   └── package.json
-│
-├── frontend/
-│   ├── app/
-│   ├── components/
-│   ├── src/
-│   │   ├── api/
-│   │   ├── constants/
-│   │   ├── hooks/
-│   │   ├── i18n/
-│   │   ├── locales/
-│   │   └── validation/
+frontend/
+├── app/
+├── components/
+├── src/
+│   ├── hooks/
+│   ├── i18n/
+│   ├── locales/
 │   ├── store/
-│   ├── tests/
-│   ├── assets/
-│   ├── android/
-│   ├── ios/
-│   ├── app.json
-│   ├── jest.config.js
-│   └── package.json
-│
-├── secTests/
-│   ├── auth/
-│   ├── authorization/
-│   ├── injection/
-│   ├── validation/
-│   ├── rateLimit/
-│   ├── headers/
-│   ├── dataExposure/
-│   ├── setup.js
-│   └── package.json
-│
-├── LICENSE
-└── README.md
+│   ├── utils/
+│   └── validation/
+└── tests/
 ```
 
----
-
-# 🚀 Running Jajisha Locally
-
-## Requirements
-
-You will need:
-
-* Node.js
-* npm
-* Git
-* MongoDB
-* Expo development environment
-* Xcode for iOS development
-* Android Studio for Android development
+The application uses Expo Router for navigation and keeps reusable UI, hooks, state, localization, validation, and utility logic separated from the route screens.
 
 ---
 
-## 1. Clone
+## Logging
+
+Both sides of the application have structured logging.
+
+The backend uses Pino and Pino HTTP for server and request logging.
+
+The frontend has its own logger for application-level events and errors.
+
+This makes development and debugging easier without scattering raw `console.log` calls throughout the application.
+
+---
+
+## Running locally
+
+### 1. Clone the repository
 
 ```bash
 git clone https://github.com/devomid/jajisha.git
 cd jajisha
 ```
 
----
-
-## 2. Backend
+### 2. Backend
 
 ```bash
 cd backend
 npm install
+npm run dev
 ```
 
-Create:
+Create a `.env` file based on `.env.example` and provide the required MongoDB and application configuration.
 
-```text
-backend/.env
+### 3. Frontend
+
+In another terminal:
+
+```bash
+cd frontend
+npm install
+npm start
 ```
 
-using the structure from:
+From there, the application can be launched through the available Expo development targets.
+
+---
+
+## Environment
+
+The backend uses environment variables for configuration rather than committing secrets to the repository.
+
+See:
 
 ```text
 backend/.env.example
 ```
 
-Example:
-
-```env
-MONGOURI=your_mongodb_connection_string
-PORT=your_port_number
-SECRET_KEY=your_jwt_secret
-CLIENT_ORIGIN=http://localhost:8081
-```
-
-Start the backend:
-
-```bash
-npm run dev
-```
-
-or:
-
-```bash
-npm start
-```
+for the expected configuration.
 
 ---
 
-## 3. Frontend
+## Project status
 
-Open another terminal:
+Jajisha is a completed portfolio project built to explore a full mobile product from the user interface through the API and database layer.
 
-```bash
-cd frontend
-npm install
-```
-
-Start Expo:
-
-```bash
-npm start
-```
-
-For native development:
-
-```bash
-npm run ios
-```
-
-or:
-
-```bash
-npm run android
-```
+The repository includes the application code, tests, security tests, localization resources, documentation assets, and development configuration.
 
 ---
 
-# 🧪 Running Tests
+## License
 
-## Frontend
+This project is licensed under the MIT License.
 
-```bash
-cd frontend
-npm test
-```
-
-## Backend
-
-```bash
-cd backend
-npm test
-```
-
-## Security
-
-```bash
-cd secTests
-npm test
-```
+See [LICENSE](LICENSE).
 
 ---
-
-# 📱 Platform Support
-
-| Platform | Status                        |
-| -------- | ----------------------------- |
-| iOS      | ✅                            |
-| Android  | ✅                            |
-| Web      | ⚠️ Development/experimental |
-
-The primary product targets are **iOS and Android**.
-
----
-
-# 🌍 Localization
-
-| Language | Status |
-| -------- | ------ |
-| English  | ✅     |
-| Persian  | ✅     |
-
-The localization layer uses:
-
-* i18next
-* react-i18next
-* dedicated locale files
-* Persian text alignment
-* RTL-aware text presentation
-
----
-
-# 🎨 UI & Design
-
-Jajisha uses a custom mobile interface built around:
-
-* React Native Paper
-* Custom theming
-* Light and dark modes
-* Persian typography
-* Shabnam font
-* Bottom-sheet based interactions
-* Blur and glass-style visual elements
-* Animated transitions
-* Map-focused interaction patterns
-
-The UI was designed specifically for mobile use rather than treating the application as a web interface inside a mobile shell.
-
----
-
-# 📸 Product Showcase
-
-> This section is intentionally separate from the feature documentation.
-> Use your strongest final screenshots here.
-
-### Discovery
 
 <p align="center">
-  <img src="image/README/showcase/discovery.png" alt="Discover public toilets with Jajisha" width="260">
-  <img src="image/README/showcase/toilet.png" alt="View toilet information in Jajisha" width="260">
-  <img src="image/README/showcase/navigation.png" alt="Navigate to a toilet with Jajisha" width="260">
+  Built by <a href="https://github.com/devomid">Omid</a>
 </p>
-
-### Contribution
-
-<p align="center">
-  <img src="image/README/showcase/add.png" alt="Add a toilet to Jajisha" width="260">
-  <img src="image/README/showcase/rating.png" alt="Rate a toilet in Jajisha" width="260">
-  <img src="image/README/showcase/review.png" alt="Review a toilet in Jajisha" width="260">
-</p>
-
-### Localization & Settings
-
-<p align="center">
-  <img src="image/README/showcase/settings.png" alt="Jajisha settings" width="260">
-  <img src="image/README/showcase/persian.png" alt="Jajisha Persian interface" width="260">
-  <img src="image/README/showcase/dark-mode.png" alt="Jajisha dark mode" width="260">
-</p>
-
----
-
-# 🎥 Demo
-
-> Add a short 30–60 second product demonstration here once the final recording is ready.
-
-**Recommended demo sequence:**
-
-```text
-Open app
-```
-
-![1790204014922](image/README/1790204014922.png)![1790204042218](image/README/1790204042218.png)
-
-![1790204683150](image/README/1790204683150.png)
-=======
-
->>>>>>> 4bc568c6ab10914545972d448a7d51ebc188480c
